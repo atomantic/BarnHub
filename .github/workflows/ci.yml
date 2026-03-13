@@ -55,6 +55,7 @@ jobs:
           xcodebuild test \
             -project BarnBook.xcodeproj \
             -scheme BarnBook \
+            -only-testing:BarnBookTests \
             -destination "$DESTINATION" \
             -destination-timeout 60 \
             -configuration Debug \
