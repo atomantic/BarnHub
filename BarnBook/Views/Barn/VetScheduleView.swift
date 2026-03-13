@@ -24,7 +24,7 @@ struct VetScheduleView: View {
                 ForEach(scheduledRecords) { record in
                     Button {
                         guard let horseID = record.horse?.persistentModelID else { return }
-                        router.navigate(to: HorseRoute.detail(horseID), tab: .horses)
+                        router.navigate(to: HorseRoute.detail(horseID))
                     } label: {
                         vetRecordRow(record)
                     }

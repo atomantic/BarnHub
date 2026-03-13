@@ -91,7 +91,7 @@ struct ClientDetailView: View {
                     Text("Horses")
                     Spacer()
                     Button {
-                        router.navigate(to: ClientRoute.manageHorses(clientID), tab: .clients)
+                        router.navigate(to: ClientRoute.manageHorses(clientID))
                     } label: {
                         Image(systemName: "pencil.circle")
                     }
@@ -150,7 +150,7 @@ struct ClientDetailView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
-                        router.navigate(to: ClientRoute.edit(clientID), tab: .clients)
+                        router.navigate(to: ClientRoute.edit(clientID))
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }

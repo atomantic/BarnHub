@@ -24,7 +24,7 @@ struct FarrierScheduleView: View {
                 ForEach(scheduledVisits) { visit in
                     Button {
                         guard let horseID = visit.horse?.persistentModelID else { return }
-                        router.navigate(to: HorseRoute.detail(horseID), tab: .horses)
+                        router.navigate(to: HorseRoute.detail(horseID))
                     } label: {
                         farrierRow(visit)
                     }

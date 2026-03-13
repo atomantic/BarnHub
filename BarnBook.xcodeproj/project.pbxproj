@@ -52,6 +52,8 @@
 		80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
 		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
 		D8294AE0F6DE17514A128ECF /* VetRecordEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4059FB68D68631292465BD /* VetRecordEditView.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */; };
+		C3D4E5F607182930A1B2C3D4 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ReportsView.swift */; };
 		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
@@ -125,6 +127,8 @@
 		1F0B2139601FAF7FAE12C875 /* HorseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseListView.swift"; sourceTree = "<group>"; };
 		C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseRowView.swift"; sourceTree = "<group>"; };
 		8E4059FB68D68631292465BD /* VetRecordEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecordEditView.swift"; sourceTree = "<group>"; };
+		B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView.swift"; sourceTree = "<group>"; };
+		D4E5F60718293041B2C3D4E5 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReportsView.swift"; sourceTree = "<group>"; };
 		F7850193B3E5ED0B66616F80 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger.swift"; sourceTree = "<group>"; };
 		D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+Helpers.swift"; sourceTree = "<group>"; };
 		CC3340C45202B29152467289 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 		C454586A1F4E28C340BDC1AD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
 				75C45A74C0754D59FD90DAE5 /* Accounting */,
 				CE6CF664131C60DA461067A8 /* Barn */,
 				58A73D2D9F8B43A7E7D9336F /* Clients */,
@@ -263,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */,
+				D4E5F60718293041B2C3D4E5 /* ReportsView.swift */,
 				162F54183A973C74E91D0DD7 /* TransactionEditView.swift */,
 				4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */,
 				FEA99F03E1B72A946035663D /* TransactionRowView.swift */,
@@ -496,6 +502,8 @@
 				80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */,
 				8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */,
 				D8294AE0F6DE17514A128ECF /* VetRecordEditView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* HomeView.swift in Sources */,
+				C3D4E5F607182930A1B2C3D4 /* ReportsView.swift in Sources */,
 				6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */,
 				3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */,
 			);

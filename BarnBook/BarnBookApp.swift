@@ -30,63 +30,51 @@ struct ContentView: View {
 
     var body: some View {
         @Bindable var router = router
-        TabView(selection: $router.selectedTab) {
-            NavigationStack(path: $router.horsesPath) {
-                HorseListView()
-                    .navigationDestination(for: HorseRoute.self) { route in
-                        switch route {
-                        case .list: HorseListView()
-                        case .detail(let id): HorseDetailView(horseID: id)
-                        case .edit(let id): HorseEditView(horseID: id)
-                        case .addVetRecord(let id): VetRecordEditView(horseID: id)
-                        case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
-                        }
+        NavigationStack(path: $router.path) {
+            HomeView()
+                .navigationDestination(for: HomeRoute.self) { route in
+                    switch route {
+                    case .horses: HorseListView()
+                    case .clients: ClientListView()
+                    case .schedule: BarnDashboardView()
+                    case .supplies: SupplyListView()
+                    case .accounting: AccountingDashboardView()
+                    case .reports: ReportsView()
                     }
-            }
-            .tabItem { Label("Horses", systemImage: "hare") }
-            .tag(Router.AppTab.horses)
-
-            NavigationStack(path: $router.clientsPath) {
-                ClientListView()
-                    .navigationDestination(for: ClientRoute.self) { route in
-                        switch route {
-                        case .list: ClientListView()
-                        case .detail(let id): ClientDetailView(clientID: id)
-                        case .edit(let id): ClientEditView(clientID: id)
-                        case .manageHorses(let id): ClientHorsesView(clientID: id)
-                        }
+                }
+                .navigationDestination(for: HorseRoute.self) { route in
+                    switch route {
+                    case .list: HorseListView()
+                    case .detail(let id): HorseDetailView(horseID: id)
+                    case .edit(let id): HorseEditView(horseID: id)
+                    case .addVetRecord(let id): VetRecordEditView(horseID: id)
+                    case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
                     }
-            }
-            .tabItem { Label("Clients", systemImage: "person.2") }
-            .tag(Router.AppTab.clients)
-
-            NavigationStack(path: $router.accountingPath) {
-                AccountingDashboardView()
-                    .navigationDestination(for: AccountingRoute.self) { route in
-                        switch route {
-                        case .list: TransactionListView()
-                        case .edit(let id): TransactionEditView(transactionID: id)
-                        }
+                }
+                .navigationDestination(for: ClientRoute.self) { route in
+                    switch route {
+                    case .list: ClientListView()
+                    case .detail(let id): ClientDetailView(clientID: id)
+                    case .edit(let id): ClientEditView(clientID: id)
+                    case .manageHorses(let id): ClientHorsesView(clientID: id)
                     }
-            }
-            .tabItem { Label("Accounting", systemImage: "dollarsign.circle") }
-            .tag(Router.AppTab.accounting)
-
-            NavigationStack(path: $router.barnPath) {
-                BarnDashboardView()
-                    .navigationDestination(for: BarnRoute.self) { route in
-                        switch route {
-                        case .supplies: SupplyListView()
-                        case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
-                        case .reminders: ReminderListView()
-                        case .reminderEdit(let id): ReminderEditView(reminderID: id)
-                        case .vetSchedule: VetScheduleView()
-                        case .farrierSchedule: FarrierScheduleView()
-                        }
+                }
+                .navigationDestination(for: AccountingRoute.self) { route in
+                    switch route {
+                    case .list: TransactionListView()
+                    case .edit(let id): TransactionEditView(transactionID: id)
                     }
-            }
-            .tabItem { Label("Barn", systemImage: "house") }
-            .tag(Router.AppTab.barn)
+                }
+                .navigationDestination(for: BarnRoute.self) { route in
+                    switch route {
+                    case .supplies: SupplyListView()
+                    case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
+                    case .reminders: ReminderListView()
+                    case .reminderEdit(let id): ReminderEditView(reminderID: id)
+                    case .vetSchedule: VetScheduleView()
+                    case .farrierSchedule: FarrierScheduleView()
+                    }
+                }
         }
     }
 }

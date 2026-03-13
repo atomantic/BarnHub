@@ -40,7 +40,7 @@ struct ClientListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    router.navigate(to: ClientRoute.edit(nil), tab: .clients)
+                    router.navigate(to: ClientRoute.edit(nil))
                 } label: {
                     Image(systemName: "plus")
                 }
