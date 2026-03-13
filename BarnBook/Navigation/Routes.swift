@@ -1,6 +1,15 @@
 import Foundation
 import SwiftData
 
+enum HomeRoute: Hashable {
+    case horses
+    case clients
+    case schedule
+    case supplies
+    case accounting
+    case reports
+}
+
 enum HorseRoute: Hashable {
     case list
     case detail(PersistentIdentifier)

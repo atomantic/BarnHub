@@ -75,7 +75,7 @@ struct AccountingDashboardView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    router.navigate(to: AccountingRoute.edit(nil), tab: .accounting)
+                    router.navigate(to: AccountingRoute.edit(nil))
                 } label: {
                     Image(systemName: "plus")
                 }

@@ -59,7 +59,7 @@ struct ReminderListView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    router.navigate(to: BarnRoute.reminderEdit(nil), tab: .barn)
+                    router.navigate(to: BarnRoute.reminderEdit(nil))
                 } label: {
                     Image(systemName: "plus")
                 }

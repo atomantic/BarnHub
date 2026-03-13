@@ -48,7 +48,7 @@ struct SupplyListView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    router.navigate(to: BarnRoute.supplyEdit(nil), tab: .barn)
+                    router.navigate(to: BarnRoute.supplyEdit(nil))
                 } label: {
                     Image(systemName: "plus")
                 }

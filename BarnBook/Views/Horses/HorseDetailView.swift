@@ -102,7 +102,7 @@ struct HorseDetailView: View {
                     Text("Vet Records")
                     Spacer()
                     Button {
-                        router.navigate(to: HorseRoute.addVetRecord(horseID), tab: .horses)
+                        router.navigate(to: HorseRoute.addVetRecord(horseID))
                     } label: {
                         Image(systemName: "plus.circle")
                     }
@@ -146,7 +146,7 @@ struct HorseDetailView: View {
                     Text("Farrier Visits")
                     Spacer()
                     Button {
-                        router.navigate(to: HorseRoute.addFarrierVisit(horseID), tab: .horses)
+                        router.navigate(to: HorseRoute.addFarrierVisit(horseID))
                     } label: {
                         Image(systemName: "plus.circle")
                     }
@@ -172,7 +172,7 @@ struct HorseDetailView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {
-                        router.navigate(to: HorseRoute.edit(horseID), tab: .horses)
+                        router.navigate(to: HorseRoute.edit(horseID))
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
