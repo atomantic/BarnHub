@@ -56,3 +56,6 @@ playground.xcworkspace
 
 # Playwright
 .playwright-mcp/
+
+# Environment
+.env
