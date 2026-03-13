@@ -5,6 +5,22 @@ import SwiftData
 struct BarnBookApp: App {
     @State private var router = Router()
 
+    private var modelContainer: ModelContainer = {
+        let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
+        let config = isSeedMode
+            ? ModelConfiguration(isStoredInMemoryOnly: true)
+            : ModelConfiguration()
+        let container = try! ModelContainer(
+            for: Horse.self, Client.self, Transaction.self,
+            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            configurations: config
+        )
+        if isSeedMode {
+            PreviewSampleData.populate(container: container)
+        }
+        return container
+    }()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -13,15 +29,7 @@ struct BarnBookApp: App {
                     DeepLinkHandler.handle(url: url, router: router)
                 }
         }
-        .modelContainer(for: [
-            Horse.self,
-            Client.self,
-            Transaction.self,
-            VetRecord.self,
-            FarrierVisit.self,
-            SupplyItem.self,
-            Reminder.self
-        ], isAutosaveEnabled: true)
+        .modelContainer(modelContainer)
     }
 }
 

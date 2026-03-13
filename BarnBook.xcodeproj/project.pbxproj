@@ -59,6 +59,7 @@
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
 		966A13AE1271F2AE67F45A67 /* BarnBookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnBookTests.swift */; };
 		8293D3A78740C0033301853F /* BarnBookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnBookUITests.swift */; };
+		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,7 @@
 		A1C67C37342285C253C4FB52 /* BarnBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarnBook.entitlements; sourceTree = "<group>"; };
 		8400E9C51028A856C60639AB /* BarnBookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnBookTests.swift"; sourceTree = "<group>"; };
 		1E512067702B1DE5393F4838 /* BarnBookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnBookUITests.swift"; sourceTree = "<group>"; };
+		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				1E512067702B1DE5393F4838 /* BarnBookUITests.swift */,
+				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
 			);
 			path = BarnBookUITests;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8293D3A78740C0033301853F /* BarnBookUITests.swift in Sources */,
+				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
