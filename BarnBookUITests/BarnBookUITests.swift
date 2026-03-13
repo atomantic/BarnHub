@@ -31,17 +31,25 @@ final class BarnBookUITests: XCTestCase {
         XCTAssertTrue(reports.exists)
     }
 
-    func testFeatureTileNavigation() {
-        let horses = app.buttons["Horses"]
-        XCTAssertTrue(horses.waitForExistence(timeout: 5))
-        horses.tap()
+    func testTabBarExists() {
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
 
-        let backButton = app.navigationBars.buttons.firstMatch
-        XCTAssertTrue(backButton.waitForExistence(timeout: 5))
-        backButton.tap()
+        XCTAssertTrue(tabBar.buttons["Home"].exists)
+        XCTAssertTrue(tabBar.buttons["Horses"].exists)
+        XCTAssertTrue(tabBar.buttons["Clients"].exists)
+        XCTAssertTrue(tabBar.buttons["Schedule"].exists)
+        XCTAssertTrue(tabBar.buttons["Accounting"].exists)
+    }
 
-        let clients = app.buttons["Clients"]
-        XCTAssertTrue(clients.waitForExistence(timeout: 5))
-        clients.tap()
+    func testTabNavigation() {
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+        tabBar.buttons["Horses"].tap()
+        tabBar.buttons["Clients"].tap()
+        tabBar.buttons["Schedule"].tap()
+        tabBar.buttons["Accounting"].tap()
+        tabBar.buttons["Home"].tap()
     }
 }

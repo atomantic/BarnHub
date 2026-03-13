@@ -3,13 +3,39 @@ import SwiftData
 
 @Observable
 final class Router {
-    var path = NavigationPath()
+    var selectedTab: AppTab = .home
+    var homePath = NavigationPath()
+    var horsesPath = NavigationPath()
+    var clientsPath = NavigationPath()
+    var schedulePath = NavigationPath()
+    var accountingPath = NavigationPath()
 
-    func navigate(to route: any Hashable) {
-        path.append(route)
+    enum AppTab: String, CaseIterable {
+        case home, horses, clients, schedule, accounting
     }
 
-    func popToRoot() {
-        path = NavigationPath()
+    func navigate(to route: any Hashable, tab: AppTab? = nil) {
+        if let tab { selectedTab = tab }
+        switch selectedTab {
+        case .home: homePath.append(route)
+        case .horses: horsesPath.append(route)
+        case .clients: clientsPath.append(route)
+        case .schedule: schedulePath.append(route)
+        case .accounting: accountingPath.append(route)
+        }
+    }
+
+    func switchTab(_ tab: AppTab) {
+        selectedTab = tab
+    }
+
+    func popToRoot(tab: AppTab? = nil) {
+        switch tab ?? selectedTab {
+        case .home: homePath = NavigationPath()
+        case .horses: horsesPath = NavigationPath()
+        case .clients: clientsPath = NavigationPath()
+        case .schedule: schedulePath = NavigationPath()
+        case .accounting: accountingPath = NavigationPath()
+        }
     }
 }
