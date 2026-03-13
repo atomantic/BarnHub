@@ -10,28 +10,38 @@ final class BarnBookUITests: XCTestCase {
         app.launch()
     }
 
-    func testTabBarExists() {
-        let tabBar = app.tabBars.firstMatch
-        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
-
-        let horsesTab = tabBar.buttons["Horses"]
-        let clientsTab = tabBar.buttons["Clients"]
-        let accountingTab = tabBar.buttons["Accounting"]
-        let barnTab = tabBar.buttons["Barn"]
-
-        XCTAssertTrue(horsesTab.exists)
-        XCTAssertTrue(clientsTab.exists)
-        XCTAssertTrue(accountingTab.exists)
-        XCTAssertTrue(barnTab.exists)
+    func testHomeScreenExists() {
+        let barnBookTitle = app.staticTexts["BarnBook"]
+        XCTAssertTrue(barnBookTitle.waitForExistence(timeout: 5))
     }
 
-    func testTabNavigation() {
-        let tabBar = app.tabBars.firstMatch
-        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+    func testHomeScreenFeatureTiles() {
+        let horses = app.buttons["Horses"]
+        let clients = app.buttons["Clients"]
+        let schedule = app.buttons["Schedule"]
+        let supplies = app.buttons["Supplies"]
+        let accounting = app.buttons["Accounting"]
+        let reports = app.buttons["Reports"]
 
-        tabBar.buttons["Clients"].tap()
-        tabBar.buttons["Accounting"].tap()
-        tabBar.buttons["Barn"].tap()
-        tabBar.buttons["Horses"].tap()
+        XCTAssertTrue(horses.waitForExistence(timeout: 5))
+        XCTAssertTrue(clients.exists)
+        XCTAssertTrue(schedule.exists)
+        XCTAssertTrue(supplies.exists)
+        XCTAssertTrue(accounting.exists)
+        XCTAssertTrue(reports.exists)
+    }
+
+    func testFeatureTileNavigation() {
+        let horses = app.buttons["Horses"]
+        XCTAssertTrue(horses.waitForExistence(timeout: 5))
+        horses.tap()
+
+        let backButton = app.navigationBars.buttons.firstMatch
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5))
+        backButton.tap()
+
+        let clients = app.buttons["Clients"]
+        XCTAssertTrue(clients.waitForExistence(timeout: 5))
+        clients.tap()
     }
 }
