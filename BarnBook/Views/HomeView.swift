@@ -49,19 +49,19 @@ struct HomeView: View {
     private var iconGrid: some View {
         LazyVGrid(columns: columns, spacing: 20) {
             FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown) {
-                router.navigate(to: HomeRoute.horses)
+                router.switchTab(.horses)
             }
             FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown) {
-                router.navigate(to: HomeRoute.clients)
+                router.switchTab(.clients)
             }
             FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown) {
-                router.navigate(to: HomeRoute.schedule)
+                router.switchTab(.schedule)
             }
             FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown) {
                 router.navigate(to: HomeRoute.supplies)
             }
             FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown) {
-                router.navigate(to: HomeRoute.accounting)
+                router.switchTab(.accounting)
             }
             FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
                 router.navigate(to: HomeRoute.reports)

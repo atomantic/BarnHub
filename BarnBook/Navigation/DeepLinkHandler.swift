@@ -7,37 +7,43 @@ struct DeepLinkHandler {
         let host = url.host() ?? ""
         let pathComponents = url.pathComponents.filter { $0 != "/" }
 
-        router.popToRoot()
-
         switch host {
         case "horses":
-            router.navigate(to: HomeRoute.horses)
+            router.popToRoot(tab: .horses)
+            router.switchTab(.horses)
 
         case "clients":
-            router.navigate(to: HomeRoute.clients)
+            router.popToRoot(tab: .clients)
+            router.switchTab(.clients)
 
         case "accounting":
-            router.navigate(to: HomeRoute.accounting)
+            router.popToRoot(tab: .accounting)
+            router.switchTab(.accounting)
 
         case "barn", "schedule":
-            router.navigate(to: HomeRoute.schedule)
+            router.popToRoot(tab: .schedule)
+            router.switchTab(.schedule)
 
             if let first = pathComponents.first {
                 switch first {
                 case "supplies":
-                    router.navigate(to: BarnRoute.supplies)
+                    router.navigate(to: BarnRoute.supplies, tab: .schedule)
                 case "reminders":
-                    router.navigate(to: BarnRoute.reminders)
+                    router.navigate(to: BarnRoute.reminders, tab: .schedule)
                 default:
                     break
                 }
             }
 
         case "supplies":
-            router.navigate(to: HomeRoute.supplies)
+            router.popToRoot(tab: .home)
+            router.switchTab(.home)
+            router.navigate(to: HomeRoute.supplies, tab: .home)
 
         case "reports":
-            router.navigate(to: HomeRoute.reports)
+            router.popToRoot(tab: .home)
+            router.switchTab(.home)
+            router.navigate(to: HomeRoute.reports, tab: .home)
 
         default:
             BarnBookLogger.warning("Unhandled deep link host=\(host)")
