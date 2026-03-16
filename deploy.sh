@@ -127,7 +127,8 @@ xcrun altool --upload-app \
     --file "$IPA_PATH" \
     --type ios \
     --apiKey "$APPSTORE_API_KEY_ID" \
-    --apiIssuer "$APPSTORE_ISSUER_ID"
+    --apiIssuer "$APPSTORE_ISSUER_ID" \
+    --transport DAV
 
 UPLOAD_EXIT=$?
 if [ $UPLOAD_EXIT -ne 0 ]; then

@@ -2,7 +2,7 @@ import XCTest
 
 final class ScreenshotTests: XCTestCase {
     var app: XCUIApplication!
-    let dir = "/Users/antic/github.com/atomantic/BarnBook/screenshots"
+    let dir = "/Users/antic/github.com/atomantic/BarnIO/screenshots"
 
     override func setUp() {
         super.setUp()
@@ -55,5 +55,10 @@ final class ScreenshotTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+
+        let data = screenshot.pngRepresentation
+        let url = URL(fileURLWithPath: "\(dir)/\(name).png")
+        try? FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)
+        try? data.write(to: url)
     }
 }
