@@ -14,7 +14,7 @@ final class ScreenshotTests: XCTestCase {
 
     func testCaptureAllScreenshots() {
         // 1. Home screen
-        let title = app.staticTexts["BarnBook"]
+        let title = app.staticTexts["BarnIO"]
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         saveScreenshot("01_home")
 

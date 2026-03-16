@@ -1,4 +1,4 @@
-# BarnBook - iOS Barn Management App
+# BarnIO - iOS Barn Management App
 
 ## Status: Phase 1-5 Implementation In Progress
 

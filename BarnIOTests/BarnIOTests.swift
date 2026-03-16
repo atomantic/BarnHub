@@ -1,8 +1,8 @@
 import XCTest
 import SwiftData
-@testable import BarnBook
+@testable import BarnIO
 
-final class BarnBookTests: XCTestCase {
+final class BarnIOTests: XCTestCase {
     var container: ModelContainer!
     var context: ModelContext!
 

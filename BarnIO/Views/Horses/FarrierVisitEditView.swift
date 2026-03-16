@@ -60,7 +60,7 @@ struct FarrierVisitEditView: View {
         )
         visit.horse = horse
         modelContext.insert(visit)
-        BarnBookLogger.info("Adding farrier visit horse=\(horse.name) farrier=\(visit.farrierName)")
+        BarnIOLogger.info("Adding farrier visit horse=\(horse.name) farrier=\(visit.farrierName)")
         modelContext.saveWithLogging()
         toastMessage = "Farrier visit saved"
         showToast = true

@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "99889D60A11D60E2AA54819D"
-               BuildableName = "BarnBook.app"
-               BlueprintName = "BarnBook"
-               ReferencedContainer = "container:BarnBook.xcodeproj">
+               BuildableName = "BarnIO.app"
+               BlueprintName = "BarnIO"
+               ReferencedContainer = "container:BarnIO.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,9 +36,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "124C588D1E4E0F457FAD7DFF"
-               BuildableName = "BarnBookTests.xctest"
-               BlueprintName = "BarnBookTests"
-               ReferencedContainer = "container:BarnBook.xcodeproj">
+               BuildableName = "BarnIOTests.xctest"
+               BlueprintName = "BarnIOTests"
+               ReferencedContainer = "container:BarnIO.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0C28F3E67EF128E4928C9ADF"
-               BuildableName = "BarnBookUITests.xctest"
-               BlueprintName = "BarnBookUITests"
-               ReferencedContainer = "container:BarnBook.xcodeproj">
+               BuildableName = "BarnIOUITests.xctest"
+               BlueprintName = "BarnIOUITests"
+               ReferencedContainer = "container:BarnIO.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "99889D60A11D60E2AA54819D"
-            BuildableName = "BarnBook.app"
-            BlueprintName = "BarnBook"
-            ReferencedContainer = "container:BarnBook.xcodeproj">
+            BuildableName = "BarnIO.app"
+            BlueprintName = "BarnIO"
+            ReferencedContainer = "container:BarnIO.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "99889D60A11D60E2AA54819D"
-            BuildableName = "BarnBook.app"
-            BlueprintName = "BarnBook"
-            ReferencedContainer = "container:BarnBook.xcodeproj">
+            BuildableName = "BarnIO.app"
+            BlueprintName = "BarnIO"
+            ReferencedContainer = "container:BarnIO.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

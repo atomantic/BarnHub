@@ -190,7 +190,7 @@ struct HorseDetailView: View {
 
     private func deleteHorse() {
         guard let horse else { return }
-        BarnBookLogger.info("Deleting horse name=\(horse.name)")
+        BarnIOLogger.info("Deleting horse name=\(horse.name)")
         modelContext.deleteWithLogging(horse)
         dismiss()
     }

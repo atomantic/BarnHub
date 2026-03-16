@@ -1,7 +1,7 @@
-# BarnBooks
+# BarnIO
 
 <p align="center">
-  <img src="logo.png" width="120" alt="BarnBooks Logo">
+  <img src="logo.png" width="120" alt="BarnIO Logo">
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
 
 - **SwiftUI** + **SwiftData** for a modern, declarative iOS experience
 - **CloudKit** sync via SwiftData for seamless multi-device access
-- **NavigationStack** with deep-linkable routes (`barnbook://` URL scheme)
+- **NavigationStack** with deep-linkable routes (`barnio://` URL scheme)
 - CI/CD via **GitHub Actions** with automatic **TestFlight** deployment
 
 ## Requirements
@@ -40,9 +40,9 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/atomantic/BarnBook.git
-cd BarnBook
-open BarnBook.xcodeproj
+git clone https://github.com/atomantic/BarnIO.git
+cd BarnIO
+open BarnIO.xcodeproj
 ```
 
 Select a simulator or device and hit Run.
@@ -61,9 +61,9 @@ Screenshots can be regenerated automatically:
 
 ```bash
 xcodebuild test \
-  -project BarnBook.xcodeproj \
-  -scheme BarnBook \
-  -only-testing:BarnBookUITests/ScreenshotTests \
+  -project BarnIO.xcodeproj \
+  -scheme BarnIO \
+  -only-testing:BarnIOUITests/ScreenshotTests \
   -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max'
 ```
 

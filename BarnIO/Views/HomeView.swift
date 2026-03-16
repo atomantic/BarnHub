@@ -34,7 +34,7 @@ struct HomeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
 
-                Text("BarnBook")
+                Text("BarnIO")
                     .font(.system(size: 32, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
             }

@@ -1,6 +1,6 @@
 import XCTest
 
-final class BarnBookUITests: XCTestCase {
+final class BarnIOUITests: XCTestCase {
     var app: XCUIApplication!
 
     override func setUp() {
@@ -11,7 +11,7 @@ final class BarnBookUITests: XCTestCase {
     }
 
     func testHomeScreenExists() {
-        let barnBookTitle = app.staticTexts["BarnBook"]
+        let barnBookTitle = app.staticTexts["BarnIO"]
         XCTAssertTrue(barnBookTitle.waitForExistence(timeout: 5))
     }
 

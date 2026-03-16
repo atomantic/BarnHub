@@ -67,7 +67,7 @@ struct VetRecordEditView: View {
         )
         record.horse = horse
         modelContext.insert(record)
-        BarnBookLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
+        BarnIOLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
         modelContext.saveWithLogging()
         toastMessage = "Vet record saved"
         showToast = true
