@@ -168,7 +168,7 @@ struct ClientDetailView: View {
 
     private func deleteClient() {
         guard let client else { return }
-        BarnBookLogger.info("Deleting client name=\(client.fullName)")
+        BarnIOLogger.info("Deleting client name=\(client.fullName)")
         modelContext.deleteWithLogging(client)
         dismiss()
     }

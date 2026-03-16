@@ -53,9 +53,9 @@ jobs:
           echo "Using destination: $DESTINATION"
 
           xcodebuild test \
-            -project BarnBook.xcodeproj \
-            -scheme BarnBook \
-            -only-testing:BarnBookTests \
+            -project BarnIO.xcodeproj \
+            -scheme BarnIO \
+            -only-testing:BarnIOTests \
             -destination "$DESTINATION" \
             -destination-timeout 60 \
             -configuration Debug \
@@ -96,11 +96,11 @@ jobs:
           fi
 
           xcodebuild \
-            -project BarnBook.xcodeproj \
-            -scheme BarnBook \
+            -project BarnIO.xcodeproj \
+            -scheme BarnIO \
             -configuration Release \
             -destination 'generic/platform=iOS' \
-            -archivePath build/BarnBook.xcarchive \
+            -archivePath build/BarnIO.xcarchive \
             $DEPLOYMENT_TARGET \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY="" \
@@ -125,7 +125,7 @@ jobs:
       - name: Export .ipa (automatic signing)
         run: |
           xcodebuild -exportArchive \
-            -archivePath build/BarnBook.xcarchive \
+            -archivePath build/BarnIO.xcarchive \
             -exportOptionsPlist exportOptions.plist \
             -exportPath build/export \
             -allowProvisioningUpdates \
@@ -136,7 +136,7 @@ jobs:
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v3
         with:
-          app-path: 'build/export/BarnBook.ipa'
+          app-path: 'build/export/BarnIO.ipa'
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

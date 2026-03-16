@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct BarnBookApp: App {
+struct BarnIOApp: App {
     @State private var router = Router()
 
     private var modelContainer: ModelContainer = {

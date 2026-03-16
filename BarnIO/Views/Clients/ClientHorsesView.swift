@@ -64,14 +64,14 @@ struct ClientHorsesView: View {
         if currentlyAssigned {
             client.horses?.removeAll { $0.persistentModelID == horse.persistentModelID }
             toastMessage = "\(horse.name) removed"
-            BarnBookLogger.info("Unassigned horse=\(horse.name) from client=\(client.fullName)")
+            BarnIOLogger.info("Unassigned horse=\(horse.name) from client=\(client.fullName)")
         } else {
             if client.horses == nil {
                 client.horses = []
             }
             client.horses?.append(horse)
             toastMessage = "\(horse.name) assigned"
-            BarnBookLogger.info("Assigned horse=\(horse.name) to client=\(client.fullName)")
+            BarnIOLogger.info("Assigned horse=\(horse.name) to client=\(client.fullName)")
         }
         modelContext.saveWithLogging()
         showToast = true

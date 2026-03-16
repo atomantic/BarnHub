@@ -2,7 +2,7 @@ import Foundation
 
 struct DeepLinkHandler {
     static func handle(url: URL, router: Router) {
-        guard url.scheme == "barnbook" else { return }
+        guard url.scheme == "barnio" else { return }
 
         let host = url.host() ?? ""
         let pathComponents = url.pathComponents.filter { $0 != "/" }
@@ -46,7 +46,7 @@ struct DeepLinkHandler {
             router.navigate(to: HomeRoute.reports, tab: .home)
 
         default:
-            BarnBookLogger.warning("Unhandled deep link host=\(host)")
+            BarnIOLogger.warning("Unhandled deep link host=\(host)")
         }
     }
 }

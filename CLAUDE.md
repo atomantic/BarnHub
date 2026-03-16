@@ -1,4 +1,4 @@
-# BarnBook
+# BarnIO
 
 Equine barn management iOS app for tracking horses, clients, schedules, supplies, and accounting.
 
@@ -12,12 +12,12 @@ Equine barn management iOS app for tracking horses, clients, schedules, supplies
 
 ```bash
 # Build
-xcodebuild build -project BarnBook.xcodeproj -scheme BarnBook \
+xcodebuild build -project BarnIO.xcodeproj -scheme BarnIO \
   -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
 
 # Run tests
-xcodebuild test -project BarnBook.xcodeproj -scheme BarnBook \
-  -only-testing:BarnBookTests \
+xcodebuild test -project BarnIO.xcodeproj -scheme BarnIO \
+  -only-testing:BarnIOTests \
   -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
 ```
 
@@ -53,5 +53,5 @@ CI/CD via GitHub Actions (`.github/workflows/ci.yml`) deploys automatically on p
 - **Date formatting**: Use extensions in `Date+Formatting.swift`
 - **Toasts**: Use `.toast()` modifier from `View+Toast.swift` — never `window.alert`
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
-- **Logging**: Use `BarnBookLogger.info/success/warning/error`
+- **Logging**: Use `BarnIOLogger.info/success/warning/error`
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument

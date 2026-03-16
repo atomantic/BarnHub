@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-struct BarnBookLogger {
+struct BarnIOLogger {
     private static let logger = os.Logger(subsystem: "net.shadowpuppet.BarnBook", category: "general")
 
     static func info(_ message: String) {

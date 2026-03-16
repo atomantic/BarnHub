@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E88AAAC5DE89C41313DA6492 /* BarnBookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnBookApp.swift */; };
+		E88AAAC5DE89C41313DA6492 /* BarnIOApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnIOApp.swift */; };
 		4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
 		C1069D979C46B814742EC22D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
 		2A210E5A43639493D0748D17 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3E00B82BEDE322C7C8474 /* Routes.swift */; };
@@ -57,8 +57,8 @@
 		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
-		966A13AE1271F2AE67F45A67 /* BarnBookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnBookTests.swift */; };
-		8293D3A78740C0033301853F /* BarnBookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnBookUITests.swift */; };
+		966A13AE1271F2AE67F45A67 /* BarnIOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnIOTests.swift */; };
+		8293D3A78740C0033301853F /* BarnIOUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnIOUITests.swift */; };
 		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,22 +68,22 @@
 			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 99889D60A11D60E2AA54819D;
-			remoteInfo = BarnBook;
+			remoteInfo = BarnIO;
 		};
 		AA11035E9A94DFC6B5DC3503 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 99889D60A11D60E2AA54819D;
-			remoteInfo = BarnBook;
+			remoteInfo = BarnIO;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		39336BD3A0262B77EFBBEFA1 /* BarnBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarnBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9D22AD988431229927A9911 /* BarnBookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B838B4D0315032B59B4A1CC9 /* BarnBookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnBookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED04A28DB89B4BB6A7F17558 /* BarnBookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnBookApp.swift"; sourceTree = "<group>"; };
+		39336BD3A0262B77EFBBEFA1 /* BarnIO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarnIO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9D22AD988431229927A9911 /* BarnIOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnIOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B838B4D0315032B59B4A1CC9 /* BarnIOUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnIOUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED04A28DB89B4BB6A7F17558 /* BarnIOApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnIOApp.swift"; sourceTree = "<group>"; };
 		9626486725CB190EBD898F44 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandler.swift"; sourceTree = "<group>"; };
 		CD0269846B3293A3B59F5C78 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Router.swift"; sourceTree = "<group>"; };
 		92C3E00B82BEDE322C7C8474 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Routes.swift"; sourceTree = "<group>"; };
@@ -133,9 +133,9 @@
 		F7850193B3E5ED0B66616F80 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger.swift"; sourceTree = "<group>"; };
 		D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+Helpers.swift"; sourceTree = "<group>"; };
 		CC3340C45202B29152467289 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A1C67C37342285C253C4FB52 /* BarnBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarnBook.entitlements; sourceTree = "<group>"; };
-		8400E9C51028A856C60639AB /* BarnBookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnBookTests.swift"; sourceTree = "<group>"; };
-		1E512067702B1DE5393F4838 /* BarnBookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnBookUITests.swift"; sourceTree = "<group>"; };
+		A1C67C37342285C253C4FB52 /* BarnIO.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarnIO.entitlements; sourceTree = "<group>"; };
+		8400E9C51028A856C60639AB /* BarnIOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnIOTests.swift"; sourceTree = "<group>"; };
+		1E512067702B1DE5393F4838 /* BarnIOUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnIOUITests.swift"; sourceTree = "<group>"; };
 		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,9 +167,9 @@
 		2B731CEFC6751AAE0EC69B98 = {
 			isa = PBXGroup;
 			children = (
-				20F4BD606C0F6D1645AE4919 /* BarnBook */,
-				C0D0581312912516FF12D747 /* BarnBookTests */,
-				463D4E7574DE52C30660D0A7 /* BarnBookUITests */,
+				20F4BD606C0F6D1645AE4919 /* BarnIO */,
+				C0D0581312912516FF12D747 /* BarnIOTests */,
+				463D4E7574DE52C30660D0A7 /* BarnIOUITests */,
 				0A2C978E52A76F0AA9F68BB5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -177,18 +177,18 @@
 		0A2C978E52A76F0AA9F68BB5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				39336BD3A0262B77EFBBEFA1 /* BarnBook.app */,
-				F9D22AD988431229927A9911 /* BarnBookTests.xctest */,
-				B838B4D0315032B59B4A1CC9 /* BarnBookUITests.xctest */,
+				39336BD3A0262B77EFBBEFA1 /* BarnIO.app */,
+				F9D22AD988431229927A9911 /* BarnIOTests.xctest */,
+				B838B4D0315032B59B4A1CC9 /* BarnIOUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		20F4BD606C0F6D1645AE4919 /* BarnBook */ = {
+		20F4BD606C0F6D1645AE4919 /* BarnIO */ = {
 			isa = PBXGroup;
 			children = (
-				A1C67C37342285C253C4FB52 /* BarnBook.entitlements */,
-				ED04A28DB89B4BB6A7F17558 /* BarnBookApp.swift */,
+				A1C67C37342285C253C4FB52 /* BarnIO.entitlements */,
+				ED04A28DB89B4BB6A7F17558 /* BarnIOApp.swift */,
 				CC3340C45202B29152467289 /* Assets.xcassets */,
 				3136E6F1DF677A1E5E9176FE /* Extensions */,
 				9CF43B31E8845D861542A38E /* Models */,
@@ -197,7 +197,7 @@
 				564EAF51B7DD4639ADD9B985 /* Services */,
 				C454586A1F4E28C340BDC1AD /* Views */,
 			);
-			path = BarnBook;
+			path = BarnIO;
 			sourceTree = "<group>";
 		};
 		3136E6F1DF677A1E5E9176FE /* Extensions */ = {
@@ -330,29 +330,29 @@
 			path = "Horses";
 			sourceTree = "<group>";
 		};
-		C0D0581312912516FF12D747 /* BarnBookTests */ = {
+		C0D0581312912516FF12D747 /* BarnIOTests */ = {
 			isa = PBXGroup;
 			children = (
-				8400E9C51028A856C60639AB /* BarnBookTests.swift */,
+				8400E9C51028A856C60639AB /* BarnIOTests.swift */,
 			);
-			path = BarnBookTests;
+			path = BarnIOTests;
 			sourceTree = "<group>";
 		};
-		463D4E7574DE52C30660D0A7 /* BarnBookUITests */ = {
+		463D4E7574DE52C30660D0A7 /* BarnIOUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1E512067702B1DE5393F4838 /* BarnBookUITests.swift */,
+				1E512067702B1DE5393F4838 /* BarnIOUITests.swift */,
 				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
 			);
-			path = BarnBookUITests;
+			path = BarnIOUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		99889D60A11D60E2AA54819D /* BarnBook */ = {
+		99889D60A11D60E2AA54819D /* BarnIO */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnBook" */;
+			buildConfigurationList = 8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnIO" */;
 			buildPhases = (
 				9C0CDACBCB11B5A73C0A33C6 /* Sources */,
 				91C73240995D03C9FE9DCEC1 /* Frameworks */,
@@ -362,14 +362,14 @@
 			);
 			dependencies = (
 			);
-			name = BarnBook;
-			productName = BarnBook;
-			productReference = 39336BD3A0262B77EFBBEFA1 /* BarnBook.app */;
+			name = BarnIO;
+			productName = BarnIO;
+			productReference = 39336BD3A0262B77EFBBEFA1 /* BarnIO.app */;
 			productType = "com.apple.product-type.application";
 		};
-		124C588D1E4E0F457FAD7DFF /* BarnBookTests */ = {
+		124C588D1E4E0F457FAD7DFF /* BarnIOTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2BD1254260B3A4E09E52CC62 /* Build configuration list for PBXNativeTarget "BarnBookTests" */;
+			buildConfigurationList = 2BD1254260B3A4E09E52CC62 /* Build configuration list for PBXNativeTarget "BarnIOTests" */;
 			buildPhases = (
 				CC687EAC0A40BA68600C6802 /* Sources */,
 				F254C1196975440FD4DCE9FD /* Frameworks */,
@@ -379,14 +379,14 @@
 			dependencies = (
 				0FF74E9165EBB0F3F5A0658F /* PBXTargetDependency */,
 			);
-			name = BarnBookTests;
-			productName = BarnBookTests;
-			productReference = F9D22AD988431229927A9911 /* BarnBookTests.xctest */;
+			name = BarnIOTests;
+			productName = BarnIOTests;
+			productReference = F9D22AD988431229927A9911 /* BarnIOTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0C28F3E67EF128E4928C9ADF /* BarnBookUITests */ = {
+		0C28F3E67EF128E4928C9ADF /* BarnIOUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnBookUITests" */;
+			buildConfigurationList = 4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnIOUITests" */;
 			buildPhases = (
 				72D01DD4203283D325C3611D /* Sources */,
 				95E4AFC82AFEA8F4A4DC3D6D /* Frameworks */,
@@ -396,9 +396,9 @@
 			dependencies = (
 				E1A4BB05D88C7B1311ADABBB /* PBXTargetDependency */,
 			);
-			name = BarnBookUITests;
-			productName = BarnBookUITests;
-			productReference = B838B4D0315032B59B4A1CC9 /* BarnBookUITests.xctest */;
+			name = BarnIOUITests;
+			productName = BarnIOUITests;
+			productReference = B838B4D0315032B59B4A1CC9 /* BarnIOUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -424,7 +424,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1E2EF4F27A9C5D42CF8A02FE /* Build configuration list for PBXProject "BarnBook" */;
+			buildConfigurationList = 1E2EF4F27A9C5D42CF8A02FE /* Build configuration list for PBXProject "BarnIO" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -437,9 +437,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				99889D60A11D60E2AA54819D /* BarnBook */,
-				124C588D1E4E0F457FAD7DFF /* BarnBookTests */,
-				0C28F3E67EF128E4928C9ADF /* BarnBookUITests */,
+				99889D60A11D60E2AA54819D /* BarnIO */,
+				124C588D1E4E0F457FAD7DFF /* BarnIOTests */,
+				0C28F3E67EF128E4928C9ADF /* BarnIOUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -460,7 +460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E88AAAC5DE89C41313DA6492 /* BarnBookApp.swift in Sources */,
+				E88AAAC5DE89C41313DA6492 /* BarnIOApp.swift in Sources */,
 				4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */,
 				C1069D979C46B814742EC22D /* Router.swift in Sources */,
 				2A210E5A43639493D0748D17 /* Routes.swift in Sources */,
@@ -516,7 +516,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				966A13AE1271F2AE67F45A67 /* BarnBookTests.swift in Sources */,
+				966A13AE1271F2AE67F45A67 /* BarnIOTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +524,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8293D3A78740C0033301853F /* BarnBookUITests.swift in Sources */,
+				8293D3A78740C0033301853F /* BarnIOUITests.swift in Sources */,
 				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -534,12 +534,12 @@
 /* Begin PBXTargetDependency section */
 		0FF74E9165EBB0F3F5A0658F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 99889D60A11D60E2AA54819D /* BarnBook */;
+			target = 99889D60A11D60E2AA54819D /* BarnIO */;
 			targetProxy = 6C4436DBC86F8E99A8B8AC05 /* PBXContainerItemProxy */;
 		};
 		E1A4BB05D88C7B1311ADABBB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 99889D60A11D60E2AA54819D /* BarnBook */;
+			target = 99889D60A11D60E2AA54819D /* BarnIO */;
 			targetProxy = AA11035E9A94DFC6B5DC3503 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -669,14 +669,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BarnBook/BarnBook.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BarnIO/BarnIO.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BarnBook/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"BarnIO/Preview Content\"";
 				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = BarnBooks;
+				INFOPLIST_KEY_CFBundleDisplayName = BarnIO;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -701,14 +701,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BarnBook/BarnBook.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BarnIO/BarnIO.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BarnBook/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"BarnIO/Preview Content\"";
 				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = BarnBooks;
+				INFOPLIST_KEY_CFBundleDisplayName = BarnIO;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -742,7 +742,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnBook.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnBook";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnIO.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnIO";
 			};
 			name = Debug;
 		};
@@ -760,7 +760,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnBook.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnBook";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnIO.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnIO";
 			};
 			name = Release;
 		};
@@ -777,7 +777,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BarnBook;
+				TEST_TARGET_NAME = BarnIO;
 			};
 			name = Debug;
 		};
@@ -794,14 +794,14 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BarnBook;
+				TEST_TARGET_NAME = BarnIO;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1E2EF4F27A9C5D42CF8A02FE /* Build configuration list for PBXProject "BarnBook" */ = {
+		1E2EF4F27A9C5D42CF8A02FE /* Build configuration list for PBXProject "BarnIO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6BEB8A8372AEC5D15F55F5B8 /* Debug */,
@@ -810,7 +810,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnBook" */ = {
+		8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnIO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4CF9E94418EB14931A5453D9 /* Debug */,
@@ -819,7 +819,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2BD1254260B3A4E09E52CC62 /* Build configuration list for PBXNativeTarget "BarnBookTests" */ = {
+		2BD1254260B3A4E09E52CC62 /* Build configuration list for PBXNativeTarget "BarnIOTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D1851D349B0FD9C25B98C28C /* Debug */,
@@ -828,7 +828,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnBookUITests" */ = {
+		4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnIOUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3DF2401EEE4B26616BBC9D32 /* Debug */,

@@ -98,7 +98,7 @@ struct HorseEditView: View {
             horse.feedingSchedule = feedingSchedule
             horse.stallNumber = stallNumber
             horse.isActive = isActive
-            BarnBookLogger.info("Updating horse name=\(trimmedName)")
+            BarnIOLogger.info("Updating horse name=\(trimmedName)")
         } else {
             let horse = Horse(
                 name: trimmedName,
@@ -112,7 +112,7 @@ struct HorseEditView: View {
                 isActive: isActive
             )
             modelContext.insert(horse)
-            BarnBookLogger.info("Creating horse name=\(trimmedName)")
+            BarnIOLogger.info("Creating horse name=\(trimmedName)")
         }
 
         modelContext.saveWithLogging()
