@@ -15,9 +15,11 @@ struct BarnIOApp: App {
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
             configurations: config
         )
+        #if DEBUG
         if isSeedMode {
             PreviewSampleData.populate(container: container)
         }
+        #endif
         return container
     }()
 
