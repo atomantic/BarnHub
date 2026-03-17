@@ -49,12 +49,38 @@ echo "📦 Build number: $CURRENT_BUILD → $NEW_BUILD"
 if [ "${1:-}" != "--skip-tests" ]; then
     echo "🧪 Running tests..."
     DESTINATION=$(
-        if xcrun simctl list devices available | grep -q "iPhone 16"; then
-            echo "platform=iOS Simulator,name=iPhone 16"
-        elif xcrun simctl list devices available | grep -q "iPhone 15"; then
-            echo "platform=iOS Simulator,name=iPhone 15"
+        # Find the first available iPhone simulator with its OS version
+        SIMINFO=$(xcrun simctl list devices available -j | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+for runtime, devices in data.get('devices', {}).items():
+    if 'iOS' not in runtime:
+        continue
+    os_ver = runtime.split('.')[-1] if 'SimRuntime' in runtime else runtime.split('-')[-1]
+    # Extract version like '18.6' from 'com.apple.CoreSimulator.SimRuntime.iOS-18-6'
+    parts = runtime.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
+    os_ver = '.'.join(parts)
+    for d in devices:
+        name = d.get('name', '')
+        if d.get('isAvailable') and 'iPhone 16' in name and 'Plus' not in name and 'Pro' not in name and 'e' != name[-1:]:
+            print(f'{name},{os_ver}')
+            sys.exit(0)
+for runtime, devices in data.get('devices', {}).items():
+    if 'iOS' not in runtime:
+        continue
+    parts = runtime.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
+    os_ver = '.'.join(parts)
+    for d in devices:
+        if d.get('isAvailable') and 'iPhone' in d.get('name', ''):
+            print(f\"{d['name']},{os_ver}\")
+            sys.exit(0)
+" 2>/dev/null)
+        SIM_NAME="${SIMINFO%%,*}"
+        SIM_OS="${SIMINFO##*,}"
+        if [ -n "$SIM_NAME" ] && [ -n "$SIM_OS" ]; then
+            echo "platform=iOS Simulator,name=$SIM_NAME,OS=$SIM_OS"
         else
-            echo "platform=iOS Simulator,name=iPhone 14"
+            echo "platform=iOS Simulator,name=iPhone 16,OS=18.6"
         fi
     )
     xcodebuild test \
