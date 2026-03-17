@@ -8,6 +8,7 @@ enum HomeRoute: Hashable {
     case supplies
     case accounting
     case reports
+    case settings
 }
 
 enum HorseRoute: Hashable {

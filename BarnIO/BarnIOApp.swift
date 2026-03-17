@@ -5,6 +5,7 @@ import SwiftData
 struct BarnIOApp: App {
     @State private var router = Router()
     @State private var storeService = StoreService()
+    @State private var appearanceManager = AppearanceManager()
 
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
@@ -27,9 +28,10 @@ struct BarnIOApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(.light)
+                .preferredColorScheme(appearanceManager.colorScheme)
                 .environment(router)
                 .environment(storeService)
+                .environment(appearanceManager)
                 .onOpenURL { url in
                     DeepLinkHandler.handle(url: url, router: router)
                 }
@@ -94,6 +96,7 @@ private extension View {
                 case .supplies: SupplyListView()
                 case .accounting: AccountingDashboardView()
                 case .reports: ReportsView()
+                case .settings: SettingsView()
                 }
             }
             .navigationDestination(for: HorseRoute.self) { route in

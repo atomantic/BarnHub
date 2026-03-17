@@ -2,9 +2,21 @@ import SwiftUI
 
 extension Color {
     static let barnGreen = Color(red: 74/255, green: 124/255, blue: 63/255)
-    static let barnBrown = Color(red: 92/255, green: 61/255, blue: 30/255)
+    static let barnBrown = Color(light: Color(red: 92/255, green: 61/255, blue: 30/255),
+                                  dark: Color(red: 210/255, green: 180/255, blue: 140/255))
     static let barnTan = Color(red: 196/255, green: 162/255, blue: 101/255)
-    static let barnOffWhite = Color(red: 245/255, green: 242/255, blue: 237/255)
+    static let barnOffWhite = Color(light: Color(red: 245/255, green: 242/255, blue: 237/255),
+                                     dark: Color(red: 28/255, green: 28/255, blue: 30/255))
+    static let barnCardBackground = Color(light: .white,
+                                           dark: Color(red: 44/255, green: 44/255, blue: 46/255))
+
+    init(light: Color, dark: Color) {
+        let lightUI = UIColor(light)
+        let darkUI = UIColor(dark)
+        self.init(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark ? darkUI : lightUI
+        })
+    }
 }
 
 extension ShapeStyle where Self == Color {
@@ -12,4 +24,5 @@ extension ShapeStyle where Self == Color {
     static var barnBrown: Color { .barnBrown }
     static var barnTan: Color { .barnTan }
     static var barnOffWhite: Color { .barnOffWhite }
+    static var barnCardBackground: Color { .barnCardBackground }
 }
