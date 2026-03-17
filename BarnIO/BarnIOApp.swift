@@ -27,6 +27,7 @@ struct BarnIOApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.light)
                 .environment(router)
                 .environment(storeService)
                 .onOpenURL { url in
