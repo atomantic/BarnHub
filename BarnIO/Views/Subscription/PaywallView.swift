@@ -134,6 +134,22 @@ struct PaywallView: View {
                         badge: "7-day free trial"
                     )
                 }
+            } else if storeService.productsLoadFailed {
+                VStack(spacing: 12) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                    Text("Unable to load subscription plans")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Button("Try Again") {
+                        Task { await storeService.loadProducts() }
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.barnGreen)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
             } else {
                 VStack(spacing: 8) {
                     ProgressView()
