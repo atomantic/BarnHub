@@ -68,6 +68,8 @@
 		AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000B /* ClientsUpgradeView.swift */; };
 		AA11223344556677AABB000E /* BarnIOProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnIOProducts.storekit */; };
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
+		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
+		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +155,8 @@
 		AA11223344556677AABB000B /* ClientsUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientsUpgradeView.swift"; sourceTree = "<group>"; };
 		AA11223344556677AABB000D /* BarnIOProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "BarnIOProducts.storekit"; sourceTree = "<group>"; };
 		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGateTests.swift"; sourceTree = "<group>"; };
+		BB11223344556677AABB0001 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManager.swift"; sourceTree = "<group>"; };
+		BB11223344556677AABB0003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +268,7 @@
 		564EAF51B7DD4639ADD9B985 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				BB11223344556677AABB0001 /* AppearanceManager.swift */,
 				AA11223344556677AABB0003 /* FeatureGate.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
@@ -276,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
+				BB11223344556677AABB0003 /* SettingsView.swift */,
 				75C45A74C0754D59FD90DAE5 /* Accounting */,
 				CE6CF664131C60DA461067A8 /* Barn */,
 				58A73D2D9F8B43A7E7D9336F /* Clients */,
@@ -556,6 +562,8 @@
 				AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */,
 				AA11223344556677AABB000A /* FeatureLockedOverlay.swift in Sources */,
 				AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */,
+				BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */,
+				BB11223344556677AABB0004 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

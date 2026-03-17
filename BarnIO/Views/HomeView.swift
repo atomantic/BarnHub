@@ -24,6 +24,16 @@ struct HomeView: View {
         }
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    router.navigate(to: HomeRoute.settings)
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundStyle(.white)
+                }
+            }
+        }
     }
 
     private var headerSection: some View {
@@ -72,7 +82,7 @@ struct HomeView: View {
             .padding(12)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.white)
+                    .fill(.barnCardBackground)
                     .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
             )
         }
@@ -118,7 +128,7 @@ struct FeatureTile: View {
             VStack(spacing: 10) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(.white)
+                        .fill(.barnCardBackground)
                         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
 
                     Image(systemName: icon)
