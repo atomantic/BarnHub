@@ -3,6 +3,7 @@ import SwiftData
 
 struct ReportsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(StoreService.self) private var storeService
     @Query private var transactions: [Transaction]
 
     private var totalIncome: Double {
@@ -35,6 +36,10 @@ struct ReportsView: View {
             .sorted { $0.1 > $1.1 }
     }
 
+    private var showCategoryBreakdowns: Bool {
+        FeatureGate.canAccessFullReports(storeService.isPro)
+    }
+
     var body: some View {
         List {
             Section("Summary") {
@@ -43,19 +48,25 @@ struct ReportsView: View {
                 summaryRow("Net Balance", value: netBalance, color: netBalance >= 0 ? .barnGreen : .red)
             }
 
-            if !incomeByCategory.isEmpty {
-                Section("Income by Category") {
-                    ForEach(incomeByCategory, id: \.0) { category, amount in
-                        categoryRow(category, amount: amount, total: totalIncome)
+            if showCategoryBreakdowns {
+                if !incomeByCategory.isEmpty {
+                    Section("Income by Category") {
+                        ForEach(incomeByCategory, id: \.0) { category, amount in
+                            categoryRow(category, amount: amount, total: totalIncome)
+                        }
                     }
                 }
-            }
 
-            if !expensesByCategory.isEmpty {
-                Section("Expenses by Category") {
-                    ForEach(expensesByCategory, id: \.0) { category, amount in
-                        categoryRow(category, amount: amount, total: totalExpenses)
+                if !expensesByCategory.isEmpty {
+                    Section("Expenses by Category") {
+                        ForEach(expensesByCategory, id: \.0) { category, amount in
+                            categoryRow(category, amount: amount, total: totalExpenses)
+                        }
                     }
+                }
+            } else {
+                Section("Category Breakdowns") {
+                    reportsLockedTeaser
                 }
             }
 
@@ -70,6 +81,32 @@ struct ReportsView: View {
             }
         }
         .navigationTitle("Reports")
+    }
+
+    @ViewBuilder
+    private var reportsLockedTeaser: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Text("Income by Category")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                ProBadgeView()
+            }
+            .padding(.vertical, 4)
+            .redacted(reason: .placeholder)
+
+            HStack {
+                Text("Expenses by Category")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                ProBadgeView()
+            }
+            .padding(.vertical, 4)
+            .redacted(reason: .placeholder)
+        }
+        .featureLockedOverlay()
     }
 
     private func summaryRow(_ label: String, value: Double, color: Color) -> some View {

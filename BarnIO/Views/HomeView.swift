@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(Router.self) private var router
+    @Environment(StoreService.self) private var storeService
 
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -15,6 +16,9 @@ struct HomeView: View {
                 headerSection
                 Spacer()
                     .frame(height: 20)
+                if !storeService.isPro {
+                    upgradeBar
+                }
                 iconGrid
             }
         }
@@ -35,9 +39,14 @@ struct HomeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
 
-                Text("BarnIO")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                HStack(spacing: 8) {
+                    Text("BarnIO")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                    if storeService.isPro {
+                        ProBadgeView()
+                    }
+                }
             }
             .padding(.bottom, 50)
 
@@ -45,6 +54,31 @@ struct HomeView: View {
                 .fill(Color.barnOffWhite)
                 .frame(height: 50)
         }
+    }
+
+    private var upgradeBar: some View {
+        Button {
+            router.navigate(to: SubscriptionRoute.paywall)
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "star.circle.fill")
+                    .foregroundStyle(.barnGreen)
+                Text("Upgrade to BarnIO Pro")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.barnBrown)
+                Spacer()
+                ProBadgeView()
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.white)
+                    .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 12)
     }
 
     private var iconGrid: some View {

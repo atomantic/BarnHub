@@ -18,11 +18,12 @@
 - [x] Phase 3: Horse & Client CRUD
 - [x] Phase 4: Accounting & Barn Management
 - [x] Phase 5: CI/CD & TestFlight
+- [x] Phase 6: BarnIO Pro Freemium Subscription
 
 ## Deferred
 - Photo capture for horse profiles
 - Local notifications for reminders
 - Reports with Swift Charts
 - Lesson scheduling / calendar
-- PDF invoices, CSV export
+- CSV export (gated behind Pro)
 - iPad layout, widgets

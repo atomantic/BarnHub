@@ -60,6 +60,14 @@
 		966A13AE1271F2AE67F45A67 /* BarnIOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnIOTests.swift */; };
 		8293D3A78740C0033301853F /* BarnIOUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnIOUITests.swift */; };
 		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
+		AA11223344556677AABB0002 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
+		AA11223344556677AABB0004 /* FeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0003 /* FeatureGate.swift */; };
+		AA11223344556677AABB0006 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0005 /* PaywallView.swift */; };
+		AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0007 /* ProBadgeView.swift */; };
+		AA11223344556677AABB000A /* FeatureLockedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */; };
+		AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000B /* ClientsUpgradeView.swift */; };
+		AA11223344556677AABB000E /* BarnIOProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnIOProducts.storekit */; };
+		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +145,14 @@
 		8400E9C51028A856C60639AB /* BarnIOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnIOTests.swift"; sourceTree = "<group>"; };
 		1E512067702B1DE5393F4838 /* BarnIOUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnIOUITests.swift"; sourceTree = "<group>"; };
 		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotTests.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB0001 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreService.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB0003 /* FeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGate.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB0005 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB0007 /* ProBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProBadgeView.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureLockedOverlay.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB000B /* ClientsUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientsUpgradeView.swift"; sourceTree = "<group>"; };
+		AA11223344556677AABB000D /* BarnIOProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "BarnIOProducts.storekit"; sourceTree = "<group>"; };
+		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGateTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +206,7 @@
 				A1C67C37342285C253C4FB52 /* BarnIO.entitlements */,
 				ED04A28DB89B4BB6A7F17558 /* BarnIOApp.swift */,
 				CC3340C45202B29152467289 /* Assets.xcassets */,
+				AA11223344556677AABB0012 /* Configuration */,
 				3136E6F1DF677A1E5E9176FE /* Extensions */,
 				9CF43B31E8845D861542A38E /* Models */,
 				DCBC7EC1946F1D8B1AA76301 /* Navigation */,
@@ -247,7 +264,9 @@
 		564EAF51B7DD4639ADD9B985 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AA11223344556677AABB0003 /* FeatureGate.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
+				AA11223344556677AABB0001 /* StoreService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 			);
 			path = "Services";
@@ -262,6 +281,7 @@
 				58A73D2D9F8B43A7E7D9336F /* Clients */,
 				6A4A5194513E89696377E642 /* Components */,
 				157D58249029F90DE2AB8725 /* Horses */,
+				AA11223344556677AABB0011 /* Subscription */,
 			);
 			path = "Views";
 			sourceTree = "<group>";
@@ -334,6 +354,7 @@
 			isa = PBXGroup;
 			children = (
 				8400E9C51028A856C60639AB /* BarnIOTests.swift */,
+				AA11223344556677AABB000F /* FeatureGateTests.swift */,
 			);
 			path = BarnIOTests;
 			sourceTree = "<group>";
@@ -345,6 +366,25 @@
 				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
 			);
 			path = BarnIOUITests;
+			sourceTree = "<group>";
+		};
+		AA11223344556677AABB0011 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				AA11223344556677AABB000B /* ClientsUpgradeView.swift */,
+				AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */,
+				AA11223344556677AABB0005 /* PaywallView.swift */,
+				AA11223344556677AABB0007 /* ProBadgeView.swift */,
+			);
+			path = "Subscription";
+			sourceTree = "<group>";
+		};
+		AA11223344556677AABB0012 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				AA11223344556677AABB000D /* BarnIOProducts.storekit */,
+			);
+			path = "Configuration";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -450,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */,
+				AA11223344556677AABB000E /* BarnIOProducts.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +550,12 @@
 				C3D4E5F607182930A1B2C3D4 /* ReportsView.swift in Sources */,
 				6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */,
 				3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */,
+				AA11223344556677AABB0002 /* StoreService.swift in Sources */,
+				AA11223344556677AABB0004 /* FeatureGate.swift in Sources */,
+				AA11223344556677AABB0006 /* PaywallView.swift in Sources */,
+				AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */,
+				AA11223344556677AABB000A /* FeatureLockedOverlay.swift in Sources */,
+				AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,6 +564,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				966A13AE1271F2AE67F45A67 /* BarnIOTests.swift in Sources */,
+				AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

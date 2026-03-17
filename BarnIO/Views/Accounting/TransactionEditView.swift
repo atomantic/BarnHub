@@ -4,6 +4,7 @@ import SwiftData
 struct TransactionEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(StoreService.self) private var storeService
 
     @Query private var clients: [Client]
 
@@ -51,11 +52,13 @@ struct TransactionEditView: View {
                 Toggle("Paid", isOn: $isPaid)
             }
 
-            Section("Client") {
-                Picker("Assign Client", selection: $selectedClientID) {
-                    Text("None").tag(nil as PersistentIdentifier?)
-                    ForEach(clients) { client in
-                        Text(client.fullName).tag(client.persistentModelID as PersistentIdentifier?)
+            if FeatureGate.canLinkClientToTransaction(storeService.isPro) {
+                Section("Client") {
+                    Picker("Assign Client", selection: $selectedClientID) {
+                        Text("None").tag(nil as PersistentIdentifier?)
+                        ForEach(clients) { client in
+                            Text(client.fullName).tag(client.persistentModelID as PersistentIdentifier?)
+                        }
                     }
                 }
             }

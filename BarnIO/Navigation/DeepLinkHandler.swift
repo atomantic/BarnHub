@@ -45,6 +45,13 @@ struct DeepLinkHandler {
             router.switchTab(.home)
             router.navigate(to: HomeRoute.reports, tab: .home)
 
+        case "subscription":
+            if pathComponents.first == "paywall" || pathComponents.isEmpty {
+                router.popToRoot(tab: .home)
+                router.switchTab(.home)
+                router.navigate(to: SubscriptionRoute.paywall, tab: .home)
+            }
+
         default:
             BarnIOLogger.warning("Unhandled deep link host=\(host)")
         }
