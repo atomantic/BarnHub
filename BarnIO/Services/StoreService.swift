@@ -8,6 +8,7 @@ final class StoreService {
     private(set) var products: [Product] = []
     private(set) var isPro = false
     private(set) var purchaseInProgress = false
+    private(set) var productsLoadFailed = false
 
     private var updateTask: Task<Void, Never>?
 
@@ -33,11 +34,18 @@ final class StoreService {
     }
 
     func loadProducts() async {
+        productsLoadFailed = false
         do {
             let fetched = try await Product.products(for: Self.productIDs)
             products = fetched.sorted { $0.price < $1.price }
-            BarnIOLogger.success("Loaded \(fetched.count) products")
+            if fetched.isEmpty {
+                productsLoadFailed = true
+                BarnIOLogger.warning("No products returned from App Store for IDs=\(Self.productIDs)")
+            } else {
+                BarnIOLogger.success("Loaded \(fetched.count) products")
+            }
         } catch {
+            productsLoadFailed = true
             BarnIOLogger.error("Failed to load products: \(error.localizedDescription)")
         }
     }
