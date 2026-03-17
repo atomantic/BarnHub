@@ -30,6 +30,10 @@ enum AccountingRoute: Hashable {
     case edit(PersistentIdentifier?)
 }
 
+enum SubscriptionRoute: Hashable {
+    case paywall
+}
+
 enum BarnRoute: Hashable {
     case supplies
     case supplyEdit(PersistentIdentifier?)

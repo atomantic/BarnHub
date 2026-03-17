@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct BarnIOApp: App {
     @State private var router = Router()
+    @State private var storeService = StoreService()
 
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
@@ -27,6 +28,7 @@ struct BarnIOApp: App {
         WindowGroup {
             ContentView()
                 .environment(router)
+                .environment(storeService)
                 .onOpenURL { url in
                     DeepLinkHandler.handle(url: url, router: router)
                 }
@@ -124,6 +126,11 @@ private extension View {
                 case .reminderEdit(let id): ReminderEditView(reminderID: id)
                 case .vetSchedule: VetScheduleView()
                 case .farrierSchedule: FarrierScheduleView()
+                }
+            }
+            .navigationDestination(for: SubscriptionRoute.self) { route in
+                switch route {
+                case .paywall: PaywallView()
                 }
             }
     }
