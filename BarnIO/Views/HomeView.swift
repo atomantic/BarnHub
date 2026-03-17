@@ -13,8 +13,9 @@ struct HomeView: View {
         ScrollView {
             VStack(spacing: 0) {
                 headerSection
+                Spacer()
+                    .frame(height: 20)
                 iconGrid
-                    .padding(.top, -30)
             }
         }
         .background(Color.barnOffWhite)
