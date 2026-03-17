@@ -26,8 +26,11 @@ struct PaywallView: View {
         .navigationTitle("BarnIO Pro")
         .navigationBarTitleDisplayMode(.inline)
         .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
-        .onAppear {
-            selectedProduct = storeService.annualProduct
+        .task {
+            if storeService.products.isEmpty {
+                await storeService.loadProducts()
+            }
+            selectedProduct = storeService.annualProduct ?? storeService.monthlyProduct
         }
     }
 
@@ -109,22 +112,37 @@ struct PaywallView: View {
             .font(.subheadline)
     }
 
+    private var productsLoaded: Bool {
+        !storeService.products.isEmpty
+    }
+
     private var planCards: some View {
         VStack(spacing: 12) {
-            if let monthly = storeService.monthlyProduct {
-                planCard(
-                    product: monthly,
-                    title: "Monthly",
-                    subtitle: monthly.displayPrice + "/month"
-                )
-            }
-            if let annual = storeService.annualProduct {
-                planCard(
-                    product: annual,
-                    title: "Annual",
-                    subtitle: annual.displayPrice + "/year",
-                    badge: "7-day free trial"
-                )
+            if productsLoaded {
+                if let monthly = storeService.monthlyProduct {
+                    planCard(
+                        product: monthly,
+                        title: "Monthly",
+                        subtitle: monthly.displayPrice + "/month"
+                    )
+                }
+                if let annual = storeService.annualProduct {
+                    planCard(
+                        product: annual,
+                        title: "Annual",
+                        subtitle: annual.displayPrice + "/year",
+                        badge: "7-day free trial"
+                    )
+                }
+            } else {
+                VStack(spacing: 8) {
+                    ProgressView()
+                    Text("Loading plans...")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 24)
             }
         }
     }
@@ -164,6 +182,10 @@ struct PaywallView: View {
         .buttonStyle(.plain)
     }
 
+    private var canPurchase: Bool {
+        selectedProduct != nil && !storeService.purchaseInProgress
+    }
+
     private var purchaseButton: some View {
         Button {
             Task { await handlePurchase() }
@@ -182,10 +204,10 @@ struct PaywallView: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.barnGreen)
+                    .fill(canPurchase ? Color.barnGreen : Color.barnGreen.opacity(0.4))
             )
         }
-        .disabled(selectedProduct == nil || storeService.purchaseInProgress)
+        .disabled(!canPurchase)
     }
 
     private var restoreButton: some View {
