@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Environment(StoreService.self) private var storeService
     @Environment(Router.self) private var router
     @State private var showingMailComposer = false
+    @State private var showRedeemCodeSheet = false
 
     private static let feedbackEmail = "atomantic@gmail.com"
 
@@ -60,6 +61,11 @@ struct SettingsView: View {
                             ProBadgeView()
                         }
                     }
+                    Button {
+                        showRedeemCodeSheet = true
+                    } label: {
+                        settingsRow("Redeem Code", icon: "gift")
+                    }
                 }
             }
 
@@ -98,6 +104,17 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .offerCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
+            switch result {
+            case .success:
+                BarnHubLogger.success("Offer code redeemed")
+                Task { await storeService.refreshEntitlements() }
+            case .failure(let error):
+                BarnHubLogger.error("Offer code redemption failed: \(error.localizedDescription)")
+            @unknown default:
+                break
+            }
+        }
         .sheet(isPresented: $showingMailComposer) {
             MailComposer(
                 recipient: Self.feedbackEmail,
