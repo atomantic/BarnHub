@@ -11,45 +11,50 @@ struct ReminderListView: View {
     @State private var showToast = false
     @State private var toastMessage = ""
 
-    private var overdueReminders: [Reminder] {
-        reminders.filter { !$0.isCompleted && $0.dueDate.isOverdue }
-    }
-
-    private var upcomingReminders: [Reminder] {
-        reminders.filter { !$0.isCompleted && !$0.dueDate.isOverdue }
-    }
-
-    private var completedReminders: [Reminder] {
-        reminders.filter(\.isCompleted)
+    private var categorizedReminders: (overdue: [Reminder], upcoming: [Reminder], completed: [Reminder]) {
+        var overdue: [Reminder] = []
+        var upcoming: [Reminder] = []
+        var completed: [Reminder] = []
+        for reminder in reminders {
+            if reminder.isCompleted {
+                completed.append(reminder)
+            } else if reminder.dueDate.isOverdue {
+                overdue.append(reminder)
+            } else {
+                upcoming.append(reminder)
+            }
+        }
+        return (overdue, upcoming, completed)
     }
 
     var body: some View {
+        let categorized = categorizedReminders
         List {
-            if !overdueReminders.isEmpty {
+            if !categorized.overdue.isEmpty {
                 Section("Overdue") {
-                    ForEach(overdueReminders) { reminder in
+                    ForEach(categorized.overdue) { reminder in
                         reminderRow(reminder, isOverdue: true)
                     }
                 }
             }
 
             Section("Upcoming") {
-                if upcomingReminders.isEmpty && overdueReminders.isEmpty {
+                if categorized.upcoming.isEmpty && categorized.overdue.isEmpty {
                     EmptyStateView(
                         icon: "bell.slash",
                         title: "No Reminders",
                         subtitle: "Tap + to create a reminder."
                     )
                 } else {
-                    ForEach(upcomingReminders) { reminder in
+                    ForEach(categorized.upcoming) { reminder in
                         reminderRow(reminder, isOverdue: false)
                     }
                 }
             }
 
-            if showCompleted && !completedReminders.isEmpty {
+            if showCompleted && !categorized.completed.isEmpty {
                 Section("Completed") {
-                    ForEach(completedReminders) { reminder in
+                    ForEach(categorized.completed) { reminder in
                         reminderRow(reminder, isOverdue: false)
                     }
                 }

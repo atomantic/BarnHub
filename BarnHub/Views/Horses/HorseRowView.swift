@@ -6,9 +6,10 @@ struct HorseRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Circle()
-                .fill(horse.isActive ? Color.green : Color.gray)
-                .frame(width: 10, height: 10)
+            Image(systemName: horse.isActive ? "checkmark.circle.fill" : "xmark.circle")
+                .foregroundStyle(horse.isActive ? Color.green : Color.gray)
+                .font(.subheadline)
+                .accessibilityLabel(horse.isActive ? "Active" : "Inactive")
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(horse.name)

@@ -6,9 +6,10 @@ struct ClientRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Circle()
-                .fill(client.isActive ? Color.green : Color.gray)
-                .frame(width: 10, height: 10)
+            Image(systemName: client.isActive ? "checkmark.circle.fill" : "xmark.circle")
+                .foregroundStyle(client.isActive ? Color.green : Color.gray)
+                .font(.subheadline)
+                .accessibilityLabel(client.isActive ? "Active" : "Inactive")
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(client.fullName)

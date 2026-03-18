@@ -37,7 +37,7 @@ struct PaywallView: View {
     private var headerSection: some View {
         VStack(spacing: 12) {
             Image(systemName: "star.circle.fill")
-                .font(.system(size: 56))
+                .font(.largeTitle)
                 .foregroundStyle(.barnGreen)
 
             Text("Upgrade to Pro")
@@ -173,7 +173,7 @@ struct PaywallView: View {
                             .font(.headline)
                         if let badge {
                             Text(badge)
-                                .font(.system(size: 10, weight: .semibold))
+                                .font(.caption2.weight(.semibold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
