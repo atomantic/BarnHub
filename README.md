@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <strong>Barn management made simple.</strong><br>
+  <strong>Privacy-first barn management.</strong><br>
+  No email. No login. No tracking. Your data lives in your iCloud.<br>
   Track horses, clients, schedules, supplies, and finances — all in one app.
 </p>
 
@@ -15,6 +16,14 @@
   <img src="screenshots/04_schedule.png" width="200">
   <img src="screenshots/05_accounting.png" width="200">
 </p>
+
+## Privacy by Design
+
+- **No email or login required** — works immediately with your Apple ID
+- **All data stored locally** and in your personal iCloud via CloudKit
+- **Zero third-party servers**, analytics, or tracking
+- **No ads, ever**
+- **Export your data privately** (Pro)
 
 ## Features
 
