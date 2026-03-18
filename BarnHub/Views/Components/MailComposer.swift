@@ -5,7 +5,7 @@ struct MailComposer: UIViewControllerRepresentable {
     let recipient: String
     let subject: String
     let body: String
-    @Binding var isPresented: Bool
+    var onDismiss: () -> Void
 
     func makeUIViewController(context: Context) -> MFMailComposeViewController {
         let composer = MFMailComposeViewController()
@@ -19,14 +19,14 @@ struct MailComposer: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(isPresented: $isPresented)
+        Coordinator(onDismiss: onDismiss)
     }
 
     final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
-        @Binding var isPresented: Bool
+        let onDismiss: () -> Void
 
-        init(isPresented: Binding<Bool>) {
-            _isPresented = isPresented
+        init(onDismiss: @escaping () -> Void) {
+            self.onDismiss = onDismiss
         }
 
         func mailComposeController(
@@ -34,7 +34,7 @@ struct MailComposer: UIViewControllerRepresentable {
             didFinishWith result: MFMailComposeResult,
             error: Error?
         ) {
-            isPresented = false
+            onDismiss()
         }
     }
 }
