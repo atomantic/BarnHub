@@ -36,6 +36,7 @@
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
 		5315009BD422469B78007167 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
 		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
+		D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
 		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
 		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
@@ -123,6 +124,7 @@
 		CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPaymentHistoryView.swift"; sourceTree = "<group>"; };
 		C24FE726A3D35D655991C025 /* ClientRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientRowView.swift"; sourceTree = "<group>"; };
 		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConfirmationDialog.swift"; sourceTree = "<group>"; };
+		A7B3C9D1E5F2081634729A5B /* MailComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MailComposer.swift"; sourceTree = "<group>"; };
 		7037AAB7CB6395B75225797D /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrencyField.swift"; sourceTree = "<group>"; };
 		DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptyStateView.swift"; sourceTree = "<group>"; };
 		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastModifier.swift"; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */,
 				7037AAB7CB6395B75225797D /* CurrencyField.swift */,
 				DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */,
+				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
 			);
@@ -541,6 +544,7 @@
 				417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */,
 				FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */,
 				ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */,
+				D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */,
 				8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,
 				BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */,
@@ -750,6 +754,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -782,6 +787,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

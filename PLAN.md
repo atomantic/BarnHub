@@ -26,4 +26,5 @@
 - Reports with Swift Charts
 - Lesson scheduling / calendar
 - CSV export (gated behind Pro)
-- iPad layout, widgets
+- iPad-optimized sidebar layout
+- Home screen widgets
