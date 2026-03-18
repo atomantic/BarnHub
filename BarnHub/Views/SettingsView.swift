@@ -7,6 +7,8 @@ struct SettingsView: View {
     @Environment(Router.self) private var router
     @State private var showingMailComposer = false
 
+    private static let feedbackEmail = "atomantic@gmail.com"
+
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
     }
@@ -81,22 +83,11 @@ struct SettingsView: View {
                     Button {
                         showingMailComposer = true
                     } label: {
-                        HStack {
-                            Text("Send Feedback")
-                            Spacer()
-                            Image(systemName: "envelope")
-                                .foregroundStyle(.secondary)
-                        }
+                        settingsRow("Send Feedback", icon: "envelope")
                     }
                 } else {
-                    Link(destination: URL(string: "mailto:atomantic@gmail.com?subject=BarnHub%20Feedback")!) {
-                        HStack {
-                            Text("Send Feedback")
-                            Spacer()
-                            Image(systemName: "envelope")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                    Link(destination: URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback")!) {
+                        settingsRow("Send Feedback", icon: "envelope")
                     }
                 }
             }
@@ -109,24 +100,28 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .sheet(isPresented: $showingMailComposer) {
             MailComposer(
-                recipient: "atomantic@gmail.com",
+                recipient: Self.feedbackEmail,
                 subject: "BarnHub Feedback",
                 body: feedbackBody,
-                isPresented: $showingMailComposer
+                onDismiss: { showingMailComposer = false }
             )
             .ignoresSafeArea()
         }
     }
 
+    private func settingsRow(_ title: String, icon: String) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
     private func externalLink(_ title: String, url: URL) -> some View {
         Link(destination: url) {
-            HStack {
-                Text(title)
-                Spacer()
-                Image(systemName: "arrow.up.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            settingsRow(title, icon: "arrow.up.right")
         }
     }
 }
