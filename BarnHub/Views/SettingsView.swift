@@ -75,21 +75,6 @@ struct SettingsView: View {
                 }
             }
 
-            Section("About") {
-                HStack {
-                    Text("Version")
-                    Spacer()
-                    Text(appVersion)
-                        .foregroundStyle(.secondary)
-                }
-                HStack {
-                    Text("Build")
-                    Spacer()
-                    Text(buildNumber)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
             Section("Feedback") {
                 if MFMailComposeViewController.canSendMail() {
                     Button {
@@ -107,6 +92,14 @@ struct SettingsView: View {
             Section {
                 externalLink("Privacy Policy", url: .privacyPolicy)
                 externalLink("Terms of Use", url: .termsOfUse)
+            }
+
+            Section {
+                Text("Version \(appVersion) (\(buildNumber))")
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity)
+                    .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Settings")

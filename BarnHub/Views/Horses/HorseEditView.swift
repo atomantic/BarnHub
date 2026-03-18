@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct HorseEditView: View {
     let horseID: PersistentIdentifier?
@@ -16,6 +17,9 @@ struct HorseEditView: View {
     @State private var stallNumber = ""
     @State private var isActive = true
 
+    @State private var photoData: Data?
+    @State private var selectedPhoto: PhotosPickerItem?
+
     @State private var toast = ToastState()
 
     private var isNew: Bool { horseID == nil }
@@ -27,6 +31,45 @@ struct HorseEditView: View {
 
     var body: some View {
         Form {
+            Section {
+                VStack(spacing: 12) {
+                    if let photoData, let uiImage = UIImage(data: photoData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 120, height: 120)
+                            .clipShape(Circle())
+                    } else {
+                        Image(systemName: "photo.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120, height: 120)
+                            .foregroundStyle(.secondary.opacity(0.4))
+                    }
+
+                    HStack(spacing: 16) {
+                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                            Label(photoData == nil ? "Add Photo" : "Change Photo", systemImage: "photo")
+                                .font(.subheadline)
+                        }
+
+                        if photoData != nil {
+                            Button(role: .destructive) {
+                                withAnimation {
+                                    photoData = nil
+                                    selectedPhoto = nil
+                                }
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                                    .font(.subheadline)
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
+            }
+
             Section("Basic Info") {
                 TextField("Name", text: $name)
                 TextField("Breed", text: $breed)
@@ -67,6 +110,16 @@ struct HorseEditView: View {
         .navigationTitle(isNew ? "New Horse" : "Edit Horse")
         .toast(toast)
         .task { loadExisting() }
+        .onChange(of: selectedPhoto) { _, newItem in
+            guard let newItem else { return }
+            Task {
+                if let data = try? await newItem.loadTransferable(type: Data.self) {
+                    await MainActor.run {
+                        photoData = downsampleImageData(data, maxDimension: 800)
+                    }
+                }
+            }
+        }
     }
 
     private func loadExisting() {
@@ -80,6 +133,7 @@ struct HorseEditView: View {
         feedingSchedule = horse.feedingSchedule
         stallNumber = horse.stallNumber
         isActive = horse.isActive
+        photoData = horse.photoData
     }
 
     private func save() {
@@ -96,6 +150,7 @@ struct HorseEditView: View {
             horse.feedingSchedule = feedingSchedule
             horse.stallNumber = stallNumber
             horse.isActive = isActive
+            horse.photoData = photoData
             BarnHubLogger.info("Updating horse name=\(trimmedName)")
         } else {
             let horse = Horse(
@@ -107,7 +162,8 @@ struct HorseEditView: View {
                 medicalNotes: medicalNotes,
                 feedingSchedule: feedingSchedule,
                 stallNumber: stallNumber,
-                isActive: isActive
+                isActive: isActive,
+                photoData: photoData
             )
             modelContext.insert(horse)
             BarnHubLogger.info("Creating horse name=\(trimmedName)")
@@ -120,5 +176,18 @@ struct HorseEditView: View {
             try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
+    }
+
+    private func downsampleImageData(_ data: Data, maxDimension: CGFloat) -> Data {
+        guard let uiImage = UIImage(data: data) else { return data }
+        let size = uiImage.size
+        let scale = min(maxDimension / max(size.width, size.height), 1.0)
+        guard scale < 1.0 else { return data }
+        let newSize = CGSize(width: size.width * scale, height: size.height * scale)
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        let resized = renderer.image { _ in
+            uiImage.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        return resized.jpegData(compressionQuality: 0.8) ?? data
     }
 }
