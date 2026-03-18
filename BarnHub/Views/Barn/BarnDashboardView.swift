@@ -8,16 +8,11 @@ struct BarnDashboardView: View {
     @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
     private var incompleteReminders: [Reminder]
 
-    @Query(sort: \SupplyItem.name) private var supplyItems: [SupplyItem]
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
 
     private var upcomingReminders: [Reminder] {
         Array(incompleteReminders.prefix(5))
-    }
-
-    private var lowStockItems: [SupplyItem] {
-        supplyItems.filter(\.isLowStock)
     }
 
     private var upcomingVetRecords: [VetRecord] {
@@ -38,9 +33,6 @@ struct BarnDashboardView: View {
                 NavigationLink(value: BarnRoute.reminders) {
                     Label("Reminders", systemImage: "bell.fill")
                 }
-                NavigationLink(value: BarnRoute.supplies) {
-                    Label("Supplies", systemImage: "shippingbox.fill")
-                }
                 NavigationLink(value: BarnRoute.vetSchedule) {
                     Label("Vet Schedule", systemImage: "cross.case.fill")
                 }
@@ -60,33 +52,6 @@ struct BarnDashboardView: View {
                     ForEach(upcomingReminders) { reminder in
                         NavigationLink(value: BarnRoute.reminderEdit(reminder.persistentModelID)) {
                             reminderRow(reminder)
-                        }
-                    }
-                }
-            }
-
-            Section("Low Stock Alerts") {
-                if lowStockItems.isEmpty {
-                    EmptyStateView(
-                        icon: "checkmark.circle",
-                        title: "Stock OK",
-                        subtitle: "All supplies are above reorder thresholds."
-                    )
-                } else {
-                    ForEach(lowStockItems) { item in
-                        NavigationLink(value: BarnRoute.supplyEdit(item.persistentModelID)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(item.name)
-                                        .font(.headline)
-                                    Text("\(item.quantity, specifier: "%.0f") \(item.unit)")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundStyle(item.quantity <= 0 ? .red : .orange)
-                            }
                         }
                     }
                 }
@@ -120,7 +85,7 @@ struct BarnDashboardView: View {
                 }
             }
         }
-        .navigationTitle("Barn")
+        .navigationTitle("Schedule")
         .navigationDestination(for: BarnRoute.self) { route in
             barnDestination(for: route)
         }

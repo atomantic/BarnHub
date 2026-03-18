@@ -7,6 +7,7 @@ struct SettingsView: View {
     @Environment(Router.self) private var router
     @State private var showingMailComposer = false
     @State private var showRedeemCodeSheet = false
+    @State private var showManageSubscription = false
 
     private static let feedbackEmail = "atomantic@gmail.com"
 
@@ -50,6 +51,11 @@ struct SettingsView: View {
                             Text("BarnHub Pro")
                             ProBadgeView()
                         }
+                    }
+                    Button {
+                        showManageSubscription = true
+                    } label: {
+                        settingsRow("Manage Subscription", icon: "creditcard")
                     }
                 } else {
                     Button {
@@ -104,6 +110,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
         .offerCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
             switch result {
             case .success:
