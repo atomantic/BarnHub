@@ -6,10 +6,18 @@ struct HorseRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: horse.isActive ? "checkmark.circle.fill" : "xmark.circle")
-                .foregroundStyle(horse.isActive ? Color.green : Color.gray)
-                .font(.subheadline)
-                .accessibilityLabel(horse.isActive ? "Active" : "Inactive")
+            if let photoData = horse.photoData, let uiImage = UIImage(data: photoData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: horse.isActive ? "checkmark.circle.fill" : "xmark.circle")
+                    .foregroundStyle(horse.isActive ? Color.green : Color.gray)
+                    .font(.subheadline)
+                    .frame(width: 40, height: 40)
+            }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(horse.name)
@@ -36,6 +44,12 @@ struct HorseRowView: View {
             }
 
             Spacer()
+
+            if horse.photoData != nil && !horse.isActive {
+                Image(systemName: "xmark.circle")
+                    .foregroundStyle(.gray)
+                    .font(.caption)
+            }
         }
         .contentShape(Rectangle())
     }

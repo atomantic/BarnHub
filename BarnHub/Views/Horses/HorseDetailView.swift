@@ -44,6 +44,21 @@ struct HorseDetailView: View {
     @ViewBuilder
     private func horseContent(_ horse: Horse) -> some View {
         List {
+            if let photoData = horse.photoData, let uiImage = UIImage(data: photoData) {
+                Section {
+                    HStack {
+                        Spacer()
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 160, height: 160)
+                            .clipShape(Circle())
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                }
+            }
+
             Section("Info") {
                 LabeledContent("Breed", value: horse.breed)
                 LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)

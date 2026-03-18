@@ -13,6 +13,9 @@ final class Horse {
     var stallNumber: String = ""
     var isActive: Bool = true
 
+    @Attribute(.externalStorage)
+    var photoData: Data? = nil
+
     @Relationship(deleteRule: .nullify, inverse: \Client.horses)
     var clients: [Client]? = nil
 
@@ -34,7 +37,8 @@ final class Horse {
         medicalNotes: String = "",
         feedingSchedule: String = "",
         stallNumber: String = "",
-        isActive: Bool = true
+        isActive: Bool = true,
+        photoData: Data? = nil
     ) {
         self.name = name
         self.breed = breed
@@ -45,5 +49,6 @@ final class Horse {
         self.feedingSchedule = feedingSchedule
         self.stallNumber = stallNumber
         self.isActive = isActive
+        self.photoData = photoData
     }
 }
