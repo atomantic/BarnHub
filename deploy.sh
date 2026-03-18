@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# BarnIO - Local TestFlight Deploy
+# BarnHub - Local TestFlight Deploy
 # Usage: ./deploy.sh [--skip-tests]
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -33,8 +33,8 @@ if [ ! -f ~/.private_keys/"$KEY_FILENAME" ]; then
     echo "🔑 Symlinked API key to ~/.private_keys/"
 fi
 
-PROJECT="BarnIO.xcodeproj"
-SCHEME="BarnIO"
+PROJECT="BarnHub.xcodeproj"
+SCHEME="BarnHub"
 BUILD_DIR="$SCRIPT_DIR/build"
 ARCHIVE_PATH="$BUILD_DIR/$SCHEME.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
@@ -86,7 +86,7 @@ for runtime, devices in data.get('devices', {}).items():
     xcodebuild test \
         -project "$PROJECT" \
         -scheme "$SCHEME" \
-        -only-testing:BarnIOTests \
+        -only-testing:BarnHubTests \
         -destination "$DESTINATION" \
         -configuration Debug \
         CODE_SIGNING_ALLOWED=NO \
