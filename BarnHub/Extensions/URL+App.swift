@@ -1,6 +1,17 @@
 import Foundation
 
 extension URL {
-    static let privacyPolicy = URL(string: "https://adameivy.com/barn.io/privacy")!
-    static let termsOfUse = URL(string: "https://adameivy.com/barn.io/terms")!
+    static var privacyPolicy: URL {
+        guard let url = URL(string: "https://adameivy.com/barn.io/privacy") else {
+            fatalError("Invalid privacyPolicy URL")
+        }
+        return url
+    }
+
+    static var termsOfUse: URL {
+        guard let url = URL(string: "https://adameivy.com/barn.io/terms") else {
+            fatalError("Invalid termsOfUse URL")
+        }
+        return url
+    }
 }
