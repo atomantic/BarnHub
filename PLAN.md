@@ -1,4 +1,4 @@
-# BarnIO - iOS Barn Management App
+# BarnHub - iOS Barn Management App
 
 ## Status: Phase 1-5 Implementation In Progress
 
@@ -18,7 +18,7 @@
 - [x] Phase 3: Horse & Client CRUD
 - [x] Phase 4: Accounting & Barn Management
 - [x] Phase 5: CI/CD & TestFlight
-- [x] Phase 6: BarnIO Pro Freemium Subscription
+- [x] Phase 6: BarnHub Pro Freemium Subscription
 
 ## Deferred
 - Photo capture for horse profiles

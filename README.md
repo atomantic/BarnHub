@@ -1,7 +1,7 @@
-# BarnIO
+# BarnHub
 
 <p align="center">
-  <img src="logo.png" width="120" alt="BarnIO Logo">
+  <img src="logo.png" width="120" alt="BarnHub Logo">
 </p>
 
 <p align="center">
@@ -40,9 +40,9 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/atomantic/BarnIO.git
-cd BarnIO
-open BarnIO.xcodeproj
+git clone https://github.com/atomantic/BarnHub.git
+cd BarnHub
+open BarnHub.xcodeproj
 ```
 
 Select a simulator or device and hit Run.
@@ -61,9 +61,9 @@ Screenshots can be regenerated automatically:
 
 ```bash
 xcodebuild test \
-  -project BarnIO.xcodeproj \
-  -scheme BarnIO \
-  -only-testing:BarnIOUITests/ScreenshotTests \
+  -project BarnHub.xcodeproj \
+  -scheme BarnHub \
+  -only-testing:BarnHubUITests/ScreenshotTests \
   -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max'
 ```
 
