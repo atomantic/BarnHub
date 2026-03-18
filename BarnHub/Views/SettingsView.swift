@@ -1,9 +1,11 @@
+import MessageUI
 import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(StoreService.self) private var storeService
     @Environment(Router.self) private var router
+    @State private var showingMailComposer = false
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
@@ -11,6 +13,17 @@ struct SettingsView: View {
 
     private var buildNumber: String {
         Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
+    }
+
+    private var feedbackBody: String {
+        let device = UIDevice.current
+        return """
+
+
+        ---
+        App: BarnHub v\(appVersion) (\(buildNumber))
+        Device: \(device.model), iOS \(device.systemVersion)
+        """
     }
 
     var body: some View {
@@ -63,12 +76,46 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Feedback") {
+                if MFMailComposeViewController.canSendMail() {
+                    Button {
+                        showingMailComposer = true
+                    } label: {
+                        HStack {
+                            Text("Send Feedback")
+                            Spacer()
+                            Image(systemName: "envelope")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } else {
+                    Link(destination: URL(string: "mailto:70015+atomantic@users.noreply.github.com?subject=BarnHub%20Feedback")!) {
+                        HStack {
+                            Text("Send Feedback")
+                            Spacer()
+                            Image(systemName: "envelope")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
             Section {
                 externalLink("Privacy Policy", url: .privacyPolicy)
                 externalLink("Terms of Use", url: .termsOfUse)
             }
         }
         .navigationTitle("Settings")
+        .sheet(isPresented: $showingMailComposer) {
+            MailComposer(
+                recipient: "70015+atomantic@users.noreply.github.com",
+                subject: "BarnHub Feedback",
+                body: feedbackBody,
+                isPresented: $showingMailComposer
+            )
+            .ignoresSafeArea()
+        }
     }
 
     private func externalLink(_ title: String, url: URL) -> some View {

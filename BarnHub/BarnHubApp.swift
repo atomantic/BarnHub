@@ -37,6 +37,9 @@ struct BarnHubApp: App {
                 }
         }
         .modelContainer(modelContainer)
+        #if targetEnvironment(macCatalyst)
+        .defaultSize(width: 1024, height: 768)
+        #endif
     }
 }
 
