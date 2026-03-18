@@ -72,6 +72,9 @@
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
 		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
 		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
+		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
+		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
+		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +164,9 @@
 		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGateTests.swift"; sourceTree = "<group>"; };
 		BB11223344556677AABB0001 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManager.swift"; sourceTree = "<group>"; };
 		BB11223344556677AABB0003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
+		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouterTests.swift"; sourceTree = "<group>"; };
+		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandlerTests.swift"; sourceTree = "<group>"; };
+		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormattingTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +373,9 @@
 			children = (
 				8400E9C51028A856C60639AB /* BarnHubTests.swift */,
 				AA11223344556677AABB000F /* FeatureGateTests.swift */,
+				CC22334455667788AABB0001 /* RouterTests.swift */,
+				CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */,
+				CC22334455667788AABB0005 /* DateFormattingTests.swift */,
 			);
 			path = BarnHubTests;
 			sourceTree = "<group>";
@@ -581,6 +590,9 @@
 			files = (
 				966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */,
 				AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */,
+				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,
+				CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */,
+				CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
