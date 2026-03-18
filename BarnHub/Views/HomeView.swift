@@ -51,7 +51,8 @@ struct HomeView: View {
 
                 HStack(spacing: 8) {
                     Text("BarnHub")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .font(.title.weight(.bold))
+                        .fontDesign(.rounded)
                         .foregroundStyle(.white)
                     if storeService.isPro {
                         ProBadgeView()
@@ -132,13 +133,14 @@ struct FeatureTile: View {
                         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
 
                     Image(systemName: icon)
-                        .font(.system(size: 30))
+                        .font(.title)
                         .foregroundStyle(color)
                 }
                 .aspectRatio(1, contentMode: .fit)
 
                 Text(title)
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .font(.caption.weight(.semibold))
+                    .fontDesign(.rounded)
                     .foregroundStyle(.barnBrown)
             }
         }

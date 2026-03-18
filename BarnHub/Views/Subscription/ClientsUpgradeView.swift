@@ -2,13 +2,14 @@ import SwiftUI
 
 struct ClientsUpgradeView: View {
     @Environment(Router.self) private var router
+    @ScaledMetric(relativeTo: .largeTitle) private var iconSize: CGFloat = 60
 
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
 
             Image(systemName: "person.2.fill")
-                .font(.system(size: 60))
+                .font(.system(size: iconSize))
                 .foregroundStyle(.barnGreen)
 
             Text("Client Management")
