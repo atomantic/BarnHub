@@ -11,6 +11,7 @@ final class StoreService {
     private(set) var productsLoadFailed = false
 
     private var updateTask: Task<Void, Never>?
+    private var setupTask: Task<Void, Never>?
 
     static let monthlyID = "net.shadowpuppet.BarnBook.pro.monthly"
     static let annualID = "net.shadowpuppet.BarnBook.pro.annual"
@@ -23,7 +24,7 @@ final class StoreService {
         updateTask = Task { [weak self] in
             await self?.listenForUpdates()
         }
-        Task { [weak self] in
+        setupTask = Task { [weak self] in
             await self?.loadProducts()
             await self?.refreshEntitlements()
         }
@@ -31,6 +32,7 @@ final class StoreService {
 
     deinit {
         updateTask?.cancel()
+        setupTask?.cancel()
     }
 
     func loadProducts() async {

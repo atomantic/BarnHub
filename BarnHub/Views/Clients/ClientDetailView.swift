@@ -99,7 +99,8 @@ struct ClientDetailView: View {
             }
 
             Section {
-                let transactions = (client.transactions ?? [])
+                let allTransactions = client.transactions ?? []
+                let transactions = allTransactions
                     .sorted { $0.date > $1.date }
                     .prefix(5)
                 if transactions.isEmpty {
@@ -133,7 +134,7 @@ struct ClientDetailView: View {
                         }
                     }
 
-                    if (client.transactions ?? []).count > 5 {
+                    if allTransactions.count > 5 {
                         NavigationLink(value: ClientRoute.detail(clientID)) {
                             Text("View All Transactions")
                                 .font(.subheadline)
