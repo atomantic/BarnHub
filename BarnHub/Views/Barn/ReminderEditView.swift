@@ -16,9 +16,7 @@ struct ReminderEditView: View {
     @State private var isCompleted = false
     @State private var selectedHorseID: PersistentIdentifier?
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var isNew: Bool { reminderID == nil }
     private var existingReminder: Reminder? {
@@ -61,8 +59,8 @@ struct ReminderEditView: View {
                 .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .onAppear(perform: loadExisting)
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .task { loadExisting() }
+        .toast(toast)
     }
 
     private func loadExisting() {
@@ -97,12 +95,10 @@ struct ReminderEditView: View {
         }
 
         modelContext.saveWithLogging()
+        toast.show(isNew ? "Reminder added" : "Reminder updated")
 
-        toastMessage = isNew ? "Reminder added" : "Reminder updated"
-        toastIsError = false
-        showToast = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }

@@ -18,9 +18,7 @@ struct TransactionEditView: View {
     @State private var isPaid: Bool = false
     @State private var selectedClientID: PersistentIdentifier?
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var isNew: Bool { transactionID == nil }
     private var existingTransaction: Transaction? {
@@ -71,8 +69,8 @@ struct TransactionEditView: View {
                 }
             }
         }
-        .onAppear(perform: loadExisting)
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .task { loadExisting() }
+        .toast(toast)
     }
 
     private func loadExisting() {
@@ -109,12 +107,10 @@ struct TransactionEditView: View {
         }
 
         modelContext.saveWithLogging()
+        toast.show(isNew ? "Transaction added" : "Transaction updated")
 
-        toastMessage = isNew ? "Transaction added" : "Transaction updated"
-        toastIsError = false
-        showToast = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }

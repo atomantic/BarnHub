@@ -15,9 +15,7 @@ struct SupplyEditView: View {
     @State private var lastOrderedDate: Date?
     @State private var showLastOrderedDate = false
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var isNew: Bool { supplyItemID == nil }
     private var existingItem: SupplyItem? {
@@ -70,8 +68,8 @@ struct SupplyEditView: View {
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .onAppear(perform: loadExisting)
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .task { loadExisting() }
+        .toast(toast)
     }
 
     private func loadExisting() {
@@ -102,12 +100,10 @@ struct SupplyEditView: View {
         item.lastOrderedDate = showLastOrderedDate ? lastOrderedDate : nil
 
         modelContext.saveWithLogging()
+        toast.show(isNew ? "Supply added" : "Supply updated")
 
-        toastMessage = isNew ? "Supply added" : "Supply updated"
-        toastIsError = false
-        showToast = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }

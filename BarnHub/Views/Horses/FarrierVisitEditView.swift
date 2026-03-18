@@ -13,8 +13,7 @@ struct FarrierVisitEditView: View {
     @State private var hasNextDue = false
     @State private var nextDueDate = Date.now
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
@@ -46,7 +45,7 @@ struct FarrierVisitEditView: View {
             }
         }
         .navigationTitle("New Farrier Visit")
-        .toast(isPresented: $showToast, message: toastMessage)
+        .toast(toast)
     }
 
     private func save() {
@@ -62,9 +61,10 @@ struct FarrierVisitEditView: View {
         modelContext.insert(visit)
         BarnHubLogger.info("Adding farrier visit horse=\(horse.name) farrier=\(visit.farrierName)")
         modelContext.saveWithLogging()
-        toastMessage = "Farrier visit saved"
-        showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        toast.show("Farrier visit saved")
+
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }
