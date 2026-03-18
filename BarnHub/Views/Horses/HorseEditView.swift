@@ -16,9 +16,7 @@ struct HorseEditView: View {
     @State private var stallNumber = ""
     @State private var isActive = true
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var isNew: Bool { horseID == nil }
 
@@ -67,8 +65,8 @@ struct HorseEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Horse" : "Edit Horse")
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
-        .onAppear(perform: loadExisting)
+        .toast(toast)
+        .task { loadExisting() }
     }
 
     private func loadExisting() {
@@ -116,11 +114,10 @@ struct HorseEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toastMessage = isNew ? "Horse added" : "Horse updated"
-        toastIsError = false
-        showToast = true
+        toast.show(isNew ? "Horse added" : "Horse updated")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }

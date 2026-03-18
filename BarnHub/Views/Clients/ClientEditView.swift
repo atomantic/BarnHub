@@ -15,9 +15,7 @@ struct ClientEditView: View {
     @State private var notes = ""
     @State private var isActive = true
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var isNew: Bool { clientID == nil }
 
@@ -68,8 +66,8 @@ struct ClientEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Client" : "Edit Client")
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
-        .onAppear(perform: loadExisting)
+        .toast(toast)
+        .task { loadExisting() }
     }
 
     private func loadExisting() {
@@ -115,11 +113,10 @@ struct ClientEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toastMessage = isNew ? "Client added" : "Client updated"
-        toastIsError = false
-        showToast = true
+        toast.show(isNew ? "Client added" : "Client updated")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }

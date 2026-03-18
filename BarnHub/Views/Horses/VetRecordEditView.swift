@@ -14,8 +14,7 @@ struct VetRecordEditView: View {
     @State private var nextDueDate = Date.now
     @State private var reminderFrequency: ReminderFrequency = .once
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
@@ -52,7 +51,7 @@ struct VetRecordEditView: View {
             }
         }
         .navigationTitle("New Vet Record")
-        .toast(isPresented: $showToast, message: toastMessage)
+        .toast(toast)
     }
 
     private func save() {
@@ -69,9 +68,10 @@ struct VetRecordEditView: View {
         modelContext.insert(record)
         BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
         modelContext.saveWithLogging()
-        toastMessage = "Vet record saved"
-        showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        toast.show("Vet record saved")
+
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             dismiss()
         }
     }
