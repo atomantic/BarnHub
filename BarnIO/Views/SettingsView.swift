@@ -64,15 +64,15 @@ struct SettingsView: View {
             }
 
             Section {
-                externalLink("Privacy Policy", url: "https://barniohq.com/privacy")
-                externalLink("Terms of Use", url: "https://barniohq.com/terms")
+                externalLink("Privacy Policy", url: .privacyPolicy)
+                externalLink("Terms of Use", url: .termsOfUse)
             }
         }
         .navigationTitle("Settings")
     }
 
-    private func externalLink(_ title: String, url: String) -> some View {
-        Link(destination: URL(string: url)!) {
+    private func externalLink(_ title: String, url: URL) -> some View {
+        Link(destination: url) {
             HStack {
                 Text(title)
                 Spacer()

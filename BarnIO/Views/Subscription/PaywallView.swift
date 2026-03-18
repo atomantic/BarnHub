@@ -238,8 +238,8 @@ struct PaywallView: View {
 
     private var legalLinks: some View {
         HStack(spacing: 16) {
-            Link("Terms of Use", destination: URL(string: "https://barniohq.com/terms")!)
-            Link("Privacy Policy", destination: URL(string: "https://barniohq.com/privacy")!)
+            Link("Terms of Use", destination: .termsOfUse)
+            Link("Privacy Policy", destination: .privacyPolicy)
         }
         .font(.caption)
         .foregroundStyle(.secondary)

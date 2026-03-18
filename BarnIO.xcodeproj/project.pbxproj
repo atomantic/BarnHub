@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
 		E88AAAC5DE89C41313DA6492 /* BarnIOApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnIOApp.swift */; };
 		4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
 		C1069D979C46B814742EC22D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
@@ -107,6 +108,7 @@
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecord.swift"; sourceTree = "<group>"; };
 		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewSampleData.swift"; sourceTree = "<group>"; };
 		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
+		90B807BC939932440E8214FD /* URL+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+App.swift"; sourceTree = "<group>"; };
 		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
 		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
 		CE768E67ED8208EC1BC695B8 /* View+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Toast.swift"; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				98791B230125578C3586BE55 /* Color+Brand.swift */,
+				90B807BC939932440E8214FD /* URL+App.swift */,
 				BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */,
 				FBA744D61AAEE032A230817D /* Double+Currency.swift */,
 				CE768E67ED8208EC1BC695B8 /* View+Toast.swift */,
@@ -507,6 +510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */,
 				E88AAAC5DE89C41313DA6492 /* BarnIOApp.swift in Sources */,
 				4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */,
 				C1069D979C46B814742EC22D /* Router.swift in Sources */,
