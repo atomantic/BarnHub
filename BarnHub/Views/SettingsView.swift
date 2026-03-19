@@ -9,7 +9,7 @@ struct SettingsView: View {
     @State private var showRedeemCodeSheet = false
     @State private var showManageSubscription = false
 
-    private static let feedbackEmail = "70015+atomantic@users.noreply.github.com"
+    private static let feedbackEmail = "support@barnhub.online"
 
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"

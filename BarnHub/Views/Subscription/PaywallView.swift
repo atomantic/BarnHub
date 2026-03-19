@@ -62,7 +62,7 @@ struct PaywallView: View {
             comparisonRow("Client Management", free: false, pro: true)
             comparisonRow("Client Billing", free: false, pro: true)
             comparisonRow("Full Reports", free: false, pro: true)
-            comparisonRow("Data Export", free: false, pro: true)
+            comparisonRow("Data Import/Export", free: true, pro: true)
         }
         .background(
             RoundedRectangle(cornerRadius: 12)
