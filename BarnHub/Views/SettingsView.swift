@@ -75,6 +75,12 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Data") {
+                NavigationLink(value: HomeRoute.dataManagement) {
+                    settingsRow("Import / Export", icon: "arrow.up.arrow.down")
+                }
+            }
+
             Section("Feedback") {
                 if MFMailComposeViewController.canSendMail() {
                     Button {

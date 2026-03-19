@@ -9,6 +9,7 @@ enum HomeRoute: Hashable {
     case accounting
     case reports
     case settings
+    case dataManagement
 }
 
 enum HorseRoute: Hashable {

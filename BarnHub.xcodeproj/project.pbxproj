@@ -60,6 +60,9 @@
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
 		AACC001122334455ARROW002 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
+		BBCC001122334455DATA0002 /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
+		BBCC001122334455DATA0004 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
+		BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
 		966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnHubTests.swift */; };
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
 		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
@@ -113,6 +116,9 @@
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecord.swift"; sourceTree = "<group>"; };
 		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewSampleData.swift"; sourceTree = "<group>"; };
 		AACC001122334455ARROW001 /* arrow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "arrow.jpeg"; sourceTree = "<group>"; };
+		BBCC001122334455DATA0001 /* DataExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataExportService.swift"; sourceTree = "<group>"; };
+		BBCC001122334455DATA0003 /* DataImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataImportService.swift"; sourceTree = "<group>"; };
+		BBCC001122334455DATA0005 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManagementView.swift"; sourceTree = "<group>"; };
 		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
 		90B807BC939932440E8214FD /* URL+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+App.swift"; sourceTree = "<group>"; };
 		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
@@ -283,6 +289,8 @@
 			isa = PBXGroup;
 			children = (
 				BB11223344556677AABB0001 /* AppearanceManager.swift */,
+				BBCC001122334455DATA0001 /* DataExportService.swift */,
+				BBCC001122334455DATA0003 /* DataImportService.swift */,
 				AA11223344556677AABB0003 /* FeatureGate.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
@@ -294,6 +302,7 @@
 		C454586A1F4E28C340BDC1AD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BBCC001122334455DATA0005 /* DataManagementView.swift */,
 				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
 				BB11223344556677AABB0003 /* SettingsView.swift */,
 				75C45A74C0754D59FD90DAE5 /* Accounting */,
@@ -526,6 +535,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBCC001122334455DATA0002 /* DataExportService.swift in Sources */,
+				BBCC001122334455DATA0004 /* DataImportService.swift in Sources */,
+				BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */,
 				0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */,
 				E88AAAC5DE89C41313DA6492 /* BarnHubApp.swift in Sources */,
 				4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */,

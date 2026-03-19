@@ -100,6 +100,7 @@ private extension View {
                 case .accounting: AccountingDashboardView()
                 case .reports: ReportsView()
                 case .settings: SettingsView()
+                case .dataManagement: DataManagementView()
                 }
             }
             .navigationDestination(for: HorseRoute.self) { route in
