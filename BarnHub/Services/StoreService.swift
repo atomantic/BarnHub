@@ -22,6 +22,7 @@ final class StoreService {
 
     #if DEBUG
     private let forceProMode = ProcessInfo.processInfo.arguments.contains("-ForceProMode")
+        || UserDefaults.standard.bool(forKey: "ForceProMode")
     #endif
 
     init() {
