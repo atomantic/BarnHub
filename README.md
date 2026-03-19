@@ -38,7 +38,7 @@
 
 - **SwiftUI** + **SwiftData** for a modern, declarative iOS experience
 - **CloudKit** sync via SwiftData for seamless multi-device access
-- **NavigationStack** with deep-linkable routes (`barnio://` URL scheme)
+- **NavigationStack** with deep-linkable routes (`barnhub://` URL scheme)
 - CI/CD via **GitHub Actions** with automatic **TestFlight** deployment
 
 ## Requirements

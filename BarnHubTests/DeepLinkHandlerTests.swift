@@ -5,7 +5,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testHorsesDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://horses")!
+        let url = URL(string: "barnhub://horses")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .horses)
@@ -14,7 +14,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testClientsDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://clients")!
+        let url = URL(string: "barnhub://clients")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .clients)
@@ -23,7 +23,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testAccountingDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://accounting")!
+        let url = URL(string: "barnhub://accounting")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .accounting)
@@ -32,7 +32,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testScheduleDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://schedule")!
+        let url = URL(string: "barnhub://schedule")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .schedule)
@@ -40,7 +40,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testBarnDeepLinkMapsToScheduleTab() {
         let router = Router()
-        let url = URL(string: "barnio://barn")!
+        let url = URL(string: "barnhub://barn")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .schedule)
@@ -48,7 +48,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testSuppliesDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://supplies")!
+        let url = URL(string: "barnhub://supplies")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .home)
@@ -57,7 +57,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testReportsDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://reports")!
+        let url = URL(string: "barnhub://reports")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .home)
@@ -66,7 +66,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testBarnSuppliesPathComponent() {
         let router = Router()
-        let url = URL(string: "barnio://barn/supplies")!
+        let url = URL(string: "barnhub://barn/supplies")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .schedule)
@@ -75,7 +75,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testBarnRemindersPathComponent() {
         let router = Router()
-        let url = URL(string: "barnio://barn/reminders")!
+        let url = URL(string: "barnhub://barn/reminders")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .schedule)
@@ -84,7 +84,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testScheduleSuppliesPathComponent() {
         let router = Router()
-        let url = URL(string: "barnio://schedule/supplies")!
+        let url = URL(string: "barnhub://schedule/supplies")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .schedule)
@@ -94,7 +94,7 @@ final class DeepLinkHandlerTests: XCTestCase {
     func testInvalidHostDoesNotChangeTab() {
         let router = Router()
         let originalTab = router.selectedTab
-        let url = URL(string: "barnio://nonexistent")!
+        let url = URL(string: "barnhub://nonexistent")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, originalTab)
@@ -117,7 +117,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testSubscriptionPaywallDeepLink() {
         let router = Router()
-        let url = URL(string: "barnio://subscription/paywall")!
+        let url = URL(string: "barnhub://subscription/paywall")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .home)
@@ -126,7 +126,7 @@ final class DeepLinkHandlerTests: XCTestCase {
 
     func testSubscriptionWithoutPathGoesToPaywall() {
         let router = Router()
-        let url = URL(string: "barnio://subscription")!
+        let url = URL(string: "barnhub://subscription")!
         DeepLinkHandler.handle(url: url, router: router)
 
         XCTAssertEqual(router.selectedTab, .home)
@@ -141,7 +141,7 @@ final class DeepLinkHandlerTests: XCTestCase {
         XCTAssertEqual(router.horsesPath.count, 2)
 
         // Deep link to horses should reset the path
-        let url = URL(string: "barnio://horses")!
+        let url = URL(string: "barnhub://horses")!
         DeepLinkHandler.handle(url: url, router: router)
         XCTAssertTrue(router.horsesPath.isEmpty)
     }

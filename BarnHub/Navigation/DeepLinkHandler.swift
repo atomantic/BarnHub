@@ -2,7 +2,7 @@ import Foundation
 
 struct DeepLinkHandler {
     static func handle(url: URL, router: Router) {
-        guard url.scheme == "barnio" else { return }
+        guard url.scheme == "barnhub" else { return }
 
         let host = url.host() ?? ""
         let pathComponents = url.pathComponents.filter { $0 != "/" }
