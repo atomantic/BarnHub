@@ -11,6 +11,7 @@ final class Horse {
     var medicalNotes: String = ""
     var feedingSchedule: String = ""
     var stallNumber: String = ""
+    var purchasePrice: Double = 0
     var isActive: Bool = true
 
     @Attribute(.externalStorage)
@@ -34,6 +35,7 @@ final class Horse {
         dateOfBirth: Date = .now,
         colorMarkings: String = "",
         weight: Double = 0,
+        purchasePrice: Double = 0,
         medicalNotes: String = "",
         feedingSchedule: String = "",
         stallNumber: String = "",
@@ -45,6 +47,7 @@ final class Horse {
         self.dateOfBirth = dateOfBirth
         self.colorMarkings = colorMarkings
         self.weight = weight
+        self.purchasePrice = purchasePrice
         self.medicalNotes = medicalNotes
         self.feedingSchedule = feedingSchedule
         self.stallNumber = stallNumber

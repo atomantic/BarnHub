@@ -8,7 +8,7 @@ final class ScreenshotTests: XCTestCase {
         super.setUp()
         continueAfterFailure = true
         app = XCUIApplication()
-        app.launchArguments = ["-SeedSampleData"]
+        app.launchArguments = ["-SeedSampleData", "-ForceProMode"]
         app.launch()
     }
 
@@ -18,35 +18,64 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         saveScreenshot("01_home")
 
-        // 2. Horses
         let tabBar = app.tabBars.firstMatch
+
+        // 2. Horses list
         tabBar.buttons["Horses"].tap()
         sleep(1)
         saveScreenshot("02_horses")
 
-        // 3. Clients
+        // 3. Horse detail (tap first horse — Arrow)
+        let arrowCell = app.cells.firstMatch
+        if arrowCell.waitForExistence(timeout: 3) {
+            arrowCell.tap()
+            sleep(1)
+            saveScreenshot("03_horse_detail")
+            app.navigationBars.buttons.element(boundBy: 0).tap()
+            sleep(1)
+        }
+
+        // 4. Clients
         tabBar.buttons["Clients"].tap()
         sleep(1)
-        saveScreenshot("03_clients")
+        saveScreenshot("04_clients")
 
-        // 4. Schedule
+        // 5. Client detail (tap first client)
+        let clientCell = app.cells.firstMatch
+        if clientCell.waitForExistence(timeout: 3) {
+            clientCell.tap()
+            sleep(1)
+            saveScreenshot("05_client_detail")
+            app.navigationBars.buttons.element(boundBy: 0).tap()
+            sleep(1)
+        }
+
+        // 6. Schedule
         tabBar.buttons["Schedule"].tap()
         sleep(1)
-        saveScreenshot("04_schedule")
+        saveScreenshot("06_schedule")
 
-        // 5. Accounting
+        // 7. Accounting
         tabBar.buttons["Accounting"].tap()
         sleep(1)
-        saveScreenshot("05_accounting")
+        saveScreenshot("07_accounting")
 
-        // 6. Reports (from Home grid)
+        // 8. Reports (from Home grid)
         tabBar.buttons["Home"].tap()
         sleep(1)
         let reports = app.buttons["Reports"]
         XCTAssertTrue(reports.waitForExistence(timeout: 3))
         reports.tap()
-        sleep(1)
-        saveScreenshot("06_reports")
+        sleep(2)
+        saveScreenshot("08_reports")
+
+        // 9. Scroll reports to show charts
+        let reportsView = app.scrollViews.firstMatch
+        if reportsView.exists {
+            reportsView.swipeUp()
+            sleep(1)
+            saveScreenshot("09_reports_charts")
+        }
     }
 
     private func saveScreenshot(_ name: String) {
