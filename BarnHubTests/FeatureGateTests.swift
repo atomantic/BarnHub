@@ -25,5 +25,4 @@ final class FeatureGateTests: XCTestCase {
     func testProUserCanAccessFullReports() {
         XCTAssertTrue(FeatureGate.canAccessFullReports(true))
     }
-
 }
