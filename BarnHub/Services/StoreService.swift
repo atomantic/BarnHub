@@ -20,7 +20,17 @@ final class StoreService {
     var monthlyProduct: Product? { products.first { $0.id == Self.monthlyID } }
     var annualProduct: Product? { products.first { $0.id == Self.annualID } }
 
+    #if DEBUG
+    private let forceProMode = ProcessInfo.processInfo.arguments.contains("-ForceProMode")
+    #endif
+
     init() {
+        #if DEBUG
+        if forceProMode {
+            isPro = true
+            BarnHubLogger.info("ForceProMode enabled")
+        }
+        #endif
         updateTask = Task { [weak self] in
             await self?.listenForUpdates()
         }
@@ -95,6 +105,9 @@ final class StoreService {
     }
 
     func refreshEntitlements() async {
+        #if DEBUG
+        if forceProMode { return }
+        #endif
         var foundPro = false
         for await result in SKTransaction.currentEntitlements {
             guard let txn = try? checkVerified(result) else { continue }

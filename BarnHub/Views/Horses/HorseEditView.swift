@@ -12,6 +12,7 @@ struct HorseEditView: View {
     @State private var dateOfBirth = Date.now
     @State private var colorMarkings = ""
     @State private var weight: Double = 0
+    @State private var purchasePrice: Double = 0
     @State private var medicalNotes = ""
     @State private var feedingSchedule = ""
     @State private var stallNumber = ""
@@ -85,6 +86,13 @@ struct HorseEditView: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                 }
+                HStack {
+                    Text("Purchase Price")
+                    Spacer()
+                    TextField("$0", value: $purchasePrice, format: .currency(code: "USD"))
+                        .keyboardType(.decimalPad)
+                        .multilineTextAlignment(.trailing)
+                }
                 TextField("Stall Number", text: $stallNumber)
                 Toggle("Active", isOn: $isActive)
             }
@@ -129,6 +137,7 @@ struct HorseEditView: View {
         dateOfBirth = horse.dateOfBirth
         colorMarkings = horse.colorMarkings
         weight = horse.weight
+        purchasePrice = horse.purchasePrice
         medicalNotes = horse.medicalNotes
         feedingSchedule = horse.feedingSchedule
         stallNumber = horse.stallNumber
@@ -146,6 +155,7 @@ struct HorseEditView: View {
             horse.dateOfBirth = dateOfBirth
             horse.colorMarkings = colorMarkings
             horse.weight = weight
+            horse.purchasePrice = purchasePrice
             horse.medicalNotes = medicalNotes
             horse.feedingSchedule = feedingSchedule
             horse.stallNumber = stallNumber
@@ -159,6 +169,7 @@ struct HorseEditView: View {
                 dateOfBirth: dateOfBirth,
                 colorMarkings: colorMarkings,
                 weight: weight,
+                purchasePrice: purchasePrice,
                 medicalNotes: medicalNotes,
                 feedingSchedule: feedingSchedule,
                 stallNumber: stallNumber,

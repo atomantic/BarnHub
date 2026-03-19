@@ -64,6 +64,9 @@ struct HorseDetailView: View {
                 LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)
                 LabeledContent("Color/Markings", value: horse.colorMarkings)
                 LabeledContent("Weight", value: horse.weight > 0 ? "\(Int(horse.weight)) lbs" : "--")
+                if horse.purchasePrice > 0 {
+                    LabeledContent("Purchase Price", value: horse.purchasePrice.asCurrency)
+                }
                 LabeledContent("Stall", value: horse.stallNumber.isEmpty ? "--" : horse.stallNumber)
                 LabeledContent("Status", value: horse.isActive ? "Active" : "Inactive")
             }

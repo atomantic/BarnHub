@@ -59,6 +59,7 @@
 		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
+		AACC001122334455ARROW002 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
 		966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnHubTests.swift */; };
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
 		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
@@ -111,6 +112,7 @@
 		3B9960085725FD7B2D959B29 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction.swift"; sourceTree = "<group>"; };
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecord.swift"; sourceTree = "<group>"; };
 		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewSampleData.swift"; sourceTree = "<group>"; };
+		AACC001122334455ARROW001 /* arrow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "arrow.jpeg"; sourceTree = "<group>"; };
 		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
 		90B807BC939932440E8214FD /* URL+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+App.swift"; sourceTree = "<group>"; };
 		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 		5533F3ED09443E81B9747239 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				AACC001122334455ARROW001 /* arrow.jpeg */,
 				4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */,
 			);
 			path = "Preview Content";
@@ -512,6 +515,7 @@
 			files = (
 				99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */,
 				AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */,
+				AACC001122334455ARROW002 /* arrow.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
