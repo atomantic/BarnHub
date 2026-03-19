@@ -98,6 +98,6 @@ No actionable findings. Supply chain, credentials, and data protection all clean
 - Local notifications for reminders
 - Reports with Swift Charts
 - Lesson scheduling / calendar
-- CSV export (gated behind Pro)
+- CSV import/export (available to all users)
 - iPad-optimized sidebar layout
 - Home screen widgets

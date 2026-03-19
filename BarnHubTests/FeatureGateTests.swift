@@ -26,11 +26,4 @@ final class FeatureGateTests: XCTestCase {
         XCTAssertTrue(FeatureGate.canAccessFullReports(true))
     }
 
-    func testFreeUserCannotExportData() {
-        XCTAssertFalse(FeatureGate.canExportData(false))
-    }
-
-    func testProUserCanExportData() {
-        XCTAssertTrue(FeatureGate.canExportData(true))
-    }
 }

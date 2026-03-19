@@ -23,7 +23,7 @@
 - **All data stored locally** and in your personal iCloud via CloudKit
 - **Zero third-party servers**, analytics, or tracking
 - **No ads, ever**
-- **Export your data privately** (Pro)
+- **Import and export your data** privately
 
 ## Features
 
