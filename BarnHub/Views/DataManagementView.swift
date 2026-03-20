@@ -13,6 +13,7 @@ struct DataManagementView: View {
     @State private var pendingImportURL: URL?
     @State private var importResult: DataImportService.ImportResult?
     @State private var showImportResult = false
+    @State private var deleteStep: DeleteStep?
 
     var body: some View {
         List {
@@ -56,6 +57,19 @@ struct DataManagementView: View {
                     .foregroundStyle(.tertiary)
                     .listRowBackground(Color.clear)
             }
+
+            Section {
+                Button(role: .destructive) {
+                    deleteStep = .warning
+                } label: {
+                    Label("Delete All Data", systemImage: "trash")
+                }
+            } header: {
+                Text("Reset")
+            } footer: {
+                Text("Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.")
+                    .font(.caption)
+            }
         }
         .navigationTitle("Import / Export")
         .toast(toast)
@@ -79,6 +93,32 @@ struct DataManagementView: View {
                 confirmTitle: "Import",
                 onConfirm: performImport
             )
+        }
+        .alert(
+            deleteStep?.title ?? "",
+            isPresented: Binding(get: { deleteStep != nil }, set: { if !$0 { deleteStep = nil } })
+        ) {
+            switch deleteStep {
+            case .warning:
+                Button("Export Data First") {
+                    deleteStep = nil
+                    exportData(.all)
+                }
+                Button("Delete Everything", role: .destructive) {
+                    deleteStep = .finalConfirmation
+                }
+                Button("Cancel", role: .cancel) { deleteStep = nil }
+            case .finalConfirmation:
+                Button("Delete All Data", role: .destructive) {
+                    deleteStep = nil
+                    deleteAllData()
+                }
+                Button("Cancel", role: .cancel) { deleteStep = nil }
+            case nil:
+                EmptyView()
+            }
+        } message: {
+            Text(deleteStep?.message ?? "")
         }
         .alert("Import Complete", isPresented: $showImportResult) {
             Button("OK") {}
@@ -185,6 +225,26 @@ struct DataManagementView: View {
         pendingImportURL = nil
     }
 
+    // MARK: - Delete All
+
+    private func deleteAllData() {
+        do {
+            try modelContext.delete(model: VetRecord.self)
+            try modelContext.delete(model: FarrierVisit.self)
+            try modelContext.delete(model: Reminder.self)
+            try modelContext.delete(model: SupplyItem.self)
+            try modelContext.delete(model: Transaction.self)
+            try modelContext.delete(model: Client.self)
+            try modelContext.delete(model: Horse.self)
+            modelContext.saveWithLogging()
+            BarnHubLogger.success("Deleted all data")
+            toast.show("All data deleted")
+        } catch {
+            BarnHubLogger.error("Failed to delete all data error=\(error.localizedDescription)")
+            toast.show("Failed to delete data", isError: true)
+        }
+    }
+
     // MARK: - Row Views
 
     private func exportRow(_ label: String, icon: String) -> some View {
@@ -209,6 +269,26 @@ struct DataManagementView: View {
 }
 
 // MARK: - Types
+
+private enum DeleteStep {
+    case warning, finalConfirmation
+
+    var title: String {
+        switch self {
+        case .warning: return "Are You Sure?"
+        case .finalConfirmation: return "Final Confirmation"
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .warning:
+            return "This will permanently delete ALL data from BarnHub on this device. Consider exporting your data first so you have a backup."
+        case .finalConfirmation:
+            return "This cannot be undone. All horses, clients, transactions, and records will be permanently deleted."
+        }
+    }
+}
 
 private enum ExportDataType {
     case horses, clients, transactions, all
