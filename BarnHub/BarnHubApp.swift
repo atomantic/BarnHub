@@ -133,7 +133,9 @@ private extension View {
                 case .reminders: ReminderListView()
                 case .reminderEdit(let id): ReminderEditView(reminderID: id)
                 case .vetSchedule: VetScheduleView()
+                case .addVetRecord: VetRecordEditView(horseID: nil)
                 case .farrierSchedule: FarrierScheduleView()
+                case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
                 }
             }
             .navigationDestination(for: SubscriptionRoute.self) { route in

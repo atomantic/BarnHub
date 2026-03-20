@@ -57,7 +57,7 @@ struct BarnDashboardView: View {
                 }
             }
 
-            Section("Next Vet Appointments") {
+            Section {
                 if upcomingVetRecords.isEmpty {
                     EmptyStateView(
                         icon: "cross.case",
@@ -69,9 +69,18 @@ struct BarnDashboardView: View {
                         vetRecordRow(record)
                     }
                 }
+            } header: {
+                HStack {
+                    Text("Next Vet Appointments")
+                    Spacer()
+                    NavigationLink(value: BarnRoute.addVetRecord) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color.barnGreen)
+                    }
+                }
             }
 
-            Section("Next Farrier Visits") {
+            Section {
                 if upcomingFarrierVisits.isEmpty {
                     EmptyStateView(
                         icon: "hammer",
@@ -83,12 +92,18 @@ struct BarnDashboardView: View {
                         farrierVisitRow(visit)
                     }
                 }
+            } header: {
+                HStack {
+                    Text("Next Farrier Visits")
+                    Spacer()
+                    NavigationLink(value: BarnRoute.addFarrierVisit) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color.barnGreen)
+                    }
+                }
             }
         }
         .navigationTitle("Schedule")
-        .navigationDestination(for: BarnRoute.self) { route in
-            barnDestination(for: route)
-        }
     }
 
     private func reminderRow(_ reminder: Reminder) -> some View {
@@ -145,21 +160,4 @@ struct BarnDashboardView: View {
         }
     }
 
-    @ViewBuilder
-    private func barnDestination(for route: BarnRoute) -> some View {
-        switch route {
-        case .supplies:
-            SupplyListView()
-        case .supplyEdit(let id):
-            SupplyEditView(supplyItemID: id)
-        case .reminders:
-            ReminderListView()
-        case .reminderEdit(let id):
-            ReminderEditView(reminderID: id)
-        case .vetSchedule:
-            VetScheduleView()
-        case .farrierSchedule:
-            FarrierScheduleView()
-        }
-    }
 }

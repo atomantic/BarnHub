@@ -5,8 +5,6 @@ struct ReminderEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @Query private var horses: [Horse]
-
     let reminderID: PersistentIdentifier?
 
     @State private var title = ""
@@ -41,14 +39,7 @@ struct ReminderEditView: View {
                 Toggle("Completed", isOn: $isCompleted)
             }
 
-            Section("Horse") {
-                Picker("Assign Horse", selection: $selectedHorseID) {
-                    Text("None").tag(nil as PersistentIdentifier?)
-                    ForEach(horses) { horse in
-                        Text(horse.name).tag(horse.persistentModelID as PersistentIdentifier?)
-                    }
-                }
-            }
+            HorsePickerSection(selectedHorseID: $selectedHorseID)
         }
         .navigationTitle(isNew ? "New Reminder" : "Edit Reminder")
         .toolbar {

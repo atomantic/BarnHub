@@ -33,6 +33,13 @@ struct FarrierScheduleView: View {
             }
         }
         .navigationTitle("Farrier Schedule")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink(value: BarnRoute.addFarrierVisit) {
+                    Label("Add Farrier Visit", systemImage: "plus")
+                }
+            }
+        }
     }
 
     private func farrierRow(_ visit: FarrierVisit) -> some View {

@@ -42,5 +42,7 @@ enum BarnRoute: Hashable {
     case reminders
     case reminderEdit(PersistentIdentifier?)
     case vetSchedule
+    case addVetRecord
     case farrierSchedule
+    case addFarrierVisit
 }
