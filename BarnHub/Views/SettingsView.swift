@@ -48,7 +48,7 @@ struct SettingsView: View {
                         Text("Plan")
                         Spacer()
                         HStack(spacing: 4) {
-                            Text("BarnHub Pro")
+                            Text("BarnHub")
                             ProBadgeView()
                         }
                     }
