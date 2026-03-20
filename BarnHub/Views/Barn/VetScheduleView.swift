@@ -33,6 +33,13 @@ struct VetScheduleView: View {
             }
         }
         .navigationTitle("Vet Schedule")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink(value: BarnRoute.addVetRecord) {
+                    Label("Add Vet Record", systemImage: "plus")
+                }
+            }
+        }
     }
 
     private func vetRecordRow(_ record: VetRecord) -> some View {

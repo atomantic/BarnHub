@@ -39,6 +39,7 @@
 		D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
 		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
 		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
+		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
 		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
@@ -138,6 +139,7 @@
 		A7B3C9D1E5F2081634729A5B /* MailComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MailComposer.swift"; sourceTree = "<group>"; };
 		7037AAB7CB6395B75225797D /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrencyField.swift"; sourceTree = "<group>"; };
 		DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptyStateView.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorsePickerSection.swift"; sourceTree = "<group>"; };
 		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastModifier.swift"; sourceTree = "<group>"; };
 		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastView.swift"; sourceTree = "<group>"; };
 		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnDashboardView.swift"; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */,
 				7037AAB7CB6395B75225797D /* CurrencyField.swift */,
 				DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */,
+				A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */,
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
@@ -569,6 +572,7 @@
 				417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */,
 				FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */,
 				ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */,
+				F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */,
 				D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */,
 				8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,

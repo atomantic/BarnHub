@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct FarrierVisitEditView: View {
-    let horseID: PersistentIdentifier
+    let horseID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
@@ -12,15 +12,25 @@ struct FarrierVisitEditView: View {
     @State private var cost: Double = 0
     @State private var hasNextDue = false
     @State private var nextDueDate = Date.now
+    @State private var selectedHorseID: PersistentIdentifier?
 
     @State private var toast = ToastState()
 
+    private var resolvedHorseID: PersistentIdentifier? {
+        horseID ?? selectedHorseID
+    }
+
     private var horse: Horse? {
-        modelContext.model(for: horseID) as? Horse
+        guard let id = resolvedHorseID else { return nil }
+        return modelContext.model(for: id) as? Horse
     }
 
     var body: some View {
         Form {
+            if horseID == nil {
+                HorsePickerSection(selectedHorseID: $selectedHorseID, placeholder: "Select a horse")
+            }
+
             Section("Visit Details") {
                 DatePicker("Date", selection: $date, displayedComponents: .date)
                 TextField("Farrier Name", text: $farrierName)
@@ -41,7 +51,7 @@ struct FarrierVisitEditView: View {
                     save()
                 }
                 .frame(maxWidth: .infinity)
-                .disabled(farrierName.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(farrierName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
             }
         }
         .navigationTitle("New Farrier Visit")
