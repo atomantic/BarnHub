@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import StoreKit
 
@@ -17,8 +18,38 @@ final class StoreService {
     static let annualID = "net.shadowpuppet.BarnBook.pro.annual"
     private static let productIDs: Set<String> = [monthlyID, annualID]
 
+    /// SHA-256 hash of the accepted secret pro code
+    private static let secretProCodeHash = "102eed4f5449cd2346d3e867dac01aca0f65d95e8295b543f415af9c3714ba93"
+    private static let secretProKey = "SecretProUnlocked"
+    private static let proOverrideDisabledKey = "ProOverrideDisabled"
+
     var monthlyProduct: Product? { products.first { $0.id == Self.monthlyID } }
     var annualProduct: Product? { products.first { $0.id == Self.annualID } }
+
+    var hasSecretPro: Bool { UserDefaults.standard.bool(forKey: Self.secretProKey) }
+
+    var isProOverrideDisabled: Bool {
+        get { UserDefaults.standard.bool(forKey: Self.proOverrideDisabledKey) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Self.proOverrideDisabledKey)
+            Task { await refreshEntitlements() }
+        }
+    }
+
+    func redeemSecretCode(_ code: String) -> Bool {
+        let trimmed = code.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let hash = SHA256.hash(data: Data(trimmed.utf8))
+        let hexHash = hash.compactMap { String(format: "%02x", $0) }.joined()
+        guard hexHash == Self.secretProCodeHash else {
+            BarnHubLogger.warning("Invalid secret code attempted")
+            return false
+        }
+        UserDefaults.standard.set(true, forKey: Self.secretProKey)
+        UserDefaults.standard.set(false, forKey: Self.proOverrideDisabledKey)
+        isPro = true
+        BarnHubLogger.success("Secret pro code redeemed")
+        return true
+    }
 
     #if DEBUG
     private let forceProMode = ProcessInfo.processInfo.arguments.contains("-ForceProMode")
@@ -32,6 +63,10 @@ final class StoreService {
             BarnHubLogger.info("ForceProMode enabled")
         }
         #endif
+        if hasSecretPro && !UserDefaults.standard.bool(forKey: Self.proOverrideDisabledKey) {
+            isPro = true
+            BarnHubLogger.info("Secret pro code active")
+        }
         updateTask = Task { [weak self] in
             await self?.listenForUpdates()
         }
@@ -109,6 +144,10 @@ final class StoreService {
         #if DEBUG
         if forceProMode { return }
         #endif
+        if hasSecretPro && !isProOverrideDisabled {
+            await MainActor.run { if !isPro { isPro = true } }
+            return
+        }
         var foundPro = false
         for await result in SKTransaction.currentEntitlements {
             guard let txn = try? checkVerified(result) else { continue }
