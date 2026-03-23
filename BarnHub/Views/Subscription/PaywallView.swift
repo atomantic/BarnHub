@@ -18,7 +18,7 @@ struct PaywallView: View {
                 planCards
                 purchaseButton
                 restoreButton
-                legalLinks
+                subscriptionDisclosure
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 32)
@@ -236,13 +236,19 @@ struct PaywallView: View {
         }
     }
 
-    private var legalLinks: some View {
-        HStack(spacing: 16) {
-            Link("Terms of Use", destination: .termsOfUse)
-            Link("Privacy Policy", destination: .privacyPolicy)
+    private var subscriptionDisclosure: some View {
+        VStack(spacing: 8) {
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage and cancel your subscriptions in your App Store account settings.")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+            HStack(spacing: 16) {
+                Link("Terms of Use (EULA)", destination: .termsOfUse)
+                Link("Privacy Policy", destination: .privacyPolicy)
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
 
     @MainActor

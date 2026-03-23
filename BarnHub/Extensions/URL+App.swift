@@ -9,7 +9,7 @@ extension URL {
     }
 
     static var termsOfUse: URL {
-        guard let url = URL(string: "https://barnhub.online/terms") else {
+        guard let url = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/") else {
             fatalError("Invalid termsOfUse URL")
         }
         return url
