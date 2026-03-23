@@ -8,6 +8,10 @@ struct SettingsView: View {
     @State private var showingMailComposer = false
     @State private var showRedeemCodeSheet = false
     @State private var showManageSubscription = false
+    @State private var showSecretCodeAlert = false
+    @State private var secretCodeInput = ""
+    @State private var showInvalidCodeToast = false
+    @State private var showCodeRedeemedToast = false
 
     private static let feedbackEmail = "support@barnhub.online"
 
@@ -52,10 +56,17 @@ struct SettingsView: View {
                             ProBadgeView()
                         }
                     }
-                    Button {
-                        showManageSubscription = true
-                    } label: {
-                        settingsRow("Manage Subscription", icon: "creditcard")
+                    if storeService.hasSecretPro {
+                        Toggle("Basic Mode", isOn: Binding(
+                            get: { storeService.isProOverrideDisabled },
+                            set: { storeService.isProOverrideDisabled = $0 }
+                        ))
+                    } else {
+                        Button {
+                            showManageSubscription = true
+                        } label: {
+                            settingsRow("Manage Subscription", icon: "creditcard")
+                        }
                     }
                 } else {
                     Button {
@@ -71,6 +82,12 @@ struct SettingsView: View {
                         showRedeemCodeSheet = true
                     } label: {
                         settingsRow("Redeem Code", icon: "gift")
+                    }
+                    Button {
+                        secretCodeInput = ""
+                        showSecretCodeAlert = true
+                    } label: {
+                        settingsRow("Enter Secret Code", icon: "lock.open")
                     }
                 }
             }
@@ -130,6 +147,23 @@ struct SettingsView: View {
             )
             .ignoresSafeArea()
         }
+        .alert("Enter Secret Code", isPresented: $showSecretCodeAlert) {
+            TextField("Code", text: $secretCodeInput)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.characters)
+            Button("Redeem") {
+                if storeService.redeemSecretCode(secretCodeInput) {
+                    showCodeRedeemedToast = true
+                } else {
+                    showInvalidCodeToast = true
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Enter the code you received to unlock BarnHub Pro.")
+        }
+        .toast(isPresented: $showCodeRedeemedToast, message: "Pro unlocked!")
+        .toast(isPresented: $showInvalidCodeToast, message: "Invalid code", isError: true)
     }
 
     private func settingsRow(_ title: String, icon: String) -> some View {
