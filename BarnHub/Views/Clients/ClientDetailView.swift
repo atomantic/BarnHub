@@ -163,12 +163,17 @@ struct ClientDetailView: View {
             }
 
             if FeatureGate.canGenerateContracts(storeService.isPro) {
-                Section("Contracts & Documents") {
+                Section("Contracts") {
                     Button {
                         showContractGenerator = true
                     } label: {
                         Label("Generate Contract", systemImage: "doc.richtext.fill")
                     }
+                }
+            }
+
+            if FeatureGate.canStoreDocuments(storeService.isPro) {
+                Section("Documents") {
                     NavigationLink(value: ClientRoute.documents(clientID)) {
                         HStack {
                             Label("Documents", systemImage: "folder.fill")

@@ -7,7 +7,6 @@ struct ClientDocumentsView: View {
     let clientID: PersistentIdentifier
     @Environment(\.modelContext) private var modelContext
 
-    @State private var showAddMenu = false
     @State private var showPDFPicker = false
     @State private var showPhotoPicker = false
     @State private var showCamera = false
@@ -142,13 +141,9 @@ struct ClientDocumentsView: View {
 
                 Spacer()
 
-                if doc.documentType == .photo, let data = doc.fileData, let img = UIImage(data: data) {
-                    Image(uiImage: img)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 44, height: 44)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                }
+                Text(doc.documentType.displayName)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .tint(.primary)
