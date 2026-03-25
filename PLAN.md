@@ -4,9 +4,8 @@ For completed work, see [DONE.md](./DONE.md).
 
 ## Next Up
 
-1. **Local push notifications for reminders** — schedule UserNotifications for overdue reminders, vet appointments, and farrier visits so barn managers get alerts when not in the app; morning summary notification for today's tasks
-2. **Boarding agreements & contract templates** — extend InvoicePDFService to generate boarding contracts, liability waivers, and care agreements as shareable PDFs; Pro-only feature
-3. **iCloud sync status indicator** — show subtle sync state in the UI so users know if data is up-to-date across devices; handle CloudKit merge conflicts gracefully
+1. **Boarding agreements & contract templates** — extend InvoicePDFService to generate boarding contracts, liability waivers, and care agreements as shareable PDFs; Pro-only feature
+2. **iCloud sync status indicator** — show subtle sync state in the UI so users know if data is up-to-date across devices; handle CloudKit merge conflicts gracefully
 
 ## Backlog
 

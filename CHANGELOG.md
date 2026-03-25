@@ -1,0 +1,16 @@
+# Changelog
+
+## Unreleased
+
+### New Features
+- **Push Notifications** — get notified when reminders, vet appointments, and farrier visits are due. Morning summary at 7 AM shows overdue tasks and today's schedule. Notifications are automatically scheduled when you create or edit reminders and appointments.
+
+### Improvements
+- **Better Accessibility** — income/expense transactions now show direction arrows alongside colors, supply stock badges show distinct "Out" vs "Low" labels with warning icons for color-blind users
+- **Dynamic Type Support** — reports empty state uses semantic fonts that scale with your accessibility settings
+- **Smoother Saves** — improved save-and-dismiss behavior across all edit screens with proper cancellation handling
+
+### Bug Fixes
+- Fixed toast notification auto-dismiss that could interfere with view cancellation
+- Fixed potential crash from force-unwrapped URL constants
+- Unified vet and farrier schedule row layouts for consistent appearance
