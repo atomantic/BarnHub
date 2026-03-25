@@ -42,9 +42,13 @@ struct TransactionRowView: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 2) {
-                Text(transaction.amount.asCurrency)
-                    .font(.headline)
-                    .foregroundStyle(amountColor)
+                HStack(spacing: 2) {
+                    Image(systemName: transaction.type == .income ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
+                        .font(.caption)
+                    Text(transaction.amount.asCurrency)
+                        .font(.headline)
+                }
+                .foregroundStyle(amountColor)
                 HStack(spacing: 4) {
                     Text(transaction.date.shortFormatted)
                         .font(.caption)

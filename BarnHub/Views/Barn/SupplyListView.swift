@@ -92,16 +92,19 @@ struct SupplyListView: View {
             }
             Spacer()
             if item.isLowStock {
-                Text("Low")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(
-                        Capsule()
-                            .fill(item.quantity <= 0 ? Color.red.opacity(0.2) : Color.orange.opacity(0.2))
-                    )
-                    .foregroundStyle(item.quantity <= 0 ? .red : .orange)
+                HStack(spacing: 4) {
+                    Image(systemName: item.quantity <= 0 ? "exclamationmark.triangle.fill" : "exclamationmark.circle.fill")
+                    Text(item.quantity <= 0 ? "Out" : "Low")
+                }
+                .font(.caption)
+                .fontWeight(.semibold)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(
+                    Capsule()
+                        .fill(item.quantity <= 0 ? Color.red.opacity(0.2) : Color.orange.opacity(0.2))
+                )
+                .foregroundStyle(item.quantity <= 0 ? .red : .orange)
             }
         }
     }
