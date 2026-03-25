@@ -18,10 +18,7 @@ struct SupplyEditView: View {
     @State private var toast = ToastState()
 
     private var isNew: Bool { supplyItemID == nil }
-    private var existingItem: SupplyItem? {
-        guard let id = supplyItemID else { return nil }
-        return modelContext.model(for: id) as? SupplyItem
-    }
+    private var existingItem: SupplyItem? { modelContext.existingModel(for: supplyItemID) }
 
     var body: some View {
         Form {

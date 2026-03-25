@@ -18,11 +18,7 @@ struct ClientEditView: View {
     @State private var toast = ToastState()
 
     private var isNew: Bool { clientID == nil }
-
-    private var existingClient: Client? {
-        guard let clientID else { return nil }
-        return modelContext.model(for: clientID) as? Client
-    }
+    private var existingClient: Client? { modelContext.existingModel(for: clientID) }
 
     var body: some View {
         Form {

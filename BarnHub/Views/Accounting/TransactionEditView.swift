@@ -21,10 +21,7 @@ struct TransactionEditView: View {
     @State private var toast = ToastState()
 
     private var isNew: Bool { transactionID == nil }
-    private var existingTransaction: Transaction? {
-        guard let id = transactionID else { return nil }
-        return modelContext.model(for: id) as? Transaction
-    }
+    private var existingTransaction: Transaction? { modelContext.existingModel(for: transactionID) }
 
     var body: some View {
         Form {
