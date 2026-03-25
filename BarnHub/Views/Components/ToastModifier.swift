@@ -31,8 +31,10 @@ struct ToastModifier: ViewModifier {
             .animation(.easeInOut(duration: 0.3), value: isPresented)
             .task(id: isPresented) {
                 guard isPresented else { return }
-                try? await Task.sleep(for: .seconds(2))
-                isPresented = false
+                do {
+                    try await Task.sleep(for: .seconds(2))
+                    isPresented = false
+                } catch {}
             }
     }
 }
@@ -53,8 +55,10 @@ struct ToastStateModifier: ViewModifier {
             .animation(.easeInOut(duration: 0.3), value: state.isPresented)
             .task(id: state.isPresented) {
                 guard state.isPresented else { return }
-                try? await Task.sleep(for: .seconds(2))
-                state.isPresented = false
+                do {
+                    try await Task.sleep(for: .seconds(2))
+                    state.isPresented = false
+                } catch {}
             }
     }
 }
