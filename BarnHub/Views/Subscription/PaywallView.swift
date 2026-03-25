@@ -39,6 +39,7 @@ struct PaywallView: View {
             Image(systemName: "star.circle.fill")
                 .font(.largeTitle)
                 .foregroundStyle(.barnGreen)
+                .accessibilityHidden(true)
 
             Text("Upgrade to Pro")
                 .font(.title.weight(.bold))
@@ -110,6 +111,7 @@ struct PaywallView: View {
         Image(systemName: available ? "checkmark.circle.fill" : "xmark.circle")
             .foregroundStyle(available ? .barnGreen : .secondary.opacity(0.4))
             .font(.subheadline)
+            .accessibilityLabel(available ? "Included" : "Not included")
     }
 
     private var productsLoaded: Bool {

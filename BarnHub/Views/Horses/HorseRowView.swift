@@ -12,11 +12,13 @@ struct HorseRowView: View {
                     .scaledToFill()
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
+                    .accessibilityLabel("\(horse.name) photo")
             } else {
                 Image(systemName: horse.isActive ? "checkmark.circle.fill" : "xmark.circle")
                     .foregroundStyle(horse.isActive ? Color.green : Color.gray)
                     .font(.subheadline)
                     .frame(width: 40, height: 40)
+                    .accessibilityLabel(horse.isActive ? "Active" : "Inactive")
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -49,6 +51,7 @@ struct HorseRowView: View {
                 Image(systemName: "xmark.circle")
                     .foregroundStyle(.gray)
                     .font(.caption)
+                    .accessibilityLabel("Inactive")
             }
         }
         .contentShape(Rectangle())

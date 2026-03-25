@@ -27,6 +27,7 @@ struct TransactionRowView: View {
             Image(systemName: categoryIcon)
                 .foregroundStyle(amountColor)
                 .frame(width: 28)
+                .accessibilityLabel(transaction.category.displayName)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(transaction.category.displayName)
@@ -57,6 +58,7 @@ struct TransactionRowView: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.caption)
                             .foregroundStyle(.green)
+                            .accessibilityLabel("Paid")
                     }
                 }
             }

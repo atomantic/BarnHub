@@ -15,6 +15,7 @@ struct FeatureLockedOverlay: ViewModifier {
                         Image(systemName: "lock.fill")
                             .font(.title)
                             .foregroundStyle(.barnGreen)
+                            .accessibilityHidden(true)
 
                         Text("Upgrade to Pro")
                             .font(.headline)

@@ -108,6 +108,7 @@ struct HomeView: View {
                     .frame(width: 80, height: 80)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
+                    .accessibilityLabel("BarnHub logo")
 
                 HStack(spacing: 8) {
                     Text("BarnHub")
