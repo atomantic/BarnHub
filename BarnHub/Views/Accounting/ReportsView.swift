@@ -9,83 +9,8 @@ struct ReportsView: View {
 
     @State private var selectedPeriod: ReportPeriod = .thisMonth
 
-    private var filteredTransactions: [Transaction] {
-        let calendar = Calendar.current
-        let now = Date.now
-        switch selectedPeriod {
-        case .thisMonth:
-            let components = calendar.dateComponents([.year, .month], from: now)
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
-        case .lastMonth:
-            let components = calendar.dateComponents([.year, .month], from: now)
-            guard let thisMonthStart = calendar.date(from: components),
-                  let start = calendar.date(byAdding: .month, value: -1, to: thisMonthStart)
-            else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date < thisMonthStart }
-        case .thisQuarter:
-            let month = calendar.component(.month, from: now)
-            let quarterStartMonth = ((month - 1) / 3) * 3 + 1
-            var components = calendar.dateComponents([.year], from: now)
-            components.month = quarterStartMonth
-            components.day = 1
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
-        case .thisYear:
-            var components = calendar.dateComponents([.year], from: now)
-            components.month = 1
-            components.day = 1
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
-        case .allTime:
-            return transactions
-        }
-    }
-
-    private var totalIncome: Double {
-        filteredTransactions.filter { $0.type == .income }.reduce(0) { $0 + $1.amount }
-    }
-
-    private var totalExpenses: Double {
-        filteredTransactions.filter { $0.type == .expense }.reduce(0) { $0 + $1.amount }
-    }
-
-    private var netBalance: Double { totalIncome - totalExpenses }
-
-    private var expensesByCategory: [(category: TransactionCategory, amount: Double)] {
-        var grouped: [TransactionCategory: Double] = [:]
-        for t in filteredTransactions where t.type == .expense {
-            grouped[t.category, default: 0] += t.amount
-        }
-        return grouped.map { (category: $0.key, amount: $0.value) }
-            .sorted { $0.amount > $1.amount }
-    }
-
-    private var incomeByCategory: [(category: TransactionCategory, amount: Double)] {
-        var grouped: [TransactionCategory: Double] = [:]
-        for t in filteredTransactions where t.type == .income {
-            grouped[t.category, default: 0] += t.amount
-        }
-        return grouped.map { (category: $0.key, amount: $0.value) }
-            .sorted { $0.amount > $1.amount }
-    }
-
-    private var monthlyTotals: [MonthlyTotal] {
-        let calendar = Calendar.current
-        var grouped: [Date: (income: Double, expenses: Double)] = [:]
-        for t in filteredTransactions {
-            let components = calendar.dateComponents([.year, .month], from: t.date)
-            let monthStart = calendar.date(from: components) ?? t.date
-            var entry = grouped[monthStart, default: (income: 0, expenses: 0)]
-            if t.type == .income {
-                entry.income += t.amount
-            } else {
-                entry.expenses += t.amount
-            }
-            grouped[monthStart] = entry
-        }
-        return grouped.map { MonthlyTotal(month: $0.key, income: $0.value.income, expenses: $0.value.expenses) }
-            .sorted { $0.month < $1.month }
+    private var reportData: ReportData {
+        ReportData(transactions: transactions, period: selectedPeriod)
     }
 
     private var showFullReports: Bool {
@@ -93,23 +18,24 @@ struct ReportsView: View {
     }
 
     var body: some View {
+        let data = reportData
         ScrollView {
             VStack(spacing: 20) {
                 periodPicker
-                summaryCards
-                if filteredTransactions.isEmpty {
+                summaryCards(data: data)
+                if data.filteredTransactions.isEmpty {
                     emptyState
                 } else {
-                    incomeExpenseChart
+                    incomeExpenseChart(data: data)
                     if showFullReports {
-                        if monthlyTotals.count > 1 {
-                            monthlyTrendChart
+                        if data.monthlyTotals.count > 1 {
+                            monthlyTrendChart(data: data)
                         }
-                        if !expensesByCategory.isEmpty {
-                            categoryBreakdownSection("Expenses by Category", data: expensesByCategory, total: totalExpenses, colors: expenseCategoryColors)
+                        if !data.expensesByCategory.isEmpty {
+                            categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
                         }
-                        if !incomeByCategory.isEmpty {
-                            categoryBreakdownSection("Income by Category", data: incomeByCategory, total: totalIncome, colors: incomeCategoryColors)
+                        if !data.incomeByCategory.isEmpty {
+                            categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
                         }
                     } else {
                         lockedSection
@@ -135,11 +61,11 @@ struct ReportsView: View {
 
     // MARK: - Summary Cards
 
-    private var summaryCards: some View {
+    private func summaryCards(data: ReportData) -> some View {
         HStack(spacing: 12) {
-            summaryCard(title: "Income", amount: totalIncome, icon: "arrow.down.circle.fill", color: .green)
-            summaryCard(title: "Expenses", amount: totalExpenses, icon: "arrow.up.circle.fill", color: .red)
-            summaryCard(title: "Net", amount: netBalance, icon: "equal.circle.fill", color: netBalance >= 0 ? .barnGreen : .red)
+            summaryCard(title: "Income", amount: data.totalIncome, icon: "arrow.down.circle.fill", color: .green)
+            summaryCard(title: "Expenses", amount: data.totalExpenses, icon: "arrow.up.circle.fill", color: .red)
+            summaryCard(title: "Net", amount: data.netBalance, icon: "equal.circle.fill", color: data.netBalance >= 0 ? .barnGreen : .red)
         }
     }
 
@@ -169,7 +95,7 @@ struct ReportsView: View {
 
     // MARK: - Income vs Expense Bar Chart
 
-    private var incomeExpenseChart: some View {
+    private func incomeExpenseChart(data: ReportData) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Income vs Expenses")
                 .font(.headline)
@@ -177,14 +103,14 @@ struct ReportsView: View {
             Chart {
                 BarMark(
                     x: .value("Type", "Income"),
-                    y: .value("Amount", totalIncome)
+                    y: .value("Amount", data.totalIncome)
                 )
                 .foregroundStyle(Color.green.gradient)
                 .cornerRadius(6)
 
                 BarMark(
                     x: .value("Type", "Expenses"),
-                    y: .value("Amount", totalExpenses)
+                    y: .value("Amount", data.totalExpenses)
                 )
                 .foregroundStyle(Color.red.gradient)
                 .cornerRadius(6)
@@ -211,12 +137,12 @@ struct ReportsView: View {
 
     // MARK: - Monthly Trend
 
-    private var monthlyTrendChart: some View {
+    private func monthlyTrendChart(data: ReportData) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Monthly Trend")
                 .font(.headline)
 
-            Chart(monthlyTotals) { total in
+            Chart(data.monthlyTotals) { total in
                 LineMark(
                     x: .value("Month", total.month, unit: .month),
                     y: .value("Income", total.income)
@@ -425,6 +351,85 @@ struct ReportsView: View {
 
     private var incomeCategoryColors: [Color] {
         [.green, .barnGreen, .teal, .cyan, .mint, .blue, .indigo, .purple, .yellow]
+    }
+}
+
+// MARK: - Report Data
+
+struct ReportData {
+    let filteredTransactions: [Transaction]
+    let totalIncome: Double
+    let totalExpenses: Double
+    let netBalance: Double
+    let expensesByCategory: [(category: TransactionCategory, amount: Double)]
+    let incomeByCategory: [(category: TransactionCategory, amount: Double)]
+    let monthlyTotals: [MonthlyTotal]
+
+    init(transactions: [Transaction], period: ReportPeriod) {
+        let filtered = Self.filterByPeriod(transactions, period: period)
+        self.filteredTransactions = filtered
+
+        var income: Double = 0
+        var expenses: Double = 0
+        var expenseGroups: [TransactionCategory: Double] = [:]
+        var incomeGroups: [TransactionCategory: Double] = [:]
+        var monthGroups: [Date: (income: Double, expenses: Double)] = [:]
+        let calendar = Calendar.current
+
+        for t in filtered {
+            if t.type == .income {
+                income += t.amount
+                incomeGroups[t.category, default: 0] += t.amount
+            } else {
+                expenses += t.amount
+                expenseGroups[t.category, default: 0] += t.amount
+            }
+            let components = calendar.dateComponents([.year, .month], from: t.date)
+            let monthStart = calendar.date(from: components) ?? t.date
+            var entry = monthGroups[monthStart, default: (income: 0, expenses: 0)]
+            if t.type == .income { entry.income += t.amount } else { entry.expenses += t.amount }
+            monthGroups[monthStart] = entry
+        }
+
+        self.totalIncome = income
+        self.totalExpenses = expenses
+        self.netBalance = income - expenses
+        self.expensesByCategory = expenseGroups.map { (category: $0.key, amount: $0.value) }.sorted { $0.amount > $1.amount }
+        self.incomeByCategory = incomeGroups.map { (category: $0.key, amount: $0.value) }.sorted { $0.amount > $1.amount }
+        self.monthlyTotals = monthGroups.map { MonthlyTotal(month: $0.key, income: $0.value.income, expenses: $0.value.expenses) }.sorted { $0.month < $1.month }
+    }
+
+    private static func filterByPeriod(_ transactions: [Transaction], period: ReportPeriod) -> [Transaction] {
+        let calendar = Calendar.current
+        let now = Date.now
+        switch period {
+        case .thisMonth:
+            let components = calendar.dateComponents([.year, .month], from: now)
+            guard let start = calendar.date(from: components) else { return transactions }
+            return transactions.filter { $0.date >= start && $0.date <= now }
+        case .lastMonth:
+            let components = calendar.dateComponents([.year, .month], from: now)
+            guard let thisMonthStart = calendar.date(from: components),
+                  let start = calendar.date(byAdding: .month, value: -1, to: thisMonthStart)
+            else { return transactions }
+            return transactions.filter { $0.date >= start && $0.date < thisMonthStart }
+        case .thisQuarter:
+            let month = calendar.component(.month, from: now)
+            let quarterStartMonth = ((month - 1) / 3) * 3 + 1
+            var components = calendar.dateComponents([.year], from: now)
+            components.month = quarterStartMonth
+            components.day = 1
+            guard let start = calendar.date(from: components) else { return transactions }
+            return transactions.filter { $0.date >= start && $0.date <= now }
+        case .thisYear:
+            var components = calendar.dateComponents([.year], from: now)
+            components.month = 1
+            components.day = 1
+            guard let start = calendar.date(from: components) else { return transactions }
+            return transactions.filter { $0.date >= start && $0.date <= now }
+        case .allTime:
+            return transactions
+        }
     }
 }
 
