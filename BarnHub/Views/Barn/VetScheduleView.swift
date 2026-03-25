@@ -26,7 +26,12 @@ struct VetScheduleView: View {
                         guard let horseID = record.horse?.persistentModelID else { return }
                         router.navigate(to: HorseRoute.detail(horseID))
                     } label: {
-                        vetRecordRow(record)
+                        ScheduleRecordRow(
+                            horseName: record.horse?.name ?? "Unknown Horse",
+                            providerName: record.vetName,
+                            description: record.descriptionText,
+                            nextDueDate: record.nextDueDate
+                        )
                     }
                     .tint(.primary)
                 }
@@ -42,33 +47,4 @@ struct VetScheduleView: View {
         }
     }
 
-    private func vetRecordRow(_ record: VetRecord) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(record.horse?.name ?? "Unknown Horse")
-                    .font(.headline)
-                Text(record.vetName)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                if !record.descriptionText.isEmpty {
-                    Text(record.descriptionText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-            Spacer()
-            if let nextDue = record.nextDueDate {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(nextDue.shortFormatted)
-                        .font(.subheadline)
-                        .foregroundStyle(nextDue.isOverdue ? .red : .primary)
-                    Text(nextDue.relativeDateString)
-                        .font(.caption)
-                        .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                }
-            }
-        }
-        .padding(.vertical, 2)
-    }
 }
