@@ -28,6 +28,21 @@ Completed items archived from PLAN.md. For release notes, see `.changelogs/`.
 - AppearanceManager UserDefaults key confirmed namespaced (net.shadowpuppet.BarnBook.appearanceMode)
 - Added test suites: DeepLinkHandlerTests, RouterTests, DateFormattingTests, InvoiceTests, TimelineEventTests, WeightEntryTests
 
+### Backlog Fixes (2026-03-25)
+
+- Simplified URL+App.swift static URLs — removed fatalError, switched to static let
+- Fixed Task.sleep cancellation handling in ToastModifier — replaced try? with do/catch
+- Replaced hardcoded .system(size: 48) font in ReportsView with semantic .largeTitle
+- Extracted showAndDismiss helper in ToastState — DRY'd save-dismiss pattern across 7 edit views
+- Added income/expense direction icons in TransactionRowView (accessibility)
+- Added severity icons and "Out"/"Low" text labels in SupplyListView stock badges (accessibility)
+- Extracted shared ScheduleRecordRow component from VetScheduleView and FarrierScheduleView
+- Confirmed ReminderListView already uses single-pass categorization (not a triple-filter)
+- Confirmed ClientDetailView intermediate array is necessary (used for both display and count)
+- Confirmed StoreService already has deinit task cancellation
+- Confirmed ClientsUpgradeView already uses @ScaledMetric for Dynamic Type
+- Confirmed tests already strengthened: reminder dates, currency exact equality, displayName logic
+
 ### Deferred Items (Implemented)
 
 - Reports with Swift Charts (was deferred, implemented in enhanced reports)
