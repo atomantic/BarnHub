@@ -100,11 +100,6 @@ struct SupplyEditView: View {
         item.lastOrderedDate = showLastOrderedDate ? lastOrderedDate : nil
 
         modelContext.saveWithLogging()
-        toast.show(isNew ? "Supply added" : "Supply updated")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss(isNew ? "Supply added" : "Supply updated", dismiss: dismiss)
     }
 }

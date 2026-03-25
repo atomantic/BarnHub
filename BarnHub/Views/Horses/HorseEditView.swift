@@ -181,12 +181,7 @@ struct HorseEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.show(isNew ? "Horse added" : "Horse updated")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss(isNew ? "Horse added" : "Horse updated", dismiss: dismiss)
     }
 
     private func downsampleImageData(_ data: Data, maxDimension: CGFloat) -> Data {

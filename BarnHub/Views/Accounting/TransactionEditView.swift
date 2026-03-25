@@ -107,11 +107,6 @@ struct TransactionEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.show(isNew ? "Transaction added" : "Transaction updated")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss(isNew ? "Transaction added" : "Transaction updated", dismiss: dismiss)
     }
 }
