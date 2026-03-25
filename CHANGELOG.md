@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 
 ### New Features
 - **Push Notifications** — get notified when reminders, vet appointments, and farrier visits are due. Morning summary at 7 AM shows overdue tasks and today's schedule. Notifications are automatically scheduled when you create or edit reminders and appointments.
+- **Contract Templates** (Pro) — generate professional boarding agreements, liability waivers, and care agreements as shareable PDFs directly from a client's profile. Includes client info, horse details, terms and conditions, and signature blocks.
 
 ### Improvements
 - **Better Accessibility** — income/expense transactions now show direction arrows alongside colors, supply stock badges show distinct "Out" vs "Low" labels with warning icons for color-blind users
