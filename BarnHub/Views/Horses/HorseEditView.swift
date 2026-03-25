@@ -24,11 +24,7 @@ struct HorseEditView: View {
     @State private var toast = ToastState()
 
     private var isNew: Bool { horseID == nil }
-
-    private var existingHorse: Horse? {
-        guard let horseID else { return nil }
-        return modelContext.model(for: horseID) as? Horse
-    }
+    private var existingHorse: Horse? { modelContext.existingModel(for: horseID) }
 
     var body: some View {
         Form {

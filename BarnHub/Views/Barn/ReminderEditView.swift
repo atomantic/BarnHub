@@ -18,10 +18,7 @@ struct ReminderEditView: View {
     @State private var toast = ToastState()
 
     private var isNew: Bool { reminderID == nil }
-    private var existingReminder: Reminder? {
-        guard let id = reminderID else { return nil }
-        return modelContext.model(for: id) as? Reminder
-    }
+    private var existingReminder: Reminder? { modelContext.existingModel(for: reminderID) }
 
     var body: some View {
         Form {
