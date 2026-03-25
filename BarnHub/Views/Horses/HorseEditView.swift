@@ -42,6 +42,7 @@ struct HorseEditView: View {
                             .scaledToFit()
                             .frame(width: 120, height: 120)
                             .foregroundStyle(.secondary.opacity(0.4))
+                            .accessibilityLabel("No photo")
                     }
 
                     HStack(spacing: 16) {
