@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+### New Features
+- **Document Storage** (Pro) — upload PDF contracts, photograph signed agreements with your camera, or pick photos from your library and attach them to any client's profile. Browse, share, and delete documents from the new Documents section on each client page.
+
+### Code Quality
+- Extracted generic model lookup helper across all edit views
+- Single-pass report data aggregation replaces 7 scattered computed properties
+- Added accessibility labels to decorative images across 6 views
+
 ## 1.2.0
 
 ### New Features
