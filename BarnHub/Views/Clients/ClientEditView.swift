@@ -113,11 +113,6 @@ struct ClientEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.show(isNew ? "Client added" : "Client updated")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss(isNew ? "Client added" : "Client updated", dismiss: dismiss)
     }
 }

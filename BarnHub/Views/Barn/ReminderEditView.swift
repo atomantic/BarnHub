@@ -86,11 +86,6 @@ struct ReminderEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.show(isNew ? "Reminder added" : "Reminder updated")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss(isNew ? "Reminder added" : "Reminder updated", dismiss: dismiss)
     }
 }

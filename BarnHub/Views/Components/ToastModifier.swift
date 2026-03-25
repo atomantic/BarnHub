@@ -11,6 +11,17 @@ final class ToastState {
         self.isError = isError
         self.isPresented = true
     }
+
+    @MainActor
+    func showAndDismiss(_ message: String, isError: Bool = false, dismiss: DismissAction) {
+        show(message, isError: isError)
+        Task {
+            do {
+                try await Task.sleep(for: .seconds(0.5))
+                dismiss()
+            } catch {}
+        }
+    }
 }
 
 struct ToastModifier: ViewModifier {

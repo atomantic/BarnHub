@@ -78,11 +78,6 @@ struct VetRecordEditView: View {
         modelContext.insert(record)
         BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
         modelContext.saveWithLogging()
-        toast.show("Vet record saved")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss("Vet record saved", dismiss: dismiss)
     }
 }

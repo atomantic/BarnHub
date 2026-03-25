@@ -71,11 +71,6 @@ struct FarrierVisitEditView: View {
         modelContext.insert(visit)
         BarnHubLogger.info("Adding farrier visit horse=\(horse.name) farrier=\(visit.farrierName)")
         modelContext.saveWithLogging()
-        toast.show("Farrier visit saved")
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-            dismiss()
-        }
+        toast.showAndDismiss("Farrier visit saved", dismiss: dismiss)
     }
 }
