@@ -76,6 +76,39 @@ final class ScreenshotTests: XCTestCase {
             sleep(1)
             saveScreenshot("09_reports_charts")
         }
+
+        // 10. Contract generator with type picker
+        tabBar.buttons["Clients"].tap()
+        sleep(1)
+        let clientCell2 = app.cells.firstMatch
+        if clientCell2.waitForExistence(timeout: 3) {
+            clientCell2.tap()
+            sleep(1)
+
+            // Scroll to find Generate Contract
+            let list = app.collectionViews.firstMatch
+            for _ in 0..<5 {
+                if app.staticTexts["Generate Contract"].exists { break }
+                list.swipeUp()
+                sleep(1)
+            }
+
+            if app.staticTexts["Generate Contract"].exists {
+                app.staticTexts["Generate Contract"].tap()
+                sleep(2)
+
+                // Tap the Type picker row to expand it and show options
+                let typePicker = app.staticTexts["Boarding Agreement"]
+                if typePicker.waitForExistence(timeout: 3) {
+                    typePicker.tap()
+                    sleep(1)
+                    saveScreenshot("10_contract_types")
+                } else {
+                    // Fallback: screenshot the form as-is
+                    saveScreenshot("10_contract_types")
+                }
+            }
+        }
     }
 
     private func saveScreenshot(_ name: String) {
