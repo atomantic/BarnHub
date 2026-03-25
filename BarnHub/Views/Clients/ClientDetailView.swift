@@ -163,11 +163,23 @@ struct ClientDetailView: View {
             }
 
             if FeatureGate.canGenerateContracts(storeService.isPro) {
-                Section("Contracts") {
+                Section("Contracts & Documents") {
                     Button {
                         showContractGenerator = true
                     } label: {
                         Label("Generate Contract", systemImage: "doc.richtext.fill")
+                    }
+                    NavigationLink(value: ClientRoute.documents(clientID)) {
+                        HStack {
+                            Label("Documents", systemImage: "folder.fill")
+                            Spacer()
+                            let count = client.documents?.count ?? 0
+                            if count > 0 {
+                                Text("\(count)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
             }

@@ -12,7 +12,7 @@ final class BarnHubTests: XCTestCase {
         container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self,
+            Invoice.self, WeightEntry.self, ClientDocument.self,
             configurations: config
         )
         context = ModelContext(container)

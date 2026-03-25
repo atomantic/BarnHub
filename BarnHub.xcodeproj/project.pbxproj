@@ -30,6 +30,7 @@
 		1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
 		28BD6B5FCC74B289029B6DC5 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA99F03E1B72A946035663D /* TransactionRowView.swift */; };
 		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
+		E251F19AFA0EFFDF2258DA4A /* ClientDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */; };
 		C7A6790D06FDF33CF6E8AB4A /* ClientEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A772809337802F14016AA93 /* ClientEditView.swift */; };
 		F50BBE3E4D70CEE98B129B00 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
 		66688FD96603B00FD222B7C1 /* ClientListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */; };
@@ -83,6 +84,7 @@
 		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
 		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
 		03674AD350F1487688C795DF /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
+		3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
 		2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
 		BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
 		7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
@@ -143,6 +145,7 @@
 		4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionListView.swift"; sourceTree = "<group>"; };
 		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionRowView.swift"; sourceTree = "<group>"; };
 		32105EF55A7597B8990A4F42 /* ClientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDetailView.swift"; sourceTree = "<group>"; };
+		6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDocumentsView.swift"; sourceTree = "<group>"; };
 		5A772809337802F14016AA93 /* ClientEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientEditView.swift"; sourceTree = "<group>"; };
 		C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientHorsesView.swift"; sourceTree = "<group>"; };
 		0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientListView.swift"; sourceTree = "<group>"; };
@@ -193,6 +196,7 @@
 		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandlerTests.swift"; sourceTree = "<group>"; };
 		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormattingTests.swift"; sourceTree = "<group>"; };
 		11204D4698E5472A9F981077 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Invoice.swift"; sourceTree = "<group>"; };
+		9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDocument.swift"; sourceTree = "<group>"; };
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoicePDFService.swift"; sourceTree = "<group>"; };
 		CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContractPDFService.swift"; sourceTree = "<group>"; };
 		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceGeneratorView.swift"; sourceTree = "<group>"; };
@@ -286,6 +290,7 @@
 				47E49121D576E6628ED2785E /* Enums.swift */,
 				C2F53930338F4A389921F640 /* WeightEntry.swift */,
 				11204D4698E5472A9F981077 /* Invoice.swift */,
+				9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */,
 				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
 				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
 				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
@@ -378,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				32105EF55A7597B8990A4F42 /* ClientDetailView.swift */,
+				6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */,
 				5A772809337802F14016AA93 /* ClientEditView.swift */,
 				C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */,
 				0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */,
@@ -585,6 +591,7 @@
 				2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */,
 				BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */,
 				03674AD350F1487688C795DF /* Invoice.swift in Sources */,
+				3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */,
 				BBCC001122334455DATA0002 /* DataExportService.swift in Sources */,
 				BBCC001122334455DATA0004 /* DataImportService.swift in Sources */,
 				BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */,
@@ -611,6 +618,7 @@
 				1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */,
 				28BD6B5FCC74B289029B6DC5 /* TransactionRowView.swift in Sources */,
 				FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */,
+				E251F19AFA0EFFDF2258DA4A /* ClientDocumentsView.swift in Sources */,
 				C7A6790D06FDF33CF6E8AB4A /* ClientEditView.swift in Sources */,
 				F50BBE3E4D70CEE98B129B00 /* ClientHorsesView.swift in Sources */,
 				66688FD96603B00FD222B7C1 /* ClientListView.swift in Sources */,
