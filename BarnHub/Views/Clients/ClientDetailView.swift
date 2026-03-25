@@ -13,6 +13,7 @@ struct ClientDetailView: View {
     @State private var toastMessage = ""
     @State private var toastIsError = false
     @State private var showInvoiceGenerator = false
+    @State private var showContractGenerator = false
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -160,10 +161,23 @@ struct ClientDetailView: View {
                     }
                 }
             }
+
+            if FeatureGate.canGenerateContracts(storeService.isPro) {
+                Section("Contracts") {
+                    Button {
+                        showContractGenerator = true
+                    } label: {
+                        Label("Generate Contract", systemImage: "doc.richtext.fill")
+                    }
+                }
+            }
         }
         .navigationTitle(client.fullName)
         .sheet(isPresented: $showInvoiceGenerator) {
             InvoiceGeneratorView(clientID: clientID)
+        }
+        .sheet(isPresented: $showContractGenerator) {
+            ContractGeneratorView(clientID: clientID)
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
