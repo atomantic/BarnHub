@@ -84,7 +84,9 @@
 		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
 		03674AD350F1487688C795DF /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
 		2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
+		BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
 		7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
+		53CB508045015689ED7769B5 /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
 		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
 		5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
 		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
@@ -192,7 +194,9 @@
 		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormattingTests.swift"; sourceTree = "<group>"; };
 		11204D4698E5472A9F981077 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Invoice.swift"; sourceTree = "<group>"; };
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoicePDFService.swift"; sourceTree = "<group>"; };
+		CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContractPDFService.swift"; sourceTree = "<group>"; };
 		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceGeneratorView.swift"; sourceTree = "<group>"; };
+		6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContractGeneratorView.swift"; sourceTree = "<group>"; };
 		2A783091571746209645CF10 /* InvoiceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceHistoryView.swift"; sourceTree = "<group>"; };
 		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntry.swift"; sourceTree = "<group>"; };
 		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthTimelineView.swift"; sourceTree = "<group>"; };
@@ -320,6 +324,7 @@
 				AA11223344556677AABB0003 /* FeatureGate.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
 				C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */,
+				CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
@@ -380,6 +385,7 @@
 				C24FE726A3D35D655991C025 /* ClientRowView.swift */,
 				2A783091571746209645CF10 /* InvoiceHistoryView.swift */,
 				F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */,
+				6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */,
 			);
 			path = "Clients";
 			sourceTree = "<group>";
@@ -575,7 +581,9 @@
 				5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */,
 				DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */,
 				7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */,
+				53CB508045015689ED7769B5 /* ContractGeneratorView.swift in Sources */,
 				2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */,
+				BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */,
 				03674AD350F1487688C795DF /* Invoice.swift in Sources */,
 				BBCC001122334455DATA0002 /* DataExportService.swift in Sources */,
 				BBCC001122334455DATA0004 /* DataImportService.swift in Sources */,
