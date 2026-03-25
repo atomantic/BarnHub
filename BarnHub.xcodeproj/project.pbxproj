@@ -41,6 +41,7 @@
 		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
 		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
+		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
 		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
 		3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
@@ -150,6 +151,7 @@
 		DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptyStateView.swift"; sourceTree = "<group>"; };
 		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorsePickerSection.swift"; sourceTree = "<group>"; };
 		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastModifier.swift"; sourceTree = "<group>"; };
+		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleRecordRow.swift"; sourceTree = "<group>"; };
 		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastView.swift"; sourceTree = "<group>"; };
 		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnDashboardView.swift"; sourceTree = "<group>"; };
 		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FarrierScheduleView.swift"; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */,
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
+				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
 			);
 			path = "Components";
@@ -608,6 +611,7 @@
 				F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */,
 				D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */,
 				8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */,
+				B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,
 				BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */,
 				3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */,
