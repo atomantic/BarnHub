@@ -388,7 +388,7 @@ struct ReportsView: View {
     private var emptyState: some View {
         VStack(spacing: 12) {
             Image(systemName: "chart.bar")
-                .font(.system(size: 48))
+                .font(.largeTitle)
                 .foregroundStyle(.secondary.opacity(0.4))
             Text("No Data Yet")
                 .font(.headline)
