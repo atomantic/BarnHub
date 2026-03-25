@@ -10,6 +10,7 @@ struct PreviewSampleData {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            Invoice.self, WeightEntry.self,
             configurations: config
         )
         populate(container: container)

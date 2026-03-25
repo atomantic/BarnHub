@@ -59,6 +59,13 @@ struct HorseDetailView: View {
                 }
             }
 
+            Section {
+                NavigationLink(value: HorseRoute.healthTimeline(horseID)) {
+                    Label("Health Timeline", systemImage: "heart.text.clipboard")
+                        .foregroundStyle(.barnGreen)
+                }
+            }
+
             Section("Info") {
                 LabeledContent("Breed", value: horse.breed)
                 LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)

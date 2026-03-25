@@ -80,6 +80,15 @@
 		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
 		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
 		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
+		03674AD350F1487688C795DF /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
+		2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
+		7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
+		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
+		5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
+		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
+		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
+		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
+		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +186,15 @@
 		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouterTests.swift"; sourceTree = "<group>"; };
 		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandlerTests.swift"; sourceTree = "<group>"; };
 		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormattingTests.swift"; sourceTree = "<group>"; };
+		11204D4698E5472A9F981077 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Invoice.swift"; sourceTree = "<group>"; };
+		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoicePDFService.swift"; sourceTree = "<group>"; };
+		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceGeneratorView.swift"; sourceTree = "<group>"; };
+		2A783091571746209645CF10 /* InvoiceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceHistoryView.swift"; sourceTree = "<group>"; };
+		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntry.swift"; sourceTree = "<group>"; };
+		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthTimelineView.swift"; sourceTree = "<group>"; };
+		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceTests.swift"; sourceTree = "<group>"; };
+		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntryTests.swift"; sourceTree = "<group>"; };
+		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEventTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,6 +276,8 @@
 			children = (
 				23D455C23A05576DE66AA068 /* Client.swift */,
 				47E49121D576E6628ED2785E /* Enums.swift */,
+				C2F53930338F4A389921F640 /* WeightEntry.swift */,
+				11204D4698E5472A9F981077 /* Invoice.swift */,
 				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
 				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
 				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
@@ -295,6 +315,7 @@
 				BBCC001122334455DATA0003 /* DataImportService.swift */,
 				AA11223344556677AABB0003 /* FeatureGate.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
+				C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 			);
@@ -352,6 +373,8 @@
 				0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */,
 				CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */,
 				C24FE726A3D35D655991C025 /* ClientRowView.swift */,
+				2A783091571746209645CF10 /* InvoiceHistoryView.swift */,
+				F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */,
 			);
 			path = "Clients";
 			sourceTree = "<group>";
@@ -378,6 +401,7 @@
 				8C38356F6D87FBDFB2290568 /* HorseEditView.swift */,
 				1F0B2139601FAF7FAE12C875 /* HorseListView.swift */,
 				C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */,
+				A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */,
 				8E4059FB68D68631292465BD /* VetRecordEditView.swift */,
 			);
 			path = "Horses";
@@ -387,6 +411,9 @@
 			isa = PBXGroup;
 			children = (
 				8400E9C51028A856C60639AB /* BarnHubTests.swift */,
+				E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */,
+				2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */,
+				AB694A490656430DBDBC7C9C /* InvoiceTests.swift */,
 				AA11223344556677AABB000F /* FeatureGateTests.swift */,
 				CC22334455667788AABB0001 /* RouterTests.swift */,
 				CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */,
@@ -538,6 +565,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */,
+				5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */,
+				DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */,
+				7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */,
+				2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */,
+				03674AD350F1487688C795DF /* Invoice.swift in Sources */,
 				BBCC001122334455DATA0002 /* DataExportService.swift in Sources */,
 				BBCC001122334455DATA0004 /* DataImportService.swift in Sources */,
 				BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */,
@@ -610,6 +643,9 @@
 			files = (
 				966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */,
 				AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */,
+				41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */,
+				495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */,
+				22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */,
 				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,
 				CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */,
 				CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */,

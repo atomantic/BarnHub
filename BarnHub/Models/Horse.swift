@@ -29,6 +29,9 @@ final class Horse {
     @Relationship(deleteRule: .cascade)
     var reminders: [Reminder]? = nil
 
+    @Relationship(deleteRule: .cascade)
+    var weightEntries: [WeightEntry]? = nil
+
     init(
         name: String = "",
         breed: String = "",
