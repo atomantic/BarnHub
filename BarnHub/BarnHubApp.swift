@@ -15,6 +15,7 @@ struct BarnHubApp: App {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            Invoice.self, WeightEntry.self,
             configurations: config
         )
         #if DEBUG
@@ -110,6 +111,7 @@ private extension View {
                 case .edit(let id): HorseEditView(horseID: id)
                 case .addVetRecord(let id): VetRecordEditView(horseID: id)
                 case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
+                case .healthTimeline(let id): HealthTimelineView(horseID: id)
                 }
             }
             .navigationDestination(for: ClientRoute.self) { route in
@@ -118,6 +120,7 @@ private extension View {
                 case .detail(let id): ClientDetailView(clientID: id)
                 case .edit(let id): ClientEditView(clientID: id)
                 case .manageHorses(let id): ClientHorsesView(clientID: id)
+                case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
                 }
             }
             .navigationDestination(for: AccountingRoute.self) { route in

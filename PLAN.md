@@ -93,6 +93,35 @@ No actionable findings. Supply chain, credentials, and data protection all clean
 | Router.swift | tests | Needs test coverage |
 | Date+Formatting.swift | tests | Needs test coverage |
 
+## Phase 7: Live Dashboard with Quick Stats & Overdue Alerts
+
+The HomeView is currently just a grid of navigation tiles. Transform it into a real operational dashboard that surfaces the information a barn manager needs first thing in the morning.
+
+- [x] **At-a-glance stats bar** — active horse count, active client count, and this month's net balance, shown as compact cards below the header
+- [x] **Overdue alerts section** — red-flagged list of overdue reminders, past-due vet appointments, and past-due farrier visits with quick-tap to the relevant record
+- [x] **Today's schedule preview** — upcoming reminders and appointments due today/tomorrow, collapsed to top 3 with "See all" link to the Schedule tab
+- [x] Pull data via `@Query` with date predicates so the dashboard is always live
+
+## Phase 8: Client Invoice Generation & Sharing
+
+The accounting system tracks transactions but barn managers have no way to bill clients. Add PDF invoice generation and sharing so they can send professional invoices directly from the app.
+
+- [x] **Invoice date range picker** — on ClientDetailView, add "Generate Invoice" button that opens a sheet to select a date range
+- [x] **PDF renderer** — generate a clean PDF with barn name/logo, client info, line-item transactions for the period, and a total due
+- [x] **Share sheet integration** — use `ShareLink` to email/message/AirDrop the generated PDF
+- [x] **Invoice history** — persist generated invoices (date range, total, PDF data) as a new `Invoice` SwiftData model linked to the client so they can be re-sent or referenced later
+- [x] Pro-only feature gated behind `FeatureGate`
+
+## Phase 9: Horse Health Timeline
+
+Vet records and farrier visits are tracked separately, but there's no unified view of a horse's complete care history. Add a chronological health timeline to HorseDetailView.
+
+- [x] **Timeline view** — unified chronological list on HorseDetailView showing vet visits, farrier visits, weight changes, and medical note updates as color-coded entries
+- [x] **Event type icons & color coding** — vet (cross icon, blue), farrier (hammer icon, orange), weight log (scale icon, green)
+- [x] **Weight tracking model** — add a `WeightEntry` SwiftData model (date + weight) linked to Horse, keeping the single `weight` field updated to latest
+- [x] **Quick-add from timeline** — tap "+" on the timeline to add any event type without navigating away from the horse's profile
+- [x] **Filterable** — toggle event types on/off to focus on specific care categories
+
 ## Deferred
 - Photo capture for horse profiles
 - Local notifications for reminders

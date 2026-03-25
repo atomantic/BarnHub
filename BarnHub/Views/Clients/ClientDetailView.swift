@@ -5,12 +5,14 @@ struct ClientDetailView: View {
     let clientID: PersistentIdentifier
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
+    @Environment(StoreService.self) private var storeService
     @Environment(\.dismiss) private var dismiss
 
     @State private var showDeleteConfirmation = false
     @State private var showToast = false
     @State private var toastMessage = ""
     @State private var toastIsError = false
+    @State private var showInvoiceGenerator = false
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -145,8 +147,24 @@ struct ClientDetailView: View {
             } header: {
                 Text("Recent Transactions")
             }
+
+            if FeatureGate.canGenerateInvoices(storeService.isPro) {
+                Section("Invoices") {
+                    Button {
+                        showInvoiceGenerator = true
+                    } label: {
+                        Label("Generate Invoice", systemImage: "doc.text.fill")
+                    }
+                    NavigationLink(value: ClientRoute.invoiceHistory(clientID)) {
+                        Label("Invoice History", systemImage: "clock.arrow.circlepath")
+                    }
+                }
+            }
         }
         .navigationTitle(client.fullName)
+        .sheet(isPresented: $showInvoiceGenerator) {
+            InvoiceGeneratorView(clientID: clientID)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
