@@ -69,6 +69,7 @@
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
 		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
 		AA11223344556677AABB0002 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
+		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
 		AA11223344556677AABB0004 /* FeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0003 /* FeatureGate.swift */; };
 		AA11223344556677AABB0006 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0005 /* PaywallView.swift */; };
 		AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0007 /* ProBadgeView.swift */; };
@@ -176,6 +177,7 @@
 		1E512067702B1DE5393F4838 /* BarnHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnHubUITests.swift"; sourceTree = "<group>"; };
 		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotTests.swift"; sourceTree = "<group>"; };
 		AA11223344556677AABB0001 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreService.swift"; sourceTree = "<group>"; };
+		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationService.swift"; sourceTree = "<group>"; };
 		AA11223344556677AABB0003 /* FeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGate.swift"; sourceTree = "<group>"; };
 		AA11223344556677AABB0005 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
 		AA11223344556677AABB0007 /* ProBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProBadgeView.swift"; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
 				C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
+				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 			);
 			path = "Services";
@@ -631,6 +634,7 @@
 				6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */,
 				3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */,
 				AA11223344556677AABB0002 /* StoreService.swift in Sources */,
+				72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */,
 				AA11223344556677AABB0004 /* FeatureGate.swift in Sources */,
 				AA11223344556677AABB0006 /* PaywallView.swift in Sources */,
 				AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */,

@@ -6,6 +6,7 @@ struct BarnHubApp: App {
     @State private var router = Router()
     @State private var storeService = StoreService()
     @State private var appearanceManager = AppearanceManager()
+    @State private var notificationService = NotificationService()
 
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
@@ -33,8 +34,12 @@ struct BarnHubApp: App {
                 .environment(router)
                 .environment(storeService)
                 .environment(appearanceManager)
+                .environment(notificationService)
                 .onOpenURL { url in
                     DeepLinkHandler.handle(url: url, router: router)
+                }
+                .task {
+                    await notificationService.requestAuthorization()
                 }
         }
         .modelContainer(modelContainer)

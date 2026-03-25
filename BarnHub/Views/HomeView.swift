@@ -4,6 +4,8 @@ import SwiftData
 struct HomeView: View {
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
+    @Environment(NotificationService.self) private var notificationService
+    @Environment(\.modelContext) private var modelContext
 
     @Query(filter: #Predicate<Horse> { $0.isActive }) private var activeHorses: [Horse]
     @Query(filter: #Predicate<Client> { $0.isActive }) private var activeClients: [Client]
@@ -77,6 +79,11 @@ struct HomeView: View {
         }
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
+        .task {
+            notificationService.scheduleAllPending(context: modelContext)
+            let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
+            notificationService.scheduleMorningSummary(overdueCount: totalOverdueCount, todayCount: todayCount)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

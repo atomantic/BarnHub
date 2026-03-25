@@ -5,6 +5,7 @@ struct VetRecordEditView: View {
     let horseID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(NotificationService.self) private var notificationService
 
     @State private var date = Date.now
     @State private var vetName = ""
@@ -78,6 +79,7 @@ struct VetRecordEditView: View {
         modelContext.insert(record)
         BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
         modelContext.saveWithLogging()
+        notificationService.scheduleVetRecord(record)
         toast.showAndDismiss("Vet record saved", dismiss: dismiss)
     }
 }
