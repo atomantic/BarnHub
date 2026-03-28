@@ -93,6 +93,9 @@ struct ClientDocumentsView: View {
                             addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: data)
                         }
                     }
+                } catch is CancellationError {
+                    // Task was cancelled by a newer selection — no error toast needed.
+                    return
                 } catch {
                     await MainActor.run {
                         toastMessage = "Failed to load photo"

@@ -29,13 +29,18 @@ struct BarnHubApp: App {
             return container
         } catch {
             BarnHubLogger.error("ModelContainer init failed: \(error.localizedDescription) — falling back to in-memory store")
-            let fallback = try! ModelContainer(
-                for: Horse.self, Client.self, Transaction.self,
-                VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-                Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-            )
-            return fallback
+            do {
+                let fallback = try ModelContainer(
+                    for: Horse.self, Client.self, Transaction.self,
+                    VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                    Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+                return fallback
+            } catch {
+                BarnHubLogger.error("Fallback in-memory ModelContainer init also failed: \(error.localizedDescription)")
+                fatalError("Unable to initialize SwiftData ModelContainer (both persistent and in-memory initializations failed).")
+            }
         }
     }()
 
