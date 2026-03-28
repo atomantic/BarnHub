@@ -92,6 +92,7 @@
 		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
 		5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
 		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
+		B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */; };
 		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
 		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
@@ -204,6 +205,7 @@
 		2A783091571746209645CF10 /* InvoiceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceHistoryView.swift"; sourceTree = "<group>"; };
 		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntry.swift"; sourceTree = "<group>"; };
 		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthTimelineView.swift"; sourceTree = "<group>"; };
+		D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightChartView.swift"; sourceTree = "<group>"; };
 		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceTests.swift"; sourceTree = "<group>"; };
 		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntryTests.swift"; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEventTests.swift"; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				1F0B2139601FAF7FAE12C875 /* HorseListView.swift */,
 				C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */,
 				A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */,
+				D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */,
 				8E4059FB68D68631292465BD /* VetRecordEditView.swift */,
 			);
 			path = "Horses";
@@ -584,6 +587,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */,
+				B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */,
 				5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */,
 				DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */,
 				7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */,

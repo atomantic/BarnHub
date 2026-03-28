@@ -125,6 +125,11 @@ struct HealthTimelineView: View {
         }
         .navigationTitle("Health Timeline")
         .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: HorseRoute.weightChart(horseID)) {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
