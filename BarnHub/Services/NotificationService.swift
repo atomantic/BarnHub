@@ -91,24 +91,27 @@ final class NotificationService {
 
     func scheduleAllPending(context: ModelContext) {
         if let last = lastScheduledDate, Calendar.current.isDateInToday(last) { return }
-        lastScheduledDate = .now
 
-        let reminders = (try? context.fetch(FetchDescriptor<Reminder>())) ?? []
-        for reminder in reminders where !reminder.isCompleted {
-            scheduleReminder(reminder)
+        do {
+            let reminders = try context.fetch(FetchDescriptor<Reminder>())
+            let vetRecords = try context.fetch(FetchDescriptor<VetRecord>())
+            let farrierVisits = try context.fetch(FetchDescriptor<FarrierVisit>())
+
+            for reminder in reminders where !reminder.isCompleted {
+                scheduleReminder(reminder)
+            }
+            for record in vetRecords where record.nextDueDate != nil {
+                scheduleVetRecord(record)
+            }
+            for visit in farrierVisits where visit.nextDueDate != nil {
+                scheduleFarrierVisit(visit)
+            }
+
+            lastScheduledDate = .now
+            BarnHubLogger.info("Scheduled notifications reminders=\(reminders.filter { !$0.isCompleted }.count) vet=\(vetRecords.filter { $0.nextDueDate != nil }.count) farrier=\(farrierVisits.filter { $0.nextDueDate != nil }.count)")
+        } catch {
+            BarnHubLogger.error("scheduleAllPending fetch failed: \(error.localizedDescription) — will retry next launch")
         }
-
-        let vetRecords = (try? context.fetch(FetchDescriptor<VetRecord>())) ?? []
-        for record in vetRecords where record.nextDueDate != nil {
-            scheduleVetRecord(record)
-        }
-
-        let farrierVisits = (try? context.fetch(FetchDescriptor<FarrierVisit>())) ?? []
-        for visit in farrierVisits where visit.nextDueDate != nil {
-            scheduleFarrierVisit(visit)
-        }
-
-        BarnHubLogger.info("Scheduled notifications reminders=\(reminders.filter { !$0.isCompleted }.count) vet=\(vetRecords.filter { $0.nextDueDate != nil }.count) farrier=\(farrierVisits.filter { $0.nextDueDate != nil }.count)")
     }
 
     // MARK: - Morning Summary

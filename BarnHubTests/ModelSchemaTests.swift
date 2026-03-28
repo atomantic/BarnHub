@@ -9,21 +9,17 @@ final class ModelSchemaTests: XCTestCase {
     private var container: ModelContainer!
     private var context: ModelContext!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        do {
-            container = try ModelContainer(
-                for: Horse.self, Client.self, Transaction.self,
-                VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-                Invoice.self, WeightEntry.self, ClientDocument.self,
-                BarnNote.self, Lesson.self,
-                configurations: config
-            )
-            context = ModelContext(container)
-        } catch {
-            XCTFail("Failed to create ModelContainer: \(error)")
-        }
+        container = try ModelContainer(
+            for: Horse.self, Client.self, Transaction.self,
+            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            Invoice.self, WeightEntry.self, ClientDocument.self,
+            BarnNote.self, Lesson.self,
+            configurations: config
+        )
+        context = ModelContext(container)
     }
 
     override func tearDown() {
