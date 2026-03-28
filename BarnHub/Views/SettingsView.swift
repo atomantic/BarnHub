@@ -129,8 +129,10 @@ struct SettingsView: View {
                         settingsRow("Send Feedback", icon: "envelope")
                     }
                 } else {
-                    Link(destination: URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback")!) {
-                        settingsRow("Send Feedback", icon: "envelope")
+                    if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
+                        Link(destination: url) {
+                            settingsRow("Send Feedback", icon: "envelope")
+                        }
                     }
                 }
             }
