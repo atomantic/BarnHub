@@ -70,6 +70,28 @@ final class StoreService {
         return status == errSecSuccess
     }
 
+    /// One-time migration: if UserDefaults contains secret-pro flags from a pre-Keychain
+    /// build, copy them into the Keychain and remove the UserDefaults entries so the
+    /// user doesn't lose their unlock after upgrading.
+    private static func migrateUserDefaultsToKeychain() {
+        let defaults = UserDefaults.standard
+        let udSecretKey = "SecretProUnlocked"
+        let udOverrideKey = "ProOverrideDisabled"
+
+        // Only migrate if Keychain has no value yet but UserDefaults does.
+        if !keychainBool(forKey: secretProKey),
+           defaults.object(forKey: udSecretKey) != nil {
+            let wasUnlocked = defaults.bool(forKey: udSecretKey)
+            let wasDisabled = defaults.bool(forKey: udOverrideKey)
+            if setKeychainBool(wasUnlocked, forKey: secretProKey)
+                && setKeychainBool(wasDisabled, forKey: proOverrideDisabledKey) {
+                defaults.removeObject(forKey: udSecretKey)
+                defaults.removeObject(forKey: udOverrideKey)
+                BarnHubLogger.info("Migrated secret-pro flags from UserDefaults to Keychain")
+            }
+        }
+    }
+
     func redeemSecretCode(_ code: String) -> Bool {
         let trimmed = code.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let hash = SHA256.hash(data: Data(trimmed.utf8))
@@ -95,6 +117,7 @@ final class StoreService {
     #endif
 
     init() {
+        Self.migrateUserDefaultsToKeychain()
         #if DEBUG
         if forceProMode {
             isPro = true
