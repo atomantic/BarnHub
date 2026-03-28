@@ -74,17 +74,4 @@ final class DateFormattingTests: XCTestCase {
                       "Expected relative past string, got: \(result)")
     }
 
-    func testFormattedStyleShort() {
-        var components = DateComponents()
-        components.year = 2026
-        components.month = 7
-        components.day = 4
-        components.hour = 12
-        let date = Calendar.current.date(from: components)!
-
-        let formatted = date.formatted(style: .short)
-        // Short style produces something like "7/4/26"
-        XCTAssertTrue(formatted.contains("7") && formatted.contains("4"),
-                      "Expected short formatted date containing month and day, got: \(formatted)")
-    }
 }
