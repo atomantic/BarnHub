@@ -8,10 +8,13 @@ struct ConfirmationDialog: View {
     var confirmRole: ButtonRole? = nil
     let onConfirm: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         ZStack {
             if isPresented {
-                Color.black.opacity(0.4)
+                Rectangle()
+                    .fill(.ultraThinMaterial)
                     .ignoresSafeArea()
                     .onTapGesture { isPresented = false }
 
@@ -46,7 +49,10 @@ struct ConfirmationDialog: View {
                         .fill(.regularMaterial)
                 )
                 .padding(.horizontal, 40)
-                .transition(.scale.combined(with: .opacity))
+                .accessibilityElement(children: .contain)
+                .accessibilityAddTraits(.isModal)
+                .accessibilitySortPriority(1)
+                .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
         }
         .animation(.easeInOut(duration: 0.2), value: isPresented)

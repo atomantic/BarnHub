@@ -16,24 +16,12 @@ struct WeightChartView: View {
         (horse?.weightEntries ?? []).sorted { $0.date < $1.date }
     }
 
-    private var minWeight: Double {
-        entries.map(\.weight).min() ?? 0
-    }
-
-    private var maxWeight: Double {
-        entries.map(\.weight).max() ?? 0
-    }
-
-    private var weightChange: Double? {
-        guard entries.count >= 2,
-              let first = entries.first,
-              let last = entries.last else { return nil }
-        return last.weight - first.weight
-    }
-
     var body: some View {
-        Group {
-            if entries.isEmpty {
+        let sortedEntries = entries
+        let minWeight = sortedEntries.map(\.weight).min() ?? 0
+        let maxWeight = sortedEntries.map(\.weight).max() ?? 0
+        return Group {
+            if sortedEntries.isEmpty {
                 EmptyStateView(
                     icon: "scalemass",
                     title: "No Weight Records",
@@ -42,9 +30,9 @@ struct WeightChartView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 20) {
-                        summaryCards
-                        chartSection
-                        historySection
+                        summaryCards(sortedEntries: sortedEntries, minWeight: minWeight, maxWeight: maxWeight)
+                        chartSection(sortedEntries: sortedEntries, minWeight: minWeight, maxWeight: maxWeight)
+                        historySection(sortedEntries: sortedEntries)
                     }
                     .padding()
                 }
@@ -56,11 +44,17 @@ struct WeightChartView: View {
 
     // MARK: - Summary Cards
 
-    private var summaryCards: some View {
-        HStack(spacing: 12) {
+    private func summaryCards(sortedEntries: [WeightEntry], minWeight: Double, maxWeight: Double) -> some View {
+        let weightChange: Double? = {
+            guard sortedEntries.count >= 2,
+                  let first = sortedEntries.first,
+                  let last = sortedEntries.last else { return nil }
+            return last.weight - first.weight
+        }()
+        return HStack(spacing: 12) {
             weightCard(
                 title: "Current",
-                value: "\(Int(entries.last?.weight ?? 0))",
+                value: "\(Int(sortedEntries.last?.weight ?? 0))",
                 unit: "lbs",
                 color: .barnGreen
             )
@@ -107,7 +101,7 @@ struct WeightChartView: View {
 
     // MARK: - Chart
 
-    private var chartSection: some View {
+    private func chartSection(sortedEntries: [WeightEntry], minWeight: Double, maxWeight: Double) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Weight Over Time")
                 .font(.headline)
@@ -115,7 +109,7 @@ struct WeightChartView: View {
             let yMin = max(0, minWeight - 50)
             let yMax = maxWeight + 50
 
-            Chart(entries, id: \.persistentModelID) { entry in
+            Chart(sortedEntries, id: \.persistentModelID) { entry in
                 LineMark(
                     x: .value("Date", entry.date, unit: .day),
                     y: .value("Weight", entry.weight)
@@ -181,7 +175,7 @@ struct WeightChartView: View {
                         .gesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged { value in
-                                    selectEntry(at: value.location, proxy: proxy, geometry: geometry)
+                                    selectEntry(at: value.location, proxy: proxy, geometry: geometry, entries: sortedEntries)
                                 }
                                 .onEnded { _ in
                                     selectedEntry = nil
@@ -199,8 +193,9 @@ struct WeightChartView: View {
         )
     }
 
-    private func selectEntry(at location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) {
-        let plotFrame = geometry[proxy.plotFrame!]
+    private func selectEntry(at location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy, entries: [WeightEntry]) {
+        guard let frame = proxy.plotFrame else { return }
+        let plotFrame = geometry[frame]
         let xPosition = location.x - plotFrame.origin.x
         guard let date: Date = proxy.value(atX: xPosition) else { return }
 
@@ -211,12 +206,12 @@ struct WeightChartView: View {
 
     // MARK: - History
 
-    private var historySection: some View {
+    private func historySection(sortedEntries: [WeightEntry]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("History")
                 .font(.headline)
 
-            ForEach(entries.reversed(), id: \.persistentModelID) { entry in
+            ForEach(sortedEntries.reversed(), id: \.persistentModelID) { entry in
                 HStack {
                     Image(systemName: "scalemass.fill")
                         .font(.caption)
@@ -228,7 +223,7 @@ struct WeightChartView: View {
                     Text(entry.date.shortFormatted)
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    if let change = changeFrom(entry) {
+                    if let change = changeFrom(entry, in: sortedEntries) {
                         Text("\(change >= 0 ? "+" : "")\(Int(change))")
                             .font(.caption)
                             .foregroundStyle(change >= 0 ? .barnGreen : .red)
@@ -247,7 +242,7 @@ struct WeightChartView: View {
         )
     }
 
-    private func changeFrom(_ entry: WeightEntry) -> Double? {
+    private func changeFrom(_ entry: WeightEntry, in entries: [WeightEntry]) -> Double? {
         guard let index = entries.firstIndex(where: { $0.persistentModelID == entry.persistentModelID }),
               index > 0 else { return nil }
         return entry.weight - entries[index - 1].weight

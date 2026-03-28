@@ -20,6 +20,7 @@ struct HorseEditView: View {
 
     @State private var photoData: Data?
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var photoLoadTask: Task<Void, Never>?
 
     @State private var toast = ToastState()
 
@@ -117,10 +118,20 @@ struct HorseEditView: View {
         .task { loadExisting() }
         .onChange(of: selectedPhoto) { _, newItem in
             guard let newItem else { return }
-            Task {
-                if let data = try? await newItem.loadTransferable(type: Data.self) {
+            photoLoadTask?.cancel()
+            photoLoadTask = Task {
+                do {
+                    if let data = try await newItem.loadTransferable(type: Data.self) {
+                        await MainActor.run {
+                            photoData = downsampleImageData(data, maxDimension: 800)
+                            selectedPhoto = nil
+                        }
+                    }
+                } catch is CancellationError {
+                    // Task was cancelled by a newer selection — no error toast needed.
+                } catch {
                     await MainActor.run {
-                        photoData = downsampleImageData(data, maxDimension: 800)
+                        toast.show("Failed to load photo", isError: true)
                     }
                 }
             }

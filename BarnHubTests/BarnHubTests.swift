@@ -13,6 +13,7 @@ final class BarnHubTests: XCTestCase {
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
             Invoice.self, WeightEntry.self, ClientDocument.self,
+            BarnNote.self, Lesson.self,
             configurations: config
         )
         context = ModelContext(container)
@@ -81,6 +82,43 @@ final class BarnHubTests: XCTestCase {
         XCTAssertTrue(item.isLowStock)
         item.quantity = 15
         XCTAssertFalse(item.isLowStock)
+    }
+
+    func testSupplyItem_isLowStock_whenQuantityEqualsThreshold() {
+        let item = SupplyItem()
+        item.quantity = 10
+        item.reorderThreshold = 10
+        // quantity <= reorderThreshold should be true at boundary
+        XCTAssertTrue(item.isLowStock)
+    }
+
+    func testSupplyItem_isLowStock_whenQuantityIsZero() {
+        let item = SupplyItem()
+        item.quantity = 0
+        item.reorderThreshold = 0
+        // 0 <= 0 → low stock
+        XCTAssertTrue(item.isLowStock)
+    }
+
+    func testClientFullName_emptyLastName() {
+        let client = Client()
+        client.firstName = "Jane"
+        client.lastName = ""
+        XCTAssertEqual(client.fullName, "Jane")
+    }
+
+    func testClientFullName_emptyFirstName() {
+        let client = Client()
+        client.firstName = ""
+        client.lastName = "Doe"
+        XCTAssertEqual(client.fullName, "Doe")
+    }
+
+    func testClientFullName_bothEmpty() {
+        let client = Client()
+        client.firstName = ""
+        client.lastName = ""
+        XCTAssertEqual(client.fullName, "")
     }
 
     func testReminderNextOccurrence() {

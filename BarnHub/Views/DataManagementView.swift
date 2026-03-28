@@ -138,23 +138,35 @@ struct DataManagementView: View {
     private func exportData(_ type: ExportDataType) {
         let tempDir = FileManager.default.temporaryDirectory
 
-        switch type {
-        case .horses:
-            let csv = DataExportService.exportHorsesCSV(from: modelContext)
-            exportURL = writeTemp(csv, name: "barnhub_horses.csv", dir: tempDir)
-        case .clients:
-            let csv = DataExportService.exportClientsCSV(from: modelContext)
-            exportURL = writeTemp(csv, name: "barnhub_clients.csv", dir: tempDir)
-        case .transactions:
-            let csv = DataExportService.exportTransactionsCSV(from: modelContext)
-            exportURL = writeTemp(csv, name: "barnhub_transactions.csv", dir: tempDir)
-        case .all:
-            let folder = tempDir.appendingPathComponent("BarnHub Export", isDirectory: true)
-            try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-            _ = writeTemp(DataExportService.exportHorsesCSV(from: modelContext), name: "horses.csv", dir: folder)
-            _ = writeTemp(DataExportService.exportClientsCSV(from: modelContext), name: "clients.csv", dir: folder)
-            _ = writeTemp(DataExportService.exportTransactionsCSV(from: modelContext), name: "transactions.csv", dir: folder)
-            exportURL = folder
+        do {
+            switch type {
+            case .horses:
+                let csv = try DataExportService.exportHorsesCSV(from: modelContext)
+                exportURL = writeTemp(csv, name: "barnhub_horses.csv", dir: tempDir)
+            case .clients:
+                let csv = try DataExportService.exportClientsCSV(from: modelContext)
+                exportURL = writeTemp(csv, name: "barnhub_clients.csv", dir: tempDir)
+            case .transactions:
+                let csv = try DataExportService.exportTransactionsCSV(from: modelContext)
+                exportURL = writeTemp(csv, name: "barnhub_transactions.csv", dir: tempDir)
+            case .all:
+                let folder = tempDir.appendingPathComponent("BarnHub Export", isDirectory: true)
+                do {
+                    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                } catch {
+                    BarnHubLogger.error("Failed to create export directory error=\(error.localizedDescription)")
+                    toast.show("Export failed", isError: true)
+                    return
+                }
+                _ = writeTemp(try DataExportService.exportHorsesCSV(from: modelContext), name: "horses.csv", dir: folder)
+                _ = writeTemp(try DataExportService.exportClientsCSV(from: modelContext), name: "clients.csv", dir: folder)
+                _ = writeTemp(try DataExportService.exportTransactionsCSV(from: modelContext), name: "transactions.csv", dir: folder)
+                exportURL = folder
+            }
+        } catch {
+            BarnHubLogger.error("Export fetch failed error=\(error.localizedDescription)")
+            toast.show("Export failed", isError: true)
+            return
         }
 
         if exportURL != nil {
@@ -211,13 +223,18 @@ struct DataManagementView: View {
         }
 
         let result: DataImportService.ImportResult
-        switch type {
-        case .horses:
-            result = DataImportService.importHorses(from: csvString, context: modelContext)
-        case .clients:
-            result = DataImportService.importClients(from: csvString, context: modelContext)
-        case .transactions:
-            result = DataImportService.importTransactions(from: csvString, context: modelContext)
+        do {
+            switch type {
+            case .horses:
+                result = DataImportService.importHorses(from: csvString, context: modelContext)
+            case .clients:
+                result = DataImportService.importClients(from: csvString, context: modelContext)
+            case .transactions:
+                result = try DataImportService.importTransactions(from: csvString, context: modelContext)
+            }
+        } catch {
+            toast.show("Import failed: \(error.localizedDescription)", isError: true)
+            return
         }
 
         importResult = result

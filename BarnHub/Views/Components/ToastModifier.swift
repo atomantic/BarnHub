@@ -19,7 +19,7 @@ final class ToastState {
             do {
                 try await Task.sleep(for: .seconds(0.5))
                 dismiss()
-            } catch {}
+            } catch is CancellationError { }
         }
     }
 }
@@ -28,6 +28,7 @@ struct ToastModifier: ViewModifier {
     @Binding var isPresented: Bool
     let message: String
     var isError: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         content
@@ -35,23 +36,22 @@ struct ToastModifier: ViewModifier {
                 if isPresented {
                     ToastView(message: message, isError: isError)
                         .padding(.top, 8)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
                         .zIndex(1)
                 }
             }
-            .animation(.easeInOut(duration: 0.3), value: isPresented)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: isPresented)
             .task(id: isPresented) {
                 guard isPresented else { return }
-                do {
-                    try await Task.sleep(for: .seconds(2))
-                    isPresented = false
-                } catch {}
+                try? await Task.sleep(for: .seconds(2))
+                if isPresented { isPresented = false }
             }
     }
 }
 
 struct ToastStateModifier: ViewModifier {
     @Bindable var state: ToastState
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         content
@@ -59,17 +59,15 @@ struct ToastStateModifier: ViewModifier {
                 if state.isPresented {
                     ToastView(message: state.message, isError: state.isError)
                         .padding(.top, 8)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
                         .zIndex(1)
                 }
             }
-            .animation(.easeInOut(duration: 0.3), value: state.isPresented)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: state.isPresented)
             .task(id: state.isPresented) {
                 guard state.isPresented else { return }
-                do {
-                    try await Task.sleep(for: .seconds(2))
-                    state.isPresented = false
-                } catch {}
+                try? await Task.sleep(for: .seconds(2))
+                if state.isPresented { state.isPresented = false }
             }
     }
 }

@@ -41,9 +41,9 @@ struct AccountingDashboardView: View {
         List {
             Section("This Month") {
                 HStack(spacing: 12) {
-                    summaryCard(title: "Income", amount: monthlyIncome, color: .green)
-                    summaryCard(title: "Expenses", amount: monthlyExpenses, color: .red)
-                    summaryCard(title: "Balance", amount: balance, color: balance >= 0 ? .blue : .orange)
+                    SummaryCard(title: "Income", amount: monthlyIncome, color: .green)
+                    SummaryCard(title: "Expenses", amount: monthlyExpenses, color: .red)
+                    SummaryCard(title: "Balance", amount: balance, color: balance >= 0 ? .blue : .orange)
                 }
                 .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                 .listRowBackground(Color.clear)
@@ -81,30 +81,6 @@ struct AccountingDashboardView: View {
                 }
             }
         }
-        .navigationDestination(for: AccountingRoute.self) { route in
-            switch route {
-            case .list:
-                TransactionListView()
-            case .edit(let id):
-                TransactionEditView(transactionID: id)
-            }
-        }
     }
 
-    private func summaryCard(title: String, amount: Double, color: Color) -> some View {
-        VStack(spacing: 4) {
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(amount.asCurrency)
-                .font(.headline)
-                .foregroundStyle(color)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(color.opacity(0.1))
-        )
-    }
 }

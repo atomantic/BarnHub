@@ -8,12 +8,22 @@ struct HorseDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var showDeleteConfirmation = false
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
+    }
+
+    private var sortedVetRecords: [VetRecord] {
+        (horse?.vetRecords ?? []).sorted { $0.date > $1.date }
+    }
+
+    private var sortedFarrierVisits: [FarrierVisit] {
+        (horse?.farrierVisits ?? []).sorted { $0.date > $1.date }
+    }
+
+    private var sortedHorseClients: [Client] {
+        (horse?.clients ?? []).sorted { $0.fullName < $1.fullName }
     }
 
     var body: some View {
@@ -38,7 +48,7 @@ struct HorseDetailView: View {
                 onConfirm: deleteHorse
             )
         }
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .toast(toast)
     }
 
     @ViewBuilder
@@ -95,12 +105,11 @@ struct HorseDetailView: View {
             }
 
             Section {
-                let records = (horse.vetRecords ?? []).sorted { $0.date > $1.date }
-                if records.isEmpty {
+                if sortedVetRecords.isEmpty {
                     Text("No vet records")
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(records, id: \.persistentModelID) { record in
+                    ForEach(sortedVetRecords, id: \.persistentModelID) { record in
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
                                 Text(record.date.shortFormatted)
@@ -139,12 +148,11 @@ struct HorseDetailView: View {
             }
 
             Section {
-                let visits = (horse.farrierVisits ?? []).sorted { $0.date > $1.date }
-                if visits.isEmpty {
+                if sortedFarrierVisits.isEmpty {
                     Text("No farrier visits")
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(visits, id: \.persistentModelID) { visit in
+                    ForEach(sortedFarrierVisits, id: \.persistentModelID) { visit in
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {
                                 Text(visit.date.shortFormatted)
@@ -183,12 +191,11 @@ struct HorseDetailView: View {
             }
 
             Section("Clients") {
-                let clients = (horse.clients ?? []).sorted { $0.fullName < $1.fullName }
-                if clients.isEmpty {
+                if sortedHorseClients.isEmpty {
                     Text("No assigned clients")
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(clients, id: \.persistentModelID) { client in
+                    ForEach(sortedHorseClients, id: \.persistentModelID) { client in
                         NavigationLink(value: ClientRoute.detail(client.persistentModelID)) {
                             Text(client.fullName)
                         }

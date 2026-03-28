@@ -7,8 +7,7 @@ struct ClientHorsesView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -57,23 +56,22 @@ struct ClientHorsesView: View {
             }
         }
         .navigationTitle("Manage Horses")
-        .toast(isPresented: $showToast, message: toastMessage)
+        .toast(toast)
     }
 
     private func toggleHorse(_ horse: Horse, for client: Client, currentlyAssigned: Bool) {
         if currentlyAssigned {
             client.horses?.removeAll { $0.persistentModelID == horse.persistentModelID }
-            toastMessage = "\(horse.name) removed"
+            toast.show("\(horse.name) removed")
             BarnHubLogger.info("Unassigned horse=\(horse.name) from client=\(client.fullName)")
         } else {
             if client.horses == nil {
                 client.horses = []
             }
             client.horses?.append(horse)
-            toastMessage = "\(horse.name) assigned"
+            toast.show("\(horse.name) assigned")
             BarnHubLogger.info("Assigned horse=\(horse.name) to client=\(client.fullName)")
         }
         modelContext.saveWithLogging()
-        showToast = true
     }
 }

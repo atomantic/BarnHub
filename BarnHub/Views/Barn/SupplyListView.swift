@@ -10,9 +10,7 @@ struct SupplyListView: View {
     @State private var searchText = ""
     @State private var showDeleteConfirmation = false
     @State private var itemToDelete: SupplyItem?
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     private var filteredItems: [SupplyItem] {
         guard !searchText.isEmpty else { return supplyItems }
@@ -64,21 +62,11 @@ struct SupplyListView: View {
             ) {
                 guard let item = itemToDelete else { return }
                 modelContext.deleteWithLogging(item)
-                toastMessage = "Supply deleted"
-                toastIsError = false
-                showToast = true
+                toast.show("Supply deleted")
                 itemToDelete = nil
             }
         }
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
-        .navigationDestination(for: BarnRoute.self) { route in
-            switch route {
-            case .supplyEdit(let id):
-                SupplyEditView(supplyItemID: id)
-            default:
-                EmptyView()
-            }
-        }
+        .toast(toast)
     }
 
     private func supplyRow(_ item: SupplyItem) -> some View {

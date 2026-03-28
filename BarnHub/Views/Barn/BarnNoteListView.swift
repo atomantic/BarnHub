@@ -8,8 +8,7 @@ struct BarnNoteListView: View {
     @Query(sort: \BarnNote.date, order: .reverse) private var notes: [BarnNote]
 
     @State private var selectedCategory: BarnNoteCategory?
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
 
     private var filteredNotes: [BarnNote] {
         guard let category = selectedCategory else { return notes }
@@ -74,15 +73,7 @@ struct BarnNoteListView: View {
                 }
             }
         }
-        .toast(isPresented: $showToast, message: toastMessage)
-        .navigationDestination(for: BarnRoute.self) { route in
-            switch route {
-            case .barnNoteEdit(let id):
-                BarnNoteEditView(noteID: id)
-            default:
-                EmptyView()
-            }
-        }
+        .toast(toast)
     }
 
     private var categoryFilter: some View {
@@ -162,7 +153,6 @@ struct BarnNoteListView: View {
         for index in offsets {
             modelContext.deleteWithLogging(groupNotes[index])
         }
-        toastMessage = "Note deleted"
-        showToast = true
+        toast.show("Note deleted")
     }
 }

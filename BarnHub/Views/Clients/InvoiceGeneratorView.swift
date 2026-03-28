@@ -10,6 +10,7 @@ struct InvoiceGeneratorView: View {
     @State private var endDate = Date.now
     @State private var showShareSheet = false
     @State private var generatedPDFURL: URL?
+    @State private var toast = ToastState()
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -95,6 +96,7 @@ struct InvoiceGeneratorView: View {
                     ShareSheet(items: [url])
                 }
             }
+            .toast(toast)
         }
     }
 
@@ -134,7 +136,13 @@ struct InvoiceGeneratorView: View {
 
         let fileName = Invoice.fileName(clientName: client.fullName, startDate: startDate, endDate: endDate)
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        try? pdfData.write(to: tempURL)
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
+            toast.show("Failed to save invoice", isError: true)
+            return
+        }
         generatedPDFURL = tempURL
         showShareSheet = true
     }

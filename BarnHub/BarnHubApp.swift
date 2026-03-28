@@ -14,18 +14,34 @@ struct BarnHubApp: App {
         let config = isSeedMode
             ? ModelConfiguration(isStoredInMemoryOnly: true)
             : ModelConfiguration(cloudKitDatabase: .automatic)
-        let container = try! ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
-            configurations: config
-        )
-        #if DEBUG
-        if isSeedMode {
-            PreviewSampleData.populate(container: container)
+        do {
+            let container = try ModelContainer(
+                for: Horse.self, Client.self, Transaction.self,
+                VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
+                configurations: config
+            )
+            #if DEBUG
+            if isSeedMode {
+                PreviewSampleData.populate(container: container)
+            }
+            #endif
+            return container
+        } catch {
+            BarnHubLogger.error("ModelContainer init failed: \(error.localizedDescription) — falling back to in-memory store")
+            do {
+                let fallback = try ModelContainer(
+                    for: Horse.self, Client.self, Transaction.self,
+                    VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                    Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+                return fallback
+            } catch {
+                BarnHubLogger.error("Fallback in-memory ModelContainer init also failed: \(error.localizedDescription)")
+                fatalError("Unable to initialize SwiftData ModelContainer (both persistent and in-memory initializations failed).")
+            }
         }
-        #endif
-        return container
     }()
 
     var body: some Scene {
@@ -54,62 +70,80 @@ struct BarnHubApp: App {
 struct ContentView: View {
     @Environment(Router.self) private var router
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(NotificationService.self) private var notificationService
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
+    private var incompleteReminders: [Reminder]
+    @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
+    @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
 
     var body: some View {
         @Bindable var router = router
-        if sizeClass == .regular {
-            NavigationSplitView {
-                List(selection: sidebarSelection) {
-                    ForEach(Router.AppTab.allCases, id: \.self) { tab in
-                        Label(tab.title, systemImage: tab.icon)
-                            .tag(tab)
+        Group {
+            if sizeClass == .regular {
+                NavigationSplitView {
+                    List(selection: sidebarSelection) {
+                        ForEach(Router.AppTab.allCases, id: \.self) { tab in
+                            Label(tab.title, systemImage: tab.icon)
+                                .tag(tab)
+                        }
                     }
+                    .navigationTitle("BarnHub")
+                    .listStyle(.sidebar)
+                } detail: {
+                    sidebarDetailView
+                        .id(router.selectedTab)
                 }
-                .navigationTitle("BarnHub")
-                .listStyle(.sidebar)
-            } detail: {
-                sidebarDetailView
-                    .id(router.selectedTab)
+                .tint(.barnGreen)
+            } else {
+                TabView(selection: $router.selectedTab) {
+                    NavigationStack(path: $router.homePath) {
+                        HomeView()
+                            .withRouteDestinations()
+                    }
+                    .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
+                    .tag(Router.AppTab.home)
+
+                    NavigationStack(path: $router.horsesPath) {
+                        HorseListView()
+                            .withRouteDestinations()
+                    }
+                    .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
+                    .tag(Router.AppTab.horses)
+
+                    NavigationStack(path: $router.clientsPath) {
+                        ClientListView()
+                            .withRouteDestinations()
+                    }
+                    .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
+                    .tag(Router.AppTab.clients)
+
+                    NavigationStack(path: $router.schedulePath) {
+                        BarnDashboardView()
+                            .withRouteDestinations()
+                    }
+                    .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
+                    .tag(Router.AppTab.schedule)
+
+                    NavigationStack(path: $router.accountingPath) {
+                        AccountingDashboardView()
+                            .withRouteDestinations()
+                    }
+                    .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
+                    .tag(Router.AppTab.accounting)
+                }
+                .tint(.barnGreen)
             }
-            .tint(.barnGreen)
-        } else {
-            TabView(selection: $router.selectedTab) {
-                NavigationStack(path: $router.homePath) {
-                    HomeView()
-                        .withRouteDestinations()
-                }
-                .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
-                .tag(Router.AppTab.home)
-
-                NavigationStack(path: $router.horsesPath) {
-                    HorseListView()
-                        .withRouteDestinations()
-                }
-                .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
-                .tag(Router.AppTab.horses)
-
-                NavigationStack(path: $router.clientsPath) {
-                    ClientListView()
-                        .withRouteDestinations()
-                }
-                .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
-                .tag(Router.AppTab.clients)
-
-                NavigationStack(path: $router.schedulePath) {
-                    BarnDashboardView()
-                        .withRouteDestinations()
-                }
-                .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
-                .tag(Router.AppTab.schedule)
-
-                NavigationStack(path: $router.accountingPath) {
-                    AccountingDashboardView()
-                        .withRouteDestinations()
-                }
-                .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
-                .tag(Router.AppTab.accounting)
-            }
-            .tint(.barnGreen)
+        }
+        .task {
+            notificationService.scheduleAllPending(context: modelContext)
+            let overdueRems = incompleteReminders.filter { $0.dueDate.isOverdue }.count
+            let overdueVet = vetRecords.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
+            let overdueFarrier = farrierVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
+            let overdueCount = overdueRems + overdueVet + overdueFarrier
+            let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
+            notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
         }
     }
 
@@ -187,6 +221,7 @@ private extension View {
                 case .edit(let id): ClientEditView(clientID: id)
                 case .manageHorses(let id): ClientHorsesView(clientID: id)
                 case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
+                case .paymentHistory(let id): ClientPaymentHistoryView(clientID: id)
                 case .documents(let id): ClientDocumentsView(clientID: id)
                 }
             }
