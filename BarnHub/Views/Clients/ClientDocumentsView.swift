@@ -11,6 +11,7 @@ struct ClientDocumentsView: View {
     @State private var showPhotoPicker = false
     @State private var showCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var photoLoadTask: Task<Void, Never>?
     @State private var showDeleteConfirmation = false
     @State private var documentToDelete: ClientDocument?
     @State private var showToast = false
@@ -84,11 +85,21 @@ struct ClientDocumentsView: View {
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhoto, matching: .images)
         .onChange(of: selectedPhoto) { _, newItem in
             guard let newItem else { return }
-            Task {
-                if let data = try? await newItem.loadTransferable(type: Data.self) {
-                    addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: data)
+            photoLoadTask?.cancel()
+            photoLoadTask = Task {
+                do {
+                    if let data = try await newItem.loadTransferable(type: Data.self) {
+                        await MainActor.run {
+                            addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: data)
+                        }
+                    }
+                } catch {
+                    await MainActor.run {
+                        toastMessage = "Failed to load photo"
+                        showToast = true
+                    }
                 }
-                selectedPhoto = nil
+                await MainActor.run { selectedPhoto = nil }
             }
         }
         .fullScreenCover(isPresented: $showCamera) {
