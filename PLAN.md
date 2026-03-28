@@ -8,6 +8,5 @@ For completed work, see [DONE.md](./DONE.md).
 
 ## Future / Ideas
 
-- iPad-optimized sidebar layout with split view
 - Home screen widgets for at-a-glance barn stats
 - Lesson scheduling / calendar integration
