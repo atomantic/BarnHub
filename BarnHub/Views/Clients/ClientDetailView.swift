@@ -9,14 +9,16 @@ struct ClientDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var showDeleteConfirmation = false
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
     @State private var showInvoiceGenerator = false
     @State private var showContractGenerator = false
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
+    }
+
+    private var sortedRecentTransactions: [Transaction] {
+        Array((client?.transactions ?? []).sorted { $0.date > $1.date }.prefix(5))
     }
 
     var body: some View {
@@ -41,11 +43,13 @@ struct ClientDetailView: View {
                 onConfirm: deleteClient
             )
         }
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .toast(toast)
     }
 
     @ViewBuilder
     private func clientContent(_ client: Client) -> some View {
+        let recentTransactions = sortedRecentTransactions
+        let allTransactionsCount = client.transactions?.count ?? 0
         List {
             Section("Contact Info") {
                 if !client.email.isEmpty {
@@ -102,15 +106,11 @@ struct ClientDetailView: View {
             }
 
             Section {
-                let allTransactions = client.transactions ?? []
-                let transactions = allTransactions
-                    .sorted { $0.date > $1.date }
-                    .prefix(5)
-                if transactions.isEmpty {
+                if recentTransactions.isEmpty {
                     Text("No transactions")
                         .foregroundStyle(.secondary)
                 } else {
-                    ForEach(transactions, id: \.persistentModelID) { transaction in
+                    ForEach(recentTransactions, id: \.persistentModelID) { transaction in
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(transaction.category.displayName)
@@ -137,11 +137,11 @@ struct ClientDetailView: View {
                         }
                     }
 
-                    if allTransactions.count > 5 {
-                        NavigationLink(value: ClientRoute.detail(clientID)) {
+                    if allTransactionsCount > 5 {
+                        NavigationLink(value: ClientRoute.paymentHistory(clientID)) {
                             Text("View All Transactions")
                                 .font(.subheadline)
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(.barnGreen)
                         }
                     }
                 }
