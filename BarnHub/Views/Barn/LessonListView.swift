@@ -92,9 +92,8 @@ struct LessonListView: View {
                 HStack(spacing: 4) {
                     Text(lesson.cost.asCurrency)
                         .font(.caption)
-                    Circle()
-                        .fill(lesson.isPaid ? .green : .orange)
-                        .frame(width: 8, height: 8)
+                    Image(systemName: lesson.isPaid ? "checkmark.circle.fill" : "xmark.circle")
+                        .foregroundStyle(lesson.isPaid ? Color.barnGreen : .orange)
                         .accessibilityLabel(lesson.isPaid ? "Paid" : "Unpaid")
                 }
             }
