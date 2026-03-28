@@ -82,6 +82,14 @@
 		AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
 		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
+		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
+		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
+		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
+		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
+		TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0005000000000001 /* StoreServiceTests.swift */; };
+		TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0006000000000001 /* SyncMonitorTests.swift */; };
+		TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0007000000000001 /* AppearanceManagerTests.swift */; };
+		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
 		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
 		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
 		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
@@ -233,6 +241,14 @@
 		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonListView.swift"; sourceTree = "<group>"; };
 		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonEditView.swift"; sourceTree = "<group>"; };
 		AADD112233445566LESS0007 /* ClientPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPickerSection.swift"; sourceTree = "<group>"; };
+		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelSchemaTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataExportServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataImportServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitorTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManagerTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnumsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +491,14 @@
 				CC22334455667788AABB0001 /* RouterTests.swift */,
 				CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */,
 				CC22334455667788AABB0005 /* DateFormattingTests.swift */,
+				TESTNEW0001000000000001 /* ModelSchemaTests.swift */,
+				TESTNEW0002000000000001 /* DataExportServiceTests.swift */,
+				TESTNEW0003000000000001 /* DataImportServiceTests.swift */,
+				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
+				TESTNEW0005000000000001 /* StoreServiceTests.swift */,
+				TESTNEW0006000000000001 /* SyncMonitorTests.swift */,
+				TESTNEW0007000000000001 /* AppearanceManagerTests.swift */,
+				TESTNEW0008000000000001 /* EnumsTests.swift */,
 			);
 			path = BarnHubTests;
 			sourceTree = "<group>";
@@ -725,6 +749,14 @@
 				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,
 				CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */,
 				CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */,
+				TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */,
+				TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */,
+				TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */,
+				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
+				TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */,
+				TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */,
+				TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */,
+				TESTNEW0008000000000002 /* EnumsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
