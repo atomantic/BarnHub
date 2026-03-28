@@ -57,6 +57,7 @@ struct SupplyEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Supply" : "Edit Supply")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

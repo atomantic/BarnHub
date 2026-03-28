@@ -71,6 +71,7 @@ struct LessonEditView: View {
             ClientPickerSection(selectedClientID: $selectedClientID)
         }
         .navigationTitle(isNew ? "New Lesson" : "Edit Lesson")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

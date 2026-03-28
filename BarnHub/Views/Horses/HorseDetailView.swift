@@ -204,6 +204,7 @@ struct HorseDetailView: View {
             }
         }
         .navigationTitle(horse.name)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {

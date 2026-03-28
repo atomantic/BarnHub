@@ -62,6 +62,7 @@ struct VetRecordEditView: View {
             }
         }
         .navigationTitle("New Vet Record")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(toast)
     }
 

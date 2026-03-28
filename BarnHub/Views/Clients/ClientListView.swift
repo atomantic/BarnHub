@@ -41,6 +41,7 @@ struct ClientListView: View {
             }
         }
         .navigationTitle("Clients")
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search clients")
         .toolbar {
             if isPro {

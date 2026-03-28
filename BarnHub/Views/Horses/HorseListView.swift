@@ -36,6 +36,7 @@ struct HorseListView: View {
             }
         }
         .navigationTitle("Horses")
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search horses")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

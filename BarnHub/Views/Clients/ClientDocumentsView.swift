@@ -52,6 +52,7 @@ struct ClientDocumentsView: View {
             }
         }
         .navigationTitle("Documents")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {

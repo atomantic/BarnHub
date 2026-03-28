@@ -37,6 +37,7 @@ struct BarnNoteEditView: View {
             HorsePickerSection(selectedHorseID: $selectedHorseID)
         }
         .navigationTitle(isNew ? "New Note" : "Edit Note")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

@@ -64,6 +64,7 @@ struct BarnNoteListView: View {
             }
         }
         .navigationTitle("Barn Notes")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

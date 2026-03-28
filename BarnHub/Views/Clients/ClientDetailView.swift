@@ -190,6 +190,7 @@ struct ClientDetailView: View {
             }
         }
         .navigationTitle(client.fullName)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showInvoiceGenerator) {
             InvoiceGeneratorView(clientID: clientID)
         }

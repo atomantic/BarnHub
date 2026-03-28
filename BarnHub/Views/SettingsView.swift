@@ -160,6 +160,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
         .offerCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
             switch result {

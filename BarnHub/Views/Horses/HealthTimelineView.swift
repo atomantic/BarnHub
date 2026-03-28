@@ -125,6 +125,7 @@ struct HealthTimelineView: View {
             }
         }
         .navigationTitle("Health Timeline")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink(value: HorseRoute.weightChart(horseID)) {

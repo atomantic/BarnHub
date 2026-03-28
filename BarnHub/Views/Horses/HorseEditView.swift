@@ -114,6 +114,7 @@ struct HorseEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Horse" : "Edit Horse")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(toast)
         .task { loadExisting() }
         .onChange(of: selectedPhoto) { _, newItem in

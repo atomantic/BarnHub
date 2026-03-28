@@ -72,6 +72,7 @@ struct DataManagementView: View {
             }
         }
         .navigationTitle("Import / Export")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(toast)
         .sheet(isPresented: $showExportSheet) {
             if let url = exportURL {
