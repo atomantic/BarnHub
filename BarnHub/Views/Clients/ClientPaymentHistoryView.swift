@@ -13,22 +13,15 @@ struct ClientPaymentHistoryView: View {
         (client?.transactions ?? []).sorted { $0.date > $1.date }
     }
 
-    private var totalAmount: Double {
-        sortedTransactions.reduce(0) { $0 + $1.amount }
-    }
-
-    private var totalPaid: Double {
-        sortedTransactions.filter(\.isPaid).reduce(0) { $0 + $1.amount }
-    }
-
-    private var totalUnpaid: Double {
-        sortedTransactions.filter { !$0.isPaid }.reduce(0) { $0 + $1.amount }
-    }
-
     var body: some View {
-        Group {
+        let sorted = sortedTransactions
+        let totalAmount = sorted.reduce(0) { $0 + $1.amount }
+        let totalPaid = sorted.filter(\.isPaid).reduce(0) { $0 + $1.amount }
+        let totalUnpaid = sorted.filter { !$0.isPaid }.reduce(0) { $0 + $1.amount }
+
+        return Group {
             if let client {
-                if sortedTransactions.isEmpty {
+                if sorted.isEmpty {
                     EmptyStateView(
                         icon: "dollarsign.circle",
                         title: "No Transactions",
@@ -37,7 +30,7 @@ struct ClientPaymentHistoryView: View {
                 } else {
                     List {
                         Section {
-                            ForEach(sortedTransactions, id: \.persistentModelID) { transaction in
+                            ForEach(sorted, id: \.persistentModelID) { transaction in
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(transaction.category.displayName)
@@ -61,14 +54,12 @@ struct ClientPaymentHistoryView: View {
                                             .font(.subheadline)
                                             .fontWeight(.medium)
                                             .foregroundStyle(transaction.type == .income ? .green : .primary)
-                                        HStack(spacing: 4) {
-                                            Circle()
-                                                .fill(transaction.isPaid ? Color.green : Color.red)
-                                                .frame(width: 6, height: 6)
-                                            Text(transaction.isPaid ? "Paid" : "Unpaid")
-                                                .font(.caption2)
-                                                .foregroundStyle(transaction.isPaid ? .green : .red)
-                                        }
+                                        Label(
+                                            transaction.isPaid ? "Paid" : "Unpaid",
+                                            systemImage: transaction.isPaid ? "checkmark.circle.fill" : "xmark.circle.fill"
+                                        )
+                                        .font(.caption2)
+                                        .foregroundStyle(transaction.isPaid ? .green : .red)
                                     }
                                 }
                             }

@@ -47,21 +47,21 @@ struct HealthTimelineView: View {
     @State private var activeFilters: Set<TimelineEventType> = Set(TimelineEventType.allCases)
     @State private var showAddWeight = false
     @State private var newWeight: String = ""
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
+    @State private var events: [TimelineEvent] = []
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
     }
 
-    private var events: [TimelineEvent] {
+    private func computeEvents() -> [TimelineEvent] {
         guard let horse else { return [] }
         var result: [TimelineEvent] = []
 
         if activeFilters.contains(.vet) {
             for record in horse.vetRecords ?? [] {
                 result.append(TimelineEvent(
-                    id: "vet-\(record.persistentModelID.hashValue)",
+                    id: "vet-\(record.persistentModelID)",
                     date: record.date,
                     type: .vet,
                     title: record.descriptionText.isEmpty ? "Vet Visit" : record.descriptionText,
@@ -75,7 +75,7 @@ struct HealthTimelineView: View {
         if activeFilters.contains(.farrier) {
             for visit in horse.farrierVisits ?? [] {
                 result.append(TimelineEvent(
-                    id: "farrier-\(visit.persistentModelID.hashValue)",
+                    id: "farrier-\(visit.persistentModelID)",
                     date: visit.date,
                     type: .farrier,
                     title: visit.serviceDescription.isEmpty ? "Farrier Visit" : visit.serviceDescription,
@@ -89,7 +89,7 @@ struct HealthTimelineView: View {
         if activeFilters.contains(.weight) {
             for entry in horse.weightEntries ?? [] {
                 result.append(TimelineEvent(
-                    id: "weight-\(entry.persistentModelID.hashValue)",
+                    id: "weight-\(entry.persistentModelID)",
                     date: entry.date,
                     type: .weight,
                     title: "\(Int(entry.weight)) lbs",
@@ -160,7 +160,9 @@ struct HealthTimelineView: View {
         } message: {
             Text("Enter the current weight in pounds.")
         }
-        .toast(isPresented: $showToast, message: toastMessage)
+        .toast(toast)
+        .onAppear { events = computeEvents() }
+        .onChange(of: activeFilters) { events = computeEvents() }
     }
 
     private var filterBar: some View {
@@ -245,8 +247,8 @@ struct HealthTimelineView: View {
         modelContext.insert(entry)
         horse.weight = weightValue
         BarnHubLogger.success("Weight logged for horse=\(horse.name) weight=\(weightValue)")
-        toastMessage = "Weight logged: \(Int(weightValue)) lbs"
-        showToast = true
+        toast.show("Weight logged: \(Int(weightValue)) lbs")
         newWeight = ""
+        events = computeEvents()
     }
 }

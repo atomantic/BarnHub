@@ -60,7 +60,13 @@ struct HomeView: View {
     }
 
     var body: some View {
-        ScrollView {
+        let balance = monthlyBalance
+        let overdueRems = overdueReminders
+        let overdueVet = overdueVetRecords
+        let overdueFarrier = overdueFarrierVisits
+        let overdueCount = overdueRems.count + overdueVet.count + overdueFarrier.count
+        let todayRems = todayReminders
+        return ScrollView {
             VStack(spacing: 0) {
                 headerSection
                 Spacer()
@@ -68,23 +74,18 @@ struct HomeView: View {
                 if !storeService.isPro {
                     upgradeBar
                 }
-                statsBar
-                if totalOverdueCount > 0 {
-                    overdueAlertsSection
+                statsBar(balance: balance)
+                if overdueCount > 0 {
+                    overdueAlertsSection(reminders: overdueRems, vetRecords: overdueVet, farrierVisits: overdueFarrier, count: overdueCount)
                 }
-                if !todayReminders.isEmpty {
-                    todaySection
+                if !todayRems.isEmpty {
+                    todaySection(reminders: todayRems)
                 }
                 iconGrid
             }
         }
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
-        .task {
-            notificationService.scheduleAllPending(context: modelContext)
-            let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
-            notificationService.scheduleMorningSummary(overdueCount: totalOverdueCount, todayCount: todayCount)
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 16) {
@@ -95,6 +96,7 @@ struct HomeView: View {
                         Image(systemName: "gearshape.fill")
                             .foregroundStyle(.white)
                     }
+                    .accessibilityLabel("Settings")
                 }
             }
         }
@@ -159,9 +161,8 @@ struct HomeView: View {
 
     // MARK: - Stats Bar
 
-    private var statsBar: some View {
-        let balance = monthlyBalance
-        return HStack(spacing: 12) {
+    private func statsBar(balance: Double) -> some View {
+        HStack(spacing: 12) {
             statCard(value: "\(activeHorses.count)", label: "Horses", icon: "figure.equestrian.sports", color: .barnBrown)
             statCard(value: "\(activeClients.count)", label: "Clients", icon: "person.2.fill", color: .barnBrown)
             statCard(value: balance.asCurrency, label: "This Month", icon: "dollarsign.circle.fill", color: balance >= 0 ? .barnGreen : .red)
@@ -196,19 +197,19 @@ struct HomeView: View {
 
     // MARK: - Overdue Alerts
 
-    private var overdueAlertsSection: some View {
+    private func overdueAlertsSection(reminders: [Reminder], vetRecords: [VetRecord], farrierVisits: [FarrierVisit], count: Int) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(.red)
-                Text("Overdue (\(totalOverdueCount))")
+                Text("Overdue (\(count))")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.red)
             }
             .padding(.horizontal, 24)
 
             VStack(spacing: 0) {
-                ForEach(overdueReminders.prefix(3), id: \.persistentModelID) { reminder in
+                ForEach(reminders.prefix(3), id: \.persistentModelID) { reminder in
                     Button {
                         router.switchTab(.schedule)
                         router.navigate(to: BarnRoute.reminderEdit(reminder.persistentModelID), tab: .schedule)
@@ -222,7 +223,7 @@ struct HomeView: View {
                     }
                     .buttonStyle(.plain)
                 }
-                ForEach(overdueVetRecords.prefix(2), id: \.persistentModelID) { record in
+                ForEach(vetRecords.prefix(2), id: \.persistentModelID) { record in
                     overdueRow(
                         icon: "cross.case.fill",
                         title: "Vet: \(record.horse?.name ?? "Unknown")",
@@ -230,7 +231,7 @@ struct HomeView: View {
                         date: record.nextDueDate
                     )
                 }
-                ForEach(overdueFarrierVisits.prefix(2), id: \.persistentModelID) { visit in
+                ForEach(farrierVisits.prefix(2), id: \.persistentModelID) { visit in
                     overdueRow(
                         icon: "hammer.fill",
                         title: "Farrier: \(visit.horse?.name ?? "Unknown")",
@@ -287,7 +288,7 @@ struct HomeView: View {
 
     // MARK: - Today Section
 
-    private var todaySection: some View {
+    private func todaySection(reminders: [Reminder]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Coming Up")
                 .font(.subheadline.weight(.semibold))
@@ -295,7 +296,7 @@ struct HomeView: View {
                 .padding(.horizontal, 24)
 
             VStack(spacing: 0) {
-                ForEach(todayReminders, id: \.persistentModelID) { reminder in
+                ForEach(reminders, id: \.persistentModelID) { reminder in
                     HStack(spacing: 10) {
                         Image(systemName: "bell.fill")
                             .font(.caption)
