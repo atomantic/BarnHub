@@ -5,6 +5,7 @@ struct HomeView: View {
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
     @Environment(NotificationService.self) private var notificationService
+    @Environment(SyncMonitor.self) private var syncMonitor
     @Environment(\.modelContext) private var modelContext
 
     @Query(filter: #Predicate<Horse> { $0.isActive }) private var activeHorses: [Horse]
@@ -86,11 +87,14 @@ struct HomeView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    router.navigate(to: HomeRoute.settings)
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .foregroundStyle(.white)
+                HStack(spacing: 16) {
+                    SyncIndicatorView()
+                    Button {
+                        router.navigate(to: HomeRoute.settings)
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(.white)
+                    }
                 }
             }
         }
