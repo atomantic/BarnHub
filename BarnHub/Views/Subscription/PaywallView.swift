@@ -28,7 +28,7 @@ struct PaywallView: View {
             if storeService.products.isEmpty {
                 await storeService.loadProducts()
             }
-            selectedProduct = storeService.annualProduct ?? storeService.monthlyProduct
+            selectedProduct = storeService.annualProduct ?? storeService.lifetimeProduct ?? storeService.monthlyProduct
         }
     }
 
@@ -60,6 +60,7 @@ struct PaywallView: View {
             comparisonRow("Basic Accounting", free: true, pro: true)
             comparisonRow("Client Management", free: false, pro: true)
             comparisonRow("Client Billing", free: false, pro: true)
+            comparisonRow("Contracts & Documents", free: false, pro: true)
             comparisonRow("Full Reports", free: false, pro: true)
             comparisonRow("Data Import/Export", free: true, pro: true)
         }
@@ -132,6 +133,14 @@ struct PaywallView: View {
                         title: "Annual",
                         subtitle: annual.displayPrice + "/year",
                         badge: "7-day free trial"
+                    )
+                }
+                if let lifetime = storeService.lifetimeProduct {
+                    planCard(
+                        product: lifetime,
+                        title: "Lifetime",
+                        subtitle: lifetime.displayPrice + " once",
+                        badge: "Best value"
                     )
                 }
             } else if storeService.productsLoadFailed {
@@ -211,7 +220,7 @@ struct PaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Text("Subscribe Now")
+                    Text(selectedProduct?.id == StoreService.lifetimeID ? "Buy Lifetime" : "Subscribe Now")
                         .fontWeight(.semibold)
                 }
             }
@@ -238,7 +247,7 @@ struct PaywallView: View {
 
     private var subscriptionDisclosure: some View {
         VStack(spacing: 8) {
-            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period. You can manage and cancel your subscriptions in your App Store account settings.")
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. The Lifetime option is a one-time purchase that unlocks Pro features permanently. You can manage subscriptions in your App Store account settings.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)

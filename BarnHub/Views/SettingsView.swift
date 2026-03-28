@@ -62,7 +62,7 @@ struct SettingsView: View {
                         Text("Plan")
                         Spacer()
                         HStack(spacing: 4) {
-                            Text("BarnHub")
+                            Text(storeService.hasLifetime ? "Lifetime" : "BarnHub")
                             ProBadgeView()
                         }
                     }
