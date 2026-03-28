@@ -10,7 +10,7 @@ struct PreviewSampleData {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self,
+            Invoice.self, WeightEntry.self, Lesson.self,
             configurations: config
         )
         populate(container: container)
@@ -51,6 +51,9 @@ struct PreviewSampleData {
 
         let reminders = createReminders(horses: horses)
         reminders.forEach { context.insert($0) }
+
+        let lessons = createLessons(horses: horses, clients: clients)
+        lessons.forEach { context.insert($0) }
 
         try? context.save()
     }
@@ -335,6 +338,57 @@ struct PreviewSampleData {
                 lastOrderedDate: nil
             )
         ]
+    }
+
+    static func createLessons(horses: [Horse], clients: [Client]) -> [Lesson] {
+        let calendar = Calendar.current
+        let jane = clients.first
+        let sarah = clients.count > 2 ? clients[2] : nil
+        var lessons: [Lesson] = []
+
+        let janeLesson = Lesson(
+            date: calendar.date(byAdding: .day, value: -3, to: .now) ?? .now,
+            duration: 60,
+            lessonType: .privateLesson,
+            notes: "Flatwork and jumping basics",
+            cost: 75.00,
+            isPaid: true,
+            frequency: .weekly,
+            nextDate: calendar.date(byAdding: .day, value: 4, to: .now)
+        )
+        janeLesson.horse = horses.first
+        janeLesson.client = jane
+        lessons.append(janeLesson)
+
+        let sarahLesson = Lesson(
+            date: calendar.date(byAdding: .day, value: -1, to: .now) ?? .now,
+            duration: 45,
+            lessonType: .privateLesson,
+            notes: "Walk/trot fundamentals, posting practice",
+            cost: 75.00,
+            isPaid: false,
+            frequency: .weekly,
+            nextDate: calendar.date(byAdding: .day, value: 6, to: .now)
+        )
+        sarahLesson.horse = horses.first
+        sarahLesson.client = sarah
+        lessons.append(sarahLesson)
+
+        let groupLesson = Lesson(
+            date: calendar.date(byAdding: .day, value: -7, to: .now) ?? .now,
+            duration: 90,
+            lessonType: .group,
+            notes: "Saturday group trail ride and horsemanship",
+            cost: 50.00,
+            isPaid: true,
+            frequency: .weekly,
+            nextDate: calendar.date(byAdding: .day, value: 0, to: .now)
+        )
+        groupLesson.horse = horses.count > 3 ? horses[3] : nil
+        groupLesson.client = jane
+        lessons.append(groupLesson)
+
+        return lessons
     }
 
     static func createReminders(horses: [Horse]) -> [Reminder] {

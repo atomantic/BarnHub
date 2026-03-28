@@ -24,6 +24,9 @@ final class Client {
     @Relationship(deleteRule: .cascade)
     var documents: [ClientDocument]? = nil
 
+    @Relationship(deleteRule: .cascade)
+    var lessons: [Lesson]? = nil
+
     var fullName: String {
         "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
     }

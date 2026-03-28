@@ -48,4 +48,6 @@ enum BarnRoute: Hashable {
     case addVetRecord
     case farrierSchedule
     case addFarrierVisit
+    case lessons
+    case lessonEdit(PersistentIdentifier?)
 }
