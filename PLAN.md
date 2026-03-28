@@ -9,4 +9,4 @@ For completed work, see [DONE.md](./DONE.md).
 ## Future / Ideas
 
 - Home screen widgets for at-a-glance barn stats
-- Lesson scheduling / calendar integration
+- ~~Lesson scheduling / calendar integration~~ (implemented)
