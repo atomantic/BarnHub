@@ -9,8 +9,7 @@ struct ReminderListView: View {
     @Query(sort: \Reminder.dueDate) private var reminders: [Reminder]
 
     @State private var showCompleted = false
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
 
     private var categorizedReminders: (overdue: [Reminder], upcoming: [Reminder], completed: [Reminder]) {
         var overdue: [Reminder] = []
@@ -74,7 +73,7 @@ struct ReminderListView: View {
                 Toggle("Show Completed", isOn: $showCompleted)
             }
         }
-        .toast(isPresented: $showToast, message: toastMessage)
+        .toast(toast)
     }
 
     private func reminderRow(_ reminder: Reminder, isOverdue: Bool) -> some View {
@@ -87,6 +86,9 @@ struct ReminderListView: View {
                     .font(.title3)
             }
             .buttonStyle(.plain)
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
+            .accessibilityLabel(reminder.isCompleted ? "Mark incomplete" : "Mark complete")
 
             NavigationLink(value: BarnRoute.reminderEdit(reminder.persistentModelID)) {
                 VStack(alignment: .leading, spacing: 2) {
@@ -107,8 +109,8 @@ struct ReminderListView: View {
                                 .font(.caption2)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
-                                .background(Capsule().fill(.blue.opacity(0.15)))
-                                .foregroundStyle(.blue)
+                                .background(Capsule().fill(Color.barnGreen.opacity(0.15)))
+                                .foregroundStyle(Color.barnGreen)
                         }
                     }
                 }
@@ -120,7 +122,6 @@ struct ReminderListView: View {
         reminder.isCompleted.toggle()
         modelContext.saveWithLogging()
         notificationService.scheduleReminder(reminder)
-        toastMessage = reminder.isCompleted ? "Marked complete" : "Marked incomplete"
-        showToast = true
+        toast.show(reminder.isCompleted ? "Marked complete" : "Marked incomplete")
     }
 }
