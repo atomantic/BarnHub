@@ -15,6 +15,8 @@ struct HomeView: View {
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
     @Query(sort: \Transaction.date, order: .reverse) private var transactions: [Transaction]
+    @Query(sort: \Lesson.date) private var lessons: [Lesson]
+    @Query private var supplyItems: [SupplyItem]
 
     private let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -50,6 +52,41 @@ struct HomeView: View {
         overdueReminders.count + overdueVetRecords.count + overdueFarrierVisits.count
     }
 
+    private var nextScheduleItemToday: String? {
+        let calendar = Calendar.current
+        let now = Date.now
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mma"
+        timeFormatter.amSymbol = "am"
+        timeFormatter.pmSymbol = "pm"
+
+        struct ScheduleItem: Comparable {
+            let date: Date
+            let label: String
+            static func < (lhs: ScheduleItem, rhs: ScheduleItem) -> Bool { lhs.date < rhs.date }
+        }
+
+        var items: [ScheduleItem] = []
+
+        for lesson in lessons where calendar.isDateInToday(lesson.date) && lesson.date >= now {
+            items.append(ScheduleItem(date: lesson.date, label: "\(timeFormatter.string(from: lesson.date)) Lesson"))
+        }
+        for record in vetRecords {
+            guard let due = record.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
+            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Vet"))
+        }
+        for visit in farrierVisits {
+            guard let due = visit.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
+            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Farrier"))
+        }
+
+        return items.sorted().first?.label
+    }
+
+    private var lowStockCount: Int {
+        supplyItems.filter { $0.isLowStock }.count
+    }
+
     private var todayReminders: [Reminder] {
         let calendar = Calendar.current
         return Array(
@@ -74,14 +111,13 @@ struct HomeView: View {
                 if !storeService.isPro {
                     upgradeBar
                 }
-                statsBar(balance: balance)
                 if overdueCount > 0 {
                     overdueAlertsSection(reminders: overdueRems, vetRecords: overdueVet, farrierVisits: overdueFarrier, count: overdueCount)
                 }
                 if !todayRems.isEmpty {
                     todaySection(reminders: todayRems)
                 }
-                iconGrid
+                iconGrid(balance: balance)
             }
         }
         .background(Color.barnOffWhite)
@@ -157,42 +193,6 @@ struct HomeView: View {
         .buttonStyle(.plain)
         .padding(.horizontal, 24)
         .padding(.bottom, 12)
-    }
-
-    // MARK: - Stats Bar
-
-    private func statsBar(balance: Double) -> some View {
-        HStack(spacing: 12) {
-            statCard(value: "\(activeHorses.count)", label: "Horses", icon: "figure.equestrian.sports", color: .barnBrown)
-            statCard(value: "\(activeClients.count)", label: "Clients", icon: "person.2.fill", color: .barnBrown)
-            statCard(value: balance.asCurrency, label: "This Month", icon: "dollarsign.circle.fill", color: balance >= 0 ? .barnGreen : .red)
-        }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 16)
-    }
-
-    private func statCard(value: String, label: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.headline)
-                .fontDesign(.rounded)
-                .foregroundStyle(color)
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.barnCardBackground)
-                .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-        )
     }
 
     // MARK: - Overdue Alerts
@@ -330,21 +330,25 @@ struct HomeView: View {
         .padding(.bottom, 16)
     }
 
-    private var iconGrid: some View {
-        LazyVGrid(columns: columns, spacing: 20) {
-            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown) {
+    private func iconGrid(balance: Double) -> some View {
+        let horseCount = activeHorses.count
+        let clientCount = activeClients.count
+        let stockAlert = lowStockCount
+
+        return LazyVGrid(columns: columns, spacing: 20) {
+            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: "\(horseCount) \(horseCount == 1 ? "Horse" : "Horses")") {
                 router.switchTab(.horses)
             }
-            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown) {
+            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: "\(clientCount) \(clientCount == 1 ? "Client" : "Clients")") {
                 router.switchTab(.clients)
             }
-            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown) {
+            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday) {
                 router.switchTab(.schedule)
             }
-            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown) {
+            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil) {
                 router.navigate(to: HomeRoute.supplies)
             }
-            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown) {
+            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red) {
                 router.switchTab(.accounting)
             }
             FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
@@ -363,6 +367,8 @@ struct FeatureTile: View {
     let icon: String
     let title: String
     let color: Color
+    var badge: String? = nil
+    var badgeColor: Color? = nil
     let action: () -> Void
 
     var body: some View {
@@ -373,9 +379,19 @@ struct FeatureTile: View {
                         .fill(.barnCardBackground)
                         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
 
-                    Image(systemName: icon)
-                        .font(.title)
-                        .foregroundStyle(color)
+                    VStack(spacing: 6) {
+                        Image(systemName: icon)
+                            .font(.title)
+                            .foregroundStyle(color)
+                        if let badge {
+                            Text(badge)
+                                .font(.caption2.weight(.semibold))
+                                .fontDesign(.rounded)
+                                .foregroundStyle(badgeColor ?? .secondary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
+                    }
                 }
                 .aspectRatio(1, contentMode: .fit)
 
