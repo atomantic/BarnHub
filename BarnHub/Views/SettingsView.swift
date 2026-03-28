@@ -13,6 +13,7 @@ struct SettingsView: View {
     @State private var secretCodeInput = ""
     @State private var showInvalidCodeToast = false
     @State private var showCodeRedeemedToast = false
+    @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
 
     private static let feedbackEmail = "support@barnhub.online"
 
@@ -45,6 +46,14 @@ struct SettingsView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+            }
+
+            Section("Home Screen") {
+                Picker("Accounting Balance", selection: $balancePeriodRaw) {
+                    ForEach(BalancePeriod.allCases) { period in
+                        Text(period.displayName).tag(period.rawValue)
+                    }
+                }
             }
 
             Section("Subscription") {
