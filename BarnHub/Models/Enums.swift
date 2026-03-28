@@ -17,6 +17,18 @@ enum TransactionType: String, Codable, CaseIterable, Identifiable {
     var displayName: String { rawValue.capitalized }
 }
 
+enum LessonType: String, Codable, CaseIterable, Identifiable {
+    case privateLesson = "private"
+    case group, training, evaluation
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .privateLesson: return "Private"
+        default: return rawValue.capitalized
+        }
+    }
+}
+
 enum ReminderFrequency: String, Codable, CaseIterable, Identifiable {
     case once, daily, weekly, monthly, quarterly, biannually, annually
     var id: String { rawValue }

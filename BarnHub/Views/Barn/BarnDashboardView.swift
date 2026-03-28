@@ -10,6 +10,7 @@ struct BarnDashboardView: View {
 
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
+    @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
 
     private var upcomingReminders: [Reminder] {
         Array(incompleteReminders.prefix(5))
@@ -19,6 +20,12 @@ struct BarnDashboardView: View {
         vetRecords
             .filter { $0.nextDueDate != nil }
             .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
+    }
+
+    private var upcomingLessons: [Lesson] {
+        allLessons
+            .filter { $0.nextDate != nil }
+            .sorted { ($0.nextDate ?? .distantFuture) < ($1.nextDate ?? .distantFuture) }
     }
 
     private var upcomingFarrierVisits: [FarrierVisit] {
@@ -38,6 +45,9 @@ struct BarnDashboardView: View {
                 }
                 NavigationLink(value: BarnRoute.farrierSchedule) {
                     Label("Farrier Schedule", systemImage: "hammer.fill")
+                }
+                NavigationLink(value: BarnRoute.lessons) {
+                    Label("Lessons", systemImage: "book.fill")
                 }
             }
 
@@ -102,6 +112,31 @@ struct BarnDashboardView: View {
                     }
                 }
             }
+
+            Section {
+                if upcomingLessons.isEmpty {
+                    EmptyStateView(
+                        icon: "book",
+                        title: "No Upcoming Lessons",
+                        subtitle: "No scheduled lessons."
+                    )
+                } else {
+                    ForEach(upcomingLessons.prefix(5)) { lesson in
+                        NavigationLink(value: BarnRoute.lessonEdit(lesson.persistentModelID)) {
+                            lessonRow(lesson)
+                        }
+                    }
+                }
+            } header: {
+                HStack {
+                    Text("Upcoming Lessons")
+                    Spacer()
+                    NavigationLink(value: BarnRoute.lessonEdit(nil)) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color.barnGreen)
+                    }
+                }
+            }
         }
         .navigationTitle("Schedule")
     }
@@ -156,6 +191,30 @@ struct BarnDashboardView: View {
                 Text(nextDue.shortFormatted)
                     .font(.caption)
                     .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+            }
+        }
+    }
+
+    private func lessonRow(_ lesson: Lesson) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(lesson.client?.fullName ?? "No Client")
+                    .font(.headline)
+                HStack(spacing: 4) {
+                    Text(lesson.lessonType.displayName)
+                        .font(.caption)
+                    if let horse = lesson.horse {
+                        Text("on \(horse.name)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            Spacer()
+            if let nextDate = lesson.nextDate {
+                Text(nextDate.shortFormatted)
+                    .font(.caption)
+                    .foregroundStyle(nextDate.isOverdue ? .red : .secondary)
             }
         }
     }
