@@ -117,6 +117,7 @@ private extension View {
                 case .addVetRecord(let id): VetRecordEditView(horseID: id)
                 case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
                 case .healthTimeline(let id): HealthTimelineView(horseID: id)
+                case .weightChart(let id): WeightChartView(horseID: id)
                 }
             }
             .navigationDestination(for: ClientRoute.self) { route in
