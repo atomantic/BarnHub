@@ -12,6 +12,26 @@ final class Router {
 
     enum AppTab: String, CaseIterable {
         case home, horses, clients, schedule, accounting
+
+        var title: String {
+            switch self {
+            case .home: "Home"
+            case .horses: "Horses"
+            case .clients: "Clients"
+            case .schedule: "Schedule"
+            case .accounting: "Accounting"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .home: "house.fill"
+            case .horses: "figure.equestrian.sports"
+            case .clients: "person.2.fill"
+            case .schedule: "calendar"
+            case .accounting: "dollarsign.circle.fill"
+            }
+        }
     }
 
     func navigate(to route: any Hashable, tab: AppTab? = nil) {

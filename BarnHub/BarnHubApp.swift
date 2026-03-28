@@ -51,46 +51,103 @@ struct BarnHubApp: App {
 
 struct ContentView: View {
     @Environment(Router.self) private var router
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         @Bindable var router = router
-        TabView(selection: $router.selectedTab) {
+        if sizeClass == .regular {
+            NavigationSplitView {
+                List(selection: sidebarSelection) {
+                    ForEach(Router.AppTab.allCases, id: \.self) { tab in
+                        Label(tab.title, systemImage: tab.icon)
+                            .tag(tab)
+                    }
+                }
+                .navigationTitle("BarnHub")
+                .listStyle(.sidebar)
+            } detail: {
+                sidebarDetailView
+                    .id(router.selectedTab)
+            }
+            .tint(.barnGreen)
+        } else {
+            TabView(selection: $router.selectedTab) {
+                NavigationStack(path: $router.homePath) {
+                    HomeView()
+                        .withRouteDestinations()
+                }
+                .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
+                .tag(Router.AppTab.home)
+
+                NavigationStack(path: $router.horsesPath) {
+                    HorseListView()
+                        .withRouteDestinations()
+                }
+                .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
+                .tag(Router.AppTab.horses)
+
+                NavigationStack(path: $router.clientsPath) {
+                    ClientListView()
+                        .withRouteDestinations()
+                }
+                .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
+                .tag(Router.AppTab.clients)
+
+                NavigationStack(path: $router.schedulePath) {
+                    BarnDashboardView()
+                        .withRouteDestinations()
+                }
+                .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
+                .tag(Router.AppTab.schedule)
+
+                NavigationStack(path: $router.accountingPath) {
+                    AccountingDashboardView()
+                        .withRouteDestinations()
+                }
+                .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
+                .tag(Router.AppTab.accounting)
+            }
+            .tint(.barnGreen)
+        }
+    }
+
+    private var sidebarSelection: Binding<Router.AppTab?> {
+        Binding(
+            get: { router.selectedTab },
+            set: { if let tab = $0 { router.selectedTab = tab } }
+        )
+    }
+
+    @ViewBuilder
+    private var sidebarDetailView: some View {
+        @Bindable var router = router
+        switch router.selectedTab {
+        case .home:
             NavigationStack(path: $router.homePath) {
                 HomeView()
                     .withRouteDestinations()
             }
-            .tabItem { Label("Home", systemImage: "house.fill") }
-            .tag(Router.AppTab.home)
-
+        case .horses:
             NavigationStack(path: $router.horsesPath) {
                 HorseListView()
                     .withRouteDestinations()
             }
-            .tabItem { Label("Horses", systemImage: "figure.equestrian.sports") }
-            .tag(Router.AppTab.horses)
-
+        case .clients:
             NavigationStack(path: $router.clientsPath) {
                 ClientListView()
                     .withRouteDestinations()
             }
-            .tabItem { Label("Clients", systemImage: "person.2.fill") }
-            .tag(Router.AppTab.clients)
-
+        case .schedule:
             NavigationStack(path: $router.schedulePath) {
                 BarnDashboardView()
                     .withRouteDestinations()
             }
-            .tabItem { Label("Schedule", systemImage: "calendar") }
-            .tag(Router.AppTab.schedule)
-
+        case .accounting:
             NavigationStack(path: $router.accountingPath) {
                 AccountingDashboardView()
                     .withRouteDestinations()
             }
-            .tabItem { Label("Accounting", systemImage: "dollarsign.circle.fill") }
-            .tag(Router.AppTab.accounting)
         }
-        .tint(.barnGreen)
     }
 }
 
