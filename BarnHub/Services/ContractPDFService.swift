@@ -210,7 +210,7 @@ struct ContractPDFService {
     }
 
     private static func drawSignatureBlock(context: UIGraphicsPDFRendererContext, clientName: String, y: CGFloat, margin: CGFloat, contentWidth: CGFloat) {
-        var y = y + 20
+        let y = y + 20
         let labelAttrs: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 10),
             .foregroundColor: UIColor.darkGray
