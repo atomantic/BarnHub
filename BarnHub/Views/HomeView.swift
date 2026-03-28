@@ -1,12 +1,38 @@
 import SwiftUI
 import SwiftData
 
+enum BalancePeriod: Int, CaseIterable, Identifiable {
+    case thisMonth = 0
+    case allTime = 1
+
+    var id: Int { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .thisMonth: "This Month"
+        case .allTime: "All Time"
+        }
+    }
+
+    var shortLabel: String {
+        switch self {
+        case .thisMonth: "This Month"
+        case .allTime: "All Time"
+        }
+    }
+}
+
 struct HomeView: View {
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
     @Environment(NotificationService.self) private var notificationService
     @Environment(SyncMonitor.self) private var syncMonitor
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
+
+    private var balancePeriod: BalancePeriod {
+        BalancePeriod(rawValue: balancePeriodRaw) ?? .thisMonth
+    }
 
     @Query(filter: #Predicate<Horse> { $0.isActive }) private var activeHorses: [Horse]
     @Query(filter: #Predicate<Client> { $0.isActive }) private var activeClients: [Client]
@@ -34,6 +60,16 @@ struct HomeView: View {
             guard txn.date >= monthStart && txn.date < monthEnd else { return result }
             return txn.type == .income ? result + txn.amount : result - txn.amount
         }
+    }
+
+    private var allTimeBalance: Double {
+        transactions.reduce(0) { result, txn in
+            txn.type == .income ? result + txn.amount : result - txn.amount
+        }
+    }
+
+    private var displayBalance: Double {
+        balancePeriod == .thisMonth ? monthlyBalance : allTimeBalance
     }
 
     private var overdueReminders: [Reminder] {
@@ -97,7 +133,7 @@ struct HomeView: View {
     }
 
     var body: some View {
-        let balance = monthlyBalance
+        let balance = displayBalance
         let overdueRems = overdueReminders
         let overdueVet = overdueVetRecords
         let overdueFarrier = overdueFarrierVisits
@@ -348,7 +384,7 @@ struct HomeView: View {
             FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil) {
                 router.navigate(to: HomeRoute.supplies)
             }
-            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red) {
+            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.shortLabel) {
                 router.switchTab(.accounting)
             }
             FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
@@ -369,6 +405,7 @@ struct FeatureTile: View {
     let color: Color
     var badge: String? = nil
     var badgeColor: Color? = nil
+    var badgeDetail: String? = nil
     let action: () -> Void
 
     var body: some View {
@@ -379,7 +416,7 @@ struct FeatureTile: View {
                         .fill(.barnCardBackground)
                         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
 
-                    VStack(spacing: 6) {
+                    VStack(spacing: 4) {
                         Image(systemName: icon)
                             .font(.title)
                             .foregroundStyle(color)
@@ -390,6 +427,11 @@ struct FeatureTile: View {
                                 .foregroundStyle(badgeColor ?? .secondary)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.7)
+                        }
+                        if let badgeDetail {
+                            Text(badgeDetail)
+                                .font(.system(size: 8))
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
