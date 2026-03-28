@@ -95,6 +95,8 @@
 		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
 		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
+		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,6 +209,8 @@
 		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceTests.swift"; sourceTree = "<group>"; };
 		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntryTests.swift"; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEventTests.swift"; sourceTree = "<group>"; };
+		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitor.swift"; sourceTree = "<group>"; };
+		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncIndicatorView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,6 +337,7 @@
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
+				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
 			);
 			path = "Services";
 			sourceTree = "<group>";
@@ -406,6 +411,7 @@
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
+				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
 			);
 			path = "Components";
@@ -658,6 +664,8 @@
 				AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */,
 				BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */,
 				BB11223344556677AABB0004 /* SettingsView.swift in Sources */,
+				DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */,
+				DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
