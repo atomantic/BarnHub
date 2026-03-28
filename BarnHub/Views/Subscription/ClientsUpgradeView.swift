@@ -25,6 +25,8 @@ struct ClientsUpgradeView: View {
                 featureRow(icon: "person.crop.circle.badge.plus", text: "Add & manage clients")
                 featureRow(icon: "figure.equestrian.sports", text: "Assign horses to clients")
                 featureRow(icon: "dollarsign.arrow.circlepath", text: "Track client payments")
+                featureRow(icon: "doc.text.fill", text: "Generate contracts & invoices")
+                featureRow(icon: "folder.fill", text: "Store client documents & photos")
                 featureRow(icon: "phone.fill", text: "Emergency contacts on file")
             }
             .padding(.horizontal, 40)
