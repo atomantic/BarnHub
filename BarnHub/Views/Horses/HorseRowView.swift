@@ -56,5 +56,6 @@ struct HorseRowView: View {
         }
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
+        .accessibilityValue(horse.isActive ? "Active" : "Inactive")
     }
 }

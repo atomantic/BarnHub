@@ -15,14 +15,18 @@ final class NotificationServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try! ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
-            configurations: config
-        )
-        context = ModelContext(container)
+        do {
+            container = try ModelContainer(
+                for: Horse.self, Client.self, Transaction.self,
+                VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                Invoice.self, WeightEntry.self, ClientDocument.self,
+                BarnNote.self, Lesson.self,
+                configurations: config
+            )
+            context = ModelContext(container)
+        } catch {
+            XCTFail("Failed to create ModelContainer: \(error)")
+        }
     }
 
     override func tearDown() {

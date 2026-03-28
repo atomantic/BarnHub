@@ -5,10 +5,9 @@ final class DateFormattingTests: XCTestCase {
 
     // MARK: - Helpers
 
-    /// Returns a RelativeDateTimeFormatter locked to en_US so tests are locale-independent.
-    private func enUSRelativeFormatter() -> RelativeDateTimeFormatter {
+    /// Returns a RelativeDateTimeFormatter using the current locale, matching `Date.relativeDateString` exactly.
+    private func currentLocaleRelativeFormatter() -> RelativeDateTimeFormatter {
         let f = RelativeDateTimeFormatter()
-        f.locale = Locale(identifier: "en_US")
         f.unitsStyle = .full
         return f
     }
@@ -63,31 +62,26 @@ final class DateFormattingTests: XCTestCase {
 
     func testRelativeDateStringForPastDate() {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
-        let f = enUSRelativeFormatter()
+        let f = currentLocaleRelativeFormatter()
         let expected = f.localizedString(for: yesterday, relativeTo: .now)
-        // en_US: "1 day ago" or "yesterday"
-        XCTAssertEqual(yesterday.relativeDateString, expected)
-        XCTAssertTrue(expected.contains("ago") || expected.contains("yesterday"),
-                      "Expected relative past string, got: \(expected)")
+        XCTAssertEqual(yesterday.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for past date")
     }
 
     func testRelativeDateStringForFutureDate() {
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
-        let f = enUSRelativeFormatter()
+        let f = currentLocaleRelativeFormatter()
         let expected = f.localizedString(for: tomorrow, relativeTo: .now)
-        // en_US: "in 1 day" or "tomorrow"
-        XCTAssertEqual(tomorrow.relativeDateString, expected)
-        XCTAssertTrue(expected.contains("in ") || expected.contains("tomorrow"),
-                      "Expected relative future string, got: \(expected)")
+        XCTAssertEqual(tomorrow.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for future date")
     }
 
     func testRelativeDateStringForDistantPast() {
         let longAgo = Calendar.current.date(byAdding: .month, value: -6, to: .now)!
-        let f = enUSRelativeFormatter()
+        let f = currentLocaleRelativeFormatter()
         let expected = f.localizedString(for: longAgo, relativeTo: .now)
-        XCTAssertEqual(longAgo.relativeDateString, expected)
-        XCTAssertTrue(expected.contains("ago"),
-                      "Expected relative past string, got: \(expected)")
+        XCTAssertEqual(longAgo.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for distant past")
     }
 
     // MARK: - compactFormatted

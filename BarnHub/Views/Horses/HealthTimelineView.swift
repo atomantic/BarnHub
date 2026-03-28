@@ -48,11 +48,12 @@ struct HealthTimelineView: View {
     @State private var showAddWeight = false
     @State private var newWeight: String = ""
     @State private var toast = ToastState()
-    @State private var events: [TimelineEvent] = []
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
     }
+
+    private var events: [TimelineEvent] { computeEvents() }
 
     private func computeEvents() -> [TimelineEvent] {
         guard let horse else { return [] }
@@ -161,8 +162,6 @@ struct HealthTimelineView: View {
             Text("Enter the current weight in pounds.")
         }
         .toast(toast)
-        .onAppear { events = computeEvents() }
-        .onChange(of: activeFilters) { events = computeEvents() }
     }
 
     private var filterBar: some View {
@@ -249,6 +248,5 @@ struct HealthTimelineView: View {
         BarnHubLogger.success("Weight logged for horse=\(horse.name) weight=\(weightValue)")
         toast.show("Weight logged: \(Int(weightValue)) lbs")
         newWeight = ""
-        events = computeEvents()
     }
 }

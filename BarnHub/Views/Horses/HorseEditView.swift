@@ -124,8 +124,11 @@ struct HorseEditView: View {
                     if let data = try await newItem.loadTransferable(type: Data.self) {
                         await MainActor.run {
                             photoData = downsampleImageData(data, maxDimension: 800)
+                            selectedPhoto = nil
                         }
                     }
+                } catch is CancellationError {
+                    // Task was cancelled by a newer selection — no error toast needed.
                 } catch {
                     await MainActor.run {
                         toast.show("Failed to load photo", isError: true)
