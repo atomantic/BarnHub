@@ -100,6 +100,10 @@
 		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
 		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
 		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
+		AADD112233445566LESS0002 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0001 /* Lesson.swift */; };
+		AADD112233445566LESS0004 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0003 /* LessonListView.swift */; };
+		AADD112233445566LESS0006 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
+		AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -217,6 +221,10 @@
 		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteEditView.swift"; sourceTree = "<group>"; };
 		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitor.swift"; sourceTree = "<group>"; };
 		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncIndicatorView.swift"; sourceTree = "<group>"; };
+		AADD112233445566LESS0001 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson.swift"; sourceTree = "<group>"; };
+		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonListView.swift"; sourceTree = "<group>"; };
+		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonEditView.swift"; sourceTree = "<group>"; };
+		AADD112233445566LESS0007 /* ClientPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPickerSection.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +314,7 @@
 				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
 				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
 				5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */,
+				AADD112233445566LESS0001 /* Lesson.swift */,
 				3B9960085725FD7B2D959B29 /* Transaction.swift */,
 				FF8A6A12276BB472310E25E6 /* VetRecord.swift */,
 			);
@@ -384,6 +393,8 @@
 				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
 				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
 				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
+				AADD112233445566LESS0005 /* LessonEditView.swift */,
+				AADD112233445566LESS0003 /* LessonListView.swift */,
 				93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */,
 				5E66197FAA363BF926741C13 /* ReminderListView.swift */,
 				09E279531F6A34C8031FA01E /* SupplyEditView.swift */,
@@ -413,6 +424,7 @@
 		6A4A5194513E89696377E642 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				AADD112233445566LESS0007 /* ClientPickerSection.swift */,
 				C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */,
 				7037AAB7CB6395B75225797D /* CurrencyField.swift */,
 				DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */,
@@ -678,6 +690,10 @@
 				DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */,
 				DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */,
 				DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */,
+				AADD112233445566LESS0002 /* Lesson.swift in Sources */,
+				AADD112233445566LESS0004 /* LessonListView.swift in Sources */,
+				AADD112233445566LESS0006 /* LessonEditView.swift in Sources */,
+				AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

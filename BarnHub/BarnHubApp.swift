@@ -17,7 +17,7 @@ struct BarnHubApp: App {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self,
+            Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
             configurations: config
         )
         #if DEBUG
@@ -207,6 +207,8 @@ private extension View {
                 case .addVetRecord: VetRecordEditView(horseID: nil)
                 case .farrierSchedule: FarrierScheduleView()
                 case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
+                case .lessons: LessonListView()
+                case .lessonEdit(let id): LessonEditView(lessonID: id)
                 }
             }
             .navigationDestination(for: SubscriptionRoute.self) { route in
