@@ -29,6 +29,7 @@ enum ClientRoute: Hashable {
     case edit(PersistentIdentifier?)
     case manageHorses(PersistentIdentifier)
     case invoiceHistory(PersistentIdentifier)
+    case paymentHistory(PersistentIdentifier)
     case documents(PersistentIdentifier)
 }
 

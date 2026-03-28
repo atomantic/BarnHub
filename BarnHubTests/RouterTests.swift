@@ -76,13 +76,33 @@ final class RouterTests: XCTestCase {
         XCTAssertEqual(router.schedulePath.count, 1)
         XCTAssertEqual(router.homePath.count, 1)
 
-        // Pop one tab, others unaffected
+        // Verify selectedTab matches the last explicit tab argument used
+        XCTAssertEqual(router.selectedTab, .home)
+
+        // Pop one tab, verify correct tab is now active and others untouched
         router.popToRoot(tab: .clients)
         XCTAssertTrue(router.clientsPath.isEmpty)
         XCTAssertEqual(router.horsesPath.count, 1)
         XCTAssertEqual(router.accountingPath.count, 1)
         XCTAssertEqual(router.schedulePath.count, 1)
         XCTAssertEqual(router.homePath.count, 1)
+    }
+
+    func testNavigate_setsSelectedTabToSpecifiedTab() {
+        let router = Router()
+        router.selectedTab = .home
+        router.navigate(to: HorseRoute.list, tab: .horses)
+        XCTAssertEqual(router.selectedTab, .horses)
+    }
+
+    func testNavigate_withoutTabArgument_usesCurrentTab() {
+        let router = Router()
+        router.selectedTab = .accounting
+        router.navigate(to: AccountingRoute.list)
+        XCTAssertEqual(router.selectedTab, .accounting)
+        XCTAssertEqual(router.accountingPath.count, 1)
+        XCTAssertTrue(router.homePath.isEmpty)
+        XCTAssertTrue(router.horsesPath.isEmpty)
     }
 
     func testMultipleNavigationsAccumulate() {

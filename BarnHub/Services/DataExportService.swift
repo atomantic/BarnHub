@@ -8,9 +8,9 @@ struct DataExportService {
         return f
     }()
 
-    static func exportHorsesCSV(from context: ModelContext) -> String {
+    static func exportHorsesCSV(from context: ModelContext) throws -> String {
         let descriptor = FetchDescriptor<Horse>(sortBy: [SortDescriptor(\.name)])
-        let horses = (try? context.fetch(descriptor)) ?? []
+        let horses = try context.fetch(descriptor)
 
         var csv = "Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active\n"
         for h in horses {
@@ -19,9 +19,9 @@ struct DataExportService {
         return csv
     }
 
-    static func exportClientsCSV(from context: ModelContext) -> String {
+    static func exportClientsCSV(from context: ModelContext) throws -> String {
         let descriptor = FetchDescriptor<Client>(sortBy: [SortDescriptor(\.lastName)])
-        let clients = (try? context.fetch(descriptor)) ?? []
+        let clients = try context.fetch(descriptor)
 
         var csv = "First Name,Last Name,Email,Phone,Emergency Contact,Emergency Phone,Notes,Active\n"
         for c in clients {
@@ -30,9 +30,9 @@ struct DataExportService {
         return csv
     }
 
-    static func exportTransactionsCSV(from context: ModelContext) -> String {
+    static func exportTransactionsCSV(from context: ModelContext) throws -> String {
         let descriptor = FetchDescriptor<Transaction>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        let transactions = (try? context.fetch(descriptor)) ?? []
+        let transactions = try context.fetch(descriptor)
 
         var csv = "Date,Type,Category,Amount,Memo,Client,Paid\n"
         for t in transactions {

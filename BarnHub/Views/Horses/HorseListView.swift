@@ -53,23 +53,5 @@ struct HorseListView: View {
                 .tint(showInactive ? .primary : .secondary)
             }
         }
-        .navigationDestination(for: HorseRoute.self) { route in
-            switch route {
-            case .list:
-                HorseListView()
-            case .detail(let id):
-                HorseDetailView(horseID: id)
-            case .edit(let id):
-                HorseEditView(horseID: id)
-            case .addVetRecord(let id):
-                VetRecordEditView(horseID: id)
-            case .addFarrierVisit(let id):
-                FarrierVisitEditView(horseID: id)
-            case .healthTimeline(let id):
-                HealthTimelineView(horseID: id)
-            case .weightChart(let id):
-                WeightChartView(horseID: id)
-            }
-        }
     }
 }

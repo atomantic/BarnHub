@@ -7,6 +7,7 @@ final class NotificationService {
     private(set) var isAuthorized = false
 
     private let center = UNUserNotificationCenter.current()
+    private var lastScheduledDate: Date?
 
     func requestAuthorization() async {
         do {
@@ -89,6 +90,9 @@ final class NotificationService {
     // MARK: - Bulk Scheduling
 
     func scheduleAllPending(context: ModelContext) {
+        if let last = lastScheduledDate, Calendar.current.isDateInToday(last) { return }
+        lastScheduledDate = .now
+
         let reminders = (try? context.fetch(FetchDescriptor<Reminder>())) ?? []
         for reminder in reminders where !reminder.isCompleted {
             scheduleReminder(reminder)
@@ -163,14 +167,14 @@ final class NotificationService {
     }
 
     private func reminderID(_ reminder: Reminder) -> String {
-        "reminder-\(reminder.persistentModelID.hashValue)"
+        "reminder-\(reminder.persistentModelID)"
     }
 
     private func vetRecordID(_ record: VetRecord) -> String {
-        "vet-\(record.persistentModelID.hashValue)"
+        "vet-\(record.persistentModelID)"
     }
 
     private func farrierVisitID(_ visit: FarrierVisit) -> String {
-        "farrier-\(visit.persistentModelID.hashValue)"
+        "farrier-\(visit.persistentModelID)"
     }
 }

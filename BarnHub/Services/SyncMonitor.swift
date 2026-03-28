@@ -65,6 +65,10 @@ final class SyncMonitor {
         BarnHubLogger.info("SyncMonitor started, listening for CloudKit events")
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc private func handleSyncEvent(_ notification: Notification) {
         guard let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
             as? NSPersistentCloudKitContainer.Event else { return }

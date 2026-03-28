@@ -1,5 +1,6 @@
 import CryptoKit
 import Foundation
+import Security
 import StoreKit
 
 typealias SKTransaction = StoreKit.Transaction
@@ -26,14 +27,47 @@ final class StoreService {
     var monthlyProduct: Product? { products.first { $0.id == Self.monthlyID } }
     var annualProduct: Product? { products.first { $0.id == Self.annualID } }
 
-    var hasSecretPro: Bool { UserDefaults.standard.bool(forKey: Self.secretProKey) }
+    var hasSecretPro: Bool { Self.keychainBool(forKey: Self.secretProKey) }
 
     var isProOverrideDisabled: Bool {
-        get { UserDefaults.standard.bool(forKey: Self.proOverrideDisabledKey) }
+        get { Self.keychainBool(forKey: Self.proOverrideDisabledKey) }
         set {
-            UserDefaults.standard.set(newValue, forKey: Self.proOverrideDisabledKey)
+            Self.setKeychainBool(newValue, forKey: Self.proOverrideDisabledKey)
             Task { await refreshEntitlements() }
         }
+    }
+
+    private static func keychainBool(forKey key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "net.shadowpuppet.BarnBook",
+            kSecAttrAccount as String: key,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
+              let data = result as? Data, !data.isEmpty else { return false }
+        return data[0] != 0
+    }
+
+    /// Writes a boolean flag to the keychain. Returns true if the write succeeded.
+    @discardableResult
+    private static func setKeychainBool(_ value: Bool, forKey key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "net.shadowpuppet.BarnBook",
+            kSecAttrAccount as String: key
+        ]
+        SecItemDelete(query as CFDictionary)
+        var addQuery = query
+        addQuery[kSecValueData as String] = Data([value ? 1 : 0])
+        addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        let status = SecItemAdd(addQuery as CFDictionary, nil)
+        if status != errSecSuccess {
+            BarnHubLogger.error("Keychain write failed for key '\(key)': status \(status)")
+        }
+        return status == errSecSuccess
     }
 
     func redeemSecretCode(_ code: String) -> Bool {
@@ -44,8 +78,12 @@ final class StoreService {
             BarnHubLogger.warning("Invalid secret code attempted")
             return false
         }
-        UserDefaults.standard.set(true, forKey: Self.secretProKey)
-        UserDefaults.standard.set(false, forKey: Self.proOverrideDisabledKey)
+        let wrote = Self.setKeychainBool(true, forKey: Self.secretProKey)
+            && Self.setKeychainBool(false, forKey: Self.proOverrideDisabledKey)
+        guard wrote else {
+            BarnHubLogger.error("Secret pro code keychain write failed — unlock not persisted")
+            return false
+        }
         isPro = true
         BarnHubLogger.success("Secret pro code redeemed")
         return true
@@ -63,7 +101,7 @@ final class StoreService {
             BarnHubLogger.info("ForceProMode enabled")
         }
         #endif
-        if hasSecretPro && !UserDefaults.standard.bool(forKey: Self.proOverrideDisabledKey) {
+        if hasSecretPro && !isProOverrideDisabled {
             isPro = true
             BarnHubLogger.info("Secret pro code active")
         }

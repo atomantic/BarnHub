@@ -3,6 +3,15 @@ import XCTest
 
 final class DateFormattingTests: XCTestCase {
 
+    // MARK: - Helpers
+
+    /// Returns a RelativeDateTimeFormatter using the current locale, matching `Date.relativeDateString` exactly.
+    private func currentLocaleRelativeFormatter() -> RelativeDateTimeFormatter {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .full
+        return f
+    }
+
     func testShortFormattedReturnsExpectedFormat() {
         var components = DateComponents()
         components.year = 2026
@@ -53,38 +62,48 @@ final class DateFormattingTests: XCTestCase {
 
     func testRelativeDateStringForPastDate() {
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
-        let result = yesterday.relativeDateString
-        // RelativeDateTimeFormatter produces locale-dependent strings like "1 day ago"
-        XCTAssertTrue(result.contains("ago") || result.contains("yesterday"),
-                      "Expected relative past string, got: \(result)")
+        let f = currentLocaleRelativeFormatter()
+        let expected = f.localizedString(for: yesterday, relativeTo: .now)
+        XCTAssertEqual(yesterday.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for past date")
     }
 
     func testRelativeDateStringForFutureDate() {
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: .now)!
-        let result = tomorrow.relativeDateString
-        // Should contain "in" for future dates (e.g. "in 1 day")
-        XCTAssertTrue(result.contains("in ") || result.contains("tomorrow"),
-                      "Expected relative future string, got: \(result)")
+        let f = currentLocaleRelativeFormatter()
+        let expected = f.localizedString(for: tomorrow, relativeTo: .now)
+        XCTAssertEqual(tomorrow.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for future date")
     }
 
     func testRelativeDateStringForDistantPast() {
         let longAgo = Calendar.current.date(byAdding: .month, value: -6, to: .now)!
-        let result = longAgo.relativeDateString
-        XCTAssertTrue(result.contains("ago"),
-                      "Expected relative past string, got: \(result)")
+        let f = currentLocaleRelativeFormatter()
+        let expected = f.localizedString(for: longAgo, relativeTo: .now)
+        XCTAssertEqual(longAgo.relativeDateString, expected,
+                       "relativeDateString must match RelativeDateTimeFormatter output for distant past")
     }
 
-    func testFormattedStyleShort() {
+    // MARK: - compactFormatted
+
+    func testCompactFormattedReturnsYYYYMMDD() {
         var components = DateComponents()
         components.year = 2026
-        components.month = 7
-        components.day = 4
+        components.month = 1
+        components.day = 5
         components.hour = 12
         let date = Calendar.current.date(from: components)!
-
-        let formatted = date.formatted(style: .short)
-        // Short style produces something like "7/4/26"
-        XCTAssertTrue(formatted.contains("7") && formatted.contains("4"),
-                      "Expected short formatted date containing month and day, got: \(formatted)")
+        XCTAssertEqual(date.compactFormatted, "20260105")
     }
+
+    func testCompactFormattedDecember31() {
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 12
+        components.day = 31
+        components.hour = 12
+        let date = Calendar.current.date(from: components)!
+        XCTAssertEqual(date.compactFormatted, "20251231")
+    }
+
 }

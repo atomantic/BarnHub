@@ -25,6 +25,7 @@
 		0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
 		7A7879ABF7C15CC5A0BA3265 /* Double+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA744D61AAEE032A230817D /* Double+Currency.swift */; };
 		3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
+		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
 		F703EA69FB8159D262DA3AC8 /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
 		00A9BF7BD4BED475CE708A13 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
 		1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
@@ -43,6 +44,8 @@
 		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
 		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
+		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
+		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
 		3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
@@ -79,6 +82,14 @@
 		AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
 		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
+		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
+		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
+		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
+		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
+		TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0005000000000001 /* StoreServiceTests.swift */; };
+		TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0006000000000001 /* SyncMonitorTests.swift */; };
+		TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0007000000000001 /* AppearanceManagerTests.swift */; };
+		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
 		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
 		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
 		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
@@ -150,6 +161,7 @@
 		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
 		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
 		CE768E67ED8208EC1BC695B8 /* View+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Toast.swift"; sourceTree = "<group>"; };
+		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
 		0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountingDashboardView.swift"; sourceTree = "<group>"; };
 		162F54183A973C74E91D0DD7 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionEditView.swift"; sourceTree = "<group>"; };
 		4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionListView.swift"; sourceTree = "<group>"; };
@@ -168,6 +180,8 @@
 		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorsePickerSection.swift"; sourceTree = "<group>"; };
 		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastModifier.swift"; sourceTree = "<group>"; };
 		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleRecordRow.swift"; sourceTree = "<group>"; };
+		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleListView.swift"; sourceTree = "<group>"; };
+		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryCard.swift"; sourceTree = "<group>"; };
 		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastView.swift"; sourceTree = "<group>"; };
 		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnDashboardView.swift"; sourceTree = "<group>"; };
 		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FarrierScheduleView.swift"; sourceTree = "<group>"; };
@@ -227,6 +241,14 @@
 		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonListView.swift"; sourceTree = "<group>"; };
 		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonEditView.swift"; sourceTree = "<group>"; };
 		AADD112233445566LESS0007 /* ClientPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPickerSection.swift"; sourceTree = "<group>"; };
+		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelSchemaTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataExportServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataImportServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreServiceTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitorTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManagerTests.swift"; sourceTree = "<group>"; };
+		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnumsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +321,7 @@
 				BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */,
 				FBA744D61AAEE032A230817D /* Double+Currency.swift */,
 				CE768E67ED8208EC1BC695B8 /* View+Toast.swift */,
+				VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */,
 			);
 			path = "Extensions";
 			sourceTree = "<group>";
@@ -434,6 +457,8 @@
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
+				SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */,
+				SUMMCARD00112233AABB0001 /* SummaryCard.swift */,
 				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
 			);
@@ -466,6 +491,14 @@
 				CC22334455667788AABB0001 /* RouterTests.swift */,
 				CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */,
 				CC22334455667788AABB0005 /* DateFormattingTests.swift */,
+				TESTNEW0001000000000001 /* ModelSchemaTests.swift */,
+				TESTNEW0002000000000001 /* DataExportServiceTests.swift */,
+				TESTNEW0003000000000001 /* DataImportServiceTests.swift */,
+				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
+				TESTNEW0005000000000001 /* StoreServiceTests.swift */,
+				TESTNEW0006000000000001 /* SyncMonitorTests.swift */,
+				TESTNEW0007000000000001 /* AppearanceManagerTests.swift */,
+				TESTNEW0008000000000001 /* EnumsTests.swift */,
 			);
 			path = BarnHubTests;
 			sourceTree = "<group>";
@@ -644,6 +677,7 @@
 				0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */,
 				7A7879ABF7C15CC5A0BA3265 /* Double+Currency.swift in Sources */,
 				3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */,
+				VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */,
 				F703EA69FB8159D262DA3AC8 /* AccountingDashboardView.swift in Sources */,
 				00A9BF7BD4BED475CE708A13 /* TransactionEditView.swift in Sources */,
 				1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */,
@@ -662,6 +696,8 @@
 				D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */,
 				8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */,
 				B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */,
+				SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */,
+				SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,
 				BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */,
 				3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */,
@@ -713,6 +749,14 @@
 				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,
 				CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */,
 				CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */,
+				TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */,
+				TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */,
+				TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */,
+				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
+				TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */,
+				TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */,
+				TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */,
+				TESTNEW0008000000000002 /* EnumsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

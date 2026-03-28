@@ -6,9 +6,7 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var selectedProduct: Product?
-    @State private var showToast = false
-    @State private var toastMessage = ""
-    @State private var toastIsError = false
+    @State private var toast = ToastState()
 
     var body: some View {
         ScrollView {
@@ -25,7 +23,7 @@ struct PaywallView: View {
         }
         .navigationTitle("BarnHub Pro")
         .navigationBarTitleDisplayMode(.inline)
-        .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
+        .toast(toast)
         .task {
             if storeService.products.isEmpty {
                 await storeService.loadProducts()
@@ -268,17 +266,13 @@ struct PaywallView: View {
         if restored {
             await showToastAndDismiss("Pro restored!")
         } else {
-            toastMessage = "No active subscription found"
-            toastIsError = true
-            showToast = true
+            toast.show("No active subscription found", isError: true)
         }
     }
 
     @MainActor
     private func showToastAndDismiss(_ message: String) async {
-        toastMessage = message
-        toastIsError = false
-        showToast = true
+        toast.show(message)
         try? await Task.sleep(for: .seconds(1))
         dismiss()
     }

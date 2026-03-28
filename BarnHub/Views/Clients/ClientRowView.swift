@@ -7,7 +7,7 @@ struct ClientRowView: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: client.isActive ? "checkmark.circle.fill" : "xmark.circle")
-                .foregroundStyle(client.isActive ? Color.green : Color.gray)
+                .foregroundStyle(client.isActive ? Color.barnGreen : Color.gray)
                 .font(.subheadline)
                 .accessibilityLabel(client.isActive ? "Active" : "Inactive")
 

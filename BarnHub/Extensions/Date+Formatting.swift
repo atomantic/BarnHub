@@ -19,13 +19,6 @@ extension Date {
         return formatter
     }()
 
-    func formatted(style: DateFormatter.Style) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = style
-        formatter.timeStyle = .none
-        return formatter.string(from: self)
-    }
-
     var shortFormatted: String {
         Self.shortDateFormatter.string(from: self)
     }
