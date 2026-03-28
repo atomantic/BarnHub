@@ -56,6 +56,7 @@ struct ClientHorsesView: View {
             }
         }
         .navigationTitle("Manage Horses")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(toast)
     }
 

@@ -72,6 +72,7 @@ struct AccountingDashboardView: View {
             }
         }
         .navigationTitle("Accounting")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

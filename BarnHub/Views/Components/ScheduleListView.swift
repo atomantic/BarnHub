@@ -43,6 +43,7 @@ struct ScheduleListView<Record: Identifiable>: View {
             }
         }
         .navigationTitle(navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink(value: addRoute) {

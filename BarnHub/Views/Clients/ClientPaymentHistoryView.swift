@@ -87,5 +87,6 @@ struct ClientPaymentHistoryView: View {
             }
         }
         .navigationTitle("Payment History")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

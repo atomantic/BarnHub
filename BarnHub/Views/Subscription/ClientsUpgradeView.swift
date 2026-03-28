@@ -52,6 +52,7 @@ struct ClientsUpgradeView: View {
             Spacer()
         }
         .navigationTitle("Clients")
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func featureRow(icon: String, text: String) -> some View {

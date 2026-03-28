@@ -61,6 +61,7 @@ struct ReminderListView: View {
             }
         }
         .navigationTitle("Reminders")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

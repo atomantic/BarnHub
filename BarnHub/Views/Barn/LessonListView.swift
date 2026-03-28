@@ -38,6 +38,7 @@ struct LessonListView: View {
             }
         }
         .navigationTitle("Lessons")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink(value: BarnRoute.lessonEdit(nil)) {

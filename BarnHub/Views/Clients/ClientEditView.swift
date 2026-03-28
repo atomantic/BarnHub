@@ -62,6 +62,7 @@ struct ClientEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Client" : "Edit Client")
+        .navigationBarTitleDisplayMode(.inline)
         .toast(toast)
         .task { loadExisting() }
     }

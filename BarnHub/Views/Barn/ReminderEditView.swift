@@ -40,6 +40,7 @@ struct ReminderEditView: View {
             HorsePickerSection(selectedHorseID: $selectedHorseID)
         }
         .navigationTitle(isNew ? "New Reminder" : "Edit Reminder")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {
