@@ -16,7 +16,7 @@ struct BarnHubApp: App {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
+            Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self,
             configurations: config
         )
         #if DEBUG
@@ -105,6 +105,7 @@ private extension View {
                 case .supplies: SupplyListView()
                 case .accounting: AccountingDashboardView()
                 case .reports: ReportsView()
+                case .barnNotes: BarnNoteListView()
                 case .settings: SettingsView()
                 case .dataManagement: DataManagementView()
                 }
@@ -141,6 +142,8 @@ private extension View {
                 case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
                 case .reminders: ReminderListView()
                 case .reminderEdit(let id): ReminderEditView(reminderID: id)
+                case .barnNotes: BarnNoteListView()
+                case .barnNoteEdit(let id): BarnNoteEditView(noteID: id)
                 case .vetSchedule: VetScheduleView()
                 case .addVetRecord: VetRecordEditView(horseID: nil)
                 case .farrierSchedule: FarrierScheduleView()

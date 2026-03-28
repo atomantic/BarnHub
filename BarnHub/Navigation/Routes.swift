@@ -8,6 +8,7 @@ enum HomeRoute: Hashable {
     case supplies
     case accounting
     case reports
+    case barnNotes
     case settings
     case dataManagement
 }
@@ -44,6 +45,8 @@ enum BarnRoute: Hashable {
     case supplyEdit(PersistentIdentifier?)
     case reminders
     case reminderEdit(PersistentIdentifier?)
+    case barnNotes
+    case barnNoteEdit(PersistentIdentifier?)
     case vetSchedule
     case addVetRecord
     case farrierSchedule

@@ -10,7 +10,7 @@ struct PreviewSampleData {
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self,
+            Invoice.self, WeightEntry.self, BarnNote.self,
             configurations: config
         )
         populate(container: container)
@@ -51,6 +51,9 @@ struct PreviewSampleData {
 
         let reminders = createReminders(horses: horses)
         reminders.forEach { context.insert($0) }
+
+        let barnNotes = createBarnNotes(horses: horses)
+        barnNotes.forEach { context.insert($0) }
 
         try? context.save()
     }
@@ -371,5 +374,54 @@ struct PreviewSampleData {
         reminders.append(dentist)
 
         return reminders
+    }
+
+    static func createBarnNotes(horses: [Horse]) -> [BarnNote] {
+        let calendar = Calendar.current
+        var notes: [BarnNote] = []
+
+        let note1 = BarnNote(
+            content: "Arrow seemed a little stiff in his left front during turnout this morning. Will monitor over the next few days.",
+            date: calendar.date(byAdding: .hour, value: -3, to: .now) ?? .now,
+            category: .observation
+        )
+        note1.horse = horses.first
+        notes.append(note1)
+
+        notes.append(BarnNote(
+            content: "Repaired the latch on stall B4 — was sticking and hard to open. Replaced hinge pin.",
+            date: calendar.date(byAdding: .day, value: -1, to: .now) ?? .now,
+            category: .maintenance
+        ))
+
+        let note3 = BarnNote(
+            content: "Bella refused grain at evening feed. Ate hay normally. No other signs of distress — keeping an eye on it given her colic history.",
+            date: calendar.date(byAdding: .day, value: -1, to: .now) ?? .now,
+            category: .health
+        )
+        note3.horse = horses.count > 1 ? horses[1] : nil
+        notes.append(note3)
+
+        notes.append(BarnNote(
+            content: "Heavy rain overnight, paddocks are muddy. Shortened turnout to 2 hours for all horses.",
+            date: calendar.date(byAdding: .day, value: -2, to: .now) ?? .now,
+            category: .weather
+        ))
+
+        notes.append(BarnNote(
+            content: "Hay delivery arrived — 40 bales of timothy. Stacked in the upper loft.",
+            date: calendar.date(byAdding: .day, value: -3, to: .now) ?? .now,
+            category: .general
+        ))
+
+        let note6 = BarnNote(
+            content: "Storm spooked at a tarp near the arena and pulled back on cross-ties. No injury, but re-tied with quick-release knots.",
+            date: calendar.date(byAdding: .day, value: -4, to: .now) ?? .now,
+            category: .incident
+        )
+        note6.horse = horses.count > 2 ? horses[2] : nil
+        notes.append(note6)
+
+        return notes
     }
 }

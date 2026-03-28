@@ -30,6 +30,8 @@ struct DeepLinkHandler {
                     router.navigate(to: BarnRoute.supplies, tab: .schedule)
                 case "reminders":
                     router.navigate(to: BarnRoute.reminders, tab: .schedule)
+                case "notes":
+                    router.navigate(to: BarnRoute.barnNotes, tab: .schedule)
                 default:
                     break
                 }
