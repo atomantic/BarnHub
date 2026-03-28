@@ -20,6 +20,7 @@ enum HorseRoute: Hashable {
     case addVetRecord(PersistentIdentifier)
     case addFarrierVisit(PersistentIdentifier)
     case healthTimeline(PersistentIdentifier)
+    case weightChart(PersistentIdentifier)
 }
 
 enum ClientRoute: Hashable {

@@ -10,3 +10,4 @@ For completed work, see [DONE.md](./DONE.md).
 
 - Home screen widgets for at-a-glance barn stats
 - ~~Lesson scheduling / calendar integration~~ (implemented)
+- ~~Weight trend chart~~ (implemented)
