@@ -75,14 +75,6 @@ struct BarnNoteListView: View {
             }
         }
         .toast(isPresented: $showToast, message: toastMessage)
-        .navigationDestination(for: BarnRoute.self) { route in
-            switch route {
-            case .barnNoteEdit(let id):
-                BarnNoteEditView(noteID: id)
-            default:
-                EmptyView()
-            }
-        }
     }
 
     private var categoryFilter: some View {

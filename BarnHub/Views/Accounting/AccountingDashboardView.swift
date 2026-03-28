@@ -81,14 +81,6 @@ struct AccountingDashboardView: View {
                 }
             }
         }
-        .navigationDestination(for: AccountingRoute.self) { route in
-            switch route {
-            case .list:
-                TransactionListView()
-            case .edit(let id):
-                TransactionEditView(transactionID: id)
-            }
-        }
     }
 
     private func summaryCard(title: String, amount: Double, color: Color) -> some View {
