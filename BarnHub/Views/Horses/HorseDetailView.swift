@@ -64,6 +64,10 @@ struct HorseDetailView: View {
                     Label("Health Timeline", systemImage: "heart.text.clipboard")
                         .foregroundStyle(.barnGreen)
                 }
+                NavigationLink(value: HorseRoute.weightChart(horseID)) {
+                    Label("Weight Trend", systemImage: "chart.line.uptrend.xyaxis")
+                        .foregroundStyle(.barnGreen)
+                }
             }
 
             Section("Info") {

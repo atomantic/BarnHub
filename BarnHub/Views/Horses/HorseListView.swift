@@ -67,6 +67,8 @@ struct HorseListView: View {
                 FarrierVisitEditView(horseID: id)
             case .healthTimeline(let id):
                 HealthTimelineView(horseID: id)
+            case .weightChart(let id):
+                WeightChartView(horseID: id)
             }
         }
     }
