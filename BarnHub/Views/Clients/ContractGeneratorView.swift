@@ -12,6 +12,7 @@ struct ContractGeneratorView: View {
     @State private var monthlyRate: Double = 0
     @State private var showShareSheet = false
     @State private var generatedPDFURL: URL?
+    @State private var toast = ToastState()
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -84,6 +85,7 @@ struct ContractGeneratorView: View {
                     ShareSheet(items: [url])
                 }
             }
+            .toast(toast)
             .task {
                 if selectedHorseID == nil, let first = assignedHorses.first {
                     selectedHorseID = first.persistentModelID
@@ -111,7 +113,13 @@ struct ContractGeneratorView: View {
 
         let fileName = ContractPDFService.fileName(type: contractType, clientName: client.fullName)
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        try? pdfData.write(to: tempURL)
+        do {
+            try pdfData.write(to: tempURL)
+        } catch {
+            BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
+            toast.show("Failed to save contract", isError: true)
+            return
+        }
         generatedPDFURL = tempURL
         showShareSheet = true
 
