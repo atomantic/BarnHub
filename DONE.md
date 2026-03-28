@@ -2,6 +2,10 @@
 
 Completed items archived from PLAN.md. For release notes, see `.changelogs/`.
 
+## 2026-03-28
+
+- iCloud sync with CloudKit — enabled automatic cloud sync via SwiftData, added SyncMonitor service to track sync events, sync status indicator in Home toolbar, and sync details in Settings
+
 ## 2026-03-25
 
 - Archived all completed phases and audit fixes during replan

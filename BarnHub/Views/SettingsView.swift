@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(StoreService.self) private var storeService
+    @Environment(SyncMonitor.self) private var syncMonitor
     @Environment(Router.self) private var router
     @State private var showingMailComposer = false
     @State private var showRedeemCodeSheet = false
@@ -88,6 +89,28 @@ struct SettingsView: View {
                         showSecretCodeAlert = true
                     } label: {
                         settingsRow("Enter Secret Code", icon: "lock.open")
+                    }
+                }
+            }
+
+            Section("iCloud Sync") {
+                HStack(spacing: 10) {
+                    Image(systemName: syncMonitor.status.icon)
+                        .foregroundStyle(syncMonitor.status.tint)
+                        .frame(width: 20)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(syncMonitor.status.label)
+                            .font(.subheadline)
+                        if let lastSync = syncMonitor.lastSuccessfulSync {
+                            Text("Last synced \(lastSync.relativeDateString)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                        if case .failed(let msg) = syncMonitor.status {
+                            Text(msg)
+                                .font(.caption2)
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
             }

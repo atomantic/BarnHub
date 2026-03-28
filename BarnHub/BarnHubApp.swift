@@ -7,12 +7,13 @@ struct BarnHubApp: App {
     @State private var storeService = StoreService()
     @State private var appearanceManager = AppearanceManager()
     @State private var notificationService = NotificationService()
+    @State private var syncMonitor = SyncMonitor()
 
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
         let config = isSeedMode
             ? ModelConfiguration(isStoredInMemoryOnly: true)
-            : ModelConfiguration()
+            : ModelConfiguration(cloudKitDatabase: .automatic)
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
             VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
@@ -35,6 +36,7 @@ struct BarnHubApp: App {
                 .environment(storeService)
                 .environment(appearanceManager)
                 .environment(notificationService)
+                .environment(syncMonitor)
                 .onOpenURL { url in
                     DeepLinkHandler.handle(url: url, router: router)
                 }

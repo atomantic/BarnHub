@@ -98,6 +98,8 @@
 		DD11223344556677BARN0002 /* BarnNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0001 /* BarnNote.swift */; };
 		DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
 		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
+		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,6 +215,8 @@
 		DD11223344556677BARN0001 /* BarnNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNote.swift"; sourceTree = "<group>"; };
 		DD11223344556677BARN0003 /* BarnNoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteListView.swift"; sourceTree = "<group>"; };
 		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteEditView.swift"; sourceTree = "<group>"; };
+		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitor.swift"; sourceTree = "<group>"; };
+		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncIndicatorView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +344,7 @@
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
+				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
 			);
 			path = "Services";
 			sourceTree = "<group>";
@@ -415,6 +420,7 @@
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
+				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
 			);
 			path = "Components";
@@ -670,6 +676,8 @@
 				DD11223344556677BARN0002 /* BarnNote.swift in Sources */,
 				DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */,
 				DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */,
+				DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */,
+				DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
