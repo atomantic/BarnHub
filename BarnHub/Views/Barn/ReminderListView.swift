@@ -75,14 +75,6 @@ struct ReminderListView: View {
             }
         }
         .toast(isPresented: $showToast, message: toastMessage)
-        .navigationDestination(for: BarnRoute.self) { route in
-            switch route {
-            case .reminderEdit(let id):
-                ReminderEditView(reminderID: id)
-            default:
-                EmptyView()
-            }
-        }
     }
 
     private func reminderRow(_ reminder: Reminder, isOverdue: Bool) -> some View {

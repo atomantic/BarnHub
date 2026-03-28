@@ -71,14 +71,6 @@ struct SupplyListView: View {
             }
         }
         .toast(isPresented: $showToast, message: toastMessage, isError: toastIsError)
-        .navigationDestination(for: BarnRoute.self) { route in
-            switch route {
-            case .supplyEdit(let id):
-                SupplyEditView(supplyItemID: id)
-            default:
-                EmptyView()
-            }
-        }
     }
 
     private func supplyRow(_ item: SupplyItem) -> some View {
