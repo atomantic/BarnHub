@@ -95,6 +95,9 @@
 		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
 		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
+		DD11223344556677BARN0002 /* BarnNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0001 /* BarnNote.swift */; };
+		DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
+		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,6 +210,9 @@
 		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceTests.swift"; sourceTree = "<group>"; };
 		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntryTests.swift"; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEventTests.swift"; sourceTree = "<group>"; };
+		DD11223344556677BARN0001 /* BarnNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNote.swift"; sourceTree = "<group>"; };
+		DD11223344556677BARN0003 /* BarnNoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteListView.swift"; sourceTree = "<group>"; };
+		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteEditView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +292,7 @@
 		9CF43B31E8845D861542A38E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD11223344556677BARN0001 /* BarnNote.swift */,
 				23D455C23A05576DE66AA068 /* Client.swift */,
 				47E49121D576E6628ED2785E /* Enums.swift */,
 				C2F53930338F4A389921F640 /* WeightEntry.swift */,
@@ -369,6 +376,8 @@
 			isa = PBXGroup;
 			children = (
 				4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */,
+				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
+				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
 				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
 				93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */,
 				5E66197FAA363BF926741C13 /* ReminderListView.swift */,
@@ -658,6 +667,9 @@
 				AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */,
 				BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */,
 				BB11223344556677AABB0004 /* SettingsView.swift in Sources */,
+				DD11223344556677BARN0002 /* BarnNote.swift in Sources */,
+				DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */,
+				DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

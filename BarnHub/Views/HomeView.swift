@@ -345,6 +345,9 @@ struct HomeView: View {
             FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
                 router.navigate(to: HomeRoute.reports)
             }
+            FeatureTile(icon: "note.text", title: "Barn Notes", color: .barnBrown) {
+                router.navigate(to: HomeRoute.barnNotes)
+            }
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 32)

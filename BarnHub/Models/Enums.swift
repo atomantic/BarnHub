@@ -22,3 +22,19 @@ enum ReminderFrequency: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var displayName: String { rawValue.capitalized }
 }
+
+enum BarnNoteCategory: String, Codable, CaseIterable, Identifiable {
+    case general, observation, incident, maintenance, health, weather
+    var id: String { rawValue }
+    var displayName: String { rawValue.capitalized }
+    var icon: String {
+        switch self {
+        case .general: return "note.text"
+        case .observation: return "eye"
+        case .incident: return "exclamationmark.triangle"
+        case .maintenance: return "wrench.and.screwdriver"
+        case .health: return "heart"
+        case .weather: return "cloud.sun"
+        }
+    }
+}

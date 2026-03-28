@@ -39,6 +39,9 @@ struct BarnDashboardView: View {
                 NavigationLink(value: BarnRoute.farrierSchedule) {
                     Label("Farrier Schedule", systemImage: "hammer.fill")
                 }
+                NavigationLink(value: BarnRoute.barnNotes) {
+                    Label("Barn Notes", systemImage: "note.text")
+                }
             }
 
             Section("Upcoming Reminders") {
