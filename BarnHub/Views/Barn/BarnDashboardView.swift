@@ -17,9 +17,7 @@ struct BarnDashboardView: View {
     }
 
     private var upcomingVetRecords: [VetRecord] {
-        vetRecords
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
+        filterSortByDueDate(vetRecords, dueDate: \.nextDueDate)
     }
 
     private var upcomingLessons: [Lesson] {
@@ -29,9 +27,13 @@ struct BarnDashboardView: View {
     }
 
     private var upcomingFarrierVisits: [FarrierVisit] {
-        farrierVisits
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
+        filterSortByDueDate(farrierVisits, dueDate: \.nextDueDate)
+    }
+
+    private func filterSortByDueDate<T>(_ records: [T], dueDate: KeyPath<T, Date?>) -> [T] {
+        records
+            .filter { $0[keyPath: dueDate] != nil }
+            .sorted { ($0[keyPath: dueDate] ?? .distantFuture) < ($1[keyPath: dueDate] ?? .distantFuture) }
     }
 
     var body: some View {
@@ -79,7 +81,11 @@ struct BarnDashboardView: View {
                     )
                 } else {
                     ForEach(upcomingVetRecords.prefix(5)) { record in
-                        vetRecordRow(record)
+                        scheduleRow(
+                            horseName: record.horse?.name ?? "Unknown Horse",
+                            providerName: record.vetName,
+                            nextDueDate: record.nextDueDate
+                        )
                     }
                 }
             } header: {
@@ -102,7 +108,11 @@ struct BarnDashboardView: View {
                     )
                 } else {
                     ForEach(upcomingFarrierVisits.prefix(5)) { visit in
-                        farrierVisitRow(visit)
+                        scheduleRow(
+                            horseName: visit.horse?.name ?? "Unknown Horse",
+                            providerName: visit.farrierName,
+                            nextDueDate: visit.nextDueDate
+                        )
                     }
                 }
             } header: {
@@ -162,35 +172,17 @@ struct BarnDashboardView: View {
         }
     }
 
-    private func vetRecordRow(_ record: VetRecord) -> some View {
+    private func scheduleRow(horseName: String, providerName: String, nextDueDate: Date?) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(record.horse?.name ?? "Unknown Horse")
+                Text(horseName)
                     .font(.headline)
-                Text(record.vetName)
+                Text(providerName)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            if let nextDue = record.nextDueDate {
-                Text(nextDue.shortFormatted)
-                    .font(.caption)
-                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-            }
-        }
-    }
-
-    private func farrierVisitRow(_ visit: FarrierVisit) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(visit.horse?.name ?? "Unknown Horse")
-                    .font(.headline)
-                Text(visit.farrierName)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            if let nextDue = visit.nextDueDate {
+            if let nextDue = nextDueDate {
                 Text(nextDue.shortFormatted)
                     .font(.caption)
                     .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
