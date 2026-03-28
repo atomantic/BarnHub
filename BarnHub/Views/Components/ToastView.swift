@@ -13,7 +13,7 @@ struct ToastView: View {
             .padding(.vertical, 10)
             .background(
                 Capsule()
-                    .fill(isError ? Color.red : Color.green)
+                    .fill(isError ? Color.red : Color.barnGreen)
             )
             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
     }
