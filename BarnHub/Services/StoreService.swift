@@ -17,7 +17,9 @@ final class StoreService {
 
     static let monthlyID = "net.shadowpuppet.BarnBook.pro.monthly"
     static let annualID = "net.shadowpuppet.BarnBook.pro.annual"
-    private static let productIDs: Set<String> = [monthlyID, annualID]
+    static let lifetimeID = "net.shadowpuppet.BarnBook.pro.lifetime"
+    private static let subscriptionIDs: Set<String> = [monthlyID, annualID]
+    private static let productIDs: Set<String> = [monthlyID, annualID, lifetimeID]
 
     /// SHA-256 hash of the accepted secret pro code
     private static let secretProCodeHash = "0000000000000000000000000000000000000000000000000000000000000000"
@@ -26,6 +28,8 @@ final class StoreService {
 
     var monthlyProduct: Product? { products.first { $0.id == Self.monthlyID } }
     var annualProduct: Product? { products.first { $0.id == Self.annualID } }
+    var lifetimeProduct: Product? { products.first { $0.id == Self.lifetimeID } }
+    private(set) var hasLifetime = false
 
     var hasSecretPro: Bool { Self.keychainBool(forKey: Self.secretProKey) }
 
@@ -209,16 +213,23 @@ final class StoreService {
             await MainActor.run { if !isPro { isPro = true } }
             return
         }
-        let foundPro = await {
+        let (foundPro, foundLifetime) = await { () -> (Bool, Bool) in
+            var sub = false
+            var lifetime = false
             for await result in SKTransaction.currentEntitlements {
                 guard let txn = try? checkVerified(result) else { continue }
-                if Self.productIDs.contains(txn.productID) {
-                    return true
+                if txn.productID == Self.lifetimeID {
+                    lifetime = true
+                    break
+                }
+                if Self.subscriptionIDs.contains(txn.productID) {
+                    sub = true
                 }
             }
-            return false
+            return (lifetime || sub, lifetime)
         }()
         await MainActor.run {
+            hasLifetime = foundLifetime
             if isPro != foundPro { isPro = foundPro }
         }
     }
