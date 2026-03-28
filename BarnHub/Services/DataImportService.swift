@@ -30,9 +30,9 @@ struct DataImportService {
 
         var imported = 0
         var skipped = 0
-        var errors: [String] = []
+        let errors: [String] = []
 
-        for (rowNum, row) in rows.dropFirst().enumerated() {
+        for row in rows.dropFirst() {
             guard row.count > nameIdx else {
                 skipped += 1
                 continue
@@ -92,7 +92,7 @@ struct DataImportService {
 
         var imported = 0
         var skipped = 0
-        var errors: [String] = []
+        let errors: [String] = []
 
         for row in rows.dropFirst() {
             var firstName = ""
@@ -153,7 +153,7 @@ struct DataImportService {
 
         var imported = 0
         var skipped = 0
-        var errors: [String] = []
+        let errors: [String] = []
 
         for row in rows.dropFirst() {
             guard let amount = doubleValue(row, columns, "amount"), amount > 0 else {

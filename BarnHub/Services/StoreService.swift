@@ -186,14 +186,15 @@ final class StoreService {
             await MainActor.run { if !isPro { isPro = true } }
             return
         }
-        var foundPro = false
-        for await result in SKTransaction.currentEntitlements {
-            guard let txn = try? checkVerified(result) else { continue }
-            if Self.productIDs.contains(txn.productID) {
-                foundPro = true
-                break
+        let foundPro = await {
+            for await result in SKTransaction.currentEntitlements {
+                guard let txn = try? checkVerified(result) else { continue }
+                if Self.productIDs.contains(txn.productID) {
+                    return true
+                }
             }
-        }
+            return false
+        }()
         await MainActor.run {
             if isPro != foundPro { isPro = foundPro }
         }
