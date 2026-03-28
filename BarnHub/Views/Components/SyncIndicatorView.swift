@@ -2,7 +2,6 @@ import SwiftUI
 
 struct SyncIndicatorView: View {
     @Environment(SyncMonitor.self) private var syncMonitor
-    @State private var rotating = false
 
     var body: some View {
         Image(systemName: syncMonitor.status.icon)
