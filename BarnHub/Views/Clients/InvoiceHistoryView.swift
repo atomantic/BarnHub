@@ -7,6 +7,7 @@ struct InvoiceHistoryView: View {
 
     @State private var showShareSheet = false
     @State private var selectedPDFURL: URL?
+    @State private var toast = ToastState()
 
     private var client: Client? {
         modelContext.model(for: clientID) as? Client
@@ -52,6 +53,7 @@ struct InvoiceHistoryView: View {
             }
         }
         .navigationTitle("Invoice History")
+        .toast(toast)
         .sheet(isPresented: $showShareSheet) {
             if let url = selectedPDFURL {
                 ShareSheet(items: [url])
@@ -63,7 +65,13 @@ struct InvoiceHistoryView: View {
         guard let data = invoice.pdfData else { return }
         let fileName = Invoice.fileName(clientName: client?.fullName ?? "Client", startDate: invoice.startDate, endDate: invoice.endDate)
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        try? data.write(to: tempURL)
+        do {
+            try data.write(to: tempURL)
+        } catch {
+            BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
+            toast.show("Failed to load invoice", isError: true)
+            return
+        }
         selectedPDFURL = tempURL
         showShareSheet = true
     }
@@ -74,5 +82,6 @@ struct InvoiceHistoryView: View {
             BarnHubLogger.info("Deleting invoice createdAt=\(invoice.createdAt.shortFormatted)")
             modelContext.delete(invoice)
         }
+        modelContext.saveWithLogging()
     }
 }
