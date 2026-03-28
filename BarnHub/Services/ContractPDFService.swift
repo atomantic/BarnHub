@@ -26,6 +26,8 @@ enum ContractType: String, CaseIterable, Identifiable {
 }
 
 struct ContractPDFService {
+    private static let headerColor = UIColor(red: 74/255, green: 124/255, blue: 63/255, alpha: 1)
+
     static func generatePDF(
         type: ContractType,
         clientName: String,
@@ -81,7 +83,7 @@ struct ContractPDFService {
         var y = y
         let titleAttrs: [NSAttributedString.Key: Any] = [
             .font: UIFont.boldSystemFont(ofSize: 22),
-            .foregroundColor: UIColor(red: 0.2, green: 0.4, blue: 0.2, alpha: 1)
+            .foregroundColor: headerColor
         ]
         ("BarnHub \(type.displayName)" as NSString).draw(at: CGPoint(x: margin, y: y), withAttributes: titleAttrs)
         y += 32

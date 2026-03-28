@@ -135,7 +135,7 @@ struct DataImportService {
 
     // MARK: - Transactions
 
-    static func importTransactions(from csvString: String, context: ModelContext) -> ImportResult {
+    static func importTransactions(from csvString: String, context: ModelContext) throws -> ImportResult {
         let rows = parseCSV(csvString)
         guard let header = rows.first else {
             return ImportResult(imported: 0, skipped: 0, errors: ["Empty file"])
@@ -149,7 +149,7 @@ struct DataImportService {
 
         // Pre-fetch clients for matching
         let clientDescriptor = FetchDescriptor<Client>()
-        let allClients = (try? context.fetch(clientDescriptor)) ?? []
+        let allClients = try context.fetch(clientDescriptor)
 
         var imported = 0
         var skipped = 0

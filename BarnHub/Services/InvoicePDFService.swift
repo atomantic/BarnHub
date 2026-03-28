@@ -2,6 +2,8 @@ import Foundation
 import UIKit
 
 struct InvoicePDFService {
+    private static let headerColor = UIColor(red: 74/255, green: 124/255, blue: 63/255, alpha: 1)
+
     struct LineItem {
         let date: Date
         let description: String
@@ -30,7 +32,7 @@ struct InvoicePDFService {
             // Header
             let titleAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.boldSystemFont(ofSize: 24),
-                .foregroundColor: UIColor(red: 0.2, green: 0.4, blue: 0.2, alpha: 1)
+                .foregroundColor: headerColor
             ]
             let title = "BarnHub Invoice" as NSString
             title.draw(at: CGPoint(x: margin, y: yOffset), withAttributes: titleAttrs)
