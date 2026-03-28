@@ -63,34 +63,10 @@ struct ReportsView: View {
 
     private func summaryCards(data: ReportData) -> some View {
         HStack(spacing: 12) {
-            summaryCard(title: "Income", amount: data.totalIncome, icon: "arrow.down.circle.fill", color: .green)
-            summaryCard(title: "Expenses", amount: data.totalExpenses, icon: "arrow.up.circle.fill", color: .red)
-            summaryCard(title: "Net", amount: data.netBalance, icon: "equal.circle.fill", color: data.netBalance >= 0 ? .barnGreen : .red)
+            SummaryCard(title: "Income", amount: data.totalIncome, color: .green, icon: "arrow.down.circle.fill")
+            SummaryCard(title: "Expenses", amount: data.totalExpenses, color: .red, icon: "arrow.up.circle.fill")
+            SummaryCard(title: "Net", amount: data.netBalance, color: data.netBalance >= 0 ? .barnGreen : .red, icon: "equal.circle.fill")
         }
-    }
-
-    private func summaryCard(title: String, amount: Double, icon: String, color: Color) -> some View {
-        VStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(color)
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(amount.asCurrency)
-                .font(.subheadline)
-                .fontWeight(.bold)
-                .foregroundStyle(color)
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 14)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.barnCardBackground)
-                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
-        )
     }
 
     // MARK: - Income vs Expense Bar Chart
@@ -128,11 +104,7 @@ struct ReportsView: View {
             .frame(height: 200)
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.barnCardBackground)
-                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
-        )
+        .barnCard()
     }
 
     // MARK: - Monthly Trend
@@ -199,11 +171,7 @@ struct ReportsView: View {
             .font(.caption)
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.barnCardBackground)
-                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
-        )
+        .barnCard()
     }
 
     // MARK: - Category Breakdown
@@ -250,11 +218,7 @@ struct ReportsView: View {
             }
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.barnCardBackground)
-                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
-        )
+        .barnCard()
     }
 
     // MARK: - Locked Section
@@ -456,13 +420,3 @@ struct MonthlyTotal: Identifiable {
     let expenses: Double
 }
 
-// MARK: - Short Currency Extension
-
-extension Double {
-    var asShortCurrency: String {
-        if self >= 1000 {
-            return "$\(Int(self / 1000))k"
-        }
-        return "$\(Int(self))"
-    }
-}
