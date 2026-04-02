@@ -203,6 +203,8 @@
 		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
 		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
 		FF0E902A35BA84ED658C2B60 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
+		CALVIEWS00112233AABB0002 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
+		CALVIEWS00112233AABB0003 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
 		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
 		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
@@ -345,6 +347,7 @@
 		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
 		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecord.swift; sourceTree = "<group>"; };
+		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
 		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
 		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSchemaTests.swift; sourceTree = "<group>"; };
@@ -535,6 +538,7 @@
 				A7B3C9D1E5F2081634729A5B /* MailComposer.swift */,
 				6B781D8E8A8631CE421A278E /* ToastModifier.swift */,
 				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
+				CALVIEWS00112233AABB0001 /* CalendarViews.swift */,
 				SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */,
 				SUMMCARD00112233AABB0001 /* SummaryCard.swift */,
 				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
@@ -864,6 +868,7 @@
 				C877A57158EFFCCDA3F946B7 /* MailComposer.swift in Sources */,
 				C11E2F2BC3971B7F17C19341 /* ToastModifier.swift in Sources */,
 				955EE1B9866BB5DDF2A04263 /* ScheduleRecordRow.swift in Sources */,
+				CALVIEWS00112233AABB0002 /* CalendarViews.swift in Sources */,
 				B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */,
 				3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */,
 				1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */,
@@ -971,6 +976,7 @@
 				D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */,
 				8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */,
 				B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */,
+				CALVIEWS00112233AABB0003 /* CalendarViews.swift in Sources */,
 				SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */,
 				SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,

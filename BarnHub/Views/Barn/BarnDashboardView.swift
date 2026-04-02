@@ -1,6 +1,14 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Calendar View Mode
+
+enum CalendarViewMode: String, CaseIterable {
+    case day = "Day"
+    case week = "Week"
+    case month = "Month"
+}
+
 // MARK: - Schedule Event Types
 
 enum ScheduleEventType: String, CaseIterable {
@@ -34,6 +42,8 @@ enum ScheduleEventType: String, CaseIterable {
     }
 }
 
+// MARK: - Schedule Event
+
 struct ScheduleEvent: Identifiable {
     let id: String
     let date: Date
@@ -41,6 +51,7 @@ struct ScheduleEvent: Identifiable {
     let subtitle: String?
     let type: ScheduleEventType
     let modelID: PersistentIdentifier?
+    let durationMinutes: Int
 }
 
 // MARK: - Dashboard View
@@ -56,19 +67,21 @@ struct BarnDashboardView: View {
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
     @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
 
-    #if os(macOS)
-    @State private var displayedMonth = Date.now
-    @State private var selectedDate = Date.now
-    #endif
+    @State private var viewMode: CalendarViewMode = .month
+    @State private var selectedDate: Date = .now
 
     var body: some View {
         #if os(macOS)
         macOSCalendar
             .navigationTitle("Schedule")
         #else
-        iosList
+        iOSCalendar
             .navigationTitle("Schedule")
             .inlineNavTitle()
+            .toolbar {
+                ToolbarItem(placement: .trailingBar) { categoriesMenu }
+                ToolbarItem(placement: .trailingBar) { addEventMenu }
+            }
         #endif
     }
 
@@ -84,7 +97,8 @@ struct BarnDashboardView: View {
                 title: reminder.title,
                 subtitle: reminder.horse?.name,
                 type: .reminder,
-                modelID: reminder.persistentModelID
+                modelID: reminder.persistentModelID,
+                durationMinutes: 30
             ))
         }
 
@@ -96,7 +110,8 @@ struct BarnDashboardView: View {
                 title: record.horse?.name ?? "Unknown Horse",
                 subtitle: record.vetName,
                 type: .vet,
-                modelID: record.persistentModelID
+                modelID: record.persistentModelID,
+                durationMinutes: 60
             ))
         }
 
@@ -108,7 +123,8 @@ struct BarnDashboardView: View {
                 title: visit.horse?.name ?? "Unknown Horse",
                 subtitle: visit.farrierName,
                 type: .farrier,
-                modelID: visit.persistentModelID
+                modelID: visit.persistentModelID,
+                durationMinutes: 60
             ))
         }
 
@@ -121,7 +137,8 @@ struct BarnDashboardView: View {
                 subtitle: [lesson.lessonType.displayName, lesson.horse.map { "on \($0.name)" }]
                     .compactMap { $0 }.joined(separator: " "),
                 type: .lesson,
-                modelID: lesson.persistentModelID
+                modelID: lesson.persistentModelID,
+                durationMinutes: lesson.duration
             ))
         }
 
@@ -129,340 +146,306 @@ struct BarnDashboardView: View {
     }
 
     private var eventsByDay: [Date: [ScheduleEvent]] {
-        let calendar = Calendar.current
+        let cal = Calendar.current
         var grouped: [Date: [ScheduleEvent]] = [:]
         for event in allEvents {
-            let day = calendar.startOfDay(for: event.date)
+            let day = cal.startOfDay(for: event.date)
             grouped[day, default: []].append(event)
         }
         return grouped
     }
 
-    // MARK: - iOS: List Layout
+    private func eventsForDay(_ date: Date) -> [ScheduleEvent] {
+        let day = Calendar.current.startOfDay(for: date)
+        return (eventsByDay[day] ?? []).sorted { $0.date < $1.date }
+    }
+
+    // MARK: - Navigation Helpers
+
+    private var monthStart: Date {
+        let cal = Calendar.current
+        return cal.date(from: cal.dateComponents([.year, .month], from: selectedDate)) ?? selectedDate
+    }
+
+    private var weekStart: Date {
+        let cal = Calendar.current
+        let weekday = cal.component(.weekday, from: selectedDate)
+        return cal.date(byAdding: .day, value: -(weekday - 1), to: cal.startOfDay(for: selectedDate)) ?? selectedDate
+    }
+
+    private var calendarTitle: String {
+        switch viewMode {
+        case .day:
+            let weekday = selectedDate.formatted(.dateTime.weekday(.wide))
+            let monthDay = selectedDate.formatted(.dateTime.month(.abbreviated).day())
+            return "\(weekday), \(monthDay)"
+        case .week:
+            let start = weekStart
+            guard let end = Calendar.current.date(byAdding: .day, value: 6, to: start) else { return "" }
+            let startStr = start.formatted(.dateTime.month(.abbreviated).day())
+            let cal = Calendar.current
+            let sameMonth = cal.component(.month, from: start) == cal.component(.month, from: end)
+            let endStr = sameMonth
+                ? "\(cal.component(.day, from: end))"
+                : end.formatted(.dateTime.month(.abbreviated).day())
+            return "\(startStr) – \(endStr)"
+        case .month:
+            return selectedDate.formatted(.dateTime.month(.wide).year())
+        }
+    }
+
+    private func navigate(by step: Int) {
+        let cal = Calendar.current
+        let component: Calendar.Component
+        switch viewMode {
+        case .day: component = .day
+        case .week: component = .weekOfYear
+        case .month: component = .month
+        }
+        selectedDate = cal.date(byAdding: component, value: step, to: selectedDate) ?? selectedDate
+    }
+
+    private func navigateToEvent(_ event: ScheduleEvent) {
+        guard let id = event.modelID else { return }
+        switch event.type {
+        case .reminder: router.navigate(to: BarnRoute.reminderEdit(id), tab: .schedule)
+        case .lesson: router.navigate(to: BarnRoute.lessonEdit(id), tab: .schedule)
+        case .vet: router.navigate(to: BarnRoute.vetSchedule, tab: .schedule)
+        case .farrier: router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule)
+        }
+    }
+
+    // MARK: - iOS Calendar
 
     #if os(iOS)
-    private var upcomingReminders: [Reminder] { Array(incompleteReminders.prefix(5)) }
 
-    private var upcomingVetRecords: [VetRecord] {
-        vetRecords
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
+    private var iOSCalendar: some View {
+        VStack(spacing: 0) {
+            calendarControlBar
+            Divider()
+            calendarContent
+                .frame(maxHeight: .infinity)
+        }
+        .background(Color.barnOffWhite)
     }
 
-    private var upcomingFarrierVisits: [FarrierVisit] {
-        farrierVisits
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
-    }
+    private var calendarControlBar: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Button { navigate(by: -1) } label: {
+                    Image(systemName: "chevron.left")
+                        .frame(width: 44, height: 36)
+                }
+                .buttonStyle(.plain)
 
-    private var upcomingLessons: [Lesson] {
-        allLessons
-            .filter { $0.nextDate != nil }
-            .sorted { ($0.nextDate ?? .distantFuture) < ($1.nextDate ?? .distantFuture) }
-    }
+                Spacer()
 
-    private var iosList: some View {
-        List {
-            Section {
-                NavigationLink(value: BarnRoute.reminders) {
-                    Label("Reminders", systemImage: "bell.fill")
+                Text(calendarTitle)
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(1)
+
+                Spacer()
+
+                Button("Today") { selectedDate = .now }
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(Color.barnGreen)
+                    .buttonStyle(.plain)
+                    .padding(.trailing, 4)
+
+                Button { navigate(by: 1) } label: {
+                    Image(systemName: "chevron.right")
+                        .frame(width: 44, height: 36)
                 }
-                NavigationLink(value: BarnRoute.vetSchedule) {
-                    Label("Vet Schedule", systemImage: "cross.case.fill")
-                }
-                NavigationLink(value: BarnRoute.farrierSchedule) {
-                    Label("Farrier Schedule", systemImage: "hammer.fill")
-                }
-                NavigationLink(value: BarnRoute.barnNotes) {
-                    Label("Barn Notes", systemImage: "note.text")
-                }
-                NavigationLink(value: BarnRoute.lessons) {
-                    Label("Lessons", systemImage: "book.fill")
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 8)
+
+            Picker("View", selection: $viewMode) {
+                ForEach(CalendarViewMode.allCases, id: \.self) { mode in
+                    Text(mode.rawValue).tag(mode)
                 }
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 16)
+        }
+        .padding(.vertical, 10)
+        .background(Color.systemBackground)
+    }
 
-            Section("Upcoming Reminders") {
-                if upcomingReminders.isEmpty {
-                    EmptyStateView(icon: "bell.slash", title: "No Reminders", subtitle: "All caught up!")
-                } else {
-                    ForEach(upcomingReminders) { reminder in
-                        NavigationLink(value: BarnRoute.reminderEdit(reminder.persistentModelID)) {
-                            reminderRow(reminder)
+    @ViewBuilder
+    private var calendarContent: some View {
+        switch viewMode {
+        case .month:
+            CalendarMonthView(
+                eventsByDay: eventsByDay,
+                monthStart: monthStart,
+                selectedDate: selectedDate,
+                onDateSelected: { selectedDate = $0 },
+                onEventTapped: navigateToEvent
+            )
+        case .week:
+            CalendarWeekView(
+                eventsByDay: eventsByDay,
+                weekStart: weekStart,
+                selectedDate: selectedDate,
+                onDateSelected: { date in selectedDate = date; viewMode = .day },
+                onEventTapped: navigateToEvent
+            )
+        case .day:
+            CalendarDayView(
+                events: eventsForDay(selectedDate),
+                date: selectedDate,
+                onEventTapped: navigateToEvent
+            )
+        }
+    }
+
+    private var categoriesMenu: some View {
+        Menu {
+            Button { router.navigate(to: BarnRoute.reminders, tab: .schedule) } label: {
+                Label("Reminders", systemImage: "bell.fill")
+            }
+            Button { router.navigate(to: BarnRoute.vetSchedule, tab: .schedule) } label: {
+                Label("Vet Schedule", systemImage: "cross.case.fill")
+            }
+            Button { router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule) } label: {
+                Label("Farrier Schedule", systemImage: "hammer.fill")
+            }
+            Button { router.navigate(to: BarnRoute.barnNotes, tab: .schedule) } label: {
+                Label("Barn Notes", systemImage: "note.text")
+            }
+            Button { router.navigate(to: BarnRoute.lessons, tab: .schedule) } label: {
+                Label("Lessons", systemImage: "book.fill")
+            }
+        } label: {
+            Image(systemName: "line.3.horizontal")
+        }
+    }
+
+    private var addEventMenu: some View {
+        Menu {
+            Button { router.navigate(to: BarnRoute.reminderEdit(nil), tab: .schedule) } label: {
+                Label("Reminder", systemImage: "bell.fill")
+            }
+            Button { router.navigate(to: BarnRoute.addVetRecord, tab: .schedule) } label: {
+                Label("Vet Appointment", systemImage: "cross.case.fill")
+            }
+            Button { router.navigate(to: BarnRoute.addFarrierVisit, tab: .schedule) } label: {
+                Label("Farrier Visit", systemImage: "hammer.fill")
+            }
+            Button { router.navigate(to: BarnRoute.lessonEdit(nil), tab: .schedule) } label: {
+                Label("Lesson", systemImage: "book.fill")
+            }
+        } label: {
+            Image(systemName: "plus")
+        }
+    }
+
+    #endif
+
+    // MARK: - macOS Calendar
+
+    #if os(macOS)
+
+    private var macOSCalendar: some View {
+        VStack(spacing: 0) {
+            macOSCalendarHeader
+            Divider()
+            macOSCalendarContent
+        }
+        .background(Color.barnOffWhite)
+    }
+
+    private var macOSCalendarHeader: some View {
+        HStack(spacing: 12) {
+            Button { navigate(by: -1) } label: {
+                Image(systemName: "chevron.left").font(.subheadline.weight(.semibold))
+            }
+            .buttonStyle(.plain)
+
+            Text(calendarTitle)
+                .font(.title3.weight(.semibold))
+                .frame(minWidth: 180)
+
+            Button { navigate(by: 1) } label: {
+                Image(systemName: "chevron.right").font(.subheadline.weight(.semibold))
+            }
+            .buttonStyle(.plain)
+
+            Button("Today") { selectedDate = .now }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+
+            Spacer()
+
+            Picker("View", selection: $viewMode) {
+                ForEach(CalendarViewMode.allCases, id: \.self) { mode in
+                    Text(mode.rawValue).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 180)
+
+            if viewMode == .month {
+                HStack(spacing: 12) {
+                    ForEach(ScheduleEventType.allCases, id: \.self) { type in
+                        HStack(spacing: 4) {
+                            Circle().fill(type.color).frame(width: 8, height: 8)
+                            Text(type.label).font(.caption).foregroundStyle(.secondary)
                         }
-                    }
-                }
-            }
-
-            Section {
-                if upcomingVetRecords.isEmpty {
-                    EmptyStateView(icon: "cross.case", title: "No Upcoming Vet Visits", subtitle: "No scheduled vet appointments.")
-                } else {
-                    ForEach(upcomingVetRecords.prefix(5)) { record in
-                        scheduleRow(horseName: record.horse?.name ?? "Unknown Horse", providerName: record.vetName, nextDueDate: record.nextDueDate)
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Next Vet Appointments")
-                    Spacer()
-                    NavigationLink(value: BarnRoute.addVetRecord) {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.barnGreen)
-                    }
-                }
-            }
-
-            Section {
-                if upcomingFarrierVisits.isEmpty {
-                    EmptyStateView(icon: "hammer", title: "No Upcoming Farrier Visits", subtitle: "No scheduled farrier appointments.")
-                } else {
-                    ForEach(upcomingFarrierVisits.prefix(5)) { visit in
-                        scheduleRow(horseName: visit.horse?.name ?? "Unknown Horse", providerName: visit.farrierName, nextDueDate: visit.nextDueDate)
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Next Farrier Visits")
-                    Spacer()
-                    NavigationLink(value: BarnRoute.addFarrierVisit) {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.barnGreen)
-                    }
-                }
-            }
-
-            Section {
-                if upcomingLessons.isEmpty {
-                    EmptyStateView(icon: "book", title: "No Upcoming Lessons", subtitle: "No scheduled lessons.")
-                } else {
-                    ForEach(upcomingLessons.prefix(5)) { lesson in
-                        NavigationLink(value: BarnRoute.lessonEdit(lesson.persistentModelID)) {
-                            lessonRow(lesson)
-                        }
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Upcoming Lessons")
-                    Spacer()
-                    NavigationLink(value: BarnRoute.lessonEdit(nil)) {
-                        Image(systemName: "plus.circle.fill").foregroundStyle(Color.barnGreen)
                     }
                 }
             }
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
     }
-    #endif
 
-    // MARK: - macOS: Calendar View
-
-    #if os(macOS)
-    private var macOSCalendar: some View {
-        VStack(spacing: 0) {
-            calendarHeader
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-
-            Divider()
-
+    @ViewBuilder
+    private var macOSCalendarContent: some View {
+        switch viewMode {
+        case .month:
             HStack(spacing: 0) {
-                calendarGrid
-                    .frame(maxWidth: .infinity)
+                CalendarMonthView(
+                    eventsByDay: eventsByDay,
+                    monthStart: monthStart,
+                    selectedDate: selectedDate,
+                    onDateSelected: { selectedDate = $0 },
+                    onEventTapped: navigateToEvent,
+                    showEventsList: false
+                )
+                .frame(maxWidth: .infinity)
 
                 Divider()
 
                 dayDetailPanel
                     .frame(width: 280)
             }
-        }
-        .background(Color.barnOffWhite)
-    }
-
-    // MARK: Header
-
-    private var calendarHeader: some View {
-        HStack(spacing: 12) {
-            Button { shiftMonth(-1) } label: {
-                Image(systemName: "chevron.left")
-                    .font(.subheadline.weight(.semibold))
-            }
-            .buttonStyle(.plain)
-
-            Text(monthYearString)
-                .font(.title3.weight(.semibold))
-                .frame(minWidth: 160)
-
-            Button { shiftMonth(1) } label: {
-                Image(systemName: "chevron.right")
-                    .font(.subheadline.weight(.semibold))
-            }
-            .buttonStyle(.plain)
-
-            Button("Today") {
-                displayedMonth = Date.now
-                selectedDate = Date.now
-            }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-
-            Spacer()
-
-            // Color legend
-            HStack(spacing: 12) {
-                ForEach(ScheduleEventType.allCases, id: \.self) { type in
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(type.color)
-                            .frame(width: 8, height: 8)
-                        Text(type.label)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
+        case .week:
+            CalendarWeekView(
+                eventsByDay: eventsByDay,
+                weekStart: weekStart,
+                selectedDate: selectedDate,
+                onDateSelected: { date in selectedDate = date; viewMode = .day },
+                onEventTapped: navigateToEvent
+            )
+        case .day:
+            CalendarDayView(
+                events: eventsForDay(selectedDate),
+                date: selectedDate,
+                onEventTapped: navigateToEvent
+            )
         }
     }
 
-    private var monthYearString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: displayedMonth)
-    }
-
-    private func shiftMonth(_ delta: Int) {
-        guard let newDate = Calendar.current.date(byAdding: .month, value: delta, to: displayedMonth) else { return }
-        displayedMonth = newDate
-    }
-
-    // MARK: Calendar Grid
-
-    private var calendarGrid: some View {
-        let calendar = Calendar.current
-        let weeks = monthWeeks
-        let today = calendar.startOfDay(for: Date.now)
-        let selected = calendar.startOfDay(for: selectedDate)
-
-        return VStack(spacing: 0) {
-            // Day-of-week headers
-            HStack(spacing: 0) {
-                ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
-                    Text(day)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                }
-            }
-            .background(Color.barnCardBackground.opacity(0.5))
-
-            Divider()
-
-            // Week rows
-            ForEach(Array(weeks.enumerated()), id: \.offset) { _, week in
-                HStack(spacing: 0) {
-                    ForEach(Array(week.enumerated()), id: \.offset) { _, day in
-                        if let day {
-                            let isToday = day == today
-                            let isSelected = day == selected
-                            let dayEvents = eventsByDay[day] ?? []
-
-                            calendarCell(
-                                date: day,
-                                dayNumber: calendar.component(.day, from: day),
-                                isToday: isToday,
-                                isSelected: isSelected,
-                                events: dayEvents
-                            )
-                        } else {
-                            Color.clear
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 64)
-                        }
-                    }
-                }
-                Divider().opacity(0.3)
-            }
-
-            Spacer()
-        }
-    }
-
-    private func calendarCell(date: Date, dayNumber: Int, isToday: Bool, isSelected: Bool, events: [ScheduleEvent]) -> some View {
-        Button {
-            selectedDate = date
-        } label: {
-            VStack(spacing: 4) {
-                Text("\(dayNumber)")
-                    .font(.subheadline.weight(isToday ? .bold : .regular))
-                    .foregroundStyle(isToday ? .white : .primary)
-                    .frame(width: 26, height: 26)
-                    .background {
-                        if isToday {
-                            Circle().fill(Color.barnGreen)
-                        }
-                    }
-
-                // Event dots (max 4)
-                let uniqueTypes = Array(Set(events.map(\.type))).sorted { $0.rawValue < $1.rawValue }
-                if !uniqueTypes.isEmpty {
-                    HStack(spacing: 3) {
-                        ForEach(uniqueTypes.prefix(4), id: \.self) { type in
-                            Circle()
-                                .fill(type.color)
-                                .frame(width: 6, height: 6)
-                        }
-                    }
-                } else {
-                    Spacer().frame(height: 6)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 64)
-            .background {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.barnGreen.opacity(0.1))
-                }
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var monthWeeks: [[Date?]] {
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: displayedMonth)
-        guard let monthStart = calendar.date(from: components),
-              let range = calendar.range(of: .day, in: .month, for: monthStart) else { return [] }
-
-        let firstWeekday = calendar.component(.weekday, from: monthStart) // 1=Sun
-
-        var weeks: [[Date?]] = []
-        var week: [Date?] = Array(repeating: nil, count: firstWeekday - 1)
-
-        for day in range {
-            guard let date = calendar.date(byAdding: .day, value: day - 1, to: monthStart) else { continue }
-            week.append(date)
-            if week.count == 7 {
-                weeks.append(week)
-                week = []
-            }
-        }
-        if !week.isEmpty {
-            while week.count < 7 { week.append(nil) }
-            weeks.append(week)
-        }
-
-        return weeks
-    }
-
-    // MARK: Day Detail Panel
+    // MARK: Day Detail Panel (macOS month view)
 
     private var dayDetailPanel: some View {
-        let calendar = Calendar.current
-        let selected = calendar.startOfDay(for: selectedDate)
+        let cal = Calendar.current
+        let selected = cal.startOfDay(for: selectedDate)
         let dayEvents = (eventsByDay[selected] ?? []).sorted { $0.date < $1.date }
 
         return VStack(alignment: .leading, spacing: 0) {
-            // Date header
             VStack(alignment: .leading, spacing: 2) {
                 Text(selectedDate.formatted(.dateTime.weekday(.wide)))
                     .font(.caption)
@@ -489,7 +472,7 @@ struct BarnDashboardView: View {
                 ScrollView {
                     VStack(spacing: 2) {
                         ForEach(dayEvents) { event in
-                            eventRow(event)
+                            macOSEventRow(event)
                         }
                     }
                     .padding(.vertical, 8)
@@ -498,7 +481,6 @@ struct BarnDashboardView: View {
 
             Divider()
 
-            // Add event menu
             Menu {
                 Button { router.navigate(to: BarnRoute.reminderEdit(nil), tab: .schedule) } label: {
                     Label("Reminder", systemImage: "bell.fill")
@@ -529,114 +511,9 @@ struct BarnDashboardView: View {
         .background(Color.barnCardBackground)
     }
 
-    private func eventRow(_ event: ScheduleEvent) -> some View {
-        Button {
-            navigateToEvent(event)
-        } label: {
-            HStack(spacing: 10) {
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(event.type.color)
-                    .frame(width: 4, height: 36)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(event.title)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.primary)
-                    if let subtitle = event.subtitle {
-                        Text(subtitle)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-
-                Image(systemName: event.type.icon)
-                    .font(.caption)
-                    .foregroundStyle(event.type.color)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 6)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
+    private func macOSEventRow(_ event: ScheduleEvent) -> some View {
+        ScheduleEventRow(event: event, onTap: { navigateToEvent(event) }, showTime: false, verticalPadding: 6)
     }
 
-
-    private func navigateToEvent(_ event: ScheduleEvent) {
-        guard let id = event.modelID else { return }
-        switch event.type {
-        case .reminder:
-            router.navigate(to: BarnRoute.reminderEdit(id), tab: .schedule)
-        case .lesson:
-            router.navigate(to: BarnRoute.lessonEdit(id), tab: .schedule)
-        case .vet:
-            router.navigate(to: BarnRoute.vetSchedule, tab: .schedule)
-        case .farrier:
-            router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule)
-        }
-    }
     #endif
-
-    // MARK: - Shared Row Views
-
-    private func reminderRow(_ reminder: Reminder) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(reminder.title)
-                    .font(.subheadline.weight(.medium))
-                if let horse = reminder.horse {
-                    Text(horse.name)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
-            Text(reminder.dueDate.shortFormatted)
-                .font(.caption)
-                .foregroundStyle(reminder.dueDate.isOverdue ? .red : .secondary)
-        }
-    }
-
-    private func scheduleRow(horseName: String, providerName: String, nextDueDate: Date?) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(horseName)
-                    .font(.subheadline.weight(.medium))
-                Text(providerName)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            if let nextDue = nextDueDate {
-                Text(nextDue.shortFormatted)
-                    .font(.caption)
-                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-            }
-        }
-    }
-
-    private func lessonRow(_ lesson: Lesson) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(lesson.client?.fullName ?? "No Client")
-                    .font(.subheadline.weight(.medium))
-                HStack(spacing: 4) {
-                    Text(lesson.lessonType.displayName)
-                        .font(.caption)
-                    if let horse = lesson.horse {
-                        Text("on \(horse.name)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            Spacer()
-            if let nextDate = lesson.nextDate {
-                Text(nextDate.shortFormatted)
-                    .font(.caption)
-                    .foregroundStyle(nextDate.isOverdue ? .red : .secondary)
-            }
-        }
-    }
 }
