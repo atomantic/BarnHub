@@ -9,6 +9,9 @@ struct SyncIndicatorView: View {
             .foregroundStyle(iconColor)
             .symbolEffect(.pulse, isActive: syncMonitor.status == .syncing)
             .accessibilityLabel(syncMonitor.status.label)
+            #if os(macOS)
+            .padding(.leading, 4)
+            #endif
     }
 
     private var iconColor: Color {
