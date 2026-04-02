@@ -220,7 +220,7 @@ struct HomeView: View {
                 }
             }
             #if os(macOS)
-            .padding(.bottom, 30)
+            .padding(.bottom, 44)
             #else
             .padding(.bottom, 50)
             #endif
