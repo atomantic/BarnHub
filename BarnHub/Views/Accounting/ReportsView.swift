@@ -28,6 +28,9 @@ struct ReportsView: View {
                 } else {
                     incomeExpenseChart(data: data)
                     if showFullReports {
+                        #if os(macOS)
+                        macOSChartsLayout(data: data)
+                        #else
                         if data.monthlyTotals.count > 1 {
                             monthlyTrendChart(data: data)
                         }
@@ -37,17 +40,57 @@ struct ReportsView: View {
                         if !data.incomeByCategory.isEmpty {
                             categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
                         }
+                        #endif
                     } else {
                         lockedSection
                     }
                 }
             }
             .padding()
+            #if os(macOS)
+            .frame(maxWidth: 960)
+            .frame(maxWidth: .infinity)
+            #endif
         }
         .background(Color.barnOffWhite)
         .navigationTitle("Reports")
         .inlineNavTitle()
     }
+
+    #if os(macOS)
+    @ViewBuilder
+    private func macOSChartsLayout(data: ReportData) -> some View {
+        let hasTrend = data.monthlyTotals.count > 1
+        let hasCategories = !data.expensesByCategory.isEmpty || !data.incomeByCategory.isEmpty
+
+        if hasTrend && hasCategories {
+            HStack(alignment: .top, spacing: 16) {
+                monthlyTrendChart(data: data)
+                    .frame(maxWidth: .infinity)
+
+                VStack(spacing: 16) {
+                    if !data.expensesByCategory.isEmpty {
+                        categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
+                    }
+                    if !data.incomeByCategory.isEmpty {
+                        categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+        } else {
+            if hasTrend {
+                monthlyTrendChart(data: data)
+            }
+            if !data.expensesByCategory.isEmpty {
+                categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
+            }
+            if !data.incomeByCategory.isEmpty {
+                categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+            }
+        }
+    }
+    #endif
 
     // MARK: - Period Picker
 

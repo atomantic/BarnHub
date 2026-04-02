@@ -13,10 +13,17 @@ struct SyncIndicatorView: View {
 
     private var iconColor: Color {
         switch syncMonitor.status {
+        #if os(macOS)
+        case .succeeded: .secondary
+        case .syncing: .accentColor
+        case .failed: .red
+        case .idle, .notAvailable: .secondary.opacity(0.5)
+        #else
         case .succeeded: .white.opacity(0.8)
         case .syncing: .white
         case .failed: .red
         case .idle, .notAvailable: .white.opacity(0.5)
+        #endif
         }
     }
 }
