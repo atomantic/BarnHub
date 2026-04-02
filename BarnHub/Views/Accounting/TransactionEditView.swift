@@ -60,6 +60,11 @@ struct TransactionEditView: View {
         }
         .navigationTitle(isNew ? "New Transaction" : "Edit Transaction")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

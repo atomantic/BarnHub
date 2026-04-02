@@ -115,6 +115,11 @@ struct HorseEditView: View {
         }
         .navigationTitle(isNew ? "New Horse" : "Edit Horse")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toast(toast)
         .task { loadExisting() }
         .onChange(of: selectedPhoto) { _, newItem in

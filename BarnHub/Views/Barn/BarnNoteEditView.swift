@@ -38,6 +38,11 @@ struct BarnNoteEditView: View {
         }
         .navigationTitle(isNew ? "New Note" : "Edit Note")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

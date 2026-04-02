@@ -58,6 +58,11 @@ struct SupplyEditView: View {
         }
         .navigationTitle(isNew ? "New Supply" : "Edit Supply")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

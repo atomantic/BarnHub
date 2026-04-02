@@ -553,18 +553,18 @@ struct BarnDashboardView: View {
 
     private func addButton(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            VStack(spacing: 2) {
+            HStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.caption2)
-                    .foregroundStyle(color)
                 Text(label)
-                    .font(.system(size: 9))
-                    .foregroundStyle(.secondary)
+                    .font(.caption2)
             }
+            .foregroundStyle(color)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
+            .padding(.vertical, 6)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.bordered)
+        .tint(color)
     }
 
     private func navigateToEvent(_ event: ScheduleEvent) {

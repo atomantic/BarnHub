@@ -72,6 +72,11 @@ struct LessonEditView: View {
         }
         .navigationTitle(isNew ? "New Lesson" : "Edit Lesson")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {
