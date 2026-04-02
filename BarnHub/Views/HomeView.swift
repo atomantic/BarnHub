@@ -13,13 +13,6 @@ enum BalancePeriod: Int, CaseIterable, Identifiable {
         case .allTime: "All Time"
         }
     }
-
-    var shortLabel: String {
-        switch self {
-        case .thisMonth: "This Month"
-        case .allTime: "All Time"
-        }
-    }
 }
 
 struct HomeView: View {
@@ -44,11 +37,20 @@ struct HomeView: View {
     @Query(sort: \Lesson.date) private var lessons: [Lesson]
     @Query private var supplyItems: [SupplyItem]
 
+    #if os(macOS)
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
+    #else
     private let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
+    #endif
 
     private var monthlyBalance: Double {
         let calendar = Calendar.current
@@ -143,7 +145,11 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 headerSection
                 Spacer()
+                    #if os(macOS)
+                    .frame(height: 12)
+                    #else
                     .frame(height: 20)
+                    #endif
                 if !storeService.isPro {
                     upgradeBar
                 }
@@ -160,16 +166,20 @@ struct HomeView: View {
         .ignoresSafeArea(edges: .top)
         .toolbar {
             ToolbarItem(placement: .trailingBar) {
-                HStack(spacing: 16) {
-                    SyncIndicatorView()
-                    Button {
-                        router.navigate(to: HomeRoute.settings)
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundStyle(.white)
-                    }
-                    .accessibilityLabel("Settings")
+                SyncIndicatorView()
+            }
+            ToolbarItem(placement: .trailingBar) {
+                Button {
+                    router.navigate(to: HomeRoute.settings)
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        #if os(macOS)
+                        .foregroundStyle(.secondary)
+                        #else
+                        .foregroundStyle(.white)
+                        #endif
                 }
+                .accessibilityLabel("Settings")
             }
         }
     }
@@ -177,20 +187,33 @@ struct HomeView: View {
     private var headerSection: some View {
         ZStack(alignment: .bottom) {
             Color.barnGreen
+                #if os(macOS)
+                .frame(height: 150)
+                #else
                 .frame(height: 260)
+                #endif
 
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
+                    #if os(macOS)
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    #else
                     .frame(width: 80, height: 80)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
+                    #endif
                     .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
                     .accessibilityLabel("BarnHub logo")
 
                 HStack(spacing: 8) {
                     Text("BarnHub")
+                        #if os(macOS)
+                        .font(.title3.weight(.bold))
+                        #else
                         .font(.title.weight(.bold))
+                        #endif
                         .fontDesign(.rounded)
                         .foregroundStyle(.white)
                     if storeService.isPro {
@@ -198,11 +221,19 @@ struct HomeView: View {
                     }
                 }
             }
+            #if os(macOS)
+            .padding(.bottom, 30)
+            #else
             .padding(.bottom, 50)
+            #endif
 
             SwooshShape()
                 .fill(Color.barnOffWhite)
+                #if os(macOS)
+                .frame(height: 28)
+                #else
                 .frame(height: 50)
+                #endif
         }
     }
 
@@ -371,7 +402,12 @@ struct HomeView: View {
         let clientCount = activeClients.count
         let stockAlert = lowStockCount
 
-        return LazyVGrid(columns: columns, spacing: 20) {
+        #if os(macOS)
+        let vSpacing: CGFloat = 12
+        #else
+        let vSpacing: CGFloat = 20
+        #endif
+        return LazyVGrid(columns: columns, spacing: vSpacing) {
             FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: "\(horseCount) \(horseCount == 1 ? "Horse" : "Horses")") {
                 router.switchTab(.horses)
             }
@@ -384,7 +420,7 @@ struct HomeView: View {
             FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil) {
                 router.navigate(to: HomeRoute.supplies)
             }
-            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.shortLabel) {
+            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.displayName) {
                 router.switchTab(.accounting)
             }
             FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
@@ -408,17 +444,27 @@ struct FeatureTile: View {
     var badgeDetail: String? = nil
     let action: () -> Void
 
+    #if os(macOS)
+    private var tileSpacing: CGFloat { 6 }
+    private var tileRadius: CGFloat { 10 }
+    private var tileIconFont: Font { .body }
+    #else
+    private var tileSpacing: CGFloat { 10 }
+    private var tileRadius: CGFloat { 16 }
+    private var tileIconFont: Font { .title }
+    #endif
+
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 10) {
+            VStack(spacing: tileSpacing) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: tileRadius)
                         .fill(.barnCardBackground)
                         .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
 
                     VStack(spacing: 4) {
                         Image(systemName: icon)
-                            .font(.title)
+                            .font(tileIconFont)
                             .foregroundStyle(color)
                         if let badge {
                             Text(badge)
@@ -435,7 +481,11 @@ struct FeatureTile: View {
                         }
                     }
                 }
+                #if os(macOS)
+                .frame(height: 72)
+                #else
                 .aspectRatio(1, contentMode: .fit)
+                #endif
 
                 Text(title)
                     .font(.caption.weight(.semibold))
