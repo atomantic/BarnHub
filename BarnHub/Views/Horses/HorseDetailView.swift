@@ -54,11 +54,11 @@ struct HorseDetailView: View {
     @ViewBuilder
     private func horseContent(_ horse: Horse) -> some View {
         List {
-            if let photoData = horse.photoData, let uiImage = UIImage(data: photoData) {
+            if let photoData = horse.photoData, let image = Image(photoData: photoData) {
                 Section {
                     HStack {
                         Spacer()
-                        Image(uiImage: uiImage)
+                        image
                             .resizable()
                             .scaledToFill()
                             .frame(width: 160, height: 160)
@@ -204,9 +204,9 @@ struct HorseDetailView: View {
             }
         }
         .navigationTitle(horse.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingBar) {
                 Menu {
                     Button {
                         router.navigate(to: HorseRoute.edit(horseID))

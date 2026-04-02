@@ -58,7 +58,7 @@ struct TransactionListView: View {
             }
         }
         .navigationTitle("Transactions")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

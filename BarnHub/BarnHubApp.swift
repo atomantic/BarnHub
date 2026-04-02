@@ -1,6 +1,32 @@
 import SwiftUI
 import SwiftData
 
+#if os(macOS)
+@MainActor
+final class BarnHubMacAppDelegate: NSObject, NSApplicationDelegate {
+    static var reopenWindow: (() -> Void)?
+
+    nonisolated func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+
+    nonisolated func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag {
+            DispatchQueue.main.async { Self.showOrCreateMainWindow() }
+        }
+        return true
+    }
+
+    static func showOrCreateMainWindow() {
+        for window in NSApp.windows where window.canBecomeMain {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        reopenWindow?()
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
+#endif
+
 @main
 struct BarnHubApp: App {
     @State private var router = Router()
@@ -8,6 +34,10 @@ struct BarnHubApp: App {
     @State private var appearanceManager = AppearanceManager()
     @State private var notificationService = NotificationService()
     @State private var syncMonitor = SyncMonitor()
+
+    #if os(macOS)
+    @NSApplicationDelegateAdaptor(BarnHubMacAppDelegate.self) private var appDelegate
+    #endif
 
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
@@ -45,7 +75,7 @@ struct BarnHubApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView()
                 .preferredColorScheme(appearanceManager.colorScheme)
                 .environment(router)
@@ -59,17 +89,42 @@ struct BarnHubApp: App {
                 .task {
                     await notificationService.requestAuthorization()
                 }
+                #if os(macOS)
+                .onAppear {
+                    BarnHubMacAppDelegate.reopenWindow = nil
+                }
+                #endif
         }
         .modelContainer(modelContainer)
-        #if targetEnvironment(macCatalyst)
+        #if os(macOS)
+        .defaultSize(width: 1200, height: 800)
+        .commands {
+            CommandGroup(replacing: .appTermination) {
+                Button("Quit BarnHub") { NSApplication.shared.terminate(nil) }
+                    .keyboardShortcut("q", modifiers: .command)
+            }
+        }
+        #elseif targetEnvironment(macCatalyst)
         .defaultSize(width: 1024, height: 768)
+        #endif
+
+        #if os(macOS)
+        Settings {
+            SettingsView()
+                .environment(storeService)
+                .environment(appearanceManager)
+                .environment(syncMonitor)
+                .modelContainer(modelContainer)
+        }
         #endif
     }
 }
 
 struct ContentView: View {
     @Environment(Router.self) private var router
+    #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     @Environment(NotificationService.self) private var notificationService
     @Environment(\.modelContext) private var modelContext
 
@@ -81,60 +136,15 @@ struct ContentView: View {
     var body: some View {
         @Bindable var router = router
         Group {
+            #if os(macOS)
+            sidebarLayout
+            #else
             if sizeClass == .regular {
-                NavigationSplitView {
-                    List(selection: sidebarSelection) {
-                        ForEach(Router.AppTab.allCases, id: \.self) { tab in
-                            Label(tab.title, systemImage: tab.icon)
-                                .tag(tab)
-                        }
-                    }
-                    .navigationTitle("BarnHub")
-                    .listStyle(.sidebar)
-                } detail: {
-                    sidebarDetailView
-                        .id(router.selectedTab)
-                }
-                .tint(.barnGreen)
+                sidebarLayout
             } else {
-                TabView(selection: $router.selectedTab) {
-                    NavigationStack(path: $router.homePath) {
-                        HomeView()
-                            .withRouteDestinations()
-                    }
-                    .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
-                    .tag(Router.AppTab.home)
-
-                    NavigationStack(path: $router.horsesPath) {
-                        HorseListView()
-                            .withRouteDestinations()
-                    }
-                    .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
-                    .tag(Router.AppTab.horses)
-
-                    NavigationStack(path: $router.clientsPath) {
-                        ClientListView()
-                            .withRouteDestinations()
-                    }
-                    .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
-                    .tag(Router.AppTab.clients)
-
-                    NavigationStack(path: $router.schedulePath) {
-                        BarnDashboardView()
-                            .withRouteDestinations()
-                    }
-                    .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
-                    .tag(Router.AppTab.schedule)
-
-                    NavigationStack(path: $router.accountingPath) {
-                        AccountingDashboardView()
-                            .withRouteDestinations()
-                    }
-                    .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
-                    .tag(Router.AppTab.accounting)
-                }
-                .tint(.barnGreen)
+                tabBarLayout
             }
+            #endif
         }
         .task {
             notificationService.scheduleAllPending(context: modelContext)
@@ -146,6 +156,69 @@ struct ContentView: View {
             notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
         }
     }
+
+    @ViewBuilder
+    private var sidebarLayout: some View {
+        @Bindable var router = router
+        NavigationSplitView {
+            List(selection: sidebarSelection) {
+                ForEach(Router.AppTab.allCases, id: \.self) { tab in
+                    Label(tab.title, systemImage: tab.icon)
+                        .tag(tab)
+                }
+            }
+            .navigationTitle("BarnHub")
+            .listStyle(.sidebar)
+        } detail: {
+            sidebarDetailView
+                .id(router.selectedTab)
+        }
+        .tint(.barnGreen)
+    }
+
+    #if os(iOS)
+    @ViewBuilder
+    private var tabBarLayout: some View {
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
+            NavigationStack(path: $router.homePath) {
+                HomeView()
+                    .withRouteDestinations()
+            }
+            .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
+            .tag(Router.AppTab.home)
+
+            NavigationStack(path: $router.horsesPath) {
+                HorseListView()
+                    .withRouteDestinations()
+            }
+            .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
+            .tag(Router.AppTab.horses)
+
+            NavigationStack(path: $router.clientsPath) {
+                ClientListView()
+                    .withRouteDestinations()
+            }
+            .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
+            .tag(Router.AppTab.clients)
+
+            NavigationStack(path: $router.schedulePath) {
+                BarnDashboardView()
+                    .withRouteDestinations()
+            }
+            .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
+            .tag(Router.AppTab.schedule)
+
+            NavigationStack(path: $router.accountingPath) {
+                AccountingDashboardView()
+                    .withRouteDestinations()
+            }
+            .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
+            .tag(Router.AppTab.accounting)
+        }
+        .tint(.barnGreen)
+    }
+    #endif
 
     private var sidebarSelection: Binding<Router.AppTab?> {
         Binding(

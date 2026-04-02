@@ -29,7 +29,7 @@ struct SupplyEditView: View {
                     Text("Quantity")
                     Spacer()
                     TextField("0", value: $quantity, format: .number)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                 }
                 TextField("Unit (e.g., lbs, bags)", text: $unit)
@@ -37,7 +37,7 @@ struct SupplyEditView: View {
                     Text("Reorder Threshold")
                     Spacer()
                     TextField("0", value: $reorderThreshold, format: .number)
-                        .keyboardType(.decimalPad)
+                        .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                 }
             }
@@ -57,7 +57,7 @@ struct SupplyEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Supply" : "Edit Supply")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

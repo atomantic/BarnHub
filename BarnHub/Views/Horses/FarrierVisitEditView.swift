@@ -56,7 +56,7 @@ struct FarrierVisitEditView: View {
             }
         }
         .navigationTitle("New Farrier Visit")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toast(toast)
     }
 

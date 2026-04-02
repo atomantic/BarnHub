@@ -16,7 +16,7 @@ struct CurrencyField: View {
             Text(label)
             Spacer()
             TextField("$0.00", value: $value, formatter: formatter)
-                .keyboardType(.decimalPad)
+                .decimalKeyboard()
                 .multilineTextAlignment(.trailing)
         }
     }

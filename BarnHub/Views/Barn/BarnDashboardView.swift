@@ -152,7 +152,7 @@ struct BarnDashboardView: View {
             }
         }
         .navigationTitle("Schedule")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
     }
 
     private func reminderRow(_ reminder: Reminder) -> some View {

@@ -53,7 +53,7 @@ struct InvoiceHistoryView: View {
             }
         }
         .navigationTitle("Invoice History")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toast(toast)
         .sheet(isPresented: $showShareSheet) {
             if let url = selectedPDFURL {

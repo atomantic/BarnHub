@@ -13,11 +13,34 @@ extension Color {
                                            dark: Color(red: 44/255, green: 44/255, blue: 46/255))
 
     init(light: Color, dark: Color) {
+#if os(iOS) || targetEnvironment(macCatalyst)
         let lightUI = UIColor(light)
         let darkUI = UIColor(dark)
         self.init(uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark ? darkUI : lightUI
         })
+#else
+        self.init(nsColor: NSColor(name: nil) { appearance in
+            let isDark = appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            return isDark ? NSColor(dark) : NSColor(light)
+        })
+#endif
+    }
+
+    static var systemBackground: Color {
+#if os(iOS) || targetEnvironment(macCatalyst)
+        Color(UIColor.systemBackground)
+#else
+        Color(NSColor.windowBackgroundColor)
+#endif
+    }
+
+    static var secondarySystemBackground: Color {
+#if os(iOS) || targetEnvironment(macCatalyst)
+        Color(UIColor.secondarySystemBackground)
+#else
+        Color(NSColor.controlBackgroundColor)
+#endif
     }
 }
 

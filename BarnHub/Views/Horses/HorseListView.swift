@@ -36,17 +36,17 @@ struct HorseListView: View {
             }
         }
         .navigationTitle("Horses")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search horses")
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingBar) {
                 Button {
                     router.navigate(to: HorseRoute.edit(nil))
                 } label: {
                     Image(systemName: "plus")
                 }
             }
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .leadingBar) {
                 Toggle(isOn: $showInactive) {
                     Label("Show Inactive", systemImage: "eye")
                 }

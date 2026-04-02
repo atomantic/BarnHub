@@ -85,7 +85,7 @@ struct InvoiceGeneratorView: View {
                 }
             }
             .navigationTitle("Generate Invoice")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }

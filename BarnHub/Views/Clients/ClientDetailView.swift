@@ -190,7 +190,7 @@ struct ClientDetailView: View {
             }
         }
         .navigationTitle(client.fullName)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .sheet(isPresented: $showInvoiceGenerator) {
             InvoiceGeneratorView(clientID: clientID)
         }
@@ -198,7 +198,7 @@ struct ClientDetailView: View {
             ContractGeneratorView(clientID: clientID)
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingBar) {
                 Menu {
                     Button {
                         router.navigate(to: ClientRoute.edit(clientID))

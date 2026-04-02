@@ -22,7 +22,7 @@ struct PaywallView: View {
             .padding(.bottom, 32)
         }
         .navigationTitle("BarnHub Pro")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toast(toast)
         .task {
             if storeService.products.isEmpty {
@@ -66,7 +66,7 @@ struct PaywallView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(Color.systemBackground)
                 .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
         )
     }
@@ -86,7 +86,7 @@ struct PaywallView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(Color(.secondarySystemBackground))
+        .background(Color.secondarySystemBackground)
     }
 
     private func comparisonRow(_ feature: String, free: Bool, pro: Bool) -> some View {

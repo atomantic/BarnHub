@@ -74,7 +74,7 @@ struct ContractGeneratorView: View {
                 }
             }
             .navigationTitle("Generate Contract")
-            .navigationBarTitleDisplayMode(.inline)
+            .inlineNavTitle()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }

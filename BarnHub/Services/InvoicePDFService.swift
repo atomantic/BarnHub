@@ -1,4 +1,5 @@
 import Foundation
+#if os(iOS) || targetEnvironment(macCatalyst)
 import UIKit
 
 struct InvoicePDFService {
@@ -116,3 +117,24 @@ struct InvoicePDFService {
         context.strokePath()
     }
 }
+
+#else
+
+struct InvoicePDFService {
+    struct LineItem {
+        let date: Date
+        let description: String
+        let category: String
+        let amount: Double
+    }
+
+    static func generatePDF(
+        clientName: String,
+        startDate: Date,
+        endDate: Date,
+        lineItems: [LineItem],
+        total: Double
+    ) -> Data { Data() }
+}
+
+#endif

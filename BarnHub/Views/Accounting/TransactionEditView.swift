@@ -59,7 +59,7 @@ struct TransactionEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Transaction" : "Edit Transaction")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Save") {

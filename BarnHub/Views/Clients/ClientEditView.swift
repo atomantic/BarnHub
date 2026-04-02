@@ -29,18 +29,20 @@ struct ClientEditView: View {
 
             Section("Contact") {
                 TextField("Email", text: $email)
-                    .keyboardType(.emailAddress)
+                    .emailKeyboard()
                     .textContentType(.emailAddress)
-                    .autocapitalization(.none)
+                    #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                    #endif
                 TextField("Phone", text: $phone)
-                    .keyboardType(.phonePad)
+                    .phoneKeyboard()
                     .textContentType(.telephoneNumber)
             }
 
             Section("Emergency Contact") {
                 TextField("Contact Name", text: $emergencyContact)
                 TextField("Contact Phone", text: $emergencyPhone)
-                    .keyboardType(.phonePad)
+                    .phoneKeyboard()
             }
 
             Section("Notes") {
@@ -62,7 +64,7 @@ struct ClientEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Client" : "Edit Client")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toast(toast)
         .task { loadExisting() }
     }
