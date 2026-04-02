@@ -498,22 +498,33 @@ struct BarnDashboardView: View {
 
             Divider()
 
-            // Quick add buttons
-            HStack(spacing: 8) {
-                addButton("Reminder", icon: "bell.fill", color: .barnGreen) {
-                    router.navigate(to: BarnRoute.reminderEdit(nil), tab: .schedule)
+            // Add event menu
+            Menu {
+                Button { router.navigate(to: BarnRoute.reminderEdit(nil), tab: .schedule) } label: {
+                    Label("Reminder", systemImage: "bell.fill")
                 }
-                addButton("Vet", icon: "cross.case.fill", color: .red) {
-                    router.navigate(to: BarnRoute.addVetRecord, tab: .schedule)
+                Button { router.navigate(to: BarnRoute.addVetRecord, tab: .schedule) } label: {
+                    Label("Vet Appointment", systemImage: "cross.case.fill")
                 }
-                addButton("Farrier", icon: "hammer.fill", color: .orange) {
-                    router.navigate(to: BarnRoute.addFarrierVisit, tab: .schedule)
+                Button { router.navigate(to: BarnRoute.addFarrierVisit, tab: .schedule) } label: {
+                    Label("Farrier Visit", systemImage: "hammer.fill")
                 }
-                addButton("Lesson", icon: "book.fill", color: .blue) {
-                    router.navigate(to: BarnRoute.lessonEdit(nil), tab: .schedule)
+                Button { router.navigate(to: BarnRoute.lessonEdit(nil), tab: .schedule) } label: {
+                    Label("Lesson", systemImage: "book.fill")
                 }
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "plus.circle.fill")
+                    Text("Add Event")
+                }
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.barnGreen)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
             }
-            .padding(12)
+            .buttonStyle(.plain)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 8)
         }
         .background(Color.barnCardBackground)
     }
@@ -551,21 +562,6 @@ struct BarnDashboardView: View {
         .buttonStyle(.plain)
     }
 
-    private func addButton(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.caption2)
-                Text(label)
-                    .font(.caption2)
-            }
-            .foregroundStyle(color)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 6)
-        }
-        .buttonStyle(.bordered)
-        .tint(color)
-    }
 
     private func navigateToEvent(_ event: ScheduleEvent) {
         guard let id = event.modelID else { return }
