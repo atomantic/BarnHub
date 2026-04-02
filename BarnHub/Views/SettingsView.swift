@@ -38,7 +38,6 @@ struct SettingsView: View {
         #endif
         return """
 
-
         ---
         App: BarnHub v\(appVersion) (\(buildNumber))
         Device: \(deviceInfo)
@@ -46,24 +45,71 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        @Bindable var manager = appearanceManager
-        List {
-            Section("Appearance") {
-                Picker("Theme", selection: $manager.mode) {
-                    ForEach(AppearanceMode.allCases, id: \.self) { mode in
-                        Text(mode.displayName).tag(mode)
+        settingsContent
+            .navigationTitle("Settings")
+            .inlineNavTitle()
+            .barnManageSubscriptionsSheet(isPresented: $showManageSubscription)
+            .barnOfferCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
+                switch result {
+                case .success:
+                    BarnHubLogger.success("Offer code redeemed")
+                    Task { await storeService.refreshEntitlements() }
+                case .failure(let error):
+                    BarnHubLogger.error("Offer code redemption failed: \(error.localizedDescription)")
+                @unknown default:
+                    break
+                }
+            }
+            #if os(iOS)
+            .sheet(isPresented: $showingMailComposer) {
+                MailComposer(
+                    recipient: Self.feedbackEmail,
+                    subject: "BarnHub Feedback",
+                    body: feedbackBody,
+                    onDismiss: { showingMailComposer = false }
+                )
+                .ignoresSafeArea()
+            }
+            #endif
+            .alert("Enter Secret Code", isPresented: $showSecretCodeAlert) {
+                TextField("Code", text: $secretCodeInput)
+                    .autocorrectionDisabled()
+                    #if os(iOS)
+                    .textInputAutocapitalization(.characters)
+                    #endif
+                Button("Redeem") {
+                    if storeService.redeemSecretCode(secretCodeInput) {
+                        showCodeRedeemedToast = true
+                    } else {
+                        showInvalidCodeToast = true
                     }
                 }
-                .pickerStyle(.segmented)
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Enter the code you received to unlock BarnHub Pro.")
             }
+            .toast(isPresented: $showCodeRedeemedToast, message: "Pro unlocked!")
+            .toast(isPresented: $showInvalidCodeToast, message: "Invalid code", isError: true)
+    }
 
-            Section("Home Screen") {
-                Picker("Accounting Balance", selection: $balancePeriodRaw) {
-                    ForEach(BalancePeriod.allCases) { period in
-                        Text(period.displayName).tag(period.rawValue)
-                    }
-                }
-            }
+    // MARK: - Layout
+
+    @ViewBuilder
+    private var settingsContent: some View {
+        #if os(iOS)
+        iOSSettingsList
+        #else
+        macOSColumnsSettings
+        #endif
+    }
+
+    // MARK: - iOS: List Layout
+
+    #if os(iOS)
+    private var iOSSettingsList: some View {
+        List {
+            appearanceSection
+            homeScreenSection
 
             Section("Subscription") {
                 if storeService.isPro {
@@ -88,7 +134,6 @@ struct SettingsView: View {
                         }
                     }
                 } else {
-                    #if os(iOS)
                     Button {
                         router.navigate(to: SubscriptionRoute.paywall)
                     } label: {
@@ -98,14 +143,6 @@ struct SettingsView: View {
                             ProBadgeView()
                         }
                     }
-                    #else
-                    HStack {
-                        Text("Upgrade to Pro on iPhone or iPad")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        ProBadgeView()
-                    }
-                    #endif
                     Button {
                         showRedeemCodeSheet = true
                     } label: {
@@ -120,36 +157,10 @@ struct SettingsView: View {
                 }
             }
 
-            Section("iCloud Sync") {
-                HStack(spacing: 10) {
-                    Image(systemName: syncMonitor.status.icon)
-                        .foregroundStyle(syncMonitor.status.tint)
-                        .frame(width: 20)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(syncMonitor.status.label)
-                            .font(.subheadline)
-                        if let lastSync = syncMonitor.lastSuccessfulSync {
-                            Text("Last synced \(lastSync.relativeDateString)")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                        if case .failed(let msg) = syncMonitor.status {
-                            Text(msg)
-                                .font(.caption2)
-                                .foregroundStyle(.red)
-                        }
-                    }
-                }
-            }
-
-            Section("Data") {
-                NavigationLink(value: HomeRoute.dataManagement) {
-                    settingsRow("Import / Export", icon: "arrow.up.arrow.down")
-                }
-            }
+            iCloudSyncSection
+            dataSection
 
             Section("Feedback") {
-                #if os(iOS)
                 if MFMailComposeViewController.canSendMail() {
                     Button {
                         showingMailComposer = true
@@ -163,13 +174,6 @@ struct SettingsView: View {
                         }
                     }
                 }
-                #else
-                if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
-                    Link(destination: url) {
-                        settingsRow("Send Feedback", icon: "envelope")
-                    }
-                }
-                #endif
             }
 
             Section {
@@ -185,51 +189,177 @@ struct SettingsView: View {
                     .listRowBackground(Color.clear)
             }
         }
-        .navigationTitle("Settings")
-        .inlineNavTitle()
-        .barnManageSubscriptionsSheet(isPresented: $showManageSubscription)
-        .barnOfferCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
-            switch result {
-            case .success:
-                BarnHubLogger.success("Offer code redeemed")
-                Task { await storeService.refreshEntitlements() }
-            case .failure(let error):
-                BarnHubLogger.error("Offer code redemption failed: \(error.localizedDescription)")
-            @unknown default:
-                break
+    }
+    #endif
+
+    // MARK: - macOS: Responsive Columns
+    // >= 860pt -> 3 columns | >= 540pt -> 2 columns | < 540pt -> 1 column
+
+    #if os(macOS)
+    private var macOSColumnsSettings: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            ScrollView {
+                Group {
+                    if w >= 860 {
+                        HStack(alignment: .top, spacing: 16) {
+                            col1.frame(maxWidth: .infinity)
+                            col2.frame(maxWidth: .infinity)
+                            col3.frame(maxWidth: .infinity)
+                        }
+                    } else if w >= 540 {
+                        HStack(alignment: .top, spacing: 16) {
+                            VStack(spacing: 16) { col1; col3 }.frame(maxWidth: .infinity)
+                            col2.frame(maxWidth: .infinity)
+                        }
+                    } else {
+                        VStack(spacing: 16) { col1; col2; col3 }
+                    }
+                }
+                .padding()
             }
         }
-        #if os(iOS)
-        .sheet(isPresented: $showingMailComposer) {
-            MailComposer(
-                recipient: Self.feedbackEmail,
-                subject: "BarnHub Feedback",
-                body: feedbackBody,
-                onDismiss: { showingMailComposer = false }
-            )
-            .ignoresSafeArea()
-        }
-        #endif
-        .alert("Enter Secret Code", isPresented: $showSecretCodeAlert) {
-            TextField("Code", text: $secretCodeInput)
-                .autocorrectionDisabled()
-                #if os(iOS)
-                .textInputAutocapitalization(.characters)
-                #endif
-            Button("Redeem") {
-                if storeService.redeemSecretCode(secretCodeInput) {
-                    showCodeRedeemedToast = true
+    }
+
+    private var col1: some View {
+        Form {
+            appearanceSection
+            homeScreenSection
+            Section("Subscription") {
+                if storeService.isPro {
+                    HStack {
+                        Text("Plan")
+                        Spacer()
+                        HStack(spacing: 4) {
+                            Text(storeService.hasLifetime ? "Lifetime" : "BarnHub")
+                            ProBadgeView()
+                        }
+                    }
+                    if storeService.hasSecretPro {
+                        Toggle("Basic Mode", isOn: Binding(
+                            get: { storeService.isProOverrideDisabled },
+                            set: { storeService.isProOverrideDisabled = $0 }
+                        ))
+                    } else {
+                        Button {
+                            showManageSubscription = true
+                        } label: {
+                            settingsRow("Manage Subscription", icon: "creditcard")
+                        }
+                    }
                 } else {
-                    showInvalidCodeToast = true
+                    HStack {
+                        Text("Upgrade to Pro on iPhone or iPad")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        ProBadgeView()
+                    }
+                    Button {
+                        showRedeemCodeSheet = true
+                    } label: {
+                        settingsRow("Redeem Code", icon: "gift")
+                    }
+                    Button {
+                        secretCodeInput = ""
+                        showSecretCodeAlert = true
+                    } label: {
+                        settingsRow("Enter Secret Code", icon: "lock.open")
+                    }
                 }
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Enter the code you received to unlock BarnHub Pro.")
         }
-        .toast(isPresented: $showCodeRedeemedToast, message: "Pro unlocked!")
-        .toast(isPresented: $showInvalidCodeToast, message: "Invalid code", isError: true)
+        .formStyle(.grouped)
     }
+
+    private var col2: some View {
+        Form {
+            iCloudSyncSection
+            dataSection
+            Section("Feedback") {
+                if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
+                    Link(destination: url) {
+                        settingsRow("Send Feedback", icon: "envelope")
+                    }
+                }
+            }
+        }
+        .formStyle(.grouped)
+    }
+
+    private var col3: some View {
+        Form {
+            Section("Legal") {
+                externalLink("Privacy Policy", url: .privacyPolicy)
+                externalLink("Terms of Use", url: .termsOfUse)
+            }
+            Section {
+                Text("Version \(appVersion) (\(buildNumber))")
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .formStyle(.grouped)
+    }
+    #endif
+
+    // MARK: - Shared Sections
+
+    private var appearanceSection: some View {
+        @Bindable var manager = appearanceManager
+        return Section("Appearance") {
+            Picker("Theme", selection: $manager.mode) {
+                ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                    Text(mode.displayName).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+
+    private var homeScreenSection: some View {
+        Section("Home Screen") {
+            Picker("Accounting Balance", selection: $balancePeriodRaw) {
+                ForEach(BalancePeriod.allCases) { period in
+                    Text(period.displayName).tag(period.rawValue)
+                }
+            }
+        }
+    }
+
+    private var iCloudSyncSection: some View {
+        Section("iCloud Sync") {
+            HStack(spacing: 10) {
+                Image(systemName: syncMonitor.status.icon)
+                    .foregroundStyle(syncMonitor.status.tint)
+                    .frame(width: 20)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(syncMonitor.status.label)
+                        .font(.subheadline)
+                    if let lastSync = syncMonitor.lastSuccessfulSync {
+                        Text("Last synced \(lastSync.relativeDateString)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    if case .failed(let msg) = syncMonitor.status {
+                        Text(msg)
+                            .font(.caption2)
+                            .foregroundStyle(.red)
+                    }
+                }
+            }
+        }
+    }
+
+    private var dataSection: some View {
+        Section("Data") {
+            NavigationLink(value: HomeRoute.dataManagement) {
+                settingsRow("Import / Export", icon: "arrow.up.arrow.down")
+            }
+        }
+    }
+
+    // MARK: - Helpers
 
     private func settingsRow(_ title: String, icon: String) -> some View {
         HStack {
