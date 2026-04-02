@@ -165,10 +165,8 @@ struct HomeView: View {
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
         .toolbar {
-            ToolbarItem(placement: .trailingBar) {
+            ToolbarItemGroup(placement: .trailingBar) {
                 SyncIndicatorView()
-            }
-            ToolbarItem(placement: .trailingBar) {
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
@@ -188,7 +186,7 @@ struct HomeView: View {
         ZStack(alignment: .bottom) {
             Color.barnGreen
                 #if os(macOS)
-                .frame(height: 150)
+                .frame(height: 200)
                 #else
                 .frame(height: 260)
                 #endif
