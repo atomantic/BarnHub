@@ -1,3 +1,4 @@
+#if os(iOS)
 import MessageUI
 import SwiftUI
 
@@ -38,3 +39,4 @@ struct MailComposer: UIViewControllerRepresentable {
         }
     }
 }
+#endif

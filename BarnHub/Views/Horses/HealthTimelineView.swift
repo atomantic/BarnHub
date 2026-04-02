@@ -125,9 +125,9 @@ struct HealthTimelineView: View {
             }
         }
         .navigationTitle("Health Timeline")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingBar) {
                 NavigationLink(value: HorseRoute.weightChart(horseID)) {
                     Image(systemName: "chart.line.uptrend.xyaxis")
                 }
@@ -156,7 +156,7 @@ struct HealthTimelineView: View {
         }
         .alert("Log Weight", isPresented: $showAddWeight) {
             TextField("Weight (lbs)", text: $newWeight)
-                .keyboardType(.decimalPad)
+                .decimalKeyboard()
             Button("Save") { saveWeight() }
             Button("Cancel", role: .cancel) { newWeight = "" }
         } message: {

@@ -40,7 +40,7 @@ struct WeightChartView: View {
             }
         }
         .navigationTitle("Weight Trend")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
     }
 
     // MARK: - Summary Cards

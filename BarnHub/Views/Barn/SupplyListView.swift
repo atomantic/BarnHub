@@ -43,7 +43,7 @@ struct SupplyListView: View {
         }
         .searchable(text: $searchText, prompt: "Search supplies")
         .navigationTitle("Supplies")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {

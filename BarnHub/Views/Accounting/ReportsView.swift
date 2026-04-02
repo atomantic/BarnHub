@@ -46,7 +46,7 @@ struct ReportsView: View {
         }
         .background(Color.barnOffWhite)
         .navigationTitle("Reports")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
     }
 
     // MARK: - Period Picker

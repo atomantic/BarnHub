@@ -1,11 +1,15 @@
+#if os(iOS)
 import MessageUI
+#endif
 import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(StoreService.self) private var storeService
     @Environment(SyncMonitor.self) private var syncMonitor
+    #if os(iOS)
     @Environment(Router.self) private var router
+    #endif
     @State private var showingMailComposer = false
     @State private var showRedeemCodeSheet = false
     @State private var showManageSubscription = false
@@ -26,13 +30,18 @@ struct SettingsView: View {
     }
 
     private var feedbackBody: String {
+        #if os(iOS)
         let device = UIDevice.current
+        let deviceInfo = "\(device.model), iOS \(device.systemVersion)"
+        #else
+        let deviceInfo = "macOS \(ProcessInfo.processInfo.operatingSystemVersionString)"
+        #endif
         return """
 
 
         ---
         App: BarnHub v\(appVersion) (\(buildNumber))
-        Device: \(device.model), iOS \(device.systemVersion)
+        Device: \(deviceInfo)
         """
     }
 
@@ -79,6 +88,7 @@ struct SettingsView: View {
                         }
                     }
                 } else {
+                    #if os(iOS)
                     Button {
                         router.navigate(to: SubscriptionRoute.paywall)
                     } label: {
@@ -88,6 +98,14 @@ struct SettingsView: View {
                             ProBadgeView()
                         }
                     }
+                    #else
+                    HStack {
+                        Text("Upgrade to Pro on iPhone or iPad")
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        ProBadgeView()
+                    }
+                    #endif
                     Button {
                         showRedeemCodeSheet = true
                     } label: {
@@ -131,6 +149,7 @@ struct SettingsView: View {
             }
 
             Section("Feedback") {
+                #if os(iOS)
                 if MFMailComposeViewController.canSendMail() {
                     Button {
                         showingMailComposer = true
@@ -144,6 +163,13 @@ struct SettingsView: View {
                         }
                     }
                 }
+                #else
+                if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
+                    Link(destination: url) {
+                        settingsRow("Send Feedback", icon: "envelope")
+                    }
+                }
+                #endif
             }
 
             Section {
@@ -160,9 +186,9 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.inline)
-        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
-        .offerCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
+        .inlineNavTitle()
+        .barnManageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .barnOfferCodeRedemption(isPresented: $showRedeemCodeSheet) { result in
             switch result {
             case .success:
                 BarnHubLogger.success("Offer code redeemed")
@@ -173,6 +199,7 @@ struct SettingsView: View {
                 break
             }
         }
+        #if os(iOS)
         .sheet(isPresented: $showingMailComposer) {
             MailComposer(
                 recipient: Self.feedbackEmail,
@@ -182,10 +209,13 @@ struct SettingsView: View {
             )
             .ignoresSafeArea()
         }
+        #endif
         .alert("Enter Secret Code", isPresented: $showSecretCodeAlert) {
             TextField("Code", text: $secretCodeInput)
                 .autocorrectionDisabled()
+                #if os(iOS)
                 .textInputAutocapitalization(.characters)
+                #endif
             Button("Redeem") {
                 if storeService.redeemSecretCode(secretCodeInput) {
                     showCodeRedeemedToast = true

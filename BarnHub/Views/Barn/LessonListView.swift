@@ -38,14 +38,14 @@ struct LessonListView: View {
             }
         }
         .navigationTitle("Lessons")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink(value: BarnRoute.lessonEdit(nil)) {
                     Label("Add Lesson", systemImage: "plus")
                 }
             }
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .leadingBar) {
                 Picker("Filter", selection: $showUpcomingOnly) {
                     Text("All").tag(false)
                     Text("Upcoming").tag(true)

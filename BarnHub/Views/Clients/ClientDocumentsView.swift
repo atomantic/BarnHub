@@ -52,7 +52,7 @@ struct ClientDocumentsView: View {
             }
         }
         .navigationTitle("Documents")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -66,11 +66,13 @@ struct ClientDocumentsView: View {
                     } label: {
                         Label("Choose Photo", systemImage: "photo.fill")
                     }
+                    #if os(iOS)
                     Button {
                         showCamera = true
                     } label: {
                         Label("Take Photo", systemImage: "camera.fill")
                     }
+                    #endif
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -106,11 +108,13 @@ struct ClientDocumentsView: View {
                 await MainActor.run { selectedPhoto = nil }
             }
         }
+        #if os(iOS)
         .fullScreenCover(isPresented: $showCamera) {
             CameraView { imageData in
                 addDocument(title: "Scan \(Date.now.shortFormatted)", type: .photo, data: imageData)
             }
         }
+        #endif
         .overlay {
             ConfirmationDialog(
                 isPresented: $showDeleteConfirmation,
@@ -194,6 +198,7 @@ struct ClientDocumentsView: View {
     }
 }
 
+#if os(iOS)
 // MARK: - Camera View
 
 struct CameraView: UIViewControllerRepresentable {
@@ -228,3 +233,4 @@ struct CameraView: UIViewControllerRepresentable {
         }
     }
 }
+#endif

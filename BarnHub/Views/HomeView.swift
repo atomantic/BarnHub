@@ -159,7 +159,7 @@ struct HomeView: View {
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingBar) {
                 HStack(spacing: 16) {
                     SyncIndicatorView()
                     Button {

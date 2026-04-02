@@ -72,7 +72,7 @@ struct DataManagementView: View {
             }
         }
         .navigationTitle("Import / Export")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .toast(toast)
         .sheet(isPresented: $showExportSheet) {
             if let url = exportURL {
@@ -331,14 +331,3 @@ enum ImportDataType {
     }
 }
 
-// MARK: - Share Sheet
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}

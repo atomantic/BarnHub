@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 enum ContractType: String, CaseIterable, Identifiable {
     case boardingAgreement = "boarding"
@@ -24,6 +23,9 @@ enum ContractType: String, CaseIterable, Identifiable {
         }
     }
 }
+
+#if os(iOS) || targetEnvironment(macCatalyst)
+import UIKit
 
 struct ContractPDFService {
     private static let headerColor = UIColor(red: 74/255, green: 124/255, blue: 63/255, alpha: 1)
@@ -246,3 +248,28 @@ struct ContractPDFService {
         context.strokePath()
     }
 }
+
+#else
+
+struct ContractPDFService {
+    static func generatePDF(
+        type: ContractType,
+        clientName: String,
+        clientPhone: String,
+        clientEmail: String,
+        emergencyContact: String,
+        emergencyPhone: String,
+        horseName: String,
+        horseBreed: String,
+        stallNumber: String,
+        startDate: Date,
+        monthlyRate: Double
+    ) -> Data { Data() }
+
+    static func fileName(type: ContractType, clientName: String) -> String {
+        let safe = clientName.replacingOccurrences(of: " ", with: "_")
+        return "BarnHub_\(type.displayName.replacingOccurrences(of: " ", with: "_"))_\(safe).pdf"
+    }
+}
+
+#endif

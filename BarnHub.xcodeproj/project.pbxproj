@@ -7,73 +7,118 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
-		E88AAAC5DE89C41313DA6492 /* BarnHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */; };
-		4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
-		C1069D979C46B814742EC22D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
-		2A210E5A43639493D0748D17 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3E00B82BEDE322C7C8474 /* Routes.swift */; };
-		CED0821BA15119005FF8CE2F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D455C23A05576DE66AA068 /* Client.swift */; };
-		0B326F92553B0A8255FB605C /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
-		9B15571082406ABE2413DA7F /* FarrierVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */; };
-		B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
-		3178329AF5DF0E2532D684D4 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2652CE0F629C99F95508DF5 /* Reminder.swift */; };
-		6BCEAFCD0BAFFF213E1D7B82 /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
-		EF3E795ACB2AA94E4B1E06EE /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9960085725FD7B2D959B29 /* Transaction.swift */; };
-		476E83C7E956AB45BF4C59A3 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
-		E4EC845EDC6AC0AA8E85320C /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */; };
-		3317A4E4101048B982C83535 /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98791B230125578C3586BE55 /* Color+Brand.swift */; };
-		0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
-		7A7879ABF7C15CC5A0BA3265 /* Double+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA744D61AAEE032A230817D /* Double+Currency.swift */; };
-		3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
-		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
-		F703EA69FB8159D262DA3AC8 /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
+		004CACE0D835B5B58CFD59A2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		00A9BF7BD4BED475CE708A13 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
-		1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
-		28BD6B5FCC74B289029B6DC5 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA99F03E1B72A946035663D /* TransactionRowView.swift */; };
-		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
-		E251F19AFA0EFFDF2258DA4A /* ClientDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */; };
-		C7A6790D06FDF33CF6E8AB4A /* ClientEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A772809337802F14016AA93 /* ClientEditView.swift */; };
-		F50BBE3E4D70CEE98B129B00 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
-		66688FD96603B00FD222B7C1 /* ClientListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */; };
+		00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0005 /* PaywallView.swift */; };
+		03674AD350F1487688C795DF /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
+		0590894709F843FEB7156414 /* Double+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA744D61AAEE032A230817D /* Double+Currency.swift */; };
+		05C6DAC9B032919D312E892D /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
+		081908AE0AEFB9CFC5DD75ED /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */; };
+		0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
+		0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		0B326F92553B0A8255FB605C /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
-		5315009BD422469B78007167 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
-		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
-		D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
-		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
-		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
-		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
-		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
-		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
-		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
-		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
-		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
-		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
-		3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
-		98705821AA69B804420F1126 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
-		FA0ABB71EB312493CBBF9410 /* ReminderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66197FAA363BF926741C13 /* ReminderListView.swift */; };
-		4F8AE239B5CE084622838C5D /* SupplyEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E279531F6A34C8031FA01E /* SupplyEditView.swift */; };
+		0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
+		0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
 		0F02EE5F9B13BE4924497DDF /* SupplyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */; };
-		3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2F746E98569B333351DB50 /* VetScheduleView.swift */; };
-		EE76F23F713FF9E6D56BAFF2 /* FarrierVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B61197773820D4015D429 /* FarrierVisitEditView.swift */; };
-		C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
-		D2F743ADA258BD6436964D4F /* HorseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38356F6D87FBDFB2290568 /* HorseEditView.swift */; };
-		80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
-		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
-		D8294AE0F6DE17514A128ECF /* VetRecordEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4059FB68D68631292465BD /* VetRecordEditView.swift */; };
-		A1B2C3D4E5F60718293A4B5C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */; };
-		C3D4E5F607182930A1B2C3D4 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ReportsView.swift */; };
-		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
+		0F85EA0DE901A55D3C20F7E0 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
+		0FECD3DF15FF7D5B7C41F291 /* Image+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC91A420DFF31CCEA9FB261 /* Image+PlatformCompat.swift */; };
+		14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
+		1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
+		15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
+		18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
+		19744E0316C5D37A8B58644F /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
+		1D195657269C5D4EAEDEF2EA /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
+		1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
+		2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
+		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
+		230B47D38D9F1F3B3B713D53 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D455C23A05576DE66AA068 /* Client.swift */; };
+		253652C27A4C4BC150901E01 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AD5ED6FE97B96591D9CA732 /* Cocoa.framework */; };
+		28BD6B5FCC74B289029B6DC5 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA99F03E1B72A946035663D /* TransactionRowView.swift */; };
+		2A210E5A43639493D0748D17 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3E00B82BEDE322C7C8474 /* Routes.swift */; };
+		3178329AF5DF0E2532D684D4 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2652CE0F629C99F95508DF5 /* Reminder.swift */; };
+		3317A4E4101048B982C83535 /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98791B230125578C3586BE55 /* Color+Brand.swift */; };
+		3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
+		35B59EFCC0E73FCFD72E0F3E /* ClientDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */; };
+		3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
-		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
-		AACC001122334455ARROW002 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
-		BBCC001122334455DATA0002 /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
-		BBCC001122334455DATA0004 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
-		BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
-		966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnHubTests.swift */; };
-		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
-		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
-		AA11223344556677AABB0002 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
+		3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2F746E98569B333351DB50 /* VetScheduleView.swift */; };
+		3CCE16FF2DC1E7E50B4756D2 /* SupplyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */; };
+		3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
+		3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
+		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
+		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
+		44932DED4DDB38C1486D4CA4 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
+		462C72CBD666EC1A27EA58DD /* View+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */; };
+		476E83C7E956AB45BF4C59A3 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
+		47D9EBB787629D19F306343D /* BarnNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0001 /* BarnNote.swift */; };
+		4804F7D837DE46ECC7BCC11E /* ClientListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */; };
+		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
+		49C18E219EA2DB73B789268F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */; };
+		49FCAA7CFB776EBAED74D492 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
+		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
+		4F5DC68351904D9310646DC0 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
+		4F8AE239B5CE084622838C5D /* SupplyEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E279531F6A34C8031FA01E /* SupplyEditView.swift */; };
+		4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
+		5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
+		511A6F28FF6AC2F7627D718B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
+		529B6C8140BCF6258F396688 /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
+		5315009BD422469B78007167 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
+		53CB508045015689ED7769B5 /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
+		5895B58A390D7DF70FD6B7D3 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
+		58B1A407D45B9090A0188F83 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
+		597B32CFF412D041C08C9702 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
+		5A86E38B23BCAAB5D2130D59 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
+		5C278F8FF9D472B642494577 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
+		6614D4075F2C8BDF01097D13 /* SupplyEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E279531F6A34C8031FA01E /* SupplyEditView.swift */; };
+		66688FD96603B00FD222B7C1 /* ClientListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */; };
+		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
+		67846EB91C783EDD2BB99ED8 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3E00B82BEDE322C7C8474 /* Routes.swift */; };
+		67D0F0466CEA861338639869 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
+		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
+		69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
+		6BCEAFCD0BAFFF213E1D7B82 /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
+		6D9D1281FC23234FD21E8CB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
+		6E4E6A10028C0E50D6BB0913 /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
+		6F2082EDF8064FDEF27EE5BE /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2652CE0F629C99F95508DF5 /* Reminder.swift */; };
+		716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
 		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
+		77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
+		79CEBC2D5217C4F19E415478 /* HorseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38356F6D87FBDFB2290568 /* HorseEditView.swift */; };
+		7A7879ABF7C15CC5A0BA3265 /* Double+Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA744D61AAEE032A230817D /* Double+Currency.swift */; };
+		7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
+		7B9F554D51AC55067789DD55 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
+		7DA874751B873AA29E9BE973 /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
+		7DD024A4E65E65BDF936111E /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
+		80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
+		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
+		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
+		873115BAC93C0159BCB86D42 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
+		89DADD3345601DDCA7F4E930 /* BarnHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */; };
+		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
+		8C4899F08B9237E107503E5A /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
+		90C3F661BAE4F4FE75540326 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		92E748C25DB3202C01DCA4D5 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
+		9388F61BA60E4CB0CAC35354 /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
+		955EE1B9866BB5DDF2A04263 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
+		95FB202CB0CBE34AA21EA142 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */; };
+		966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400E9C51028A856C60639AB /* BarnHubTests.swift */; };
+		96BA747D2A434D6C99902E4C /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */; };
+		98705821AA69B804420F1126 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
+		98FB3F30D95A0BD03961F9C5 /* ClientEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A772809337802F14016AA93 /* ClientEditView.swift */; };
+		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
+		9A6434B509C0867A7EAC6838 /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
+		9B15571082406ABE2413DA7F /* FarrierVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */; };
+		A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0003 /* FeatureGate.swift */; };
+		A3C9E32AAFF9260347DF7145 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
+		A40828345969CDFE498D7AF7 /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
+		A4D6CA97868E5513D7320EBE /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
+		A767DF6FDA03BB02F275316E /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98791B230125578C3586BE55 /* Color+Brand.swift */; };
+		A90DBB40ABF1B1171A28B9CB /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
+		A9C48EE5FD7ADFBDB37BEE45 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0003 /* LessonListView.swift */; };
+		AA11223344556677AABB0002 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
 		AA11223344556677AABB0004 /* FeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0003 /* FeatureGate.swift */; };
 		AA11223344556677AABB0006 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0005 /* PaywallView.swift */; };
 		AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0007 /* ProBadgeView.swift */; };
@@ -81,7 +126,85 @@
 		AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000B /* ClientsUpgradeView.swift */; };
 		AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
+		AACC001122334455ARROW002 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
+		AADD112233445566LESS0002 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0001 /* Lesson.swift */; };
+		AADD112233445566LESS0004 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0003 /* LessonListView.swift */; };
+		AADD112233445566LESS0006 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
+		AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
+		AC93C1CF8FA3FC442D24B20F /* FarrierVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */; };
+		AD36F0C70EAB02DA9E20A7AD /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
+		B05821F5FB68C8E2C29600F4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
+		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
+		B14FF81A91D05E1752D0D62F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B748DC85E941B06F934124AA /* ShareSheet.swift */; };
+		B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
+		B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
+		B5D01AEB5B1048CA46F63996 /* FeatureLockedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */; };
+		B70E0586CA22B751AE95AF59 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
+		B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */; };
+		B7D5CE80B216879EC5CD1351 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
+		B91A2F79900BBA63844EB78A /* VetRecordEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4059FB68D68631292465BD /* VetRecordEditView.swift */; };
+		BA710B4811F5A0A34BF7D9C2 /* ReminderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66197FAA363BF926741C13 /* ReminderListView.swift */; };
 		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
+		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
+		BBCC001122334455DATA0002 /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
+		BBCC001122334455DATA0004 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
+		BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
+		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
+		BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
+		C1069D979C46B814742EC22D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
+		C11E2F2BC3971B7F17C19341 /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
+		C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
+		C17D7A8663679EB6A8CF2005 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
+		C18F89EBB9CC9DD5699FF806 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
+		C1F2B654B6643C4C364F5597 /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
+		C366A9E124A03FBC6C4AF693 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
+		C3D4E5F607182930A1B2C3D4 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ReportsView.swift */; };
+		C7A6790D06FDF33CF6E8AB4A /* ClientEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A772809337802F14016AA93 /* ClientEditView.swift */; };
+		C877A57158EFFCCDA3F946B7 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
+		CA8B1245E9DC6C2A01B5A96D /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ReportsView.swift */; };
+		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
+		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
+		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
+		CE727A00BDE9FA34DE9B187A /* VetScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2F746E98569B333351DB50 /* VetScheduleView.swift */; };
+		CED0821BA15119005FF8CE2F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D455C23A05576DE66AA068 /* Client.swift */; };
+		D2F743ADA258BD6436964D4F /* HorseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38356F6D87FBDFB2290568 /* HorseEditView.swift */; };
+		D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
+		D66E57E90845459502336829 /* FarrierVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B61197773820D4015D429 /* FarrierVisitEditView.swift */; };
+		D8294AE0F6DE17514A128ECF /* VetRecordEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4059FB68D68631292465BD /* VetRecordEditView.swift */; };
+		D951958762A712FCFA5B1646 /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
+		DAEBFA20B41C7ED9CC192419 /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
+		DC73955B346D32B7D0995445 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0001 /* Lesson.swift */; };
+		DCA9E258D8CD546FFEC8B9CE /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
+		DD11223344556677BARN0002 /* BarnNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0001 /* BarnNote.swift */; };
+		DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
+		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
+		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
+		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
+		DF64EAA9B3F9B995F6FBC740 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9960085725FD7B2D959B29 /* Transaction.swift */; };
+		E251F19AFA0EFFDF2258DA4A /* ClientDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */; };
+		E4EC845EDC6AC0AA8E85320C /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */; };
+		E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930415263C4D5E6F7 /* ScreenshotTests.swift */; };
+		E6ADFFFA59BAD207FF4609C8 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
+		E88AAAC5DE89C41313DA6492 /* BarnHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */; };
+		E93F0AC5E2C627BD42F2ABD9 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA99F03E1B72A946035663D /* TransactionRowView.swift */; };
+		E9B63DC21E1DFF87076413D6 /* View+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24651A9A1646C3DE9212B3E8 /* View+PlatformCompat.swift */; };
+		EC84F06E9DEE752F44F00ED4 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
+		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
+		EE76F23F713FF9E6D56BAFF2 /* FarrierVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B61197773820D4015D429 /* FarrierVisitEditView.swift */; };
+		EF3E795ACB2AA94E4B1E06EE /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9960085725FD7B2D959B29 /* Transaction.swift */; };
+		EF64D5B5EDE7FB95341045B0 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0007 /* ProBadgeView.swift */; };
+		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
+		F50BBE3E4D70CEE98B129B00 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
+		F525745099D801FC3DC33B75 /* ClientsUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000B /* ClientsUpgradeView.swift */; };
+		F703EA69FB8159D262DA3AC8 /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
+		F7286659E2BAB2064A0004E2 /* Image+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D615DAA0864907CF642489 /* Image+PlatformCompat.swift */; };
+		FA0ABB71EB312493CBBF9410 /* ReminderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66197FAA363BF926741C13 /* ReminderListView.swift */; };
+		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
+		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
+		FF0E902A35BA84ED658C2B60 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
+		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
+		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
 		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
 		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
@@ -90,32 +213,7 @@
 		TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0006000000000001 /* SyncMonitorTests.swift */; };
 		TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0007000000000001 /* AppearanceManagerTests.swift */; };
 		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
-		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
-		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
-		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
-		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
-		03674AD350F1487688C795DF /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
-		3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
-		2013F32CA2824B89963D43ED /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
-		BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
-		7AFFC59964194DACA68DE0AC /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
-		53CB508045015689ED7769B5 /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
-		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
-		5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F53930338F4A389921F640 /* WeightEntry.swift */; };
-		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
-		B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */; };
-		22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB694A490656430DBDBC7C9C /* InvoiceTests.swift */; };
-		495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */; };
-		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
-		DD11223344556677BARN0002 /* BarnNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0001 /* BarnNote.swift */; };
-		DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
-		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
-		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
-		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
-		AADD112233445566LESS0002 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0001 /* Lesson.swift */; };
-		AADD112233445566LESS0004 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0003 /* LessonListView.swift */; };
-		AADD112233445566LESS0006 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
-		AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
+		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,130 +234,132 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDetailView.swift; sourceTree = "<group>"; };
+		04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisit.swift; sourceTree = "<group>"; };
+		08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyListView.swift; sourceTree = "<group>"; };
+		09E279531F6A34C8031FA01E /* SupplyEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyEditView.swift; sourceTree = "<group>"; };
+		0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountingDashboardView.swift; sourceTree = "<group>"; };
+		0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientListView.swift; sourceTree = "<group>"; };
+		11204D4698E5472A9F981077 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
+		14D615DAA0864907CF642489 /* Image+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Image+PlatformCompat.swift"; sourceTree = "<group>"; };
+		162F54183A973C74E91D0DD7 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditView.swift; sourceTree = "<group>"; };
+		17FD7B53BC587AAC85435CCD /* BarnHub-macOS.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = "BarnHub-macOS.entitlements"; sourceTree = "<group>"; };
+		1E512067702B1DE5393F4838 /* BarnHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubUITests.swift; sourceTree = "<group>"; };
+		1F0B2139601FAF7FAE12C875 /* HorseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseListView.swift; sourceTree = "<group>"; };
+		201B61197773820D4015D429 /* FarrierVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisitEditView.swift; sourceTree = "<group>"; };
+		23D455C23A05576DE66AA068 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		24651A9A1646C3DE9212B3E8 /* View+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "View+PlatformCompat.swift"; sourceTree = "<group>"; };
+		24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "View+PlatformCompat.swift"; sourceTree = "<group>"; };
+		2A783091571746209645CF10 /* InvoiceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceHistoryView.swift; sourceTree = "<group>"; };
+		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntryTests.swift; sourceTree = "<group>"; };
+		32105EF55A7597B8990A4F42 /* ClientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailView.swift; sourceTree = "<group>"; };
 		39336BD3A0262B77EFBBEFA1 /* BarnHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarnHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9D22AD988431229927A9911 /* BarnHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnHubApp.swift"; sourceTree = "<group>"; };
-		9626486725CB190EBD898F44 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandler.swift"; sourceTree = "<group>"; };
-		CD0269846B3293A3B59F5C78 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Router.swift"; sourceTree = "<group>"; };
-		92C3E00B82BEDE322C7C8474 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Routes.swift"; sourceTree = "<group>"; };
-		23D455C23A05576DE66AA068 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Client.swift"; sourceTree = "<group>"; };
-		47E49121D576E6628ED2785E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums.swift"; sourceTree = "<group>"; };
-		04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FarrierVisit.swift"; sourceTree = "<group>"; };
-		9B62EA806113EB26E9E1AE55 /* Horse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Horse.swift"; sourceTree = "<group>"; };
-		D2652CE0F629C99F95508DF5 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder.swift"; sourceTree = "<group>"; };
-		5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupplyItem.swift"; sourceTree = "<group>"; };
-		3B9960085725FD7B2D959B29 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction.swift"; sourceTree = "<group>"; };
-		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecord.swift"; sourceTree = "<group>"; };
-		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewSampleData.swift"; sourceTree = "<group>"; };
-		AACC001122334455ARROW001 /* arrow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "arrow.jpeg"; sourceTree = "<group>"; };
-		BBCC001122334455DATA0001 /* DataExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataExportService.swift"; sourceTree = "<group>"; };
-		BBCC001122334455DATA0003 /* DataImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataImportService.swift"; sourceTree = "<group>"; };
-		BBCC001122334455DATA0005 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManagementView.swift"; sourceTree = "<group>"; };
-		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
+		3B9960085725FD7B2D959B29 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnDashboardView.swift; sourceTree = "<group>"; };
+		47E49121D576E6628ED2785E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; };
+		4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
+		5A772809337802F14016AA93 /* ClientEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientEditView.swift; sourceTree = "<group>"; };
+		5B2F746E98569B333351DB50 /* VetScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetScheduleView.swift; sourceTree = "<group>"; };
+		5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyItem.swift; sourceTree = "<group>"; };
+		5E66197FAA363BF926741C13 /* ReminderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListView.swift; sourceTree = "<group>"; };
+		6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractGeneratorView.swift; sourceTree = "<group>"; };
+		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastModifier.swift; sourceTree = "<group>"; };
+		6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDocumentsView.swift; sourceTree = "<group>"; };
+		7037AAB7CB6395B75225797D /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
+		7AD5ED6FE97B96591D9CA732 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		8400E9C51028A856C60639AB /* BarnHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubTests.swift; sourceTree = "<group>"; };
+		888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BarnHub macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C38356F6D87FBDFB2290568 /* HorseEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseEditView.swift; sourceTree = "<group>"; };
+		8E4059FB68D68631292465BD /* VetRecordEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecordEditView.swift; sourceTree = "<group>"; };
 		90B807BC939932440E8214FD /* URL+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+App.swift"; sourceTree = "<group>"; };
-		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
-		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
-		CE768E67ED8208EC1BC695B8 /* View+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Toast.swift"; sourceTree = "<group>"; };
-		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
-		0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AccountingDashboardView.swift"; sourceTree = "<group>"; };
-		162F54183A973C74E91D0DD7 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionEditView.swift"; sourceTree = "<group>"; };
-		4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionListView.swift"; sourceTree = "<group>"; };
-		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransactionRowView.swift"; sourceTree = "<group>"; };
-		32105EF55A7597B8990A4F42 /* ClientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDetailView.swift"; sourceTree = "<group>"; };
-		6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDocumentsView.swift"; sourceTree = "<group>"; };
-		5A772809337802F14016AA93 /* ClientEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientEditView.swift"; sourceTree = "<group>"; };
-		C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientHorsesView.swift"; sourceTree = "<group>"; };
-		0ECE1BDF0AECDE6353F6F3AF /* ClientListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientListView.swift"; sourceTree = "<group>"; };
-		CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPaymentHistoryView.swift"; sourceTree = "<group>"; };
-		C24FE726A3D35D655991C025 /* ClientRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientRowView.swift"; sourceTree = "<group>"; };
-		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConfirmationDialog.swift"; sourceTree = "<group>"; };
-		A7B3C9D1E5F2081634729A5B /* MailComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MailComposer.swift"; sourceTree = "<group>"; };
-		7037AAB7CB6395B75225797D /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrencyField.swift"; sourceTree = "<group>"; };
-		DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmptyStateView.swift"; sourceTree = "<group>"; };
-		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorsePickerSection.swift"; sourceTree = "<group>"; };
-		6B781D8E8A8631CE421A278E /* ToastModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastModifier.swift"; sourceTree = "<group>"; };
-		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleRecordRow.swift"; sourceTree = "<group>"; };
-		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleListView.swift"; sourceTree = "<group>"; };
-		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryCard.swift"; sourceTree = "<group>"; };
-		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToastView.swift"; sourceTree = "<group>"; };
-		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnDashboardView.swift"; sourceTree = "<group>"; };
-		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FarrierScheduleView.swift"; sourceTree = "<group>"; };
-		93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderEditView.swift"; sourceTree = "<group>"; };
-		5E66197FAA363BF926741C13 /* ReminderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderListView.swift"; sourceTree = "<group>"; };
-		09E279531F6A34C8031FA01E /* SupplyEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupplyEditView.swift"; sourceTree = "<group>"; };
-		08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupplyListView.swift"; sourceTree = "<group>"; };
-		5B2F746E98569B333351DB50 /* VetScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetScheduleView.swift"; sourceTree = "<group>"; };
-		201B61197773820D4015D429 /* FarrierVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FarrierVisitEditView.swift"; sourceTree = "<group>"; };
-		0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseDetailView.swift"; sourceTree = "<group>"; };
-		8C38356F6D87FBDFB2290568 /* HorseEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseEditView.swift"; sourceTree = "<group>"; };
-		1F0B2139601FAF7FAE12C875 /* HorseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseListView.swift"; sourceTree = "<group>"; };
-		C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HorseRowView.swift"; sourceTree = "<group>"; };
-		8E4059FB68D68631292465BD /* VetRecordEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VetRecordEditView.swift"; sourceTree = "<group>"; };
-		B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView.swift"; sourceTree = "<group>"; };
-		D4E5F60718293041B2C3D4E5 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReportsView.swift"; sourceTree = "<group>"; };
-		F7850193B3E5ED0B66616F80 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger.swift"; sourceTree = "<group>"; };
-		D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+Helpers.swift"; sourceTree = "<group>"; };
-		CC3340C45202B29152467289 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92C3E00B82BEDE322C7C8474 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
+		93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditView.swift; sourceTree = "<group>"; };
+		9626486725CB190EBD898F44 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
+		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
+		9B62EA806113EB26E9E1AE55 /* Horse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horse.swift; sourceTree = "<group>"; };
+		9EC91A420DFF31CCEA9FB261 /* Image+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Image+PlatformCompat.swift"; sourceTree = "<group>"; };
+		9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDocument.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorsePickerSection.swift; sourceTree = "<group>"; };
 		A1C67C37342285C253C4FB52 /* BarnHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarnHub.entitlements; sourceTree = "<group>"; };
-		8400E9C51028A856C60639AB /* BarnHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnHubTests.swift"; sourceTree = "<group>"; };
-		1E512067702B1DE5393F4838 /* BarnHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnHubUITests.swift"; sourceTree = "<group>"; };
-		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotTests.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB0001 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreService.swift"; sourceTree = "<group>"; };
-		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationService.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB0003 /* FeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGate.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB0005 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB0007 /* ProBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProBadgeView.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureLockedOverlay.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB000B /* ClientsUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientsUpgradeView.swift"; sourceTree = "<group>"; };
-		AA11223344556677AABB000D /* BarnHubProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "BarnHubProducts.storekit"; sourceTree = "<group>"; };
-		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureGateTests.swift"; sourceTree = "<group>"; };
-		BB11223344556677AABB0001 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManager.swift"; sourceTree = "<group>"; };
-		BB11223344556677AABB0003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
-		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouterTests.swift"; sourceTree = "<group>"; };
-		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeepLinkHandlerTests.swift"; sourceTree = "<group>"; };
-		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormattingTests.swift"; sourceTree = "<group>"; };
-		11204D4698E5472A9F981077 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Invoice.swift"; sourceTree = "<group>"; };
-		9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientDocument.swift"; sourceTree = "<group>"; };
-		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoicePDFService.swift"; sourceTree = "<group>"; };
-		CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContractPDFService.swift"; sourceTree = "<group>"; };
-		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceGeneratorView.swift"; sourceTree = "<group>"; };
-		6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContractGeneratorView.swift"; sourceTree = "<group>"; };
-		2A783091571746209645CF10 /* InvoiceHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceHistoryView.swift"; sourceTree = "<group>"; };
-		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntry.swift"; sourceTree = "<group>"; };
-		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthTimelineView.swift"; sourceTree = "<group>"; };
-		D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightChartView.swift"; sourceTree = "<group>"; };
-		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InvoiceTests.swift"; sourceTree = "<group>"; };
-		2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeightEntryTests.swift"; sourceTree = "<group>"; };
-		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEventTests.swift"; sourceTree = "<group>"; };
-		DD11223344556677BARN0001 /* BarnNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNote.swift"; sourceTree = "<group>"; };
-		DD11223344556677BARN0003 /* BarnNoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteListView.swift"; sourceTree = "<group>"; };
-		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarnNoteEditView.swift"; sourceTree = "<group>"; };
-		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitor.swift"; sourceTree = "<group>"; };
-		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncIndicatorView.swift"; sourceTree = "<group>"; };
-		AADD112233445566LESS0001 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson.swift"; sourceTree = "<group>"; };
-		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonListView.swift"; sourceTree = "<group>"; };
-		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LessonEditView.swift"; sourceTree = "<group>"; };
-		AADD112233445566LESS0007 /* ClientPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClientPickerSection.swift"; sourceTree = "<group>"; };
-		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelSchemaTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataExportServiceTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataImportServiceTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationServiceTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreServiceTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncMonitorTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppearanceManagerTests.swift"; sourceTree = "<group>"; };
-		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnumsTests.swift"; sourceTree = "<group>"; };
+		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthTimelineView.swift; sourceTree = "<group>"; };
+		A7B3C9D1E5F2081634729A5B /* MailComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposer.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB0001 /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreService.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB0003 /* FeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGate.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB0005 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB0007 /* ProBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBadgeView.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureLockedOverlay.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB000B /* ClientsUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientsUpgradeView.swift; sourceTree = "<group>"; };
+		AA11223344556677AABB000D /* BarnHubProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BarnHubProducts.storekit; sourceTree = "<group>"; };
+		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGateTests.swift; sourceTree = "<group>"; };
+		AACC001122334455ARROW001 /* arrow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arrow.jpeg; sourceTree = "<group>"; };
+		AADD112233445566LESS0001 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson.swift; sourceTree = "<group>"; };
+		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonListView.swift; sourceTree = "<group>"; };
+		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonEditView.swift; sourceTree = "<group>"; };
+		AADD112233445566LESS0007 /* ClientPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientPickerSection.swift; sourceTree = "<group>"; };
+		AB694A490656430DBDBC7C9C /* InvoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceTests.swift; sourceTree = "<group>"; };
+		AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B748DC85E941B06F934124AA /* ShareSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB11223344556677AABB0001 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
+		BB11223344556677AABB0003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BBCC001122334455DATA0001 /* DataExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportService.swift; sourceTree = "<group>"; };
+		BBCC001122334455DATA0003 /* DataImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportService.swift; sourceTree = "<group>"; };
+		BBCC001122334455DATA0005 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
+		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
+		C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseRowView.swift; sourceTree = "<group>"; };
+		C24FE726A3D35D655991C025 /* ClientRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientRowView.swift; sourceTree = "<group>"; };
+		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
+		C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientHorsesView.swift; sourceTree = "<group>"; };
+		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
+		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicePDFService.swift; sourceTree = "<group>"; };
+		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
+		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandlerTests.swift; sourceTree = "<group>"; };
+		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormattingTests.swift; sourceTree = "<group>"; };
+		CC3340C45202B29152467289 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientPaymentHistoryView.swift; sourceTree = "<group>"; };
+		CD0269846B3293A3B59F5C78 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractPDFService.swift; sourceTree = "<group>"; };
+		CE768E67ED8208EC1BC695B8 /* View+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Toast.swift"; sourceTree = "<group>"; };
+		D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContext+Helpers.swift"; sourceTree = "<group>"; };
+		D2652CE0F629C99F95508DF5 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		D4E5F60718293041B2C3D4E5 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
+		D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartView.swift; sourceTree = "<group>"; };
+		DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		DD11223344556677BARN0001 /* BarnNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnNote.swift; sourceTree = "<group>"; };
+		DD11223344556677BARN0003 /* BarnNoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnNoteListView.swift; sourceTree = "<group>"; };
+		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnNoteEditView.swift; sourceTree = "<group>"; };
+		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitor.swift; sourceTree = "<group>"; };
+		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncIndicatorView.swift; sourceTree = "<group>"; };
+		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEventTests.swift; sourceTree = "<group>"; };
+		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRecordRow.swift; sourceTree = "<group>"; };
+		ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubApp.swift; sourceTree = "<group>"; };
+		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierScheduleView.swift; sourceTree = "<group>"; };
+		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceGeneratorView.swift; sourceTree = "<group>"; };
+		F7850193B3E5ED0B66616F80 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		F9D22AD988431229927A9911 /* BarnHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
+		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
+		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecord.swift; sourceTree = "<group>"; };
+		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
+		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
+		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSchemaTests.swift; sourceTree = "<group>"; };
+		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportServiceTests.swift; sourceTree = "<group>"; };
+		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportServiceTests.swift; sourceTree = "<group>"; };
+		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
+		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreServiceTests.swift; sourceTree = "<group>"; };
+		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitorTests.swift; sourceTree = "<group>"; };
+		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManagerTests.swift; sourceTree = "<group>"; };
+		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsTests.swift; sourceTree = "<group>"; };
+		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		91C73240995D03C9FE9DCEC1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F254C1196975440FD4DCE9FD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -273,27 +373,56 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C258C416BA9D11F05B2F2BEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				253652C27A4C4BC150901E01 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F254C1196975440FD4DCE9FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B731CEFC6751AAE0EC69B98 = {
-			isa = PBXGroup;
-			children = (
-				20F4BD606C0F6D1645AE4919 /* BarnHub */,
-				C0D0581312912516FF12D747 /* BarnHubTests */,
-				463D4E7574DE52C30660D0A7 /* BarnHubUITests */,
-				0A2C978E52A76F0AA9F68BB5 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
 		0A2C978E52A76F0AA9F68BB5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				39336BD3A0262B77EFBBEFA1 /* BarnHub.app */,
 				F9D22AD988431229927A9911 /* BarnHubTests.xctest */,
 				B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */,
+				888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		157D58249029F90DE2AB8725 /* Horses */ = {
+			isa = PBXGroup;
+			children = (
+				201B61197773820D4015D429 /* FarrierVisitEditView.swift */,
+				0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */,
+				8C38356F6D87FBDFB2290568 /* HorseEditView.swift */,
+				1F0B2139601FAF7FAE12C875 /* HorseListView.swift */,
+				C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */,
+				A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */,
+				D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */,
+				8E4059FB68D68631292465BD /* VetRecordEditView.swift */,
+			);
+			path = Horses;
+			sourceTree = "<group>";
+		};
+		1A48EF0E3BC64E27B16FE919 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB78ECF9506C47B7CE5B4987 /* OS X */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		20F4BD606C0F6D1645AE4919 /* BarnHub */ = {
@@ -309,8 +438,20 @@
 				5533F3ED09443E81B9747239 /* Preview Content */,
 				564EAF51B7DD4639ADD9B985 /* Services */,
 				C454586A1F4E28C340BDC1AD /* Views */,
+				17FD7B53BC587AAC85435CCD /* BarnHub-macOS.entitlements */,
 			);
 			path = BarnHub;
+			sourceTree = "<group>";
+		};
+		2B731CEFC6751AAE0EC69B98 = {
+			isa = PBXGroup;
+			children = (
+				20F4BD606C0F6D1645AE4919 /* BarnHub */,
+				C0D0581312912516FF12D747 /* BarnHubTests */,
+				463D4E7574DE52C30660D0A7 /* BarnHubUITests */,
+				0A2C978E52A76F0AA9F68BB5 /* Products */,
+				1A48EF0E3BC64E27B16FE919 /* Frameworks */,
+			);
 			sourceTree = "<group>";
 		};
 		3136E6F1DF677A1E5E9176FE /* Extensions */ = {
@@ -322,38 +463,21 @@
 				FBA744D61AAEE032A230817D /* Double+Currency.swift */,
 				CE768E67ED8208EC1BC695B8 /* View+Toast.swift */,
 				VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */,
+				24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */,
+				9EC91A420DFF31CCEA9FB261 /* Image+PlatformCompat.swift */,
+				24651A9A1646C3DE9212B3E8 /* View+PlatformCompat.swift */,
+				14D615DAA0864907CF642489 /* Image+PlatformCompat.swift */,
 			);
-			path = "Extensions";
+			path = Extensions;
 			sourceTree = "<group>";
 		};
-		9CF43B31E8845D861542A38E /* Models */ = {
+		463D4E7574DE52C30660D0A7 /* BarnHubUITests */ = {
 			isa = PBXGroup;
 			children = (
-				DD11223344556677BARN0001 /* BarnNote.swift */,
-				23D455C23A05576DE66AA068 /* Client.swift */,
-				47E49121D576E6628ED2785E /* Enums.swift */,
-				C2F53930338F4A389921F640 /* WeightEntry.swift */,
-				11204D4698E5472A9F981077 /* Invoice.swift */,
-				9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */,
-				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
-				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
-				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
-				5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */,
-				AADD112233445566LESS0001 /* Lesson.swift */,
-				3B9960085725FD7B2D959B29 /* Transaction.swift */,
-				FF8A6A12276BB472310E25E6 /* VetRecord.swift */,
+				1E512067702B1DE5393F4838 /* BarnHubUITests.swift */,
+				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
 			);
-			path = "Models";
-			sourceTree = "<group>";
-		};
-		DCBC7EC1946F1D8B1AA76301 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				9626486725CB190EBD898F44 /* DeepLinkHandler.swift */,
-				CD0269846B3293A3B59F5C78 /* Router.swift */,
-				92C3E00B82BEDE322C7C8474 /* Routes.swift */,
-			);
-			path = "Navigation";
+			path = BarnHubUITests;
 			sourceTree = "<group>";
 		};
 		5533F3ED09443E81B9747239 /* Preview Content */ = {
@@ -380,53 +504,7 @@
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
 			);
-			path = "Services";
-			sourceTree = "<group>";
-		};
-		C454586A1F4E28C340BDC1AD /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				BBCC001122334455DATA0005 /* DataManagementView.swift */,
-				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
-				BB11223344556677AABB0003 /* SettingsView.swift */,
-				75C45A74C0754D59FD90DAE5 /* Accounting */,
-				CE6CF664131C60DA461067A8 /* Barn */,
-				58A73D2D9F8B43A7E7D9336F /* Clients */,
-				6A4A5194513E89696377E642 /* Components */,
-				157D58249029F90DE2AB8725 /* Horses */,
-				AA11223344556677AABB0011 /* Subscription */,
-			);
-			path = "Views";
-			sourceTree = "<group>";
-		};
-		75C45A74C0754D59FD90DAE5 /* Accounting */ = {
-			isa = PBXGroup;
-			children = (
-				0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */,
-				D4E5F60718293041B2C3D4E5 /* ReportsView.swift */,
-				162F54183A973C74E91D0DD7 /* TransactionEditView.swift */,
-				4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */,
-				FEA99F03E1B72A946035663D /* TransactionRowView.swift */,
-			);
-			path = "Accounting";
-			sourceTree = "<group>";
-		};
-		CE6CF664131C60DA461067A8 /* Barn */ = {
-			isa = PBXGroup;
-			children = (
-				4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */,
-				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
-				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
-				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
-				AADD112233445566LESS0005 /* LessonEditView.swift */,
-				AADD112233445566LESS0003 /* LessonListView.swift */,
-				93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */,
-				5E66197FAA363BF926741C13 /* ReminderListView.swift */,
-				09E279531F6A34C8031FA01E /* SupplyEditView.swift */,
-				08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */,
-				5B2F746E98569B333351DB50 /* VetScheduleView.swift */,
-			);
-			path = "Barn";
+			path = Services;
 			sourceTree = "<group>";
 		};
 		58A73D2D9F8B43A7E7D9336F /* Clients */ = {
@@ -443,7 +521,7 @@
 				F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */,
 				6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */,
 			);
-			path = "Clients";
+			path = Clients;
 			sourceTree = "<group>";
 		};
 		6A4A5194513E89696377E642 /* Components */ = {
@@ -461,23 +539,61 @@
 				SUMMCARD00112233AABB0001 /* SummaryCard.swift */,
 				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
+				AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */,
+				B748DC85E941B06F934124AA /* ShareSheet.swift */,
 			);
-			path = "Components";
+			path = Components;
 			sourceTree = "<group>";
 		};
-		157D58249029F90DE2AB8725 /* Horses */ = {
+		75C45A74C0754D59FD90DAE5 /* Accounting */ = {
 			isa = PBXGroup;
 			children = (
-				201B61197773820D4015D429 /* FarrierVisitEditView.swift */,
-				0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */,
-				8C38356F6D87FBDFB2290568 /* HorseEditView.swift */,
-				1F0B2139601FAF7FAE12C875 /* HorseListView.swift */,
-				C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */,
-				A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */,
-				D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */,
-				8E4059FB68D68631292465BD /* VetRecordEditView.swift */,
+				0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */,
+				D4E5F60718293041B2C3D4E5 /* ReportsView.swift */,
+				162F54183A973C74E91D0DD7 /* TransactionEditView.swift */,
+				4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */,
+				FEA99F03E1B72A946035663D /* TransactionRowView.swift */,
 			);
-			path = "Horses";
+			path = Accounting;
+			sourceTree = "<group>";
+		};
+		9CF43B31E8845D861542A38E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD11223344556677BARN0001 /* BarnNote.swift */,
+				23D455C23A05576DE66AA068 /* Client.swift */,
+				47E49121D576E6628ED2785E /* Enums.swift */,
+				C2F53930338F4A389921F640 /* WeightEntry.swift */,
+				11204D4698E5472A9F981077 /* Invoice.swift */,
+				9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */,
+				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
+				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
+				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
+				5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */,
+				AADD112233445566LESS0001 /* Lesson.swift */,
+				3B9960085725FD7B2D959B29 /* Transaction.swift */,
+				FF8A6A12276BB472310E25E6 /* VetRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA11223344556677AABB0011 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				AA11223344556677AABB000B /* ClientsUpgradeView.swift */,
+				AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */,
+				AA11223344556677AABB0005 /* PaywallView.swift */,
+				AA11223344556677AABB0007 /* ProBadgeView.swift */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		AA11223344556677AABB0012 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				AA11223344556677AABB000D /* BarnHubProducts.storekit */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		C0D0581312912516FF12D747 /* BarnHubTests */ = {
@@ -503,53 +619,77 @@
 			path = BarnHubTests;
 			sourceTree = "<group>";
 		};
-		463D4E7574DE52C30660D0A7 /* BarnHubUITests */ = {
+		C454586A1F4E28C340BDC1AD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1E512067702B1DE5393F4838 /* BarnHubUITests.swift */,
-				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
+				BBCC001122334455DATA0005 /* DataManagementView.swift */,
+				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
+				BB11223344556677AABB0003 /* SettingsView.swift */,
+				75C45A74C0754D59FD90DAE5 /* Accounting */,
+				CE6CF664131C60DA461067A8 /* Barn */,
+				58A73D2D9F8B43A7E7D9336F /* Clients */,
+				6A4A5194513E89696377E642 /* Components */,
+				157D58249029F90DE2AB8725 /* Horses */,
+				AA11223344556677AABB0011 /* Subscription */,
 			);
-			path = BarnHubUITests;
+			path = Views;
 			sourceTree = "<group>";
 		};
-		AA11223344556677AABB0011 /* Subscription */ = {
+		CB78ECF9506C47B7CE5B4987 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				AA11223344556677AABB000B /* ClientsUpgradeView.swift */,
-				AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */,
-				AA11223344556677AABB0005 /* PaywallView.swift */,
-				AA11223344556677AABB0007 /* ProBadgeView.swift */,
+				7AD5ED6FE97B96591D9CA732 /* Cocoa.framework */,
 			);
-			path = "Subscription";
+			name = "OS X";
 			sourceTree = "<group>";
 		};
-		AA11223344556677AABB0012 /* Configuration */ = {
+		CE6CF664131C60DA461067A8 /* Barn */ = {
 			isa = PBXGroup;
 			children = (
-				AA11223344556677AABB000D /* BarnHubProducts.storekit */,
+				4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */,
+				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
+				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
+				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
+				AADD112233445566LESS0005 /* LessonEditView.swift */,
+				AADD112233445566LESS0003 /* LessonListView.swift */,
+				93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */,
+				5E66197FAA363BF926741C13 /* ReminderListView.swift */,
+				09E279531F6A34C8031FA01E /* SupplyEditView.swift */,
+				08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */,
+				5B2F746E98569B333351DB50 /* VetScheduleView.swift */,
 			);
-			path = "Configuration";
+			path = Barn;
+			sourceTree = "<group>";
+		};
+		DCBC7EC1946F1D8B1AA76301 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				9626486725CB190EBD898F44 /* DeepLinkHandler.swift */,
+				CD0269846B3293A3B59F5C78 /* Router.swift */,
+				92C3E00B82BEDE322C7C8474 /* Routes.swift */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		99889D60A11D60E2AA54819D /* BarnHub */ = {
+		0C28F3E67EF128E4928C9ADF /* BarnHubUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnHub" */;
+			buildConfigurationList = 4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnHubUITests" */;
 			buildPhases = (
-				9C0CDACBCB11B5A73C0A33C6 /* Sources */,
-				91C73240995D03C9FE9DCEC1 /* Frameworks */,
-				559034208AE29C96C45305E8 /* Resources */,
+				72D01DD4203283D325C3611D /* Sources */,
+				95E4AFC82AFEA8F4A4DC3D6D /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E1A4BB05D88C7B1311ADABBB /* PBXTargetDependency */,
 			);
-			name = BarnHub;
-			productName = BarnHub;
-			productReference = 39336BD3A0262B77EFBBEFA1 /* BarnHub.app */;
-			productType = "com.apple.product-type.application";
+			name = BarnHubUITests;
+			productName = BarnHubUITests;
+			productReference = B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		124C588D1E4E0F457FAD7DFF /* BarnHubTests */ = {
 			isa = PBXNativeTarget;
@@ -568,22 +708,39 @@
 			productReference = F9D22AD988431229927A9911 /* BarnHubTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0C28F3E67EF128E4928C9ADF /* BarnHubUITests */ = {
+		8FF17BABA8A436D4E974B167 /* BarnHub macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D9205393798E7417740E709 /* Build configuration list for PBXNativeTarget "BarnHubUITests" */;
+			buildConfigurationList = FFC54EC7631C69837AE01E4E /* Build configuration list for PBXNativeTarget "BarnHub macOS" */;
 			buildPhases = (
-				72D01DD4203283D325C3611D /* Sources */,
-				95E4AFC82AFEA8F4A4DC3D6D /* Frameworks */,
+				1AA56D041F20C7F8D3739779 /* Sources */,
+				C258C416BA9D11F05B2F2BEA /* Frameworks */,
+				02ED0BE6F25539FFEE8AF886 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E1A4BB05D88C7B1311ADABBB /* PBXTargetDependency */,
 			);
-			name = BarnHubUITests;
-			productName = BarnHubUITests;
-			productReference = B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
+			name = "BarnHub macOS";
+			productName = "BarnHub macOS";
+			productReference = 888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		99889D60A11D60E2AA54819D /* BarnHub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnHub" */;
+			buildPhases = (
+				9C0CDACBCB11B5A73C0A33C6 /* Sources */,
+				91C73240995D03C9FE9DCEC1 /* Frameworks */,
+				559034208AE29C96C45305E8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BarnHub;
+			productName = BarnHub;
+			productReference = 39336BD3A0262B77EFBBEFA1 /* BarnHub.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -595,16 +752,16 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
-					99889D60A11D60E2AA54819D = {
+					0C28F3E67EF128E4928C9ADF = {
 						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 99889D60A11D60E2AA54819D;
 					};
 					124C588D1E4E0F457FAD7DFF = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = 99889D60A11D60E2AA54819D;
 					};
-					0C28F3E67EF128E4928C9ADF = {
+					99889D60A11D60E2AA54819D = {
 						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 99889D60A11D60E2AA54819D;
 					};
 				};
 			};
@@ -624,11 +781,22 @@
 				99889D60A11D60E2AA54819D /* BarnHub */,
 				124C588D1E4E0F457FAD7DFF /* BarnHubTests */,
 				0C28F3E67EF128E4928C9ADF /* BarnHubUITests */,
+				8FF17BABA8A436D4E974B167 /* BarnHub macOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		02ED0BE6F25539FFEE8AF886 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D9D1281FC23234FD21E8CB6 /* Assets.xcassets in Resources */,
+				6E4E6A10028C0E50D6BB0913 /* BarnHubProducts.storekit in Resources */,
+				67D0F0466CEA861338639869 /* arrow.jpeg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		559034208AE29C96C45305E8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -642,6 +810,113 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1AA56D041F20C7F8D3739779 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A90DBB40ABF1B1171A28B9CB /* HealthTimelineView.swift in Sources */,
+				96BA747D2A434D6C99902E4C /* WeightChartView.swift in Sources */,
+				B7D5CE80B216879EC5CD1351 /* WeightEntry.swift in Sources */,
+				529B6C8140BCF6258F396688 /* InvoiceHistoryView.swift in Sources */,
+				9388F61BA60E4CB0CAC35354 /* InvoiceGeneratorView.swift in Sources */,
+				19744E0316C5D37A8B58644F /* ContractGeneratorView.swift in Sources */,
+				9A6434B509C0867A7EAC6838 /* InvoicePDFService.swift in Sources */,
+				7DA874751B873AA29E9BE973 /* ContractPDFService.swift in Sources */,
+				EC84F06E9DEE752F44F00ED4 /* Invoice.swift in Sources */,
+				716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */,
+				AD36F0C70EAB02DA9E20A7AD /* DataExportService.swift in Sources */,
+				0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */,
+				DCA9E258D8CD546FFEC8B9CE /* DataManagementView.swift in Sources */,
+				5C278F8FF9D472B642494577 /* URL+App.swift in Sources */,
+				89DADD3345601DDCA7F4E930 /* BarnHubApp.swift in Sources */,
+				D951958762A712FCFA5B1646 /* DeepLinkHandler.swift in Sources */,
+				C366A9E124A03FBC6C4AF693 /* Router.swift in Sources */,
+				67846EB91C783EDD2BB99ED8 /* Routes.swift in Sources */,
+				230B47D38D9F1F3B3B713D53 /* Client.swift in Sources */,
+				597B32CFF412D041C08C9702 /* Enums.swift in Sources */,
+				AC93C1CF8FA3FC442D24B20F /* FarrierVisit.swift in Sources */,
+				7DD024A4E65E65BDF936111E /* Horse.swift in Sources */,
+				6F2082EDF8064FDEF27EE5BE /* Reminder.swift in Sources */,
+				8C4899F08B9237E107503E5A /* SupplyItem.swift in Sources */,
+				DF64EAA9B3F9B995F6FBC740 /* Transaction.swift in Sources */,
+				49FCAA7CFB776EBAED74D492 /* VetRecord.swift in Sources */,
+				081908AE0AEFB9CFC5DD75ED /* PreviewSampleData.swift in Sources */,
+				A767DF6FDA03BB02F275316E /* Color+Brand.swift in Sources */,
+				18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */,
+				0590894709F843FEB7156414 /* Double+Currency.swift in Sources */,
+				7B9F554D51AC55067789DD55 /* View+Toast.swift in Sources */,
+				05C6DAC9B032919D312E892D /* View+BarnCard.swift in Sources */,
+				77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */,
+				873115BAC93C0159BCB86D42 /* TransactionEditView.swift in Sources */,
+				C18F89EBB9CC9DD5699FF806 /* TransactionListView.swift in Sources */,
+				E93F0AC5E2C627BD42F2ABD9 /* TransactionRowView.swift in Sources */,
+				4F5DC68351904D9310646DC0 /* ClientDetailView.swift in Sources */,
+				35B59EFCC0E73FCFD72E0F3E /* ClientDocumentsView.swift in Sources */,
+				98FB3F30D95A0BD03961F9C5 /* ClientEditView.swift in Sources */,
+				B70E0586CA22B751AE95AF59 /* ClientHorsesView.swift in Sources */,
+				4804F7D837DE46ECC7BCC11E /* ClientListView.swift in Sources */,
+				E6ADFFFA59BAD207FF4609C8 /* ClientPaymentHistoryView.swift in Sources */,
+				FF0E902A35BA84ED658C2B60 /* ClientRowView.swift in Sources */,
+				C1F2B654B6643C4C364F5597 /* ConfirmationDialog.swift in Sources */,
+				0F85EA0DE901A55D3C20F7E0 /* CurrencyField.swift in Sources */,
+				511A6F28FF6AC2F7627D718B /* EmptyStateView.swift in Sources */,
+				44932DED4DDB38C1486D4CA4 /* HorsePickerSection.swift in Sources */,
+				C877A57158EFFCCDA3F946B7 /* MailComposer.swift in Sources */,
+				C11E2F2BC3971B7F17C19341 /* ToastModifier.swift in Sources */,
+				955EE1B9866BB5DDF2A04263 /* ScheduleRecordRow.swift in Sources */,
+				B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */,
+				3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */,
+				1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */,
+				69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */,
+				A40828345969CDFE498D7AF7 /* FarrierScheduleView.swift in Sources */,
+				7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */,
+				BA710B4811F5A0A34BF7D9C2 /* ReminderListView.swift in Sources */,
+				6614D4075F2C8BDF01097D13 /* SupplyEditView.swift in Sources */,
+				3CCE16FF2DC1E7E50B4756D2 /* SupplyListView.swift in Sources */,
+				CE727A00BDE9FA34DE9B187A /* VetScheduleView.swift in Sources */,
+				D66E57E90845459502336829 /* FarrierVisitEditView.swift in Sources */,
+				15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */,
+				79CEBC2D5217C4F19E415478 /* HorseEditView.swift in Sources */,
+				5895B58A390D7DF70FD6B7D3 /* HorseListView.swift in Sources */,
+				A3C9E32AAFF9260347DF7145 /* HorseRowView.swift in Sources */,
+				B91A2F79900BBA63844EB78A /* VetRecordEditView.swift in Sources */,
+				95FB202CB0CBE34AA21EA142 /* HomeView.swift in Sources */,
+				CA8B1245E9DC6C2A01B5A96D /* ReportsView.swift in Sources */,
+				004CACE0D835B5B58CFD59A2 /* Logger.swift in Sources */,
+				DAEBFA20B41C7ED9CC192419 /* ModelContext+Helpers.swift in Sources */,
+				14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */,
+				0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */,
+				A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */,
+				00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */,
+				EF64D5B5EDE7FB95341045B0 /* ProBadgeView.swift in Sources */,
+				B5D01AEB5B1048CA46F63996 /* FeatureLockedOverlay.swift in Sources */,
+				F525745099D801FC3DC33B75 /* ClientsUpgradeView.swift in Sources */,
+				5A86E38B23BCAAB5D2130D59 /* AppearanceManager.swift in Sources */,
+				B05821F5FB68C8E2C29600F4 /* SettingsView.swift in Sources */,
+				47D9EBB787629D19F306343D /* BarnNote.swift in Sources */,
+				92E748C25DB3202C01DCA4D5 /* BarnNoteListView.swift in Sources */,
+				1D195657269C5D4EAEDEF2EA /* BarnNoteEditView.swift in Sources */,
+				90C3F661BAE4F4FE75540326 /* SyncMonitor.swift in Sources */,
+				58B1A407D45B9090A0188F83 /* SyncIndicatorView.swift in Sources */,
+				DC73955B346D32B7D0995445 /* Lesson.swift in Sources */,
+				A9C48EE5FD7ADFBDB37BEE45 /* LessonListView.swift in Sources */,
+				C17D7A8663679EB6A8CF2005 /* LessonEditView.swift in Sources */,
+				A4D6CA97868E5513D7320EBE /* ClientPickerSection.swift in Sources */,
+				E9B63DC21E1DFF87076413D6 /* View+PlatformCompat.swift in Sources */,
+				F7286659E2BAB2064A0004E2 /* Image+PlatformCompat.swift in Sources */,
+				B14FF81A91D05E1752D0D62F /* ShareSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72D01DD4203283D325C3611D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */,
+				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9C0CDACBCB11B5A73C0A33C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -734,6 +1009,9 @@
 				AADD112233445566LESS0004 /* LessonListView.swift in Sources */,
 				AADD112233445566LESS0006 /* LessonEditView.swift in Sources */,
 				AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */,
+				462C72CBD666EC1A27EA58DD /* View+PlatformCompat.swift in Sources */,
+				0FECD3DF15FF7D5B7C41F291 /* Image+PlatformCompat.swift in Sources */,
+				49C18E219EA2DB73B789268F /* ShareSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,15 +1038,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		72D01DD4203283D325C3611D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */,
-				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -785,6 +1054,107 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		01C5DD840EB3D74B2FF3C172 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3DF2401EEE4B26616BBC9D32 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BarnHub;
+			};
+			name = Debug;
+		};
+		4CF9E94418EB14931A5453D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		61778E974363475650A5276E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 27;
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnHub";
+			};
+			name = Release;
+		};
 		6BEB8A8372AEC5D15F55F5B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -904,69 +1274,54 @@
 			};
 			name = Release;
 		};
-		4CF9E94418EB14931A5453D9 /* Debug */ = {
+		8004BA2B5FF07C65F5E44969 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TYQ32QCF6K;
-				ENABLE_PREVIEWS = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook.mac;
+				PRODUCT_NAME = BarnHub;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = Release;
 		};
-		01C5DD840EB3D74B2FF3C172 /* Release */ = {
+		AF743FF668EF13EB9B9460B0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
 				DEVELOPMENT_TEAM = TYQ32QCF6K;
-				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
 				MARKETING_VERSION = 1.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BarnHub;
 			};
 			name = Release;
 		};
@@ -988,57 +1343,39 @@
 			};
 			name = Debug;
 		};
-		61778E974363475650A5276E /* Release */ = {
+		D9E62DF18AE4756BBA9D0EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 27;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBook.mac;
+				PRODUCT_NAME = BarnHub;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BarnHub.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BarnHub";
-			};
-			name = Release;
-		};
-		3DF2401EEE4B26616BBC9D32 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BarnHub;
 			};
 			name = Debug;
-		};
-		AF743FF668EF13EB9B9460B0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BarnHub;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1048,15 +1385,6 @@
 			buildConfigurations = (
 				6BEB8A8372AEC5D15F55F5B8 /* Debug */,
 				76148309EB47067EAA7148E7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnHub" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4CF9E94418EB14931A5453D9 /* Debug */,
-				01C5DD840EB3D74B2FF3C172 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1079,8 +1407,25 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8F965A892E9E4784ADD5B68A /* Build configuration list for PBXNativeTarget "BarnHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF9E94418EB14931A5453D9 /* Debug */,
+				01C5DD840EB3D74B2FF3C172 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FFC54EC7631C69837AE01E4E /* Build configuration list for PBXNativeTarget "BarnHub macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8004BA2B5FF07C65F5E44969 /* Release */,
+				D9E62DF18AE4756BBA9D0EEC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
 }

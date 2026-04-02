@@ -41,18 +41,18 @@ struct ClientListView: View {
             }
         }
         .navigationTitle("Clients")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search clients")
         .toolbar {
             if isPro {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .trailingBar) {
                     Button {
                         router.navigate(to: ClientRoute.edit(nil))
                     } label: {
                         Image(systemName: "plus")
                     }
                 }
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .leadingBar) {
                     Toggle(isOn: $showInactive) {
                         Label("Show Inactive", systemImage: "eye")
                     }

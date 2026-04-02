@@ -6,8 +6,8 @@ struct HorseRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            if let photoData = horse.photoData, let uiImage = UIImage(data: photoData) {
-                Image(uiImage: uiImage)
+            if let photoData = horse.photoData, let image = Image(photoData: photoData) {
+                image
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
