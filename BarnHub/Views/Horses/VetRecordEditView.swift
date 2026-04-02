@@ -63,6 +63,11 @@ struct VetRecordEditView: View {
         }
         .navigationTitle("New Vet Record")
         .inlineNavTitle()
+        #if os(macOS)
+        .formStyle(.grouped)
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
+        #endif
         .toast(toast)
     }
 
