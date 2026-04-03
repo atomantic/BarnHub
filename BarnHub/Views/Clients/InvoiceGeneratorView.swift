@@ -140,7 +140,7 @@ struct InvoiceGeneratorView: View {
             try pdfData.write(to: tempURL)
         } catch {
             BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
-            toast.show(String(localized: "Failed to save invoice"), isError: true)
+            toast.show(appLocalized("Failed to save invoice"), isError: true)
             return
         }
         generatedPDFURL = tempURL

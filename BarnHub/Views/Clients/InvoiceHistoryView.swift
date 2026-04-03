@@ -70,7 +70,7 @@ struct InvoiceHistoryView: View {
             try data.write(to: tempURL)
         } catch {
             BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
-            toast.show(String(localized: "Failed to load invoice"), isError: true)
+            toast.show(appLocalized("Failed to load invoice"), isError: true)
             return
         }
         selectedPDFURL = tempURL

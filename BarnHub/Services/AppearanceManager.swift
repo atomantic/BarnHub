@@ -5,11 +5,11 @@ enum AppearanceMode: Int, CaseIterable {
     case light = 1
     case dark = 2
 
-    var displayName: LocalizedStringKey {
+    var displayName: String {
         switch self {
-        case .system: "System"
-        case .light: "Light"
-        case .dark: "Dark"
+        case .system: return appLocalized("System", comment: "Appearance mode")
+        case .light:  return appLocalized("Light",  comment: "Appearance mode")
+        case .dark:   return appLocalized("Dark",   comment: "Appearance mode")
         }
     }
 

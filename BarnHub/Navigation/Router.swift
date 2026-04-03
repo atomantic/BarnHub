@@ -15,10 +15,10 @@ final class Router {
 
         var title: LocalizedStringKey {
             switch self {
-            case .home: "Home"
-            case .horses: "Horses"
-            case .clients: "Clients"
-            case .schedule: "Schedule"
+            case .home:       "Home"
+            case .horses:     "Horses"
+            case .clients:    "Clients"
+            case .schedule:   "Schedule"
             case .accounting: "Accounting"
             }
         }

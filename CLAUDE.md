@@ -55,3 +55,39 @@ CI/CD via GitHub Actions (`.github/workflows/ci.yml`) deploys automatically on p
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
 - **Logging**: Use `BarnHubLogger.info/success/warning/error`
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument
+
+## Localization
+
+The app uses **Xcode String Catalogs** (`Localizable.xcstrings`) with 9 supported languages + English source. Locale is set via `.environment(\.locale)` at the root view in `BarnHubApp.swift`.
+
+### Adding localized strings
+
+1. **In SwiftUI views** — `Text("My String")` auto-lookups via `LocalizedStringKey`. No extra work needed for `Text`, `Label`, `Button`, `.navigationTitle`, `Section` headers, `.confirmationDialog`, and `.alert` titles.
+
+2. **In enums, computed properties, and non-UI code** — use `appLocalized()` (defined in `Locale+App.swift`):
+   ```swift
+   var displayName: String {
+       switch self {
+       case .feed: return appLocalized("Feed", comment: "Transaction category")
+       }
+   }
+   ```
+   Always return `String` (not `LocalizedStringKey`) so values work in both `Text()` and string interpolation.
+
+3. **Never use** `String(localized:)` directly — it ignores in-app locale changes. Always use `appLocalized()` which passes `locale: .app`.
+
+4. **Never use** `NSLocalizedString` — it's the legacy API.
+
+5. **Date formatting in `Text()`** — use `Text(date, format:)` not `date.formatted()`. The former respects the SwiftUI environment locale; the latter uses the system locale.
+
+### Rules
+
+- **Always use `appLocalized()` for programmatic localized strings** — it reads the user's locale preference and resolves correctly without restart
+- **Never store localized strings in SwiftData** — store raw enum values (`rawValue`), compute `displayName` at display time
+- **Never cache `DateFormatter` as static** — use `Date.FormatStyle` or create formatters per-call so they respect locale changes
+- **`comment:` parameter is required** on all `appLocalized()` calls — it helps translators and auto-populates in the string catalog
+- **After adding new strings**, build the project — Xcode auto-extracts new keys into `Localizable.xcstrings` with state `"new"`. Then add translations for all 9 languages.
+
+### Supported languages
+
+`en`, `de`, `fr`, `nl`, `sv`, `es-ES`, `es-MX`, `pt-BR`, `it`

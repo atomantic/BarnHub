@@ -111,6 +111,6 @@ struct TransactionEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Transaction added") : String(localized: "Transaction updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Transaction added") : appLocalized("Transaction updated"), dismiss: dismiss)
     }
 }

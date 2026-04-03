@@ -9,9 +9,9 @@ enum ContractType: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .boardingAgreement: return "Boarding Agreement"
-        case .liabilityWaiver: return "Liability Waiver"
-        case .careAgreement: return "Care Agreement"
+        case .boardingAgreement: return appLocalized("Boarding Agreement", comment: "Contract type")
+        case .liabilityWaiver:   return appLocalized("Liability Waiver",   comment: "Contract type")
+        case .careAgreement:     return appLocalized("Care Agreement",     comment: "Contract type")
         }
     }
 

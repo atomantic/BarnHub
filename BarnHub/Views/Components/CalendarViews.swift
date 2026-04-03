@@ -46,7 +46,7 @@ struct ScheduleEventRow: View {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
                     if showTime && !isAllDay(event.date) {
-                        Text(event.date.formatted(.dateTime.hour().minute()))
+                        Text(event.date, format: .dateTime.hour().minute())
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Image(systemName: event.type.icon).font(.caption).foregroundStyle(event.type.color)
@@ -171,7 +171,7 @@ struct CalendarMonthView: View {
         let dayEvents = (eventsByDay[day] ?? []).sorted { $0.date < $1.date }
 
         return VStack(alignment: .leading, spacing: 0) {
-            Text(selectedDate.formatted(.dateTime.weekday(.wide).month(.wide).day()))
+            Text(selectedDate, format: .dateTime.weekday(.wide).month(.wide).day())
                 .font(.subheadline.weight(.semibold))
                 .padding(.horizontal, 16)
                 .padding(.top, 10)
@@ -244,21 +244,22 @@ struct CalendarWeekView: View {
                 let isSelected = cal.startOfDay(for: day) == cal.startOfDay(for: selectedDate)
                 Button { onDateSelected(day) } label: {
                     VStack(spacing: 2) {
-                        Text(day.formatted(.dateTime.weekday(.abbreviated)))
+                        Text(day, format: .dateTime.weekday(.short))
                             .font(.caption2)
                             .foregroundStyle(isToday ? Color.barnGreen : .secondary)
                         Text("\(cal.component(.day, from: day))")
-                            .font(.subheadline.weight(isToday ? .bold : .regular))
+                            .font(.caption.weight(isToday ? .bold : .regular))
                             .foregroundStyle(isToday ? .white : isSelected ? Color.barnGreen : .primary)
-                            .frame(width: 28, height: 28)
+                            .frame(width: 24, height: 24)
                             .background { Circle().fill(isToday ? Color.barnGreen : .clear) }
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
+                    .padding(.vertical, 4)
                 }
                 .buttonStyle(.plain)
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func weekTimeGrid(width: CGFloat) -> some View {

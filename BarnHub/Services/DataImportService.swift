@@ -19,13 +19,13 @@ struct DataImportService {
     static func importHorses(from csvString: String, context: ModelContext) -> ImportResult {
         let rows = parseCSV(csvString)
         guard let header = rows.first else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Empty file", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Empty file", comment: "Import error")])
         }
 
         let columns = header.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
         let nameIdx = columns.firstIndex(of: "name")
         guard let nameIdx else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Missing required column: Name", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Missing required column: Name", comment: "Import error")])
         }
 
         var imported = 0
@@ -78,7 +78,7 @@ struct DataImportService {
     static func importClients(from csvString: String, context: ModelContext) -> ImportResult {
         let rows = parseCSV(csvString)
         guard let header = rows.first else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Empty file", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Empty file", comment: "Import error")])
         }
 
         let columns = header.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
@@ -87,7 +87,7 @@ struct DataImportService {
         let nameIdx = columns.firstIndex(of: "name")
 
         guard firstIdx != nil || nameIdx != nil else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Missing required column: First Name or Name", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Missing required column: First Name or Name", comment: "Import error")])
         }
 
         var imported = 0
@@ -138,13 +138,13 @@ struct DataImportService {
     static func importTransactions(from csvString: String, context: ModelContext) throws -> ImportResult {
         let rows = parseCSV(csvString)
         guard let header = rows.first else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Empty file", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Empty file", comment: "Import error")])
         }
 
         let columns = header.map { $0.lowercased().trimmingCharacters(in: .whitespaces) }
 
         guard columns.contains("amount") else {
-            return ImportResult(imported: 0, skipped: 0, errors: [String(localized: "Missing required column: Amount", comment: "Import error")])
+            return ImportResult(imported: 0, skipped: 0, errors: [appLocalized("Missing required column: Amount", comment: "Import error")])
         }
 
         // Pre-fetch clients for matching
