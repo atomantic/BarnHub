@@ -17,7 +17,7 @@ struct SettingsView: View {
     @State private var secretCodeInput = ""
     @State private var showInvalidCodeToast = false
     @State private var showCodeRedeemedToast = false
-    @State private var showRestartAlert = false
+
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
     @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
 
@@ -333,20 +333,6 @@ struct SettingsView: View {
                 ForEach(Self.supportedLocales, id: \.id) { locale in
                     Text(locale.name).tag(locale.id)
                 }
-            }
-            .onChange(of: appLocaleID) { _, newValue in
-                if newValue.isEmpty {
-                    UserDefaults.standard.removeObject(forKey: "AppleLanguages")
-                } else {
-                    UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
-                }
-                showRestartAlert = true
-            }
-            .alert("Restart Required", isPresented: $showRestartAlert) {
-                Button("Restart Now") { exit(0) }
-                Button("Later", role: .cancel) {}
-            } message: {
-                Text("Please restart BarnHub to apply the language change.")
             }
         }
     }
