@@ -5,7 +5,7 @@ enum AppearanceMode: Int, CaseIterable {
     case light = 1
     case dark = 2
 
-    var displayName: String {
+    var displayName: LocalizedStringKey {
         switch self {
         case .system: "System"
         case .light: "Light"

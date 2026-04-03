@@ -395,7 +395,7 @@ struct SettingsView: View {
 
     // MARK: - Helpers
 
-    private func settingsRow(_ title: String, icon: String) -> some View {
+    private func settingsRow(_ title: LocalizedStringKey, icon: String) -> some View {
         HStack {
             Text(title)
             Spacer()
@@ -405,7 +405,7 @@ struct SettingsView: View {
         }
     }
 
-    private func externalLink(_ title: String, url: URL) -> some View {
+    private func externalLink(_ title: LocalizedStringKey, url: URL) -> some View {
         Link(destination: url) {
             settingsRow(title, icon: "arrow.up.right")
         }
