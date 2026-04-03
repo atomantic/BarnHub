@@ -74,21 +74,6 @@ struct HomeView: View {
         balancePeriod == .thisMonth ? monthlyBalance : allTimeBalance
     }
 
-    private var overdueReminders: [Reminder] {
-        incompleteReminders.filter { $0.dueDate.isOverdue }
-    }
-
-    private var overdueVetRecords: [VetRecord] {
-        vetRecords.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }
-    }
-
-    private var overdueFarrierVisits: [FarrierVisit] {
-        farrierVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }
-    }
-
-    private var totalOverdueCount: Int {
-        overdueReminders.count + overdueVetRecords.count + overdueFarrierVisits.count
-    }
 
     private var nextScheduleItemToday: String? {
         let calendar = Calendar.current
@@ -136,10 +121,6 @@ struct HomeView: View {
 
     var body: some View {
         let balance = displayBalance
-        let overdueRems = overdueReminders
-        let overdueVet = overdueVetRecords
-        let overdueFarrier = overdueFarrierVisits
-        let overdueCount = overdueRems.count + overdueVet.count + overdueFarrier.count
         let todayRems = todayReminders
         return ScrollView {
             VStack(spacing: 0) {
@@ -152,9 +133,6 @@ struct HomeView: View {
                     #endif
                 if !storeService.isPro {
                     upgradeBar
-                }
-                if overdueCount > 0 {
-                    overdueAlertsSection(reminders: overdueRems, vetRecords: overdueVet, farrierVisits: overdueFarrier, count: overdueCount)
                 }
                 if !todayRems.isEmpty {
                     todaySection(reminders: todayRems)
@@ -242,97 +220,6 @@ struct HomeView: View {
         .buttonStyle(.plain)
         .padding(.horizontal, 24)
         .padding(.bottom, 12)
-    }
-
-    // MARK: - Overdue Alerts
-
-    private func overdueAlertsSection(reminders: [Reminder], vetRecords: [VetRecord], farrierVisits: [FarrierVisit], count: Int) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.red)
-                Text("Overdue (\(count))")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.red)
-            }
-            .padding(.horizontal, 24)
-
-            VStack(spacing: 0) {
-                ForEach(reminders.prefix(3), id: \.persistentModelID) { reminder in
-                    Button {
-                        router.switchTab(.schedule)
-                        router.navigate(to: BarnRoute.reminderEdit(reminder.persistentModelID), tab: .schedule)
-                    } label: {
-                        overdueRow(
-                            icon: "bell.fill",
-                            title: reminder.title,
-                            subtitle: reminder.horse?.name,
-                            date: reminder.dueDate
-                        )
-                    }
-                    .buttonStyle(.plain)
-                }
-                ForEach(vetRecords.prefix(2), id: \.persistentModelID) { record in
-                    overdueRow(
-                        icon: "cross.case.fill",
-                        title: "Vet: \(record.horse?.name ?? "Unknown")",
-                        subtitle: record.vetName,
-                        date: record.nextDueDate
-                    )
-                }
-                ForEach(farrierVisits.prefix(2), id: \.persistentModelID) { visit in
-                    overdueRow(
-                        icon: "hammer.fill",
-                        title: "Farrier: \(visit.horse?.name ?? "Unknown")",
-                        subtitle: visit.farrierName,
-                        date: visit.nextDueDate
-                    )
-                }
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.barnCardBackground)
-                    .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-            )
-            .padding(.horizontal, 24)
-
-            Button {
-                router.switchTab(.schedule)
-            } label: {
-                Text("See all")
-                    .font(.caption)
-                    .foregroundStyle(.barnGreen)
-            }
-            .padding(.horizontal, 24)
-        }
-        .padding(.bottom, 16)
-    }
-
-    private func overdueRow(icon: String, title: String, subtitle: String?, date: Date?) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(.red)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.primary)
-                if let subtitle {
-                    Text(subtitle)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
-            if let date {
-                Text(date.relativeDateString)
-                    .font(.caption2)
-                    .foregroundStyle(.red)
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
     }
 
     // MARK: - Today Section

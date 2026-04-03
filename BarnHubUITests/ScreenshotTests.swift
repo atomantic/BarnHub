@@ -5,9 +5,9 @@ final class ScreenshotTests: XCTestCase {
 
     private static let projectDir = "/Users/antic/github.com/atomantic/BarnHub"
 
-    /// Cached config read once from disk
-    private static let config: [String: String] = {
-        for path in ["\(projectDir)/.screenshot_config.json",
+    /// Read config from project dir or /tmp (written by take_screenshots.sh)
+    private var config: [String: String] {
+        for path in ["\(Self.projectDir)/.screenshot_config.json",
                      "/tmp/barnhub_screenshot_config.json"] {
             if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
                let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String] {
@@ -15,9 +15,7 @@ final class ScreenshotTests: XCTestCase {
             }
         }
         return [:]
-    }()
-
-    private var config: [String: String] { Self.config }
+    }
 
     private var locale: String { config["locale"] ?? "en" }
 
