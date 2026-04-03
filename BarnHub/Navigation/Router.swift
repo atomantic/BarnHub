@@ -13,7 +13,7 @@ final class Router {
     enum AppTab: String, CaseIterable {
         case home, horses, clients, schedule, accounting
 
-        var title: String {
+        var title: LocalizedStringKey {
             switch self {
             case .home: "Home"
             case .horses: "Horses"

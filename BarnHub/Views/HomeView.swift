@@ -9,8 +9,8 @@ enum BalancePeriod: Int, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .thisMonth: "This Month"
-        case .allTime: "All Time"
+        case .thisMonth: String(localized: "This Month", comment: "Balance period")
+        case .allTime:   String(localized: "All Time",   comment: "Balance period")
         }
     }
 }
@@ -164,22 +164,6 @@ struct HomeView: View {
         }
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
-        .toolbar {
-            ToolbarItemGroup(placement: .trailingBar) {
-                SyncIndicatorView()
-                Button {
-                    router.navigate(to: HomeRoute.settings)
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        #if os(macOS)
-                        .foregroundStyle(.secondary)
-                        #else
-                        .foregroundStyle(.white)
-                        #endif
-                }
-                .accessibilityLabel("Settings")
-            }
-        }
     }
 
     private var headerSection: some View {
@@ -406,10 +390,10 @@ struct HomeView: View {
         let vSpacing: CGFloat = 20
         #endif
         return LazyVGrid(columns: columns, spacing: vSpacing) {
-            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: "\(horseCount) \(horseCount == 1 ? "Horse" : "Horses")") {
+            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: String(localized: "^[\(horseCount) horse](inflect: true)", comment: "Horse count badge")) {
                 router.switchTab(.horses)
             }
-            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: "\(clientCount) \(clientCount == 1 ? "Client" : "Clients")") {
+            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: String(localized: "^[\(clientCount) client](inflect: true)", comment: "Client count badge")) {
                 router.switchTab(.clients)
             }
             FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday) {
@@ -435,7 +419,7 @@ struct HomeView: View {
 
 struct FeatureTile: View {
     let icon: String
-    let title: String
+    let title: LocalizedStringKey
     let color: Color
     var badge: String? = nil
     var badgeColor: Color? = nil

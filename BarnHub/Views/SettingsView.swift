@@ -17,7 +17,22 @@ struct SettingsView: View {
     @State private var secretCodeInput = ""
     @State private var showInvalidCodeToast = false
     @State private var showCodeRedeemedToast = false
+    @State private var showRestartAlert = false
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
+    @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
+
+    private static let supportedLocales: [(id: String, name: String)] = [
+        ("",       "System Default"),
+        ("en",     "English"),
+        ("de",     "Deutsch"),
+        ("fr",     "Français"),
+        ("nl",     "Nederlands"),
+        ("sv",     "Svenska"),
+        ("es-ES",  "Español (España)"),
+        ("es-MX",  "Español (México)"),
+        ("pt-BR",  "Português (Brasil)"),
+        ("it",     "Italiano"),
+    ]
 
     private static let feedbackEmail = "support@barnhub.online"
 
@@ -88,8 +103,8 @@ struct SettingsView: View {
             } message: {
                 Text("Enter the code you received to unlock BarnHub Pro.")
             }
-            .toast(isPresented: $showCodeRedeemedToast, message: "Pro unlocked!")
-            .toast(isPresented: $showInvalidCodeToast, message: "Invalid code", isError: true)
+            .toast(isPresented: $showCodeRedeemedToast, message: String(localized: "Pro unlocked!"))
+            .toast(isPresented: $showInvalidCodeToast, message: String(localized: "Invalid code"), isError: true)
     }
 
     // MARK: - Layout
@@ -314,6 +329,25 @@ struct SettingsView: View {
                 }
             }
             .pickerStyle(.segmented)
+            Picker("Language", selection: $appLocaleID) {
+                ForEach(Self.supportedLocales, id: \.id) { locale in
+                    Text(locale.name).tag(locale.id)
+                }
+            }
+            .onChange(of: appLocaleID) { _, newValue in
+                if newValue.isEmpty {
+                    UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+                } else {
+                    UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
+                }
+                showRestartAlert = true
+            }
+            .alert("Restart Required", isPresented: $showRestartAlert) {
+                Button("Restart Now") { exit(0) }
+                Button("Later", role: .cancel) {}
+            } message: {
+                Text("Please restart BarnHub to apply the language change.")
+            }
         }
     }
 

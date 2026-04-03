@@ -156,7 +156,7 @@ struct DataManagementView: View {
                     try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
                 } catch {
                     BarnHubLogger.error("Failed to create export directory error=\(error.localizedDescription)")
-                    toast.show("Export failed", isError: true)
+                    toast.show(String(localized: "Export failed"), isError: true)
                     return
                 }
                 _ = writeTemp(try DataExportService.exportHorsesCSV(from: modelContext), name: "horses.csv", dir: folder)
@@ -166,7 +166,7 @@ struct DataManagementView: View {
             }
         } catch {
             BarnHubLogger.error("Export fetch failed error=\(error.localizedDescription)")
-            toast.show("Export failed", isError: true)
+            toast.show(String(localized: "Export failed"), isError: true)
             return
         }
 
@@ -174,7 +174,7 @@ struct DataManagementView: View {
             showExportSheet = true
             BarnHubLogger.success("Exported \(type.label)")
         } else {
-            toast.show("Export failed", isError: true)
+            toast.show(String(localized: "Export failed"), isError: true)
         }
     }
 
@@ -204,7 +204,7 @@ struct DataManagementView: View {
             pendingImportURL = url
             showImportConfirmation = true
         case .failure(let error):
-            toast.show("Could not open file: \(error.localizedDescription)", isError: true)
+            toast.show(String(localized: "Could not open file: \(error.localizedDescription)", comment: "File open error"), isError: true)
         }
     }
 
@@ -212,14 +212,14 @@ struct DataManagementView: View {
         guard let url = pendingImportURL, let type = importType else { return }
 
         guard url.startAccessingSecurityScopedResource() else {
-            toast.show("Cannot access file", isError: true)
+            toast.show(String(localized: "Cannot access file"), isError: true)
             return
         }
         defer { url.stopAccessingSecurityScopedResource() }
 
         guard let data = try? Data(contentsOf: url),
               let csvString = String(data: data, encoding: .utf8) else {
-            toast.show("Could not read file", isError: true)
+            toast.show(String(localized: "Could not read file"), isError: true)
             return
         }
 
@@ -234,7 +234,7 @@ struct DataManagementView: View {
                 result = try DataImportService.importTransactions(from: csvString, context: modelContext)
             }
         } catch {
-            toast.show("Import failed: \(error.localizedDescription)", isError: true)
+            toast.show(String(localized: "Import failed: \(error.localizedDescription)", comment: "Import error"), isError: true)
             return
         }
 
@@ -256,10 +256,10 @@ struct DataManagementView: View {
             try modelContext.delete(model: Horse.self)
             modelContext.saveWithLogging()
             BarnHubLogger.success("Deleted all data")
-            toast.show("All data deleted")
+            toast.show(String(localized: "All data deleted"))
         } catch {
             BarnHubLogger.error("Failed to delete all data error=\(error.localizedDescription)")
-            toast.show("Failed to delete data", isError: true)
+            toast.show(String(localized: "Failed to delete data"), isError: true)
         }
     }
 
@@ -293,17 +293,17 @@ private enum DeleteStep {
 
     var title: String {
         switch self {
-        case .warning: return "Are You Sure?"
-        case .finalConfirmation: return "Final Confirmation"
+        case .warning: return String(localized: "Are You Sure?", comment: "Delete confirmation alert title")
+        case .finalConfirmation: return String(localized: "Final Confirmation", comment: "Final delete confirmation alert title")
         }
     }
 
     var message: String {
         switch self {
         case .warning:
-            return "This will permanently delete ALL data from BarnHub on this device. Consider exporting your data first so you have a backup."
+            return String(localized: "This will permanently delete ALL data from BarnHub on this device. Consider exporting your data first so you have a backup.", comment: "Delete warning message")
         case .finalConfirmation:
-            return "This cannot be undone. All horses, clients, transactions, and records will be permanently deleted."
+            return String(localized: "This cannot be undone. All horses, clients, transactions, and records will be permanently deleted.", comment: "Final delete confirmation message")
         }
     }
 }
