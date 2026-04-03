@@ -34,6 +34,11 @@ struct BarnHubApp: App {
     @State private var appearanceManager = AppearanceManager()
     @State private var notificationService = NotificationService()
     @State private var syncMonitor = SyncMonitor()
+    @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
+
+    private var appLocale: Locale {
+        appLocaleID.isEmpty ? .current : Locale(identifier: appLocaleID)
+    }
 
     #if os(macOS)
     @NSApplicationDelegateAdaptor(BarnHubMacAppDelegate.self) private var appDelegate
@@ -78,6 +83,7 @@ struct BarnHubApp: App {
         WindowGroup(id: "main") {
             ContentView()
                 .preferredColorScheme(appearanceManager.colorScheme)
+                .environment(\.locale, appLocale)
                 .environment(router)
                 .environment(storeService)
                 .environment(appearanceManager)
@@ -122,6 +128,7 @@ struct BarnHubApp: App {
 
 struct ContentView: View {
     @Environment(Router.self) private var router
+    @Environment(SyncMonitor.self) private var syncMonitor
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -169,11 +176,39 @@ struct ContentView: View {
             }
             .navigationTitle("BarnHub")
             .listStyle(.sidebar)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                sidebarFooter
+            }
         } detail: {
             sidebarDetailView
                 .id(router.selectedTab)
         }
         .tint(.barnGreen)
+    }
+
+    private var sidebarFooter: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 8) {
+                SyncIndicatorView()
+                Text(syncMonitor.status.label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button {
+                    router.navigate(to: HomeRoute.settings)
+                } label: {
+                    Image(systemName: "gearshape")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(String(localized: "Settings"))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+        }
+        .background(.bar)
     }
 
     #if os(iOS)
@@ -185,6 +220,7 @@ struct ContentView: View {
                 HomeView()
                     .withRouteDestinations()
             }
+            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
             .tag(Router.AppTab.home)
 
@@ -192,6 +228,7 @@ struct ContentView: View {
                 HorseListView()
                     .withRouteDestinations()
             }
+            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
             .tag(Router.AppTab.horses)
 
@@ -199,6 +236,7 @@ struct ContentView: View {
                 ClientListView()
                     .withRouteDestinations()
             }
+            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
             .tag(Router.AppTab.clients)
 
@@ -206,6 +244,7 @@ struct ContentView: View {
                 BarnDashboardView()
                     .withRouteDestinations()
             }
+            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
             .tag(Router.AppTab.schedule)
 
@@ -213,6 +252,7 @@ struct ContentView: View {
                 AccountingDashboardView()
                     .withRouteDestinations()
             }
+            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
             .tag(Router.AppTab.accounting)
         }
@@ -261,6 +301,23 @@ struct ContentView: View {
 }
 
 private extension View {
+    #if os(iOS)
+    func withNavControls(router: Router) -> some View {
+        toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                SyncIndicatorView()
+                Button {
+                    router.navigate(to: HomeRoute.settings)
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundStyle(.white)
+                }
+                .accessibilityLabel(String(localized: "Settings"))
+            }
+        }
+    }
+    #endif
+
     func withRouteDestinations() -> some View {
         self
             .navigationDestination(for: HomeRoute.self) { route in

@@ -117,7 +117,7 @@ struct ContractGeneratorView: View {
             try pdfData.write(to: tempURL)
         } catch {
             BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
-            toast.show("Failed to save contract", isError: true)
+            toast.show(String(localized: "Failed to save contract"), isError: true)
             return
         }
         generatedPDFURL = tempURL

@@ -10,12 +10,12 @@ struct ScheduleListView<Record: Identifiable>: View {
     let providerName: (Record) -> String
     let description: (Record) -> String
     let nextDueDate: (Record) -> Date?
-    let navigationTitle: String
+    let navigationTitle: LocalizedStringKey
     let emptyIcon: String
-    let emptyTitle: String
-    let emptySubtitle: String
+    let emptyTitle: LocalizedStringKey
+    let emptySubtitle: LocalizedStringKey
     let addRoute: BarnRoute
-    let addLabel: String
+    let addLabel: LocalizedStringKey
 
     var body: some View {
         List {

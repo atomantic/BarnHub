@@ -2,8 +2,8 @@ import SwiftUI
 
 struct EmptyStateView: View {
     let icon: String
-    let title: String
-    var subtitle: String? = nil
+    let title: LocalizedStringKey
+    var subtitle: LocalizedStringKey? = nil
 
     var body: some View {
         ContentUnavailableView {

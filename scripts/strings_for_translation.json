@@ -1,0 +1,1601 @@
+{
+  "target_languages": [
+    "de",
+    "fr",
+    "nl",
+    "sv",
+    "es-ES",
+    "es-MX",
+    "pt-BR",
+    "it",
+    "en-GB",
+    "en-AU"
+  ],
+  "strings": [
+    {
+      "key": "%@ assigned",
+      "en": "%@ assigned",
+      "comment": "Horse assigned notification"
+    },
+    {
+      "key": "%@ removed",
+      "en": "%@ removed",
+      "comment": "Horse unassigned notification"
+    },
+    {
+      "key": "%lld lbs",
+      "en": "%lld lbs",
+      "comment": "A pair of text labels within a vertical stack, displaying a weight value and the corresponding date."
+    },
+    {
+      "key": "%lld min",
+      "en": "%lld min",
+      "comment": "A picker option that lets the user select a lesson duration in minutes. The value is the duration in minutes."
+    },
+    {
+      "key": "^[%lld client](inflect: true)",
+      "en": "^[%lld client](inflect: true)",
+      "comment": "Client count badge"
+    },
+    {
+      "key": "^[%lld horse](inflect: true)",
+      "en": "^[%lld horse](inflect: true)",
+      "comment": "Horse count badge"
+    },
+    {
+      "key": "$0",
+      "en": "$0",
+      "comment": "A placeholder text for a currency input field."
+    },
+    {
+      "key": "$0.00",
+      "en": "$0.00",
+      "comment": "A placeholder text for a currency field."
+    },
+    {
+      "key": "0",
+      "en": "0",
+      "comment": "A text field for entering a quantity."
+    },
+    {
+      "key": "A",
+      "en": "A",
+      "comment": "Label for a sector in the category breakdowns chart."
+    },
+    {
+      "key": "Accounting",
+      "en": "Accounting",
+      "comment": "The title of the accounting dashboard view."
+    },
+    {
+      "key": "Accounting Balance",
+      "en": "Accounting Balance",
+      "comment": "A label for the accounting balance setting in the settings view."
+    },
+    {
+      "key": "Active",
+      "en": "Active",
+      "comment": "A toggle switch that indicates whether a client is currently active."
+    },
+    {
+      "key": "Add Client",
+      "en": "Add Client",
+      "comment": "The text on a button that adds a new client."
+    },
+    {
+      "key": "Add Event",
+      "en": "Add Event",
+      "comment": "A button label that allows users to add a new event to their schedule."
+    },
+    {
+      "key": "Add Farrier Visit",
+      "en": "Add Farrier Visit",
+      "comment": "A button label that adds a farrier visit to a horse's health timeline."
+    },
+    {
+      "key": "Add Horse",
+      "en": "Add Horse",
+      "comment": "The text on a button that adds a new horse."
+    },
+    {
+      "key": "Add Lesson",
+      "en": "Add Lesson",
+      "comment": "A button label that says \"Add Lesson\"."
+    },
+    {
+      "key": "Add Photo",
+      "en": "Add Photo",
+      "comment": "A label for adding a photo to a horse."
+    },
+    {
+      "key": "Add transactions to see reports",
+      "en": "Add transactions to see reports",
+      "comment": "A description below the chart indicating that users can add transactions to view reports."
+    },
+    {
+      "key": "Add Vet Record",
+      "en": "Add Vet Record",
+      "comment": "A menu item that navigates to add a vet record."
+    },
+    {
+      "key": "All",
+      "en": "All",
+      "comment": "A placeholder text for a picker option that shows all transaction types."
+    },
+    {
+      "key": "All data deleted",
+      "en": "All data deleted",
+      "comment": "Message shown when all data is successfully deleted."
+    },
+    {
+      "key": "All Transactions",
+      "en": "All Transactions",
+      "comment": "A label describing a navigation link to a list of all transactions in the accounting section."
+    },
+    {
+      "key": "All-day",
+      "en": "All-day",
+      "comment": "A label for a section of a calendar view that lists all-day events."
+    },
+    {
+      "key": "Amount",
+      "en": "Amount",
+      "comment": "\"Amount\" is a placeholder for a description of the vertical axis label in the chart."
+    },
+    {
+      "key": "Annually",
+      "en": "Annually",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Appearance",
+      "en": "Appearance",
+      "comment": "A section header in the settings view related to appearance settings."
+    },
+    {
+      "key": "Assign Client",
+      "en": "Assign Client",
+      "comment": "A label for a picker that allows users to assign a client to a transaction."
+    },
+    {
+      "key": "Assign Horse",
+      "en": "Assign Horse",
+      "comment": "A label for a picker that allows a user to select a horse."
+    },
+    {
+      "key": "B",
+      "en": "B",
+      "comment": "Name of a transaction category."
+    },
+    {
+      "key": "Barn Notes",
+      "en": "Barn Notes",
+      "comment": "A button that navigates to the barn notes section."
+    },
+    {
+      "key": "BarnHub",
+      "en": "BarnHub",
+      "comment": "The title of the main application window."
+    },
+    {
+      "key": "BarnHub logo",
+      "en": "BarnHub logo",
+      "comment": "The accessibility label for the BarnHub logo in the home view."
+    },
+    {
+      "key": "BarnHub Pro",
+      "en": "BarnHub Pro",
+      "comment": "The title of the paywall view."
+    },
+    {
+      "key": "Basic Info",
+      "en": "Basic Info",
+      "comment": "A section header that indicates the \"Basic Info\" tab in the horse edit view."
+    },
+    {
+      "key": "Basic Mode",
+      "en": "Basic Mode",
+      "comment": "A toggle that lets users disable the \"Pro\" badge when in \"Basic Mode\"."
+    },
+    {
+      "key": "Biannually",
+      "en": "Biannually",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Boarding",
+      "en": "Boarding",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Boarding Terms",
+      "en": "Boarding Terms",
+      "comment": "A section header for the boarding terms in the contract generator view."
+    },
+    {
+      "key": "Breed",
+      "en": "Breed"
+    },
+    {
+      "key": "Buy Lifetime",
+      "en": "Buy Lifetime",
+      "comment": "A button label that says \"Buy Lifetime\" when a user selects the lifetime subscription plan."
+    },
+    {
+      "key": "C",
+      "en": "C",
+      "comment": "Label for a sector in the category breakdowns chart, representing a category with a 20% share of the total."
+    },
+    {
+      "key": "Cancel",
+      "en": "Cancel",
+      "comment": "The text for a button that dismisses the current view."
+    },
+    {
+      "key": "Cannot access file",
+      "en": "Cannot access file",
+      "comment": "Error message shown when the app cannot access the selected file."
+    },
+    {
+      "key": "Category",
+      "en": "Category",
+      "comment": "A label for the category picker in the transaction edit view."
+    },
+    {
+      "key": "Category Breakdowns",
+      "en": "Category Breakdowns",
+      "comment": "A heading for the category breakdowns section in the reports view."
+    },
+    {
+      "key": "Change Photo",
+      "en": "Change Photo",
+      "comment": "A button label that, when tapped, allows the user to change the photo of a horse."
+    },
+    {
+      "key": "Choose Photo",
+      "en": "Choose Photo",
+      "comment": "A button that allows the user to choose a photo from their library."
+    },
+    {
+      "key": "Client",
+      "en": "Client",
+      "comment": "A section header that asks the user to assign a client to a transaction."
+    },
+    {
+      "key": "Client Management",
+      "en": "Client Management",
+      "comment": "A section header for the client management features."
+    },
+    {
+      "key": "Clients",
+      "en": "Clients",
+      "comment": "The title of the screen displaying a list of clients."
+    },
+    {
+      "key": "Code",
+      "en": "Code",
+      "comment": "A label for a text field where a user can enter a secret code."
+    },
+    {
+      "key": "Color/Markings",
+      "en": "Color/Markings"
+    },
+    {
+      "key": "Coming Up",
+      "en": "Coming Up",
+      "comment": "A heading that indicates upcoming reminders."
+    },
+    {
+      "key": "Completed",
+      "en": "Completed",
+      "comment": "A toggle that indicates whether a reminder is marked as completed."
+    },
+    {
+      "key": "Contact",
+      "en": "Contact",
+      "comment": "A section header for emergency contact information."
+    },
+    {
+      "key": "Contact Info",
+      "en": "Contact Info",
+      "comment": "A section in the client detail view that lists the contact information of a client."
+    },
+    {
+      "key": "Contact Name",
+      "en": "Contact Name",
+      "comment": "A label for the name of the emergency contact."
+    },
+    {
+      "key": "Contact Phone",
+      "en": "Contact Phone",
+      "comment": "A label for the phone number of an emergency contact."
+    },
+    {
+      "key": "Contract Type",
+      "en": "Contract Type",
+      "comment": "A section header for selecting the type of contract to generate."
+    },
+    {
+      "key": "Contracts",
+      "en": "Contracts",
+      "comment": "A menu option to generate a contract for a client."
+    },
+    {
+      "key": "Could not open file: %@",
+      "en": "Could not open file: %@",
+      "comment": "File open error"
+    },
+    {
+      "key": "Could not read file",
+      "en": "Could not read file",
+      "comment": "Error message displayed when trying to read the contents of a file but it cannot be decoded as a string."
+    },
+    {
+      "key": "Created %@",
+      "en": "Created %@",
+      "comment": "A label displaying when an invoice was created."
+    },
+    {
+      "key": "CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).",
+      "en": "CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).",
+      "comment": "A footnote explaining how to properly format CSV files for import."
+    },
+    {
+      "key": "D",
+      "en": "D",
+      "comment": "Label for a sector in the \"Category Breakdowns\" chart with a 10% share of the total."
+    },
+    {
+      "key": "Daily",
+      "en": "Daily",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Data",
+      "en": "Data",
+      "comment": "A section header in the settings view related to data management."
+    },
+    {
+      "key": "Date",
+      "en": "Date",
+      "comment": "A label for the date picker in the transaction edit view."
+    },
+    {
+      "key": "Date & Time",
+      "en": "Date & Time",
+      "comment": "A label for the date and time picker in the lesson edit view."
+    },
+    {
+      "key": "Date of Birth",
+      "en": "Date of Birth"
+    },
+    {
+      "key": "Date Range",
+      "en": "Date Range",
+      "comment": "A section header that indicates the user can select a date range for the invoice."
+    },
+    {
+      "key": "Delete",
+      "en": "Delete",
+      "comment": "A button that deletes a supply item."
+    },
+    {
+      "key": "Delete All Data",
+      "en": "Delete All Data",
+      "comment": "A button that deletes all data on the device."
+    },
+    {
+      "key": "Delete Everything",
+      "en": "Delete Everything",
+      "comment": "The text for a destructive button in an alert that confirms the user wants to delete all data."
+    },
+    {
+      "key": "Description",
+      "en": "Description",
+      "comment": "A label for the description field in the vet record form."
+    },
+    {
+      "key": "Details",
+      "en": "Details",
+      "comment": "A section header for the details of a transaction."
+    },
+    {
+      "key": "Document added",
+      "en": "Document added",
+      "comment": "A toast message displayed when a document is successfully added."
+    },
+    {
+      "key": "Document deleted",
+      "en": "Document deleted",
+      "comment": "Message shown as a toast when a document is successfully deleted."
+    },
+    {
+      "key": "Documents",
+      "en": "Documents",
+      "comment": "A section that lists the documents associated with a client."
+    },
+    {
+      "key": "Done",
+      "en": "Done",
+      "comment": "A button that dismisses the current view."
+    },
+    {
+      "key": "Due Date",
+      "en": "Due Date",
+      "comment": "A label for the due date field in the reminder edit view."
+    },
+    {
+      "key": "Duration",
+      "en": "Duration",
+      "comment": "A label for the duration of a lesson."
+    },
+    {
+      "key": "Edit",
+      "en": "Edit",
+      "comment": "A menu item label for editing a client."
+    },
+    {
+      "key": "Edit Client",
+      "en": "Edit Client",
+      "comment": "The title of the view that allows users to edit details of an existing client."
+    },
+    {
+      "key": "Edit Horse",
+      "en": "Edit Horse",
+      "comment": "The navigation title for the screen where a user can edit details of a horse."
+    },
+    {
+      "key": "Edit Lesson",
+      "en": "Edit Lesson",
+      "comment": "The title of the view that allows users to edit details of an existing lesson."
+    },
+    {
+      "key": "Edit Note",
+      "en": "Edit Note",
+      "comment": "The title of the view that allows editing of a barn note."
+    },
+    {
+      "key": "Edit Reminder",
+      "en": "Edit Reminder",
+      "comment": "The title of the view that allows users to edit an existing reminder."
+    },
+    {
+      "key": "Edit Supply",
+      "en": "Edit Supply",
+      "comment": "The title of the view, indicating they are editing a supply."
+    },
+    {
+      "key": "Edit Transaction",
+      "en": "Edit Transaction",
+      "comment": "The title of the view, indicating that it is for editing a transaction."
+    },
+    {
+      "key": "Email",
+      "en": "Email",
+      "comment": "A label for the email address of a client."
+    },
+    {
+      "key": "Emergency Contact",
+      "en": "Emergency Contact",
+      "comment": "A section header for the emergency contact information of a client."
+    },
+    {
+      "key": "Empty file",
+      "en": "Empty file",
+      "comment": "Import error"
+    },
+    {
+      "key": "Enter Secret Code",
+      "en": "Enter Secret Code",
+      "comment": "An alert that prompts the user to enter a secret code to unlock BarnHub Pro."
+    },
+    {
+      "key": "Enter the code you received to unlock BarnHub Pro.",
+      "en": "Enter the code you received to unlock BarnHub Pro.",
+      "comment": "A message displayed in an alert within the Settings view, instructing the user to enter a secret code to unlock BarnHub Pro."
+    },
+    {
+      "key": "Enter the current weight in pounds.",
+      "en": "Enter the current weight in pounds.",
+      "comment": "A message displayed in an alert when logging a horse's weight."
+    },
+    {
+      "key": "Evaluation",
+      "en": "Evaluation",
+      "comment": "Lesson type"
+    },
+    {
+      "key": "Expense",
+      "en": "Expense",
+      "comment": "Transaction type"
+    },
+    {
+      "key": "Expenses",
+      "en": "Expenses",
+      "comment": "\"Expenses\" is a generic term for money that is spent on things other than food or drink."
+    },
+    {
+      "key": "Export",
+      "en": "Export",
+      "comment": "A section header that says \"Export\"."
+    },
+    {
+      "key": "Export Complete",
+      "en": "Export Complete",
+      "comment": "A title displayed after a user successfully exports data."
+    },
+    {
+      "key": "Export Data First",
+      "en": "Export Data First",
+      "comment": "A button that appears in an alert when trying to delete all data, prompting the user to export data first."
+    },
+    {
+      "key": "Export failed",
+      "en": "Export failed",
+      "comment": "Error message shown to the user when exporting data fails."
+    },
+    {
+      "key": "Export your barn data as CSV files for backup or use in spreadsheets.",
+      "en": "Export your barn data as CSV files for backup or use in spreadsheets."
+    },
+    {
+      "key": "Failed to delete data",
+      "en": "Failed to delete data",
+      "comment": "Error message displayed when an attempt to delete all data fails."
+    },
+    {
+      "key": "Failed to load invoice",
+      "en": "Failed to load invoice",
+      "comment": "Error message displayed when an invoice PDF cannot be loaded."
+    },
+    {
+      "key": "Failed to load photo",
+      "en": "Failed to load photo",
+      "comment": "Error message shown when an error occurs while loading a photo."
+    },
+    {
+      "key": "Failed to save contract",
+      "en": "Failed to save contract",
+      "comment": "Error message displayed when a contract cannot be saved."
+    },
+    {
+      "key": "Failed to save invoice",
+      "en": "Failed to save invoice",
+      "comment": "Error message displayed in a toast when an attempt to save an invoice fails."
+    },
+    {
+      "key": "Farrier",
+      "en": "Farrier",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Farrier Name",
+      "en": "Farrier Name",
+      "comment": "A label for the name of the farrier in the farrier visit form."
+    },
+    {
+      "key": "Farrier Visit",
+      "en": "Farrier Visit",
+      "comment": "A button for adding a farrier visit."
+    },
+    {
+      "key": "Farrier Visits",
+      "en": "Farrier Visits"
+    },
+    {
+      "key": "Feature",
+      "en": "Feature",
+      "comment": "A header for a feature in the feature comparison section of the paywall."
+    },
+    {
+      "key": "Feed",
+      "en": "Feed",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Feedback",
+      "en": "Feedback",
+      "comment": "A section for sending feedback."
+    },
+    {
+      "key": "Feeding Schedule",
+      "en": "Feeding Schedule"
+    },
+    {
+      "key": "Filter",
+      "en": "Filter",
+      "comment": "A toolbar item that allows users to filter lessons by whether they are upcoming or not."
+    },
+    {
+      "key": "Filters",
+      "en": "Filters",
+      "comment": "A section header in the transaction list view that toggles filter visibility."
+    },
+    {
+      "key": "First Name",
+      "en": "First Name",
+      "comment": "A label for the first name field in the client edit view."
+    },
+    {
+      "key": "Follow-up",
+      "en": "Follow-up",
+      "comment": "A section that allows scheduling a follow-up visit for a farrier visit."
+    },
+    {
+      "key": "Free",
+      "en": "Free",
+      "comment": "A label indicating that a feature is free."
+    },
+    {
+      "key": "Frequency",
+      "en": "Frequency",
+      "comment": "A label for the frequency of a recurring task."
+    },
+    {
+      "key": "From",
+      "en": "From",
+      "comment": "A label for the \"From\" date picker in the transaction list view."
+    },
+    {
+      "key": "General",
+      "en": "General",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "Generate & Share",
+      "en": "Generate & Share",
+      "comment": "A button that generates and shares a contract."
+    },
+    {
+      "key": "Generate & Share Invoice",
+      "en": "Generate & Share Invoice",
+      "comment": "A button that generates and shares an invoice."
+    },
+    {
+      "key": "Generate Contract",
+      "en": "Generate Contract",
+      "comment": "A button that, when tapped, presents a view for generating a contract."
+    },
+    {
+      "key": "Generate Invoice",
+      "en": "Generate Invoice",
+      "comment": "A button that, when tapped, presents a view for generating an invoice for a client."
+    },
+    {
+      "key": "Group",
+      "en": "Group",
+      "comment": "Lesson type"
+    },
+    {
+      "key": "Health",
+      "en": "Health",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "Health Timeline",
+      "en": "Health Timeline",
+      "comment": "The title of the view that lists a horse's health events over time."
+    },
+    {
+      "key": "History",
+      "en": "History",
+      "comment": "A section header that indicates the user's weight history."
+    },
+    {
+      "key": "Home Screen",
+      "en": "Home Screen",
+      "comment": "A section header in the settings view related to the home screen."
+    },
+    {
+      "key": "Horse",
+      "en": "Horse",
+      "comment": "A section header for selecting a horse."
+    },
+    {
+      "key": "Horses",
+      "en": "Horses",
+      "comment": "A section header that lists the horses a client has."
+    },
+    {
+      "key": "iCloud Sync",
+      "en": "iCloud Sync",
+      "comment": "A section header for iCloud sync settings."
+    },
+    {
+      "key": "iCloud unavailable",
+      "en": "iCloud unavailable",
+      "comment": "Sync status"
+    },
+    {
+      "key": "Import",
+      "en": "Import",
+      "comment": "A section that allows importing horse, client, and transaction data from CSV files."
+    },
+    {
+      "key": "Import / Export",
+      "en": "Import / Export",
+      "comment": "The title of a view that allows users to export or import data."
+    },
+    {
+      "key": "Import Complete",
+      "en": "Import Complete",
+      "comment": "A title for an alert that appears after successfully importing data."
+    },
+    {
+      "key": "Import failed: %@",
+      "en": "Import failed: %@",
+      "comment": "Import error"
+    },
+    {
+      "key": "Import PDF",
+      "en": "Import PDF",
+      "comment": "A menu item to import a PDF file."
+    },
+    {
+      "key": "Inactive",
+      "en": "Inactive",
+      "comment": "A label indicating that a client's account is inactive."
+    },
+    {
+      "key": "Incident",
+      "en": "Incident",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "Included",
+      "en": "Included",
+      "comment": "A label indicating that a feature is included with the subscription."
+    },
+    {
+      "key": "Income",
+      "en": "Income",
+      "comment": "Transaction type"
+    },
+    {
+      "key": "Income vs Expenses",
+      "en": "Income vs Expenses"
+    },
+    {
+      "key": "Info",
+      "en": "Info"
+    },
+    {
+      "key": "Invalid code",
+      "en": "Invalid code",
+      "comment": "Message shown when an invalid secret code is entered."
+    },
+    {
+      "key": "Invoice History",
+      "en": "Invoice History",
+      "comment": "A link in the client details view that navigates to the invoice history for a client."
+    },
+    {
+      "key": "Invoices",
+      "en": "Invoices",
+      "comment": "A section header that links to a view for generating invoices."
+    },
+    {
+      "key": "Language",
+      "en": "Language",
+      "comment": "A label for selecting the user's language in the settings."
+    },
+    {
+      "key": "Last Name",
+      "en": "Last Name",
+      "comment": "A label for the last name field in a client edit view."
+    },
+    {
+      "key": "Last Ordered",
+      "en": "Last Ordered",
+      "comment": "A section that allows users to toggle whether they want to track the last date they ordered a supply."
+    },
+    {
+      "key": "Last synced %@",
+      "en": "Last synced %@",
+      "comment": "A text view displaying the date and time of the last successful sync with iCloud."
+    },
+    {
+      "key": "Legal",
+      "en": "Legal",
+      "comment": "A section header that says \"Legal\"."
+    },
+    {
+      "key": "Lesson",
+      "en": "Lesson",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Lesson Type",
+      "en": "Lesson Type",
+      "comment": "A label for the type of lesson."
+    },
+    {
+      "key": "Lessons",
+      "en": "Lessons",
+      "comment": "A button label that navigates to the lessons section of the barn dashboard."
+    },
+    {
+      "key": "Lifetime",
+      "en": "Lifetime",
+      "comment": "A label indicating whether the user has a \"Lifetime\" or \"BarnHub\" subscription."
+    },
+    {
+      "key": "Loading plans...",
+      "en": "Loading plans...",
+      "comment": "A text that appears while waiting for subscription plans to load."
+    },
+    {
+      "key": "Log Weight",
+      "en": "Log Weight",
+      "comment": "A button that logs the current weight of a horse."
+    },
+    {
+      "key": "Low",
+      "en": "Low",
+      "comment": "A label indicating that a supply is low on stock."
+    },
+    {
+      "key": "M",
+      "en": "M",
+      "comment": "Placeholder data for a monthly trend chart."
+    },
+    {
+      "key": "Maintenance",
+      "en": "Maintenance",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "Manage Horses",
+      "en": "Manage Horses",
+      "comment": "The title of a view that allows a user to manage horses for a specific client."
+    },
+    {
+      "key": "Mark complete",
+      "en": "Mark complete",
+      "comment": "A label for a button that marks a reminder as complete."
+    },
+    {
+      "key": "Mark incomplete",
+      "en": "Mark incomplete",
+      "comment": "A label for a button that marks a reminder as incomplete."
+    },
+    {
+      "key": "Medical Notes",
+      "en": "Medical Notes"
+    },
+    {
+      "key": "Memo",
+      "en": "Memo",
+      "comment": "A label for a text field that lets users enter a memo for a transaction."
+    },
+    {
+      "key": "Missing required column: Amount",
+      "en": "Missing required column: Amount",
+      "comment": "Import error"
+    },
+    {
+      "key": "Missing required column: First Name or Name",
+      "en": "Missing required column: First Name or Name",
+      "comment": "Import error"
+    },
+    {
+      "key": "Missing required column: Name",
+      "en": "Missing required column: Name",
+      "comment": "Import error"
+    },
+    {
+      "key": "Month",
+      "en": "Month",
+      "comment": "Accesses a \"Month\" field on each data point, formatted as a month name."
+    },
+    {
+      "key": "Monthly",
+      "en": "Monthly",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Monthly Trend",
+      "en": "Monthly Trend",
+      "comment": "A heading displayed above the monthly trend chart."
+    },
+    {
+      "key": "Name",
+      "en": "Name",
+      "comment": "A label for the name field in the supply edit view."
+    },
+    {
+      "key": "New Client",
+      "en": "New Client",
+      "comment": "The title of the view when adding a new client."
+    },
+    {
+      "key": "New Farrier Visit",
+      "en": "New Farrier Visit",
+      "comment": "The title of a view that allows the creation of a new farrier visit."
+    },
+    {
+      "key": "New Horse",
+      "en": "New Horse",
+      "comment": "The title of the navigation bar for adding a new horse."
+    },
+    {
+      "key": "New Lesson",
+      "en": "New Lesson",
+      "comment": "The title of the button that saves a new lesson."
+    },
+    {
+      "key": "New Note",
+      "en": "New Note",
+      "comment": "The title of the button to add a new note."
+    },
+    {
+      "key": "New Reminder",
+      "en": "New Reminder",
+      "comment": "A title for a view that creates a new reminder."
+    },
+    {
+      "key": "New Supply",
+      "en": "New Supply",
+      "comment": "A button label that creates a new supply."
+    },
+    {
+      "key": "New Transaction",
+      "en": "New Transaction",
+      "comment": "The title of a button in the toolbar of the \"New Transaction\" view."
+    },
+    {
+      "key": "New Vet Record",
+      "en": "New Vet Record",
+      "comment": "The title of a view that allows users to create a new veterinary record."
+    },
+    {
+      "key": "Next Date",
+      "en": "Next Date",
+      "comment": "A toggle that allows users to set a date for the next occurrence of a recurring task."
+    },
+    {
+      "key": "Next Due Date",
+      "en": "Next Due Date",
+      "comment": "A label for the date when a follow-up visit is due."
+    },
+    {
+      "key": "Next due: %@",
+      "en": "Next due: %@",
+      "comment": "A text element that appears below a list item in the \"Vet Records\" section of a horse's detail view, indicating when the next veterinary visit is scheduled. The text changes color to red if the next due"
+    },
+    {
+      "key": "No active subscription found",
+      "en": "No active subscription found",
+      "comment": "Error message shown when there are no active subscriptions to restore."
+    },
+    {
+      "key": "No assigned clients",
+      "en": "No assigned clients"
+    },
+    {
+      "key": "No assigned horses",
+      "en": "No assigned horses",
+      "comment": "A message displayed when a client has no horses assigned to them."
+    },
+    {
+      "key": "No Data Yet",
+      "en": "No Data Yet",
+      "comment": "A description displayed when there is no data to display in the reports section."
+    },
+    {
+      "key": "No emergency contact on file",
+      "en": "No emergency contact on file",
+      "comment": "A message displayed when a client does not have an emergency contact on file."
+    },
+    {
+      "key": "No events",
+      "en": "No events",
+      "comment": "A message displayed when there are no events scheduled for a particular day."
+    },
+    {
+      "key": "No farrier visits",
+      "en": "No farrier visits"
+    },
+    {
+      "key": "No horses assigned to this client",
+      "en": "No horses assigned to this client",
+      "comment": "A message indicating that a client has no horses assigned."
+    },
+    {
+      "key": "No photo",
+      "en": "No photo",
+      "comment": "A label describing the absence of a horse's photo."
+    },
+    {
+      "key": "No transactions",
+      "en": "No transactions",
+      "comment": "A message displayed when a client has no transactions."
+    },
+    {
+      "key": "No transactions in this period",
+      "en": "No transactions in this period",
+      "comment": "A message displayed when there are no transactions to display in the preview section of the invoice generator."
+    },
+    {
+      "key": "No vet records",
+      "en": "No vet records"
+    },
+    {
+      "key": "None",
+      "en": "None",
+      "comment": "A placeholder text for a picker view that allows users to select a client for a transaction."
+    },
+    {
+      "key": "Not included",
+      "en": "Not included",
+      "comment": "A label indicating that a feature is not included with the current plan."
+    },
+    {
+      "key": "Note",
+      "en": "Note",
+      "comment": "A section header for the \"Note\" part of the barn note edit view."
+    },
+    {
+      "key": "Note deleted",
+      "en": "Note deleted",
+      "comment": "Message shown as a toast when a barn note is deleted."
+    },
+    {
+      "key": "Notes",
+      "en": "Notes",
+      "comment": "A section for adding notes to a lesson."
+    },
+    {
+      "key": "Observation",
+      "en": "Observation",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "OK",
+      "en": "OK",
+      "comment": "A button that dismisses an alert."
+    },
+    {
+      "key": "Once",
+      "en": "Once",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Other",
+      "en": "Other",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Out",
+      "en": "Out",
+      "comment": "A label displayed next to an exclamation mark in the supply list, indicating that a supply is out of stock."
+    },
+    {
+      "key": "Overdue",
+      "en": "Overdue",
+      "comment": "A section header for reminders that are past their due date."
+    },
+    {
+      "key": "Overdue (%lld)",
+      "en": "Overdue (%lld)",
+      "comment": "A heading that indicates there are overdue items. The number in parentheses is replaced with the actual number of overdue items."
+    },
+    {
+      "key": "Paid",
+      "en": "Paid",
+      "comment": "A toggle that indicates whether a transaction is marked as paid."
+    },
+    {
+      "key": "Payment",
+      "en": "Payment",
+      "comment": "A section that allows users to input and toggle the payment status of a lesson."
+    },
+    {
+      "key": "Payment History",
+      "en": "Payment History",
+      "comment": "The title of the view that shows a client's payment history."
+    },
+    {
+      "key": "Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. The Lifetime option is a one-time purchase that unlocks Pro features permanently. You can manage subscriptions in your App Store account settings.",
+      "en": "Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. The Lifetime option is a one-time purchase that unlocks Pro features permanently. You can manage subscriptions in your App Store account settings.",
+      "comment": "A detailed description of the subscription process, including terms and privacy policies."
+    },
+    {
+      "key": "Period",
+      "en": "Period",
+      "comment": "A label for a picker that lets users select a time period for financial reports."
+    },
+    {
+      "key": "Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.",
+      "en": "Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.",
+      "comment": "A footer label under the \"Reset\" section of the data management view, explaining that deleting all data will permanently remove all stored information from the device."
+    },
+    {
+      "key": "Phone",
+      "en": "Phone",
+      "comment": "A label displayed above a client's phone number."
+    },
+    {
+      "key": "Plan",
+      "en": "Plan",
+      "comment": "A row in the settings list that shows the user's current subscription plan."
+    },
+    {
+      "key": "Preview (%lld transactions)",
+      "en": "Preview (%lld transactions)",
+      "comment": "A section that previews the transactions that will be included in the generated invoice."
+    },
+    {
+      "key": "Privacy Policy",
+      "en": "Privacy Policy",
+      "comment": "A link to the privacy policy."
+    },
+    {
+      "key": "Private",
+      "en": "Private",
+      "comment": "Lesson type"
+    },
+    {
+      "key": "Pro",
+      "en": "Pro",
+      "comment": "The title of the Pro plan."
+    },
+    {
+      "key": "PRO",
+      "en": "PRO",
+      "comment": "The text \"PRO\" displayed as a badge."
+    },
+    {
+      "key": "Pro restored!",
+      "en": "Pro restored!",
+      "comment": "Text shown as a toast message when a user successfully restores their Pro subscription."
+    },
+    {
+      "key": "Pro unlocked!",
+      "en": "Pro unlocked!",
+      "comment": "Message shown as a toast when a user successfully redeems a secret code."
+    },
+    {
+      "key": "Purchase Price",
+      "en": "Purchase Price"
+    },
+    {
+      "key": "Quantity",
+      "en": "Quantity",
+      "comment": "A label displayed next to the text field for entering a quantity."
+    },
+    {
+      "key": "Quarterly",
+      "en": "Quarterly",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Quit BarnHub",
+      "en": "Quit BarnHub",
+      "comment": "The label of a button that quits the BarnHub application."
+    },
+    {
+      "key": "Recent Transactions",
+      "en": "Recent Transactions",
+      "comment": "A section header that indicates the user's most recent transactions."
+    },
+    {
+      "key": "Recurring",
+      "en": "Recurring",
+      "comment": "A section that allows a user to set up recurring lessons."
+    },
+    {
+      "key": "Redeem",
+      "en": "Redeem",
+      "comment": "A button that triggers the redemption of an offer code."
+    },
+    {
+      "key": "Reminder",
+      "en": "Reminder",
+      "comment": "A button that navigates to a view for creating a new reminder."
+    },
+    {
+      "key": "Reminder Frequency",
+      "en": "Reminder Frequency",
+      "comment": "A label for the frequency with which a reminder should be sent for a vet record."
+    },
+    {
+      "key": "Reminders",
+      "en": "Reminders",
+      "comment": "A menu item for viewing reminders."
+    },
+    {
+      "key": "Remove",
+      "en": "Remove",
+      "comment": "A button label that deletes an attached photo from a view."
+    },
+    {
+      "key": "Reorder Threshold",
+      "en": "Reorder Threshold",
+      "comment": "A label displayed next to the text field for the reorder threshold of a supply item."
+    },
+    {
+      "key": "Reports",
+      "en": "Reports",
+      "comment": "The title of the reports view."
+    },
+    {
+      "key": "Reset",
+      "en": "Reset",
+      "comment": "A section header that says \"Reset\"."
+    },
+    {
+      "key": "Restore Purchases",
+      "en": "Restore Purchases",
+      "comment": "A button label that allows users to restore their in-app purchases."
+    },
+    {
+      "key": "Reveal in Finder",
+      "en": "Reveal in Finder",
+      "comment": "A button that reveals a file in the Finder when pressed."
+    },
+    {
+      "key": "Save",
+      "en": "Save",
+      "comment": "A button that saves the current transaction."
+    },
+    {
+      "key": "Save Changes",
+      "en": "Save Changes",
+      "comment": "The label of a button that saves changes to a client's information."
+    },
+    {
+      "key": "Save Farrier Visit",
+      "en": "Save Farrier Visit",
+      "comment": "The text on a button that saves a new farrier visit."
+    },
+    {
+      "key": "Save Vet Record",
+      "en": "Save Vet Record",
+      "comment": "A button that saves a new vet record."
+    },
+    {
+      "key": "Schedule",
+      "en": "Schedule",
+      "comment": "The title of the view."
+    },
+    {
+      "key": "Schedule Follow-up",
+      "en": "Schedule Follow-up",
+      "comment": "A toggle that allows users to schedule a follow-up visit for a farrier visit."
+    },
+    {
+      "key": "Search clients",
+      "en": "Search clients",
+      "comment": "A prompt for searching through a list of clients."
+    },
+    {
+      "key": "Search horses",
+      "en": "Search horses",
+      "comment": "A prompt for searching through a list of horses."
+    },
+    {
+      "key": "Search supplies",
+      "en": "Search supplies",
+      "comment": "A prompt for searching through a list of supplies."
+    },
+    {
+      "key": "See all",
+      "en": "See all",
+      "comment": "A button label that links to a view showing all overdue items."
+    },
+    {
+      "key": "Select a horse",
+      "en": "Select a horse",
+      "comment": "A placeholder text for the horse picker in the contract generator view."
+    },
+    {
+      "key": "Select Horse",
+      "en": "Select Horse",
+      "comment": "A label for a picker that lets a user select a horse."
+    },
+    {
+      "key": "Service Description",
+      "en": "Service Description",
+      "comment": "A label for the description of a service provided by a farrier."
+    },
+    {
+      "key": "Set Next Date",
+      "en": "Set Next Date",
+      "comment": "A toggle that lets users set a date for the next occurrence of a recurring task."
+    },
+    {
+      "key": "Settings",
+      "en": "Settings",
+      "comment": "The accessibility label for the settings button in the toolbar."
+    },
+    {
+      "key": "Share",
+      "en": "Share",
+      "comment": "A button that triggers the sharing sheet."
+    },
+    {
+      "key": "Show Completed",
+      "en": "Show Completed",
+      "comment": "A toggle that lets users show or hide completed reminders."
+    },
+    {
+      "key": "Show Inactive",
+      "en": "Show Inactive",
+      "comment": "A toggle to show or hide inactive clients."
+    },
+    {
+      "key": "Stall",
+      "en": "Stall"
+    },
+    {
+      "key": "Stall %@",
+      "en": "Stall %@",
+      "comment": "A small, rounded badge displaying the stall number of a horse."
+    },
+    {
+      "key": "Stall Number",
+      "en": "Stall Number",
+      "comment": "A label for the stall number of a horse."
+    },
+    {
+      "key": "Start Date",
+      "en": "Start Date",
+      "comment": "A label for the start date picker in the boarding agreement contract generation form."
+    },
+    {
+      "key": "Status",
+      "en": "Status",
+      "comment": "A label for the status of a client."
+    },
+    {
+      "key": "Subscribe Now",
+      "en": "Subscribe Now",
+      "comment": "A button label that appears when a user can subscribe to a premium feature."
+    },
+    {
+      "key": "Subscription",
+      "en": "Subscription",
+      "comment": "A section for managing a user's subscription to BarnHub."
+    },
+    {
+      "key": "Summary",
+      "en": "Summary",
+      "comment": "A section header in the client payment history view that says \"Summary\"."
+    },
+    {
+      "key": "Supplies",
+      "en": "Supplies",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Supply deleted",
+      "en": "Supply deleted",
+      "comment": "Toast message shown when a supply is successfully deleted."
+    },
+    {
+      "key": "Sync error",
+      "en": "Sync error",
+      "comment": "Sync status"
+    },
+    {
+      "key": "Syncing…",
+      "en": "Syncing…",
+      "comment": "Sync status"
+    },
+    {
+      "key": "Tack",
+      "en": "Tack",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Terms of Use (EULA)",
+      "en": "Terms of Use (EULA)",
+      "comment": "A link to the app's Terms of Use."
+    },
+    {
+      "key": "Theme",
+      "en": "Theme",
+      "comment": "A label for the theme picker in the settings view."
+    },
+    {
+      "key": "This Month",
+      "en": "This Month",
+      "comment": "The header for the section displaying the user's monthly income, expenses, and balance."
+    },
+    {
+      "key": "Title",
+      "en": "Title",
+      "comment": "A label for the title field in the reminder edit view."
+    },
+    {
+      "key": "To",
+      "en": "To",
+      "comment": "A label for the \"To\" field in a date picker."
+    },
+    {
+      "key": "Today",
+      "en": "Today",
+      "comment": "A button that sets the calendar view to the current date."
+    },
+    {
+      "key": "Total",
+      "en": "Total",
+      "comment": "A label describing the total amount of a transaction."
+    },
+    {
+      "key": "Track clients, assign horses, manage billing, and view payment history — all in one place.",
+      "en": "Track clients, assign horses, manage billing, and view payment history — all in one place.",
+      "comment": "A description of the features included in the \"Clients Upgrade\" view."
+    },
+    {
+      "key": "Track Last Order Date",
+      "en": "Track Last Order Date",
+      "comment": "A toggle that allows users to track the date of their last order for a supply item."
+    },
+    {
+      "key": "Training",
+      "en": "Training",
+      "comment": "Lesson type\nTransaction category"
+    },
+    {
+      "key": "Transactions",
+      "en": "Transactions",
+      "comment": "The title of the transactions list view."
+    },
+    {
+      "key": "Try Again",
+      "en": "Try Again",
+      "comment": "A button label that attempts to reload subscription plans."
+    },
+    {
+      "key": "Type",
+      "en": "Type",
+      "comment": "\"Type\" on the x-axis of the chart."
+    },
+    {
+      "key": "Unable to load subscription plans",
+      "en": "Unable to load subscription plans"
+    },
+    {
+      "key": "Unit (e.g., lbs, bags)",
+      "en": "Unit (e.g., lbs, bags)",
+      "comment": "A label for the unit of measurement of a supply item."
+    },
+    {
+      "key": "Unlock full reports, client management, and more.",
+      "en": "Unlock full reports, client management, and more.",
+      "comment": "A description of the features available to Pro users."
+    },
+    {
+      "key": "Unlock the full power of BarnHub for your barn business.",
+      "en": "Unlock the full power of BarnHub for your barn business.",
+      "comment": "A description of the benefits of upgrading to the Pro version of BarnHub."
+    },
+    {
+      "key": "Unpaid",
+      "en": "Unpaid",
+      "comment": "An accessibility label for an unchecked checkbox in the lesson list."
+    },
+    {
+      "key": "Up to date",
+      "en": "Up to date",
+      "comment": "Sync status"
+    },
+    {
+      "key": "Upcoming",
+      "en": "Upcoming",
+      "comment": "A filter option in the toolbar that shows only lessons with an upcoming date."
+    },
+    {
+      "key": "Upgrade to BarnHub Pro",
+      "en": "Upgrade to BarnHub Pro",
+      "comment": "A button label that encourages users to upgrade to BarnHub Pro."
+    },
+    {
+      "key": "Upgrade to Pro",
+      "en": "Upgrade to Pro",
+      "comment": "A button label that appears in the \"Subscription\" section of the settings view, encouraging users to upgrade to the Pro version of the app."
+    },
+    {
+      "key": "Upgrade to Pro on iPhone or iPad",
+      "en": "Upgrade to Pro on iPhone or iPad",
+      "comment": "A description for upgrading to the Pro version of the app on an iPhone or iPad."
+    },
+    {
+      "key": "V",
+      "en": "V",
+      "comment": "Placeholder data for a monthly trend chart."
+    },
+    {
+      "key": "Vet Appointment",
+      "en": "Vet Appointment",
+      "comment": "A menu item for adding a vet appointment."
+    },
+    {
+      "key": "Vet Bill",
+      "en": "Vet Bill",
+      "comment": "Transaction category"
+    },
+    {
+      "key": "Vet Name",
+      "en": "Vet Name",
+      "comment": "A label for the name of the veterinarian."
+    },
+    {
+      "key": "Vet Records",
+      "en": "Vet Records"
+    },
+    {
+      "key": "View",
+      "en": "View",
+      "comment": "A segmented control that lets the user switch between different views of the calendar."
+    },
+    {
+      "key": "View All Transactions",
+      "en": "View All Transactions",
+      "comment": "A button label that links to a view of all a client's transactions."
+    },
+    {
+      "key": "View Plans",
+      "en": "View Plans"
+    },
+    {
+      "key": "Visit Details",
+      "en": "Visit Details",
+      "comment": "A section header for the details of a farrier visit."
+    },
+    {
+      "key": "Waiting",
+      "en": "Waiting",
+      "comment": "Sync status"
+    },
+    {
+      "key": "Weather",
+      "en": "Weather",
+      "comment": "Barn note category"
+    },
+    {
+      "key": "Weekly",
+      "en": "Weekly",
+      "comment": "Reminder frequency"
+    },
+    {
+      "key": "Weight",
+      "en": "Weight"
+    },
+    {
+      "key": "Weight (lbs)",
+      "en": "Weight (lbs)"
+    },
+    {
+      "key": "Weight logged: %lld lbs",
+      "en": "Weight logged: %lld lbs",
+      "comment": "Weight logging confirmation"
+    },
+    {
+      "key": "Weight Over Time",
+      "en": "Weight Over Time",
+      "comment": "A title for the weight chart displayed in the `WeightChartView`."
+    },
+    {
+      "key": "Weight Trend",
+      "en": "Weight Trend"
+    },
+    {
+      "key": "Welcome to BarnHub Pro!",
+      "en": "Welcome to BarnHub Pro!",
+      "comment": "Message shown to the user after successfully purchasing the Pro version of the app."
+    },
+    {
+      "key": "What happened at the barn?",
+      "en": "What happened at the barn?",
+      "comment": "A prompt for the user to enter details of an event that occurred at the barn."
+    },
+    {
+      "key": "Yesterday",
+      "en": "Yesterday",
+      "comment": "Title for a section in the barn note list view that lists notes from the previous day."
+    }
+  ]
+}

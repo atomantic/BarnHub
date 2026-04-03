@@ -3,7 +3,8 @@ import Foundation
 extension Date {
     private static let shortDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
         return formatter
     }()
 

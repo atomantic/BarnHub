@@ -137,7 +137,7 @@ struct HorseEditView: View {
                     // Task was cancelled by a newer selection — no error toast needed.
                 } catch {
                     await MainActor.run {
-                        toast.show("Failed to load photo", isError: true)
+                        toast.show(String(localized: "Failed to load photo"), isError: true)
                     }
                 }
             }

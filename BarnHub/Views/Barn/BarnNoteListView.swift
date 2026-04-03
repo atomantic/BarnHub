@@ -15,27 +15,42 @@ struct BarnNoteListView: View {
         return notes.filter { $0.category == category }
     }
 
-    private var groupedNotes: [(key: String, notes: [BarnNote])] {
-        let calendar = Calendar.current
-        let grouped = Dictionary(grouping: filteredNotes) { note -> String in
-            if calendar.isDateInToday(note.date) {
-                return "Today"
-            } else if calendar.isDateInYesterday(note.date) {
-                return "Yesterday"
-            } else {
-                return note.date.formatted(.dateTime.month(.wide).day().year())
+    private enum DateGroup: Hashable, Comparable {
+        case today, yesterday, date(Date)
+
+        static func < (lhs: DateGroup, rhs: DateGroup) -> Bool {
+            switch (lhs, rhs) {
+            case (.today, .today): return false
+            case (.today, _): return true
+            case (_, .today): return false
+            case (.yesterday, .yesterday): return false
+            case (.yesterday, _): return true
+            case (_, .yesterday): return false
+            case (.date(let a), .date(let b)): return a > b
             }
         }
-        // Sort groups: Today first, Yesterday second, then by date descending
-        return grouped.sorted { a, b in
-            if a.key == "Today" { return true }
-            if b.key == "Today" { return false }
-            if a.key == "Yesterday" { return true }
-            if b.key == "Yesterday" { return false }
-            let dateA = a.value.first?.date ?? .distantPast
-            let dateB = b.value.first?.date ?? .distantPast
-            return dateA > dateB
-        }.map { (key: $0.key, notes: $0.value) }
+
+        var title: String {
+            switch self {
+            case .today: return String(localized: "Today")
+            case .yesterday: return String(localized: "Yesterday")
+            case .date(let d): return d.formatted(.dateTime.month(.wide).day().year())
+            }
+        }
+    }
+
+    private var groupedNotes: [(key: DateGroup, notes: [BarnNote])] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: filteredNotes) { note -> DateGroup in
+            if calendar.isDateInToday(note.date) {
+                return .today
+            } else if calendar.isDateInYesterday(note.date) {
+                return .yesterday
+            } else {
+                return .date(calendar.startOfDay(for: note.date))
+            }
+        }
+        return grouped.sorted { $0.key < $1.key }.map { (key: $0.key, notes: $0.value) }
     }
 
     var body: some View {
@@ -50,7 +65,7 @@ struct BarnNoteListView: View {
                 )
             } else {
                 ForEach(groupedNotes, id: \.key) { group in
-                    Section(group.key) {
+                    Section(group.key.title) {
                         ForEach(group.notes, id: \.persistentModelID) { note in
                             NavigationLink(value: BarnRoute.barnNoteEdit(note.persistentModelID)) {
                                 noteRow(note)
@@ -154,6 +169,6 @@ struct BarnNoteListView: View {
         for index in offsets {
             modelContext.deleteWithLogging(groupNotes[index])
         }
-        toast.show("Note deleted")
+        toast.show(String(localized: "Note deleted"))
     }
 }

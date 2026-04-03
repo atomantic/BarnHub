@@ -101,7 +101,7 @@ struct ClientDocumentsView: View {
                     return
                 } catch {
                     await MainActor.run {
-                        toastMessage = "Failed to load photo"
+                        toastMessage = String(localized: "Failed to load photo")
                         showToast = true
                     }
                 }
@@ -125,7 +125,7 @@ struct ClientDocumentsView: View {
             ) {
                 guard let doc = documentToDelete else { return }
                 modelContext.deleteWithLogging(doc)
-                toastMessage = "Document deleted"
+                toastMessage = String(localized: "Document deleted")
                 showToast = true
                 documentToDelete = nil
             }
@@ -184,7 +184,7 @@ struct ClientDocumentsView: View {
         doc.client = client
         modelContext.insert(doc)
         modelContext.saveWithLogging()
-        toastMessage = "Document added"
+        toastMessage = String(localized: "Document added")
         showToast = true
         BarnHubLogger.success("Document added client=\(client.fullName) title=\(title) type=\(type.rawValue)")
     }
