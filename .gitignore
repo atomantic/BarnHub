@@ -63,3 +63,7 @@ asc-*.png
 
 # Claude local settings
 .claude/settings.local.json
+
+# Screenshot automation
+.screenshot_config.json
+screenshots/*/

@@ -390,25 +390,25 @@ struct HomeView: View {
         let vSpacing: CGFloat = 20
         #endif
         return LazyVGrid(columns: columns, spacing: vSpacing) {
-            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: appLocalized("^[\(horseCount) horse](inflect: true)", comment: "Horse count badge")) {
+            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: appLocalized("^[\(horseCount) horse](inflect: true)", comment: "Horse count badge"), tag: "tile_horses") {
                 router.switchTab(.horses)
             }
-            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: appLocalized("^[\(clientCount) client](inflect: true)", comment: "Client count badge")) {
+            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: appLocalized("^[\(clientCount) client](inflect: true)", comment: "Client count badge"), tag: "tile_clients") {
                 router.switchTab(.clients)
             }
-            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday) {
+            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday, tag: "tile_schedule") {
                 router.switchTab(.schedule)
             }
-            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil) {
+            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil, tag: "tile_supplies") {
                 router.navigate(to: HomeRoute.supplies)
             }
-            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.displayName) {
+            FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.displayName, tag: "tile_accounting") {
                 router.switchTab(.accounting)
             }
-            FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown) {
+            FeatureTile(icon: "chart.bar.fill", title: "Reports", color: .barnBrown, tag: "tile_reports") {
                 router.navigate(to: HomeRoute.reports)
             }
-            FeatureTile(icon: "note.text", title: "Barn Notes", color: .barnBrown) {
+            FeatureTile(icon: "note.text", title: "Barn Notes", color: .barnBrown, tag: "tile_notes") {
                 router.navigate(to: HomeRoute.barnNotes)
             }
         }
@@ -424,6 +424,7 @@ struct FeatureTile: View {
     var badge: String? = nil
     var badgeColor: Color? = nil
     var badgeDetail: String? = nil
+    var tag: String? = nil
     let action: () -> Void
 
     #if os(macOS)
@@ -476,6 +477,19 @@ struct FeatureTile: View {
             }
         }
         .buttonStyle(.plain)
+        .modifier(OptionalAccessibilityID(tag))
+    }
+}
+
+private struct OptionalAccessibilityID: ViewModifier {
+    let id: String?
+    init(_ id: String?) { self.id = id }
+    func body(content: Content) -> some View {
+        if let id {
+            content.accessibilityIdentifier(id)
+        } else {
+            content
+        }
     }
 }
 

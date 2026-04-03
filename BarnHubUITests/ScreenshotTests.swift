@@ -2,111 +2,217 @@ import XCTest
 
 final class ScreenshotTests: XCTestCase {
     var app: XCUIApplication!
-    let dir = "/Users/antic/github.com/atomantic/BarnHub/screenshots"
+
+    private static let projectDir = "/Users/antic/github.com/atomantic/BarnHub"
+
+    /// Cached config read once from disk
+    private static let config: [String: String] = {
+        for path in ["\(projectDir)/.screenshot_config.json",
+                     "/tmp/barnhub_screenshot_config.json"] {
+            if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: String] {
+                return dict
+            }
+        }
+        return [:]
+    }()
+
+    private var config: [String: String] { Self.config }
+
+    private var locale: String { config["locale"] ?? "en" }
+
+    private var isIPad: Bool {
+        if let device = config["device"] { return device.hasPrefix("ipad") }
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    private var deviceType: String {
+        if let device = config["device"] { return device }
+        return isIPad ? "ipad_13" : "iphone_6.7"
+    }
+
+    private var outputDir: String {
+        config["output_dir"] ?? "\(Self.projectDir)/screenshots"
+    }
+
+    private var currency: String { config["currency"] ?? "USD" }
+
+    private var launchArgs: [String] {
+        ["-SeedSampleData", "-ForceProMode",
+         "-net.shadowpuppet.BarnBook.appLocale", locale,
+         "-net.shadowpuppet.BarnBook.currencyCode", currency,
+         "-AppleLanguages", "(\(locale))",
+         "-AppleLocale", locale]
+    }
 
     override func setUp() {
         super.setUp()
         continueAfterFailure = true
         app = XCUIApplication()
-        app.launchArguments = ["-SeedSampleData", "-ForceProMode"]
+        app.launchArguments = launchArgs
         app.launch()
+        sleep(2)
+        dismissSystemAlerts()
     }
 
-    func testCaptureAllScreenshots() {
-        // 1. Home screen
-        let title = app.staticTexts["BarnHub"]
-        XCTAssertTrue(title.waitForExistence(timeout: 5))
+    // MARK: - iPhone Screenshots
+
+    func testCaptureIPhoneScreenshots() {
+        guard !isIPad else { return }
+
         saveScreenshot("01_home")
 
         let tabBar = app.tabBars.firstMatch
 
-        // 2. Horses list
-        tabBar.buttons["Horses"].tap()
+        // Horses list
+        tabBar.buttons.element(boundBy: 1).tap()
         sleep(1)
         saveScreenshot("02_horses")
 
-        // 3. Horse detail (tap first horse — Arrow)
-        let arrowCell = app.cells.firstMatch
-        if arrowCell.waitForExistence(timeout: 3) {
-            arrowCell.tap()
+        // Horse detail
+        if app.cells.firstMatch.waitForExistence(timeout: 3) {
+            app.cells.firstMatch.tap()
             sleep(1)
             saveScreenshot("03_horse_detail")
             app.navigationBars.buttons.element(boundBy: 0).tap()
             sleep(1)
         }
 
-        // 4. Clients
-        tabBar.buttons["Clients"].tap()
+        // Clients
+        tabBar.buttons.element(boundBy: 2).tap()
         sleep(1)
         saveScreenshot("04_clients")
 
-        // 5. Client detail (tap first client)
-        let clientCell = app.cells.firstMatch
-        if clientCell.waitForExistence(timeout: 3) {
-            clientCell.tap()
+        // Client detail
+        if app.cells.firstMatch.waitForExistence(timeout: 3) {
+            app.cells.firstMatch.tap()
             sleep(1)
             saveScreenshot("05_client_detail")
             app.navigationBars.buttons.element(boundBy: 0).tap()
             sleep(1)
         }
 
-        // 6. Schedule
-        tabBar.buttons["Schedule"].tap()
+        // Schedule
+        tabBar.buttons.element(boundBy: 3).tap()
         sleep(1)
         saveScreenshot("06_schedule")
 
-        // 7. Accounting
-        tabBar.buttons["Accounting"].tap()
+        // Accounting
+        tabBar.buttons.element(boundBy: 4).tap()
         sleep(1)
         saveScreenshot("07_accounting")
 
-        // 8. Reports (from Home grid)
-        tabBar.buttons["Home"].tap()
+        // Reports (navigate via Home tile)
+        tabBar.buttons.element(boundBy: 0).tap()
         sleep(1)
-        let reports = app.buttons["Reports"]
-        XCTAssertTrue(reports.waitForExistence(timeout: 3))
-        reports.tap()
-        sleep(2)
-        saveScreenshot("08_reports")
+        let reportsTile = app.buttons["tile_reports"]
+        if reportsTile.waitForExistence(timeout: 3) {
+            reportsTile.tap()
+            sleep(2)
+            saveScreenshot("08_reports")
 
-        // 9. Scroll reports to show charts
-        let reportsView = app.scrollViews.firstMatch
-        if reportsView.exists {
-            reportsView.swipeUp()
-            sleep(1)
-            saveScreenshot("09_reports_charts")
+            // Scroll to show charts
+            let reportsView = app.scrollViews.firstMatch
+            if reportsView.exists {
+                reportsView.swipeUp()
+                sleep(1)
+                saveScreenshot("09_reports_charts")
+            }
         }
 
-        // 10. Contract generator with type picker
-        tabBar.buttons["Clients"].tap()
+        // Contract type picker (navigate to client detail → Generate Contract)
+        tabBar.buttons.element(boundBy: 2).tap()
         sleep(1)
-        let clientCell2 = app.cells.firstMatch
-        if clientCell2.waitForExistence(timeout: 3) {
-            clientCell2.tap()
+        if app.cells.firstMatch.waitForExistence(timeout: 3) {
+            app.cells.firstMatch.tap()
             sleep(1)
 
-            // Scroll to find Generate Contract
+            // Scroll to find Generate Contract button
             let list = app.collectionViews.firstMatch
             for _ in 0..<5 {
-                if app.staticTexts["Generate Contract"].exists { break }
+                let contractBtn = app.buttons["generate_contract"]
+                if contractBtn.exists {
+                    contractBtn.tap()
+                    sleep(2)
+                    saveScreenshot("10_contract_types")
+                    break
+                }
                 list.swipeUp()
                 sleep(1)
             }
+        }
+    }
 
-            if app.staticTexts["Generate Contract"].exists {
-                app.staticTexts["Generate Contract"].tap()
-                sleep(2)
+    // MARK: - iPad Screenshots
+    // iPad portrait hides sidebar — navigate via Home grid tiles, relaunch between screens.
 
-                // Tap the Type picker row to expand it and show options
-                let typePicker = app.staticTexts["Boarding Agreement"]
-                if typePicker.waitForExistence(timeout: 3) {
-                    typePicker.tap()
-                    sleep(1)
-                    saveScreenshot("10_contract_types")
-                } else {
-                    // Fallback: screenshot the form as-is
-                    saveScreenshot("10_contract_types")
-                }
+    func testCaptureIPadScreenshots() {
+        guard isIPad else { return }
+
+        // 1. Home
+        saveScreenshot("01_home")
+
+        // 2-3. Horses + detail
+        tapTile("tile_horses")
+        saveScreenshot("02_horses")
+        if app.cells.firstMatch.waitForExistence(timeout: 3) {
+            app.cells.firstMatch.tap()
+            sleep(1)
+            saveScreenshot("03_horse_detail")
+        }
+
+        relaunch()
+
+        // 4. Clients
+        tapTile("tile_clients")
+        saveScreenshot("04_clients")
+
+        relaunch()
+
+        // 5. Schedule
+        tapTile("tile_schedule")
+        saveScreenshot("05_schedule")
+
+        relaunch()
+
+        // 6. Accounting
+        tapTile("tile_accounting")
+        saveScreenshot("06_accounting")
+
+        relaunch()
+
+        // 7. Reports
+        tapTile("tile_reports")
+        saveScreenshot("07_reports")
+    }
+
+    // MARK: - Helpers
+
+    private func tapTile(_ identifier: String) {
+        let tile = app.buttons[identifier]
+        if tile.waitForExistence(timeout: 3) {
+            tile.tap()
+            sleep(2)
+        }
+    }
+
+    private func relaunch() {
+        app.launchArguments = launchArgs
+        app.launch()
+        sleep(2)
+        dismissSystemAlerts()
+    }
+
+    private func dismissSystemAlerts() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        // Check localized "Allow" buttons across all supported languages
+        for label in ["Allow", "Erlauben", "Autoriser", "Permitir",
+                      "Consenti", "Toestaan", "Tillåt"] {
+            let btn = springboard.buttons[label]
+            if btn.waitForExistence(timeout: 1) {
+                btn.tap()
+                sleep(1)
+                return
             }
         }
     }
@@ -114,13 +220,13 @@ final class ScreenshotTests: XCTestCase {
     private func saveScreenshot(_ name: String) {
         let screenshot = app.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
-        attachment.name = name
+        attachment.name = "\(locale)_\(deviceType)_\(name)"
         attachment.lifetime = .keepAlways
         add(attachment)
 
-        let data = screenshot.pngRepresentation
+        let dir = "\(outputDir)/\(locale)/\(deviceType)"
         let url = URL(fileURLWithPath: "\(dir)/\(name).png")
         try? FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)
-        try? data.write(to: url)
+        try? screenshot.pngRepresentation.write(to: url)
     }
 }

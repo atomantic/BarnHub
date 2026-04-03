@@ -78,6 +78,10 @@
 		6716F81EFFA26F29AF4556D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		67846EB91C783EDD2BB99ED8 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3E00B82BEDE322C7C8474 /* Routes.swift */; };
 		67D0F0466CEA861338639869 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
+		BBCC001122334455BELLA001 /* bella.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455BELLA000 /* bella.jpeg */; };
+		BBCC001122334455STORM001 /* storm.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455STORM000 /* storm.png */; };
+		BBCC001122334455DAISY001 /* daisy.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DAISY000 /* daisy.png */; };
+		BBCC001122334455CLEO0001 /* cleo.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455CLEO0000 /* cleo.png */; };
 		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
 		6BCEAFCD0BAFFF213E1D7B82 /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
@@ -131,6 +135,10 @@
 		AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
 		AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000F /* FeatureGateTests.swift */; };
 		AACC001122334455ARROW002 /* arrow.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AACC001122334455ARROW001 /* arrow.jpeg */; };
+		BBCC001122334455BELLA002 /* bella.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455BELLA000 /* bella.jpeg */; };
+		BBCC001122334455STORM002 /* storm.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455STORM000 /* storm.png */; };
+		BBCC001122334455DAISY002 /* daisy.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DAISY000 /* daisy.png */; };
+		BBCC001122334455CLEO0002 /* cleo.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455CLEO0000 /* cleo.png */; };
 		AADD112233445566LESS0002 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0001 /* Lesson.swift */; };
 		AADD112233445566LESS0004 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0003 /* LessonListView.swift */; };
 		AADD112233445566LESS0006 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
@@ -301,6 +309,10 @@
 		AA11223344556677AABB000D /* BarnHubProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BarnHubProducts.storekit; sourceTree = "<group>"; };
 		AA11223344556677AABB000F /* FeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGateTests.swift; sourceTree = "<group>"; };
 		AACC001122334455ARROW001 /* arrow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arrow.jpeg; sourceTree = "<group>"; };
+		BBCC001122334455BELLA000 /* bella.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bella.jpeg; sourceTree = "<group>"; };
+		BBCC001122334455STORM000 /* storm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm.png; sourceTree = "<group>"; };
+		BBCC001122334455DAISY000 /* daisy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = daisy.png; sourceTree = "<group>"; };
+		BBCC001122334455CLEO0000 /* cleo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cleo.png; sourceTree = "<group>"; };
 		AADD112233445566LESS0001 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson.swift; sourceTree = "<group>"; };
 		AADD112233445566LESS0003 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonListView.swift; sourceTree = "<group>"; };
 		AADD112233445566LESS0005 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonEditView.swift; sourceTree = "<group>"; };
@@ -495,6 +507,10 @@
 			isa = PBXGroup;
 			children = (
 				AACC001122334455ARROW001 /* arrow.jpeg */,
+				BBCC001122334455BELLA000 /* bella.jpeg */,
+				BBCC001122334455STORM000 /* storm.png */,
+				BBCC001122334455DAISY000 /* daisy.png */,
+				BBCC001122334455CLEO0000 /* cleo.png */,
 				4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */,
 			);
 			path = "Preview Content";
@@ -815,6 +831,10 @@
 				6D9D1281FC23234FD21E8CB6 /* Assets.xcassets in Resources */,
 				6E4E6A10028C0E50D6BB0913 /* BarnHubProducts.storekit in Resources */,
 				67D0F0466CEA861338639869 /* arrow.jpeg in Resources */,
+				BBCC001122334455BELLA001 /* bella.jpeg in Resources */,
+				BBCC001122334455STORM001 /* storm.png in Resources */,
+				BBCC001122334455DAISY001 /* daisy.png in Resources */,
+				BBCC001122334455CLEO0001 /* cleo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -826,6 +846,10 @@
 				99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */,
 				AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */,
 				AACC001122334455ARROW002 /* arrow.jpeg in Resources */,
+				BBCC001122334455BELLA002 /* bella.jpeg in Resources */,
+				BBCC001122334455STORM002 /* storm.png in Resources */,
+				BBCC001122334455DAISY002 /* daisy.png in Resources */,
+				BBCC001122334455CLEO0002 /* cleo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
