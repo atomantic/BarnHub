@@ -11,11 +11,11 @@ enum SyncStatus: Equatable {
 
     var label: String {
         switch self {
-        case .idle: "Waiting"
-        case .syncing: "Syncing…"
-        case .succeeded: "Up to date"
-        case .failed: "Sync error"
-        case .notAvailable: "iCloud unavailable"
+        case .idle: String(localized: "Waiting", comment: "Sync status")
+        case .syncing: String(localized: "Syncing…", comment: "Sync status")
+        case .succeeded: String(localized: "Up to date", comment: "Sync status")
+        case .failed: String(localized: "Sync error", comment: "Sync status")
+        case .notAvailable: String(localized: "iCloud unavailable", comment: "Sync status")
         }
     }
 

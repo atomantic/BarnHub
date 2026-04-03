@@ -63,14 +63,14 @@ struct ClientHorsesView: View {
     private func toggleHorse(_ horse: Horse, for client: Client, currentlyAssigned: Bool) {
         if currentlyAssigned {
             client.horses?.removeAll { $0.persistentModelID == horse.persistentModelID }
-            toast.show("\(horse.name) removed")
+            toast.show(String(localized: "\(horse.name) removed", comment: "Horse unassigned notification"))
             BarnHubLogger.info("Unassigned horse=\(horse.name) from client=\(client.fullName)")
         } else {
             if client.horses == nil {
                 client.horses = []
             }
             client.horses?.append(horse)
-            toast.show("\(horse.name) assigned")
+            toast.show(String(localized: "\(horse.name) assigned", comment: "Horse assigned notification"))
             BarnHubLogger.info("Assigned horse=\(horse.name) to client=\(client.fullName)")
         }
         modelContext.saveWithLogging()

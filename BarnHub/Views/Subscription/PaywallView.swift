@@ -265,7 +265,7 @@ struct PaywallView: View {
         guard let product = selectedProduct else { return }
         let success = await storeService.purchase(product)
         if success {
-            await showToastAndDismiss("Welcome to BarnHub Pro!")
+            await showToastAndDismiss(String(localized: "Welcome to BarnHub Pro!"))
         }
     }
 
@@ -273,9 +273,9 @@ struct PaywallView: View {
     private func handleRestore() async {
         let restored = await storeService.restorePurchases()
         if restored {
-            await showToastAndDismiss("Pro restored!")
+            await showToastAndDismiss(String(localized: "Pro restored!"))
         } else {
-            toast.show("No active subscription found", isError: true)
+            toast.show(String(localized: "No active subscription found"), isError: true)
         }
     }
 
