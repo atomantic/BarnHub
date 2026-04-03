@@ -57,6 +57,7 @@
 		49C18E219EA2DB73B789268F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */; };
 		49FCAA7CFB776EBAED74D492 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
 		4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
+		4E16D5A7364C4FC7B62CA26B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 943D638300E743FE98F4D65E /* Localizable.xcstrings */; };
 		4F5DC68351904D9310646DC0 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
 		4F8AE239B5CE084622838C5D /* SupplyEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E279531F6A34C8031FA01E /* SupplyEditView.swift */; };
 		4FEF7970AFD0223C8911E16B /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
@@ -95,6 +96,7 @@
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
 		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
 		873115BAC93C0159BCB86D42 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
+		87DA624D2AAB4188B6D329FF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 943D638300E743FE98F4D65E /* Localizable.xcstrings */; };
 		89DADD3345601DDCA7F4E930 /* BarnHubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */; };
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
 		8C4899F08B9237E107503E5A /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
@@ -162,6 +164,8 @@
 		C7A6790D06FDF33CF6E8AB4A /* ClientEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A772809337802F14016AA93 /* ClientEditView.swift */; };
 		C877A57158EFFCCDA3F946B7 /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
 		CA8B1245E9DC6C2A01B5A96D /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ReportsView.swift */; };
+		CALVIEWS00112233AABB0002 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
+		CALVIEWS00112233AABB0003 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
 		CC22334455667788AABB0002 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0001 /* RouterTests.swift */; };
 		CC22334455667788AABB0004 /* DeepLinkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */; };
 		CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22334455667788AABB0005 /* DateFormattingTests.swift */; };
@@ -203,8 +207,6 @@
 		FA83C1D5D7DD0A02F7B9F9E1 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
 		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
 		FF0E902A35BA84ED658C2B60 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
-		CALVIEWS00112233AABB0002 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
-		CALVIEWS00112233AABB0003 /* CalendarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = CALVIEWS00112233AABB0001 /* CalendarViews.swift */; };
 		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
 		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
@@ -271,12 +273,13 @@
 		7037AAB7CB6395B75225797D /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
 		7AD5ED6FE97B96591D9CA732 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		8400E9C51028A856C60639AB /* BarnHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubTests.swift; sourceTree = "<group>"; };
-		888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BarnHub macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		888831ADC9A6B88ACAA195B4 /* BarnHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarnHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C38356F6D87FBDFB2290568 /* HorseEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseEditView.swift; sourceTree = "<group>"; };
 		8E4059FB68D68631292465BD /* VetRecordEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecordEditView.swift; sourceTree = "<group>"; };
 		90B807BC939932440E8214FD /* URL+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+App.swift"; sourceTree = "<group>"; };
 		92C3E00B82BEDE322C7C8474 /* Routes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
 		93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditView.swift; sourceTree = "<group>"; };
+		943D638300E743FE98F4D65E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		9626486725CB190EBD898F44 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
 		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
@@ -318,6 +321,7 @@
 		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicePDFService.swift; sourceTree = "<group>"; };
 		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandlerTests.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0005 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormattingTests.swift; sourceTree = "<group>"; };
@@ -347,7 +351,6 @@
 		FBA744D61AAEE032A230817D /* Double+Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Currency.swift"; sourceTree = "<group>"; };
 		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecord.swift; sourceTree = "<group>"; };
-		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
 		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
 		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSchemaTests.swift; sourceTree = "<group>"; };
@@ -400,7 +403,7 @@
 				39336BD3A0262B77EFBBEFA1 /* BarnHub.app */,
 				F9D22AD988431229927A9911 /* BarnHubTests.xctest */,
 				B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */,
-				888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */,
+				888831ADC9A6B88ACAA195B4 /* BarnHub.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				A1C67C37342285C253C4FB52 /* BarnHub.entitlements */,
 				ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */,
 				CC3340C45202B29152467289 /* Assets.xcassets */,
+				943D638300E743FE98F4D65E /* Localizable.xcstrings */,
 				AA11223344556677AABB0012 /* Configuration */,
 				3136E6F1DF677A1E5E9176FE /* Extensions */,
 				9CF43B31E8845D861542A38E /* Models */,
@@ -726,7 +730,7 @@
 			);
 			name = "BarnHub macOS";
 			productName = "BarnHub macOS";
-			productReference = 888831ADC9A6B88ACAA195B4 /* BarnHub macOS.app */;
+			productReference = 888831ADC9A6B88ACAA195B4 /* BarnHub.app */;
 			productType = "com.apple.product-type.application";
 		};
 		99889D60A11D60E2AA54819D /* BarnHub */ = {
@@ -754,7 +758,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					0C28F3E67EF128E4928C9ADF = {
 						CreatedOnToolsVersion = 16.0;
@@ -775,6 +779,14 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				de,
+				fr,
+				nl,
+				sv,
+				"es-ES",
+				"es-MX",
+				"pt-BR",
+				it,
 				Base,
 			);
 			mainGroup = 2B731CEFC6751AAE0EC69B98;
@@ -795,6 +807,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E16D5A7364C4FC7B62CA26B /* Localizable.xcstrings in Resources */,
 				6D9D1281FC23234FD21E8CB6 /* Assets.xcassets in Resources */,
 				6E4E6A10028C0E50D6BB0913 /* BarnHubProducts.storekit in Resources */,
 				67D0F0466CEA861338639869 /* arrow.jpeg in Resources */,
@@ -805,6 +818,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87DA624D2AAB4188B6D329FF /* Localizable.xcstrings in Resources */,
 				99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */,
 				AA11223344556677AABB000E /* BarnHubProducts.storekit in Resources */,
 				AACC001122334455ARROW002 /* arrow.jpeg in Resources */,
@@ -1069,7 +1083,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
@@ -1098,7 +1111,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
@@ -1119,7 +1131,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
 				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
@@ -1149,7 +1160,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
@@ -1166,6 +1176,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSTECOMPILER_CHECK_UNUSED_PARAMETERS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1196,6 +1207,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1219,6 +1231,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1229,6 +1242,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSTECOMPILER_CHECK_UNUSED_PARAMETERS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1259,6 +1273,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1275,6 +1290,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1283,16 +1299,19 @@
 		8004BA2B5FF07C65F5E44969 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 27;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
@@ -1319,7 +1338,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
@@ -1337,7 +1355,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 27;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
@@ -1352,16 +1369,19 @@
 		D9E62DF18AE4756BBA9D0EEC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 27;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = TYQ32QCF6K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BarnHub;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
