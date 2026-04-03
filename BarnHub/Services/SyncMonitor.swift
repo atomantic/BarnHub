@@ -9,13 +9,13 @@ enum SyncStatus: Equatable {
     case failed(String)
     case notAvailable
 
-    var label: LocalizedStringKey {
+    var label: String {
         switch self {
-        case .idle: "Waiting"
-        case .syncing: "Syncing…"
-        case .succeeded: "Up to date"
-        case .failed: "Sync error"
-        case .notAvailable: "iCloud unavailable"
+        case .idle:         return appLocalized("Waiting",            comment: "Sync status")
+        case .syncing:      return appLocalized("Syncing…",           comment: "Sync status")
+        case .succeeded:    return appLocalized("Up to date",         comment: "Sync status")
+        case .failed:       return appLocalized("Sync error",         comment: "Sync status")
+        case .notAvailable: return appLocalized("iCloud unavailable", comment: "Sync status")
         }
     }
 

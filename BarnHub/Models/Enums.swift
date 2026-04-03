@@ -6,15 +6,15 @@ enum TransactionCategory: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var displayName: String {
         switch self {
-        case .lesson:    return String(localized: "Lesson",    comment: "Transaction category")
-        case .boarding:  return String(localized: "Boarding",  comment: "Transaction category")
-        case .training:  return String(localized: "Training",  comment: "Transaction category")
-        case .vetBill:   return String(localized: "Vet Bill",  comment: "Transaction category")
-        case .farrier:   return String(localized: "Farrier",   comment: "Transaction category")
-        case .feed:      return String(localized: "Feed",      comment: "Transaction category")
-        case .supplies:  return String(localized: "Supplies",  comment: "Transaction category")
-        case .tack:      return String(localized: "Tack",      comment: "Transaction category")
-        case .other:     return String(localized: "Other",     comment: "Transaction category")
+        case .lesson:    return appLocalized("Lesson",    comment: "Transaction category")
+        case .boarding:  return appLocalized("Boarding",  comment: "Transaction category")
+        case .training:  return appLocalized("Training",  comment: "Transaction category")
+        case .vetBill:   return appLocalized("Vet Bill",  comment: "Transaction category")
+        case .farrier:   return appLocalized("Farrier",   comment: "Transaction category")
+        case .feed:      return appLocalized("Feed",      comment: "Transaction category")
+        case .supplies:  return appLocalized("Supplies",  comment: "Transaction category")
+        case .tack:      return appLocalized("Tack",      comment: "Transaction category")
+        case .other:     return appLocalized("Other",     comment: "Transaction category")
         }
     }
 }
@@ -22,10 +22,10 @@ enum TransactionCategory: String, Codable, CaseIterable, Identifiable {
 enum TransactionType: String, Codable, CaseIterable, Identifiable {
     case income, expense
     var id: String { rawValue }
-    var displayName: LocalizedStringKey {
+    var displayName: String {
         switch self {
-        case .income:  return "Income"
-        case .expense: return "Expense"
+        case .income:  return appLocalized("Income",  comment: "Transaction type")
+        case .expense: return appLocalized("Expense", comment: "Transaction type")
         }
     }
 }
@@ -36,10 +36,10 @@ enum LessonType: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var displayName: String {
         switch self {
-        case .privateLesson: return String(localized: "Private",    comment: "Lesson type")
-        case .group:         return String(localized: "Group",      comment: "Lesson type")
-        case .training:      return String(localized: "Training",   comment: "Lesson type")
-        case .evaluation:    return String(localized: "Evaluation", comment: "Lesson type")
+        case .privateLesson: return appLocalized("Private",    comment: "Lesson type")
+        case .group:         return appLocalized("Group",      comment: "Lesson type")
+        case .training:      return appLocalized("Training",   comment: "Lesson type")
+        case .evaluation:    return appLocalized("Evaluation", comment: "Lesson type")
         }
     }
 }
@@ -47,15 +47,15 @@ enum LessonType: String, Codable, CaseIterable, Identifiable {
 enum ReminderFrequency: String, Codable, CaseIterable, Identifiable {
     case once, daily, weekly, monthly, quarterly, biannually, annually
     var id: String { rawValue }
-    var displayName: LocalizedStringKey {
+    var displayName: String {
         switch self {
-        case .once:        return "Once"
-        case .daily:       return "Daily"
-        case .weekly:      return "Weekly"
-        case .monthly:     return "Monthly"
-        case .quarterly:   return "Quarterly"
-        case .biannually:  return "Biannually"
-        case .annually:    return "Annually"
+        case .once:        return appLocalized("Once",        comment: "Reminder frequency")
+        case .daily:       return appLocalized("Daily",       comment: "Reminder frequency")
+        case .weekly:      return appLocalized("Weekly",      comment: "Reminder frequency")
+        case .monthly:     return appLocalized("Monthly",     comment: "Reminder frequency")
+        case .quarterly:   return appLocalized("Quarterly",   comment: "Reminder frequency")
+        case .biannually:  return appLocalized("Biannually",  comment: "Reminder frequency")
+        case .annually:    return appLocalized("Annually",    comment: "Reminder frequency")
         }
     }
 }
@@ -63,14 +63,14 @@ enum ReminderFrequency: String, Codable, CaseIterable, Identifiable {
 enum BarnNoteCategory: String, Codable, CaseIterable, Identifiable {
     case general, observation, incident, maintenance, health, weather
     var id: String { rawValue }
-    var displayName: LocalizedStringKey {
+    var displayName: String {
         switch self {
-        case .general:     return "General"
-        case .observation: return "Observation"
-        case .incident:    return "Incident"
-        case .maintenance: return "Maintenance"
-        case .health:      return "Health"
-        case .weather:     return "Weather"
+        case .general:     return appLocalized("General",     comment: "Barn note category")
+        case .observation: return appLocalized("Observation", comment: "Barn note category")
+        case .incident:    return appLocalized("Incident",    comment: "Barn note category")
+        case .maintenance: return appLocalized("Maintenance", comment: "Barn note category")
+        case .health:      return appLocalized("Health",      comment: "Barn note category")
+        case .weather:     return appLocalized("Weather",     comment: "Barn note category")
         }
     }
     var icon: String {

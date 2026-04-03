@@ -7,10 +7,10 @@ enum BalancePeriod: Int, CaseIterable, Identifiable {
 
     var id: Int { rawValue }
 
-    var displayName: LocalizedStringKey {
+    var displayName: String {
         switch self {
-        case .thisMonth: "This Month"
-        case .allTime:   "All Time"
+        case .thisMonth: return appLocalized("This Month", comment: "Balance period")
+        case .allTime:   return appLocalized("All Time",   comment: "Balance period")
         }
     }
 }
@@ -390,10 +390,10 @@ struct HomeView: View {
         let vSpacing: CGFloat = 20
         #endif
         return LazyVGrid(columns: columns, spacing: vSpacing) {
-            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: String(localized: "^[\(horseCount) horse](inflect: true)", comment: "Horse count badge")) {
+            FeatureTile(icon: "figure.equestrian.sports", title: "Horses", color: .barnBrown, badge: appLocalized("^[\(horseCount) horse](inflect: true)", comment: "Horse count badge")) {
                 router.switchTab(.horses)
             }
-            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: String(localized: "^[\(clientCount) client](inflect: true)", comment: "Client count badge")) {
+            FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: appLocalized("^[\(clientCount) client](inflect: true)", comment: "Client count badge")) {
                 router.switchTab(.clients)
             }
             FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday) {
@@ -423,7 +423,7 @@ struct FeatureTile: View {
     let color: Color
     var badge: String? = nil
     var badgeColor: Color? = nil
-    var badgeDetail: LocalizedStringKey? = nil
+    var badgeDetail: String? = nil
     let action: () -> Void
 
     #if os(macOS)

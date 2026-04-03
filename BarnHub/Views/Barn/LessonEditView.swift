@@ -135,6 +135,6 @@ struct LessonEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Lesson added") : String(localized: "Lesson updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Lesson added") : appLocalized("Lesson updated"), dismiss: dismiss)
     }
 }

@@ -63,7 +63,7 @@ struct SupplyListView: View {
             ) {
                 guard let item = itemToDelete else { return }
                 modelContext.deleteWithLogging(item)
-                toast.show(String(localized: "Supply deleted"))
+                toast.show(appLocalized("Supply deleted"))
                 itemToDelete = nil
             }
         }

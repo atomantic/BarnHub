@@ -92,6 +92,6 @@ struct ReminderEditView: View {
 
         modelContext.saveWithLogging()
         notificationService.scheduleReminder(reminder)
-        toast.showAndDismiss(isNew ? String(localized: "Reminder added") : String(localized: "Reminder updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Reminder added") : appLocalized("Reminder updated"), dismiss: dismiss)
     }
 }

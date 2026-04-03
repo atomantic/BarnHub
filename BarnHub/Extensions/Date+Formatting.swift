@@ -1,31 +1,19 @@
 import Foundation
 
 extension Date {
-    private static let shortDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter
-    }()
-
-    private static let compactDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        return formatter
-    }()
-
-    private static let relativeFormatter: RelativeDateTimeFormatter = {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .full
-        return formatter
-    }()
-
     var shortFormatted: String {
-        Self.shortDateFormatter.string(from: self)
+        formatted(Date.FormatStyle.dateTime.month(.twoDigits).day(.twoDigits).year())
     }
 
+    private static let compactFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyyMMdd"
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
+
     var compactFormatted: String {
-        Self.compactDateFormatter.string(from: self)
+        Self.compactFormatter.string(from: self)
     }
 
     var isOverdue: Bool {
@@ -33,6 +21,8 @@ extension Date {
     }
 
     var relativeDateString: String {
-        Self.relativeFormatter.localizedString(for: self, relativeTo: .now)
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: self, relativeTo: .now)
     }
 }

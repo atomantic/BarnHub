@@ -104,6 +104,6 @@ struct SupplyEditView: View {
         item.lastOrderedDate = showLastOrderedDate ? lastOrderedDate : nil
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Supply added") : String(localized: "Supply updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Supply added") : appLocalized("Supply updated"), dismiss: dismiss)
     }
 }

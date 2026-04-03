@@ -84,6 +84,6 @@ struct BarnNoteEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Note added") : String(localized: "Note updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Note added") : appLocalized("Note updated"), dismiss: dismiss)
     }
 }

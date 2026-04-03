@@ -40,8 +40,8 @@ enum DocumentType: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .pdf: return "PDF"
-        case .photo: return "Photo"
+        case .pdf:   return appLocalized("PDF",   comment: "Document type")
+        case .photo: return appLocalized("Photo", comment: "Document type")
         }
     }
 

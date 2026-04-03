@@ -203,7 +203,7 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(String(localized: "Settings"))
+                .accessibilityLabel(appLocalized("Settings"))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
@@ -312,7 +312,7 @@ private extension View {
                     Image(systemName: "gearshape.fill")
                         .foregroundStyle(.white)
                 }
-                .accessibilityLabel(String(localized: "Settings"))
+                .accessibilityLabel(appLocalized("Settings"))
             }
         }
     }

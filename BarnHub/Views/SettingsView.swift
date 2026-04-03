@@ -21,8 +21,8 @@ struct SettingsView: View {
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
     @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
 
-    private static let supportedLocales: [(id: String, name: String)] = [
-        ("",       "System Default"),
+    private var supportedLocales: [(id: String, name: String)] {[
+        ("",       appLocalized("System Default", comment: "Language picker option")),
         ("en",     "English"),
         ("de",     "Deutsch"),
         ("fr",     "Français"),
@@ -32,7 +32,7 @@ struct SettingsView: View {
         ("es-MX",  "Español (México)"),
         ("pt-BR",  "Português (Brasil)"),
         ("it",     "Italiano"),
-    ]
+    ]}
 
     private static let feedbackEmail = "support@barnhub.online"
 
@@ -103,8 +103,8 @@ struct SettingsView: View {
             } message: {
                 Text("Enter the code you received to unlock BarnHub Pro.")
             }
-            .toast(isPresented: $showCodeRedeemedToast, message: String(localized: "Pro unlocked!"))
-            .toast(isPresented: $showInvalidCodeToast, message: String(localized: "Invalid code"), isError: true)
+            .toast(isPresented: $showCodeRedeemedToast, message: appLocalized("Pro unlocked!"))
+            .toast(isPresented: $showInvalidCodeToast, message: appLocalized("Invalid code"), isError: true)
     }
 
     // MARK: - Layout
@@ -330,8 +330,16 @@ struct SettingsView: View {
             }
             .pickerStyle(.segmented)
             Picker("Language", selection: $appLocaleID) {
-                ForEach(Self.supportedLocales, id: \.id) { locale in
+                ForEach(supportedLocales, id: \.id) { locale in
                     Text(locale.name).tag(locale.id)
+                }
+            }
+            .onChange(of: appLocaleID) { _, newValue in
+                Bundle.resetAppBundleCache()
+                if newValue.isEmpty {
+                    UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+                } else {
+                    UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
                 }
             }
         }

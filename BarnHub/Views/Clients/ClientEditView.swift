@@ -119,6 +119,6 @@ struct ClientEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Client added") : String(localized: "Client updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Client added") : appLocalized("Client updated"), dismiss: dismiss)
     }
 }

@@ -32,8 +32,8 @@ struct BarnNoteListView: View {
 
         var title: String {
             switch self {
-            case .today: return String(localized: "Today")
-            case .yesterday: return String(localized: "Yesterday")
+            case .today: return appLocalized("Today")
+            case .yesterday: return appLocalized("Yesterday")
             case .date(let d): return d.formatted(.dateTime.month(.wide).day().year())
             }
         }
@@ -96,7 +96,7 @@ struct BarnNoteListView: View {
         Section {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    filterChip(label: "All", isSelected: selectedCategory == nil) {
+                    filterChip(label: appLocalized("All", comment: "Filter chip label"), isSelected: selectedCategory == nil) {
                         selectedCategory = nil
                     }
                     ForEach(BarnNoteCategory.allCases) { category in
@@ -114,7 +114,7 @@ struct BarnNoteListView: View {
         }
     }
 
-    private func filterChip(label: LocalizedStringKey, icon: String? = nil, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    private func filterChip(label: String, icon: String? = nil, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 4) {
                 if let icon {
@@ -146,7 +146,7 @@ struct BarnNoteListView: View {
                     .font(.subheadline)
                     .lineLimit(2)
                 HStack(spacing: 8) {
-                    Text(note.date.formatted(.dateTime.hour().minute()))
+                    Text(note.date, format: .dateTime.hour().minute())
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                     if let horse = note.horse {
@@ -169,6 +169,6 @@ struct BarnNoteListView: View {
         for index in offsets {
             modelContext.deleteWithLogging(groupNotes[index])
         }
-        toast.show(String(localized: "Note deleted"))
+        toast.show(appLocalized("Note deleted"))
     }
 }

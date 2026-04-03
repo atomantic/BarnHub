@@ -141,7 +141,7 @@ struct HorseEditView: View {
                     // Task was cancelled by a newer selection — no error toast needed.
                 } catch {
                     await MainActor.run {
-                        toast.show(String(localized: "Failed to load photo"), isError: true)
+                        toast.show(appLocalized("Failed to load photo"), isError: true)
                     }
                 }
             }
@@ -199,7 +199,7 @@ struct HorseEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? String(localized: "Horse added") : String(localized: "Horse updated"), dismiss: dismiss)
+        toast.showAndDismiss(isNew ? appLocalized("Horse added") : appLocalized("Horse updated"), dismiss: dismiss)
     }
 
     private func downsampleImageData(_ data: Data, maxDimension: CGFloat) -> Data {

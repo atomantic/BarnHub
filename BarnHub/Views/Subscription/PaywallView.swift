@@ -124,14 +124,14 @@ struct PaywallView: View {
                     planCard(
                         product: monthly,
                         title: "Monthly",
-                        subtitle: monthly.displayPrice + String(localized: "/month")
+                        subtitle: monthly.displayPrice + appLocalized("/month")
                     )
                 }
                 if let annual = storeService.annualProduct {
                     planCard(
                         product: annual,
                         title: "Annual",
-                        subtitle: annual.displayPrice + String(localized: "/year"),
+                        subtitle: annual.displayPrice + appLocalized("/year"),
                         badge: "7-day free trial"
                     )
                 }
@@ -139,7 +139,7 @@ struct PaywallView: View {
                     planCard(
                         product: lifetime,
                         title: "Lifetime",
-                        subtitle: lifetime.displayPrice + String(localized: " once"),
+                        subtitle: lifetime.displayPrice + appLocalized(" once"),
                         badge: "Best value"
                     )
                 }
@@ -269,7 +269,7 @@ struct PaywallView: View {
         guard let product = selectedProduct else { return }
         let success = await storeService.purchase(product)
         if success {
-            await showToastAndDismiss(String(localized: "Welcome to BarnHub Pro!"))
+            await showToastAndDismiss(appLocalized("Welcome to BarnHub Pro!"))
         }
     }
 
@@ -277,9 +277,9 @@ struct PaywallView: View {
     private func handleRestore() async {
         let restored = await storeService.restorePurchases()
         if restored {
-            await showToastAndDismiss(String(localized: "Pro restored!"))
+            await showToastAndDismiss(appLocalized("Pro restored!"))
         } else {
-            toast.show(String(localized: "No active subscription found"), isError: true)
+            toast.show(appLocalized("No active subscription found"), isError: true)
         }
     }
 

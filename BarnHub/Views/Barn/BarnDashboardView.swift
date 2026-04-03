@@ -4,11 +4,15 @@ import SwiftData
 // MARK: - Calendar View Mode
 
 enum CalendarViewMode: String, CaseIterable {
-    case day = "Day"
-    case week = "Week"
-    case month = "Month"
+    case day, week, month
 
-    var localizedLabel: LocalizedStringKey { LocalizedStringKey(rawValue) }
+    var displayName: String {
+        switch self {
+        case .day:   return appLocalized("Day",   comment: "Calendar view mode")
+        case .week:  return appLocalized("Week",  comment: "Calendar view mode")
+        case .month: return appLocalized("Month", comment: "Calendar view mode")
+        }
+    }
 }
 
 // MARK: - Schedule Event Types
@@ -34,12 +38,12 @@ enum ScheduleEventType: String, CaseIterable {
         }
     }
 
-    var label: LocalizedStringKey {
+    var label: String {
         switch self {
-        case .reminder: "Reminder"
-        case .vet: "Vet"
-        case .farrier: "Farrier"
-        case .lesson: "Lesson"
+        case .reminder: return appLocalized("Reminder", comment: "Schedule event type")
+        case .vet:      return appLocalized("Vet",      comment: "Schedule event type")
+        case .farrier:  return appLocalized("Farrier",  comment: "Schedule event type")
+        case .lesson:   return appLocalized("Lesson",   comment: "Schedule event type")
         }
     }
 }
@@ -260,10 +264,12 @@ struct BarnDashboardView: View {
             }
             .padding(.horizontal, 8)
 
-            Picker("View", selection: $viewMode) {
+            Picker(selection: $viewMode) {
                 ForEach(CalendarViewMode.allCases, id: \.self) { mode in
-                    Text(mode.localizedLabel).tag(mode)
+                    Text(mode.displayName).tag(mode)
                 }
+            } label: {
+                EmptyView()
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 16)
@@ -378,21 +384,21 @@ struct BarnDashboardView: View {
 
             Spacer()
 
-            Picker("View", selection: $viewMode) {
+            Picker(selection: $viewMode) {
                 ForEach(CalendarViewMode.allCases, id: \.self) { mode in
-                    Text(mode.localizedLabel).tag(mode)
+                    Text(mode.displayName).tag(mode)
                 }
+            } label: {
+                EmptyView()
             }
             .pickerStyle(.segmented)
             .frame(width: 180)
 
-            if viewMode == .month {
-                HStack(spacing: 12) {
-                    ForEach(ScheduleEventType.allCases, id: \.self) { type in
-                        HStack(spacing: 4) {
-                            Circle().fill(type.color).frame(width: 8, height: 8)
-                            Text(type.label).font(.caption).foregroundStyle(.secondary)
-                        }
+            HStack(spacing: 12) {
+                ForEach(ScheduleEventType.allCases, id: \.self) { type in
+                    HStack(spacing: 4) {
+                        Circle().fill(type.color).frame(width: 8, height: 8)
+                        Text(type.label).font(.caption).foregroundStyle(.secondary)
                     }
                 }
             }
@@ -403,38 +409,40 @@ struct BarnDashboardView: View {
 
     @ViewBuilder
     private var macOSCalendarContent: some View {
-        switch viewMode {
-        case .month:
-            HStack(spacing: 0) {
-                CalendarMonthView(
-                    eventsByDay: eventsByDay,
-                    monthStart: monthStart,
-                    selectedDate: selectedDate,
-                    onDateSelected: { selectedDate = $0 },
-                    onEventTapped: navigateToEvent,
-                    showEventsList: false
-                )
-                .frame(maxWidth: .infinity)
-
-                Divider()
-
-                dayDetailPanel
-                    .frame(width: 280)
+        HStack(spacing: 0) {
+            Group {
+                switch viewMode {
+                case .month:
+                    CalendarMonthView(
+                        eventsByDay: eventsByDay,
+                        monthStart: monthStart,
+                        selectedDate: selectedDate,
+                        onDateSelected: { selectedDate = $0 },
+                        onEventTapped: navigateToEvent,
+                        showEventsList: false
+                    )
+                case .week:
+                    CalendarWeekView(
+                        eventsByDay: eventsByDay,
+                        weekStart: weekStart,
+                        selectedDate: selectedDate,
+                        onDateSelected: { selectedDate = $0 },
+                        onEventTapped: navigateToEvent
+                    )
+                case .day:
+                    CalendarDayView(
+                        events: eventsForDay(selectedDate),
+                        date: selectedDate,
+                        onEventTapped: navigateToEvent
+                    )
+                }
             }
-        case .week:
-            CalendarWeekView(
-                eventsByDay: eventsByDay,
-                weekStart: weekStart,
-                selectedDate: selectedDate,
-                onDateSelected: { date in selectedDate = date; viewMode = .day },
-                onEventTapped: navigateToEvent
-            )
-        case .day:
-            CalendarDayView(
-                events: eventsForDay(selectedDate),
-                date: selectedDate,
-                onEventTapped: navigateToEvent
-            )
+            .frame(maxWidth: .infinity)
+
+            Divider()
+
+            dayDetailPanel
+                .frame(width: 280)
         }
     }
 
@@ -447,10 +455,10 @@ struct BarnDashboardView: View {
 
         return VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(selectedDate.formatted(.dateTime.weekday(.wide)))
+                Text(selectedDate, format: .dateTime.weekday(.wide))
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(selectedDate.formatted(.dateTime.month(.wide).day()))
+                Text(selectedDate, format: .dateTime.month(.wide).day())
                     .font(.title3.weight(.semibold))
             }
             .padding(.horizontal, 16)

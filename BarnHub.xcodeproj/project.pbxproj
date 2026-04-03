@@ -20,6 +20,7 @@
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
 		0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
 		0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
+		31C4F96A12A64238920C018A /* Locale+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */; };
 		0F02EE5F9B13BE4924497DDF /* SupplyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */; };
 		0F85EA0DE901A55D3C20F7E0 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7037AAB7CB6395B75225797D /* CurrencyField.swift */; };
 		0FECD3DF15FF7D5B7C41F291 /* Image+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC91A420DFF31CCEA9FB261 /* Image+PlatformCompat.swift */; };
@@ -27,6 +28,7 @@
 		1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
 		18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
+		F486DFDDF4594EE2BB0CDB49 /* Locale+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */; };
 		19744E0316C5D37A8B58644F /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
 		1D195657269C5D4EAEDEF2EA /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
 		1E8D158A2BE9C8CA1CDE51F1 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
@@ -314,6 +316,7 @@
 		BBCC001122334455DATA0003 /* DataImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportService.swift; sourceTree = "<group>"; };
 		BBCC001122334455DATA0005 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
 		BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
+		95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+App.swift"; sourceTree = "<group>"; };
 		C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseRowView.swift; sourceTree = "<group>"; };
 		C24FE726A3D35D655991C025 /* ClientRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientRowView.swift; sourceTree = "<group>"; };
 		C2F53930338F4A389921F640 /* WeightEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntry.swift; sourceTree = "<group>"; };
@@ -467,6 +470,7 @@
 				98791B230125578C3586BE55 /* Color+Brand.swift */,
 				90B807BC939932440E8214FD /* URL+App.swift */,
 				BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */,
+				95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */,
 				FBA744D61AAEE032A230817D /* Double+Currency.swift */,
 				CE768E67ED8208EC1BC695B8 /* View+Toast.swift */,
 				VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */,
@@ -861,6 +865,7 @@
 				081908AE0AEFB9CFC5DD75ED /* PreviewSampleData.swift in Sources */,
 				A767DF6FDA03BB02F275316E /* Color+Brand.swift in Sources */,
 				18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */,
+				F486DFDDF4594EE2BB0CDB49 /* Locale+App.swift in Sources */,
 				0590894709F843FEB7156414 /* Double+Currency.swift in Sources */,
 				7B9F554D51AC55067789DD55 /* View+Toast.swift in Sources */,
 				05C6DAC9B032919D312E892D /* View+BarnCard.swift in Sources */,
@@ -969,6 +974,7 @@
 				E4EC845EDC6AC0AA8E85320C /* PreviewSampleData.swift in Sources */,
 				3317A4E4101048B982C83535 /* Color+Brand.swift in Sources */,
 				0EDA5BFBB09EAA910489125D /* Date+Formatting.swift in Sources */,
+				31C4F96A12A64238920C018A /* Locale+App.swift in Sources */,
 				7A7879ABF7C15CC5A0BA3265 /* Double+Currency.swift in Sources */,
 				3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */,
 				VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */,
