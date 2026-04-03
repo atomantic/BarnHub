@@ -173,24 +173,22 @@ struct BarnDashboardView: View {
         return cal.date(byAdding: .day, value: -(weekday - 1), to: cal.startOfDay(for: selectedDate)) ?? selectedDate
     }
 
-    private var calendarTitle: String {
+    @ViewBuilder
+    private var calendarTitleView: some View {
         switch viewMode {
         case .day:
-            let weekday = selectedDate.formatted(.dateTime.weekday(.wide))
-            let monthDay = selectedDate.formatted(.dateTime.month(.abbreviated).day())
-            return "\(weekday), \(monthDay)"
+            Text(selectedDate, format: .dateTime.weekday(.wide)) + Text(", ") + Text(selectedDate, format: .dateTime.month(.abbreviated).day())
         case .week:
             let start = weekStart
-            guard let end = Calendar.current.date(byAdding: .day, value: 6, to: start) else { return "" }
-            let startStr = start.formatted(.dateTime.month(.abbreviated).day())
-            let cal = Calendar.current
-            let sameMonth = cal.component(.month, from: start) == cal.component(.month, from: end)
-            let endStr = sameMonth
-                ? "\(cal.component(.day, from: end))"
-                : end.formatted(.dateTime.month(.abbreviated).day())
-            return "\(startStr) – \(endStr)"
+            let end = Calendar.current.date(byAdding: .day, value: 6, to: start) ?? start
+            let sameMonth = Calendar.current.component(.month, from: start) == Calendar.current.component(.month, from: end)
+            if sameMonth {
+                Text(start, format: .dateTime.month(.abbreviated).day()) + Text(" – ") + Text(end, format: .dateTime.day())
+            } else {
+                Text(start, format: .dateTime.month(.abbreviated).day()) + Text(" – ") + Text(end, format: .dateTime.month(.abbreviated).day())
+            }
         case .month:
-            return selectedDate.formatted(.dateTime.month(.wide).year())
+            Text(selectedDate, format: .dateTime.month(.wide).year())
         }
     }
 
@@ -240,7 +238,7 @@ struct BarnDashboardView: View {
 
                 Spacer()
 
-                Text(calendarTitle)
+                calendarTitleView
                     .font(.subheadline.weight(.semibold))
                     .lineLimit(1)
 
@@ -363,7 +361,7 @@ struct BarnDashboardView: View {
             }
             .buttonStyle(.plain)
 
-            Text(calendarTitle)
+            calendarTitleView
                 .font(.title3.weight(.semibold))
                 .frame(minWidth: 180)
 
