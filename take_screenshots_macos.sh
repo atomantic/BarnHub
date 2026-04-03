@@ -125,6 +125,37 @@ click_sidebar() {
     end tell" 2>/dev/null || true
 }
 
+# Click at a position in the window (relative to window top-left, in points)
+click_at() {
+    local x="$1" y="$2"
+    osascript -e "
+    tell application \"BarnHub\" to activate
+    tell application \"System Events\"
+        tell process \"BarnHub\"
+            set winPos to position of window 1
+            set absX to (item 1 of winPos) + $x
+            set absY to (item 2 of winPos) + $y
+            click at {absX, absY}
+        end tell
+    end tell" 2>/dev/null || true
+}
+
+# Click first item in the detail list (to the right of sidebar, first row)
+click_first_detail_row() {
+    # Sidebar is ~80pt wide; title bar ~28pt; nav bar ~24pt; first row center ~65pt below nav
+    click_at 200 100
+}
+
+# Go back via Cmd+[ keyboard shortcut
+go_back() {
+    osascript -e '
+    tell application "BarnHub" to activate
+    delay 0.3
+    tell application "System Events"
+        key code 33 using command down
+    end tell' 2>/dev/null || true
+}
+
 # Take screenshot of BarnHub window
 capture_window() {
     local output_path="$1"
@@ -154,12 +185,13 @@ capture_locale() {
     killall BarnHub 2>/dev/null || true
     sleep 1
 
-    # Launch with locale + sample data
+    # Launch with locale + sample data + light mode
     open "$APP_PATH" --args \
         -SeedSampleData \
         -ForceProMode \
         -net.shadowpuppet.BarnBook.appLocale "$lang" \
         -net.shadowpuppet.BarnBook.currencyCode "$currency" \
+        -net.shadowpuppet.BarnBook.appearanceMode 1 \
         -AppleLanguages "($lang)" \
         -AppleLocale "$lang"
 
@@ -175,20 +207,27 @@ capture_locale() {
     sleep 1
     capture_window "$out_dir/02_horses.png"
 
-    # 3. Clients (row 3)
+    # 3. Horse detail — click first horse in the detail list
+    click_first_detail_row
+    sleep 1
+    capture_window "$out_dir/03_horse_detail.png"
+    go_back
+    sleep 1
+
+    # 4. Clients (row 3)
     click_sidebar 3
     sleep 1
-    capture_window "$out_dir/03_clients.png"
+    capture_window "$out_dir/04_clients.png"
 
-    # 4. Schedule (row 4)
+    # 5. Schedule (row 4)
     click_sidebar 4
     sleep 1
-    capture_window "$out_dir/04_schedule.png"
+    capture_window "$out_dir/05_schedule.png"
 
-    # 5. Accounting (row 5)
+    # 6. Accounting (row 5)
     click_sidebar 5
     sleep 1
-    capture_window "$out_dir/05_accounting.png"
+    capture_window "$out_dir/06_accounting.png"
 
     # Quit
     killall BarnHub 2>/dev/null || true
