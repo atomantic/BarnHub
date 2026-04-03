@@ -89,7 +89,7 @@ struct PaywallView: View {
         .background(Color.secondarySystemBackground)
     }
 
-    private func comparisonRow(_ feature: String, free: Bool, pro: Bool) -> some View {
+    private func comparisonRow(_ feature: LocalizedStringKey, free: Bool, pro: Bool) -> some View {
         VStack(spacing: 0) {
             HStack {
                 Text(feature)
@@ -124,14 +124,14 @@ struct PaywallView: View {
                     planCard(
                         product: monthly,
                         title: "Monthly",
-                        subtitle: monthly.displayPrice + "/month"
+                        subtitle: monthly.displayPrice + String(localized: "/month")
                     )
                 }
                 if let annual = storeService.annualProduct {
                     planCard(
                         product: annual,
                         title: "Annual",
-                        subtitle: annual.displayPrice + "/year",
+                        subtitle: annual.displayPrice + String(localized: "/year"),
                         badge: "7-day free trial"
                     )
                 }
@@ -139,7 +139,7 @@ struct PaywallView: View {
                     planCard(
                         product: lifetime,
                         title: "Lifetime",
-                        subtitle: lifetime.displayPrice + " once",
+                        subtitle: lifetime.displayPrice + String(localized: " once"),
                         badge: "Best value"
                     )
                 }
@@ -172,7 +172,7 @@ struct PaywallView: View {
         }
     }
 
-    private func planCard(product: Product, title: String, subtitle: String, badge: String? = nil) -> some View {
+    private func planCard(product: Product, title: LocalizedStringKey, subtitle: String, badge: LocalizedStringKey? = nil) -> some View {
         let isSelected = selectedProduct?.id == product.id
         return Button { selectedProduct = product } label: {
             HStack {
@@ -211,6 +211,10 @@ struct PaywallView: View {
         selectedProduct != nil && !storeService.purchaseInProgress
     }
 
+    private var purchaseLabel: LocalizedStringKey {
+        selectedProduct?.id == StoreService.lifetimeID ? "Buy Lifetime" : "Subscribe Now"
+    }
+
     private var purchaseButton: some View {
         Button {
             Task { await handlePurchase() }
@@ -220,7 +224,7 @@ struct PaywallView: View {
                     ProgressView()
                         .tint(.white)
                 } else {
-                    Text(selectedProduct?.id == StoreService.lifetimeID ? "Buy Lifetime" : "Subscribe Now")
+                    Text(purchaseLabel)
                         .fontWeight(.semibold)
                 }
             }

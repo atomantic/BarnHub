@@ -19,6 +19,7 @@ struct ReminderEditView: View {
 
     private var isNew: Bool { reminderID == nil }
     private var existingReminder: Reminder? { modelContext.existingModel(for: reminderID) }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Reminder" : "Edit Reminder" }
 
     var body: some View {
         Form {
@@ -39,7 +40,7 @@ struct ReminderEditView: View {
 
             HorsePickerSection(selectedHorseID: $selectedHorseID)
         }
-        .navigationTitle(isNew ? "New Reminder" : "Edit Reminder")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -91,6 +92,6 @@ struct ReminderEditView: View {
 
         modelContext.saveWithLogging()
         notificationService.scheduleReminder(reminder)
-        toast.showAndDismiss(isNew ? "Reminder added" : "Reminder updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Reminder added") : String(localized: "Reminder updated"), dismiss: dismiss)
     }
 }

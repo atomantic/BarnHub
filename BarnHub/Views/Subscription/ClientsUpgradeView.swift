@@ -55,7 +55,7 @@ struct ClientsUpgradeView: View {
         .inlineNavTitle()
     }
 
-    private func featureRow(icon: String, text: String) -> some View {
+    private func featureRow(icon: String, text: LocalizedStringKey) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .foregroundStyle(.barnGreen)

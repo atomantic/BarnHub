@@ -16,6 +16,7 @@ struct BarnNoteEditView: View {
 
     private var isNew: Bool { noteID == nil }
     private var existingNote: BarnNote? { modelContext.existingModel(for: noteID) }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Note" : "Edit Note" }
 
     var body: some View {
         Form {
@@ -36,7 +37,7 @@ struct BarnNoteEditView: View {
 
             HorsePickerSection(selectedHorseID: $selectedHorseID)
         }
-        .navigationTitle(isNew ? "New Note" : "Edit Note")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -83,6 +84,6 @@ struct BarnNoteEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Note added" : "Note updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Note added") : String(localized: "Note updated"), dismiss: dismiss)
     }
 }

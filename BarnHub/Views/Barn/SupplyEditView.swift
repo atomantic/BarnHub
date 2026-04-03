@@ -19,6 +19,7 @@ struct SupplyEditView: View {
 
     private var isNew: Bool { supplyItemID == nil }
     private var existingItem: SupplyItem? { modelContext.existingModel(for: supplyItemID) }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Supply" : "Edit Supply" }
 
     var body: some View {
         Form {
@@ -56,7 +57,7 @@ struct SupplyEditView: View {
                 }
             }
         }
-        .navigationTitle(isNew ? "New Supply" : "Edit Supply")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -103,6 +104,6 @@ struct SupplyEditView: View {
         item.lastOrderedDate = showLastOrderedDate ? lastOrderedDate : nil
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Supply added" : "Supply updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Supply added") : String(localized: "Supply updated"), dismiss: dismiss)
     }
 }

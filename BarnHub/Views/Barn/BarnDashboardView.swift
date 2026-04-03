@@ -7,6 +7,8 @@ enum CalendarViewMode: String, CaseIterable {
     case day = "Day"
     case week = "Week"
     case month = "Month"
+
+    var localizedLabel: LocalizedStringKey { LocalizedStringKey(rawValue) }
 }
 
 // MARK: - Schedule Event Types
@@ -32,7 +34,7 @@ enum ScheduleEventType: String, CaseIterable {
         }
     }
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
         case .reminder: "Reminder"
         case .vet: "Vet"
@@ -260,7 +262,7 @@ struct BarnDashboardView: View {
 
             Picker("View", selection: $viewMode) {
                 ForEach(CalendarViewMode.allCases, id: \.self) { mode in
-                    Text(mode.rawValue).tag(mode)
+                    Text(mode.localizedLabel).tag(mode)
                 }
             }
             .pickerStyle(.segmented)
@@ -378,7 +380,7 @@ struct BarnDashboardView: View {
 
             Picker("View", selection: $viewMode) {
                 ForEach(CalendarViewMode.allCases, id: \.self) { mode in
-                    Text(mode.rawValue).tag(mode)
+                    Text(mode.localizedLabel).tag(mode)
                 }
             }
             .pickerStyle(.segmented)

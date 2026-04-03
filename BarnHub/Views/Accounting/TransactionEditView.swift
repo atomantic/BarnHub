@@ -22,6 +22,7 @@ struct TransactionEditView: View {
 
     private var isNew: Bool { transactionID == nil }
     private var existingTransaction: Transaction? { modelContext.existingModel(for: transactionID) }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Transaction" : "Edit Transaction" }
 
     var body: some View {
         Form {
@@ -58,7 +59,7 @@ struct TransactionEditView: View {
                 }
             }
         }
-        .navigationTitle(isNew ? "New Transaction" : "Edit Transaction")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -110,6 +111,6 @@ struct TransactionEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Transaction added" : "Transaction updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Transaction added") : String(localized: "Transaction updated"), dismiss: dismiss)
     }
 }
