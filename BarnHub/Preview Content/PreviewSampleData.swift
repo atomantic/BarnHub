@@ -2,6 +2,8 @@ import Foundation
 import SwiftData
 #if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
 #endif
 
 struct PreviewSampleData {
@@ -62,10 +64,10 @@ struct PreviewSampleData {
     }
 
     private static func loadPhoto(_ name: String, ext: String = "jpeg") -> Data? {
-        #if canImport(UIKit)
         guard let url = Bundle.main.url(forResource: name, withExtension: ext),
-              let data = try? Data(contentsOf: url),
-              let image = UIImage(data: data) else { return nil }
+              let data = try? Data(contentsOf: url) else { return nil }
+        #if canImport(UIKit)
+        guard let image = UIImage(data: data) else { return nil }
         let maxDim: CGFloat = 800
         let scale = min(maxDim / max(image.size.width, image.size.height), 1.0)
         guard scale < 1.0 else { return data }
@@ -75,8 +77,23 @@ struct PreviewSampleData {
             image.draw(in: CGRect(origin: .zero, size: newSize))
         }
         return resized.jpegData(compressionQuality: 0.8)
+        #elseif canImport(AppKit)
+        guard let image = NSImage(data: data) else { return nil }
+        let maxDim: CGFloat = 800
+        let scale = min(maxDim / max(image.size.width, image.size.height), 1.0)
+        guard scale < 1.0 else { return data }
+        let newSize = NSSize(width: image.size.width * scale, height: image.size.height * scale)
+        let resized = NSImage(size: newSize)
+        resized.lockFocus()
+        image.draw(in: NSRect(origin: .zero, size: newSize),
+                   from: NSRect(origin: .zero, size: image.size),
+                   operation: .copy, fraction: 1.0)
+        resized.unlockFocus()
+        guard let tiff = resized.tiffRepresentation,
+              let rep = NSBitmapImageRep(data: tiff) else { return data }
+        return rep.representation(using: .jpeg, properties: [.compressionFactor: 0.8])
         #else
-        return nil
+        return data
         #endif
     }
 

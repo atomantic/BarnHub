@@ -51,176 +51,263 @@ struct HorseDetailView: View {
         .toast(toast)
     }
 
+    // MARK: - Shared section builders
+
     @ViewBuilder
-    private func horseContent(_ horse: Horse) -> some View {
-        List {
-            if let photoData = horse.photoData, let image = Image(photoData: photoData) {
-                Section {
-                    HStack {
-                        Spacer()
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 160, height: 160)
-                            .clipShape(Circle())
-                        Spacer()
-                    }
-                    .listRowBackground(Color.clear)
-                }
-            }
-
+    private func photoSection(_ horse: Horse) -> some View {
+        if let photoData = horse.photoData, let image = Image(photoData: photoData) {
             Section {
-                NavigationLink(value: HorseRoute.healthTimeline(horseID)) {
-                    Label("Health Timeline", systemImage: "heart.text.clipboard")
-                        .foregroundStyle(.barnGreen)
+                HStack {
+                    Spacer()
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 160, height: 160)
+                        .clipShape(Circle())
+                    Spacer()
                 }
-                NavigationLink(value: HorseRoute.weightChart(horseID)) {
-                    Label("Weight Trend", systemImage: "chart.line.uptrend.xyaxis")
-                        .foregroundStyle(.barnGreen)
-                }
+                .listRowBackground(Color.clear)
             }
+        }
+    }
 
-            Section("Info") {
-                LabeledContent("Breed", value: horse.breed)
-                LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)
-                LabeledContent("Color/Markings", value: horse.colorMarkings)
-                LabeledContent("Weight", value: horse.weight > 0 ? "\(Int(horse.weight)) lbs" : "--")
-                if horse.purchasePrice > 0 {
-                    LabeledContent("Purchase Price", value: horse.purchasePrice.asCurrency)
-                }
-                LabeledContent("Stall", value: horse.stallNumber.isEmpty ? "--" : horse.stallNumber)
-                LabeledContent("Status", value: horse.isActive ? "Active" : "Inactive")
+    private func quickLinksSection() -> some View {
+        Section {
+            NavigationLink(value: HorseRoute.healthTimeline(horseID)) {
+                Label("Health Timeline", systemImage: "heart.text.clipboard")
+                    .foregroundStyle(.barnGreen)
             }
-
-            if !horse.medicalNotes.isEmpty {
-                Section("Medical Notes") {
-                    Text(horse.medicalNotes)
-                }
+            NavigationLink(value: HorseRoute.weightChart(horseID)) {
+                Label("Weight Trend", systemImage: "chart.line.uptrend.xyaxis")
+                    .foregroundStyle(.barnGreen)
             }
+        }
+    }
 
-            if !horse.feedingSchedule.isEmpty {
-                Section("Feeding Schedule") {
-                    Text(horse.feedingSchedule)
-                }
+    private func infoSection(_ horse: Horse) -> some View {
+        Section("Info") {
+            LabeledContent("Breed", value: horse.breed)
+            LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)
+            LabeledContent("Color/Markings", value: horse.colorMarkings)
+            LabeledContent("Weight", value: horse.weight > 0 ? "\(Int(horse.weight)) lbs" : "--")
+            if horse.purchasePrice > 0 {
+                LabeledContent("Purchase Price", value: horse.purchasePrice.asCurrency)
             }
+            LabeledContent("Stall", value: horse.stallNumber.isEmpty ? "--" : horse.stallNumber)
+            LabeledContent("Status", value: horse.isActive ? "Active" : "Inactive")
+        }
+    }
 
-            Section {
-                if sortedVetRecords.isEmpty {
-                    Text("No vet records")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(sortedVetRecords, id: \.persistentModelID) { record in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(record.date.shortFormatted)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                Spacer()
-                                Text(record.cost.asCurrency)
-                                    .font(.subheadline)
-                            }
-                            Text(record.vetName)
+    @ViewBuilder
+    private func notesSection(_ horse: Horse) -> some View {
+        if !horse.medicalNotes.isEmpty {
+            Section("Medical Notes") {
+                Text(horse.medicalNotes)
+            }
+        }
+        if !horse.feedingSchedule.isEmpty {
+            Section("Feeding Schedule") {
+                Text(horse.feedingSchedule)
+            }
+        }
+    }
+
+    private func vetSection() -> some View {
+        Section {
+            if sortedVetRecords.isEmpty {
+                Text("No vet records")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(sortedVetRecords, id: \.persistentModelID) { record in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(record.date.shortFormatted)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            Spacer()
+                            Text(record.cost.asCurrency)
+                                .font(.subheadline)
+                        }
+                        Text(record.vetName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        if !record.descriptionText.isEmpty {
+                            Text(record.descriptionText)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            if !record.descriptionText.isEmpty {
-                                Text(record.descriptionText)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            if let nextDue = record.nextDueDate {
-                                Text("Next due: \(nextDue.shortFormatted)")
-                                    .font(.caption2)
-                                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                            }
+                        }
+                        if let nextDue = record.nextDueDate {
+                            Text("Next due: \(nextDue.shortFormatted)")
+                                .font(.caption2)
+                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
                         }
                     }
                 }
-            } header: {
-                HStack {
-                    Text("Vet Records")
-                    Spacer()
-                    Button {
-                        router.navigate(to: HorseRoute.addVetRecord(horseID))
-                    } label: {
-                        Image(systemName: "plus.circle")
-                    }
+            }
+        } header: {
+            HStack {
+                Text("Vet Records")
+                Spacer()
+                Button {
+                    router.navigate(to: HorseRoute.addVetRecord(horseID))
+                } label: {
+                    Image(systemName: "plus.circle")
                 }
             }
+        }
+    }
 
-            Section {
-                if sortedFarrierVisits.isEmpty {
-                    Text("No farrier visits")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(sortedFarrierVisits, id: \.persistentModelID) { visit in
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(visit.date.shortFormatted)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                Spacer()
-                                Text(visit.cost.asCurrency)
-                                    .font(.subheadline)
-                            }
-                            Text(visit.farrierName)
+    private func farrierSection() -> some View {
+        Section {
+            if sortedFarrierVisits.isEmpty {
+                Text("No farrier visits")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(sortedFarrierVisits, id: \.persistentModelID) { visit in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(visit.date.shortFormatted)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            Spacer()
+                            Text(visit.cost.asCurrency)
+                                .font(.subheadline)
+                        }
+                        Text(visit.farrierName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        if !visit.serviceDescription.isEmpty {
+                            Text(visit.serviceDescription)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            if !visit.serviceDescription.isEmpty {
-                                Text(visit.serviceDescription)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            if let nextDue = visit.nextDueDate {
-                                Text("Next due: \(nextDue.shortFormatted)")
-                                    .font(.caption2)
-                                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                            }
                         }
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Farrier Visits")
-                    Spacer()
-                    Button {
-                        router.navigate(to: HorseRoute.addFarrierVisit(horseID))
-                    } label: {
-                        Image(systemName: "plus.circle")
+                        if let nextDue = visit.nextDueDate {
+                            Text("Next due: \(nextDue.shortFormatted)")
+                                .font(.caption2)
+                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+                        }
                     }
                 }
             }
+        } header: {
+            HStack {
+                Text("Farrier Visits")
+                Spacer()
+                Button {
+                    router.navigate(to: HorseRoute.addFarrierVisit(horseID))
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+            }
+        }
+    }
 
-            Section("Clients") {
-                if sortedHorseClients.isEmpty {
-                    Text("No assigned clients")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(sortedHorseClients, id: \.persistentModelID) { client in
-                        NavigationLink(value: ClientRoute.detail(client.persistentModelID)) {
-                            Text(client.fullName)
-                        }
+    private func clientsSection() -> some View {
+        Section("Clients") {
+            if sortedHorseClients.isEmpty {
+                Text("No assigned clients")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(sortedHorseClients, id: \.persistentModelID) { client in
+                    NavigationLink(value: ClientRoute.detail(client.persistentModelID)) {
+                        Text(client.fullName)
                     }
                 }
             }
         }
+    }
+
+    // MARK: - Layout
+
+    @ViewBuilder
+    private func horseContent(_ horse: Horse) -> some View {
+        #if os(macOS)
+        macOSLayout(horse)
+        #else
+        iOSLayout(horse)
+        #endif
+    }
+
+    #if os(iOS)
+    private func iOSLayout(_ horse: Horse) -> some View {
+        List {
+            photoSection(horse)
+            quickLinksSection()
+            infoSection(horse)
+            notesSection(horse)
+            vetSection()
+            farrierSection()
+            clientsSection()
+        }
         .navigationTitle(horse.name)
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .trailingBar) {
-                Menu {
-                    Button {
-                        router.navigate(to: HorseRoute.edit(horseID))
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
+        .toolbar { horseToolbar }
+    }
+    #endif
+
+    #if os(macOS)
+    private func macOSLayout(_ horse: Horse) -> some View {
+        ScrollView {
+            HStack(alignment: .top, spacing: 24) {
+                // Left column: photo + info + notes
+                VStack(spacing: 0) {
+                    Form {
+                        if let photoData = horse.photoData, let image = Image(photoData: photoData) {
+                            Section {
+                                HStack {
+                                    Spacer()
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 200, height: 200)
+                                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    Spacer()
+                                }
+                            }
+                        }
+                        quickLinksSection()
+                        infoSection(horse)
+                        notesSection(horse)
                     }
-                    Button(role: .destructive) {
-                        showDeleteConfirmation = true
-                    } label: {
-                        Label("Delete", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
+                    .formStyle(.grouped)
                 }
+                .frame(maxWidth: .infinity)
+
+                // Right column: records + clients
+                VStack(spacing: 0) {
+                    Form {
+                        vetSection()
+                        farrierSection()
+                        clientsSection()
+                    }
+                    .formStyle(.grouped)
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .padding()
+        }
+        .navigationTitle(horse.name)
+        .inlineNavTitle()
+        .toolbar { horseToolbar }
+    }
+    #endif
+
+    @ToolbarContentBuilder
+    private var horseToolbar: some ToolbarContent {
+        ToolbarItem(placement: .trailingBar) {
+            Menu {
+                Button {
+                    router.navigate(to: HorseRoute.edit(horseID))
+                } label: {
+                    Label("Edit", systemImage: "pencil")
+                }
+                Button(role: .destructive) {
+                    showDeleteConfirmation = true
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            } label: {
+                Image(systemName: "ellipsis.circle")
             }
         }
     }

@@ -56,9 +56,6 @@ done
 WINDOW_WIDTH=1440
 WINDOW_HEIGHT=900
 
-# Sidebar tabs in order (matching Router.AppTab.allCases)
-SIDEBAR_TABS=("Home" "Horses" "Clients" "Schedule" "Accounting")
-
 echo "=========================================="
 echo "  BarnHub macOS Screenshot Capture"
 echo "=========================================="
@@ -67,21 +64,6 @@ echo "  Window: ${WINDOW_WIDTH}x${WINDOW_HEIGHT}"
 echo "  Output: $SCREENSHOTS_DIR/{locale}/macos/"
 echo "=========================================="
 echo ""
-
-# Check permissions
-check_permissions() {
-    # Quick test: try to list windows via osascript
-    local result
-    result=$(osascript -e 'tell application "System Events" to return name of first process whose frontmost is true' 2>&1) || true
-    if echo "$result" | grep -qi "not allowed\|assistive\|denied"; then
-        echo "❌ Accessibility permission required."
-        echo "   Go to System Settings → Privacy & Security → Accessibility"
-        echo "   and add your terminal app."
-        exit 1
-    fi
-}
-
-check_permissions
 
 # Build macOS app
 echo "🔨 Building macOS app..."
@@ -102,17 +84,19 @@ if [[ ! -d "$APP_PATH" ]]; then
     exit 1
 fi
 
-# Get window ID for BarnHub
+# Get window ID for BarnHub via CGWindowListCopyWindowInfo
 get_window_id() {
-    osascript -e '
-    tell application "System Events"
-        tell process "BarnHub"
-            if (count of windows) > 0 then
-                -- CGWindowID via window properties
-                return id of first window
-            end if
-        end tell
-    end tell' 2>/dev/null || echo ""
+    swift -e '
+    import Cocoa
+    let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
+    guard let windowList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else { exit(1) }
+    for w in windowList {
+        let owner = w[kCGWindowOwnerName as String] as? String ?? ""
+        if owner == "BarnHub" {
+            if let num = w[kCGWindowNumber as String] as? Int { print(num); break }
+        }
+    }
+    ' 2>/dev/null
 }
 
 # Position and resize window
@@ -128,27 +112,15 @@ setup_window() {
     end tell" 2>/dev/null
 }
 
-# Click a sidebar item by index (0=Home, 1=Horses, 2=Clients, 3=Schedule, 4=Accounting)
+# Click a sidebar item by row number (1=Home, 2=Horses, 3=Clients, 4=Schedule, 5=Accounting)
 click_sidebar() {
-    local index="$1"
-    # Use accessibility identifier set in BarnHubApp.swift: sidebar_home, sidebar_horses, etc.
-    local ids=("sidebar_home" "sidebar_horses" "sidebar_clients" "sidebar_schedule" "sidebar_accounting")
-    local aid="${ids[$index]}"
-
+    local row="$1"
     osascript -e "
     tell application \"System Events\"
         tell process \"BarnHub\"
-            -- Try outline row approach (SwiftUI List in sidebar)
-            try
-                tell outline 1 of scroll area 1 of splitter group 1 of group 1 of window 1
-                    click row $((index + 1))
-                end tell
-                return
-            end try
-            -- Fallback: click by row index in any list
-            try
-                click row $((index + 1)) of table 1 of scroll area 1 of window 1
-            end try
+            tell outline 1 of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+                select row $row
+            end tell
         end tell
     end tell" 2>/dev/null || true
 }
@@ -156,16 +128,14 @@ click_sidebar() {
 # Take screenshot of BarnHub window
 capture_window() {
     local output_path="$1"
-    # Use screencapture with window selection by focusing the app first
     osascript -e 'tell application "BarnHub" to activate' 2>/dev/null
     sleep 0.5
-    # Capture front window using CGWindowID
     local wid
     wid=$(get_window_id)
     if [[ -n "$wid" ]]; then
         screencapture -l "$wid" -o -x "$output_path" 2>/dev/null
     else
-        # Fallback: capture by region
+        # Fallback: capture by screen region
         screencapture -R "100,100,${WINDOW_WIDTH},${WINDOW_HEIGHT}" -o -x "$output_path" 2>/dev/null
     fi
 }
@@ -197,26 +167,26 @@ capture_locale() {
     setup_window
     sleep 1
 
-    # 1. Home (default tab — index 0)
+    # 1. Home (row 1 — already selected by default)
     capture_window "$out_dir/01_home.png"
 
-    # 2. Horses (index 1)
-    click_sidebar 1
+    # 2. Horses (row 2)
+    click_sidebar 2
     sleep 1
     capture_window "$out_dir/02_horses.png"
 
-    # 3. Clients (index 2)
-    click_sidebar 2
+    # 3. Clients (row 3)
+    click_sidebar 3
     sleep 1
     capture_window "$out_dir/03_clients.png"
 
-    # 4. Schedule (index 3)
-    click_sidebar 3
+    # 4. Schedule (row 4)
+    click_sidebar 4
     sleep 1
     capture_window "$out_dir/04_schedule.png"
 
-    # 5. Accounting (index 4)
-    click_sidebar 4
+    # 5. Accounting (row 5)
+    click_sidebar 5
     sleep 1
     capture_window "$out_dir/05_accounting.png"
 
