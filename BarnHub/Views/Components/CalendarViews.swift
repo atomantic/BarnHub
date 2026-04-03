@@ -9,9 +9,11 @@ private func isAllDay(_ date: Date) -> Bool {
 
 private func hourLabel(_ hour: Int) -> String {
     guard hour > 0 else { return "" }
-    if hour < 12 { return "\(hour) AM" }
-    if hour == 12 { return "12 PM" }
-    return "\(hour - 12) PM"
+    var comps = DateComponents()
+    comps.hour = hour
+    comps.minute = 0
+    guard let date = Calendar.current.date(from: comps) else { return "\(hour)" }
+    return date.formatted(.dateTime.hour())
 }
 
 private func eventYOffset(_ date: Date, hourHeight: CGFloat) -> CGFloat {

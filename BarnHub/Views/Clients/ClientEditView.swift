@@ -19,6 +19,8 @@ struct ClientEditView: View {
 
     private var isNew: Bool { clientID == nil }
     private var existingClient: Client? { modelContext.existingModel(for: clientID) }
+    private var saveButtonLabel: LocalizedStringKey { isNew ? "Add Client" : "Save Changes" }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Client" : "Edit Client" }
 
     var body: some View {
         Form {
@@ -55,7 +57,7 @@ struct ClientEditView: View {
             }
 
             Section {
-                Button(isNew ? "Add Client" : "Save Changes") {
+                Button(saveButtonLabel) {
                     save()
                 }
                 .frame(maxWidth: .infinity)
@@ -63,7 +65,7 @@ struct ClientEditView: View {
                     && lastName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .navigationTitle(isNew ? "New Client" : "Edit Client")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -117,6 +119,6 @@ struct ClientEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Client added" : "Client updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Client added") : String(localized: "Client updated"), dismiss: dismiss)
     }
 }

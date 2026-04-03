@@ -23,6 +23,7 @@ struct LessonEditView: View {
 
     private var isNew: Bool { lessonID == nil }
     private var existingLesson: Lesson? { modelContext.existingModel(for: lessonID) }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Lesson" : "Edit Lesson" }
 
     private static let durations = [30, 45, 60, 90, 120]
 
@@ -70,7 +71,7 @@ struct LessonEditView: View {
             HorsePickerSection(selectedHorseID: $selectedHorseID)
             ClientPickerSection(selectedClientID: $selectedClientID)
         }
-        .navigationTitle(isNew ? "New Lesson" : "Edit Lesson")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -134,6 +135,6 @@ struct LessonEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Lesson added" : "Lesson updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Lesson added") : String(localized: "Lesson updated"), dismiss: dismiss)
     }
 }

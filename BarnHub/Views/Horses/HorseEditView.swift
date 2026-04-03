@@ -27,6 +27,10 @@ struct HorseEditView: View {
     private var isNew: Bool { horseID == nil }
     private var existingHorse: Horse? { modelContext.existingModel(for: horseID) }
 
+    private var addPhotoLabel: LocalizedStringKey { photoData == nil ? "Add Photo" : "Change Photo" }
+    private var saveButtonLabel: LocalizedStringKey { isNew ? "Add Horse" : "Save Changes" }
+    private var navigationTitleKey: LocalizedStringKey { isNew ? "New Horse" : "Edit Horse" }
+
     var body: some View {
         Form {
             Section {
@@ -48,7 +52,7 @@ struct HorseEditView: View {
 
                     HStack(spacing: 16) {
                         PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                            Label(photoData == nil ? "Add Photo" : "Change Photo", systemImage: "photo")
+                            Label(addPhotoLabel, systemImage: "photo")
                                 .font(.subheadline)
                         }
 
@@ -106,14 +110,14 @@ struct HorseEditView: View {
             }
 
             Section {
-                Button(isNew ? "Add Horse" : "Save Changes") {
+                Button(saveButtonLabel) {
                     save()
                 }
                 .frame(maxWidth: .infinity)
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .navigationTitle(isNew ? "New Horse" : "Edit Horse")
+        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -195,7 +199,7 @@ struct HorseEditView: View {
         }
 
         modelContext.saveWithLogging()
-        toast.showAndDismiss(isNew ? "Horse added" : "Horse updated", dismiss: dismiss)
+        toast.showAndDismiss(isNew ? String(localized: "Horse added") : String(localized: "Horse updated"), dismiss: dismiss)
     }
 
     private func downsampleImageData(_ data: Data, maxDimension: CGFloat) -> Data {
