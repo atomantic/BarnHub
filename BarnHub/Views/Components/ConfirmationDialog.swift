@@ -2,9 +2,9 @@ import SwiftUI
 
 struct ConfirmationDialog: View {
     @Binding var isPresented: Bool
-    let title: String
-    let message: String
-    var confirmTitle: String = "Confirm"
+    let title: LocalizedStringKey
+    let message: LocalizedStringKey
+    var confirmTitle: LocalizedStringKey = "Confirm"
     var confirmRole: ButtonRole? = nil
     let onConfirm: () -> Void
 

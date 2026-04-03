@@ -89,7 +89,7 @@ struct DataManagementView: View {
         .overlay {
             ConfirmationDialog(
                 isPresented: $showImportConfirmation,
-                title: "Import \(importType?.label ?? "Data")",
+                title: importType?.importTitle ?? "Import",
                 message: "This will add new records from the CSV file. Existing data will not be modified or removed.",
                 confirmTitle: "Import",
                 onConfirm: performImport
@@ -265,7 +265,7 @@ struct DataManagementView: View {
 
     // MARK: - Row Views
 
-    private func exportRow(_ label: String, icon: String) -> some View {
+    private func exportRow(_ label: LocalizedStringKey, icon: String) -> some View {
         HStack {
             Label(label, systemImage: icon)
             Spacer()
@@ -275,7 +275,7 @@ struct DataManagementView: View {
         }
     }
 
-    private func importRow(_ label: String, icon: String) -> some View {
+    private func importRow(_ label: LocalizedStringKey, icon: String) -> some View {
         HStack {
             Label(label, systemImage: icon)
             Spacer()
@@ -327,6 +327,13 @@ enum ImportDataType {
         case .horses: return "Horses"
         case .clients: return "Clients"
         case .transactions: return "Transactions"
+        }
+    }
+    var importTitle: LocalizedStringKey {
+        switch self {
+        case .horses: return "Import Horses"
+        case .clients: return "Import Clients"
+        case .transactions: return "Import Transactions"
         }
     }
 }
