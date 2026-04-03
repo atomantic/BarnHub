@@ -3,11 +3,13 @@
 # take_screenshots.sh — Capture App Store Connect screenshots for all languages and devices.
 #
 # Usage:
-#   ./take_screenshots.sh                 # all languages, all devices
-#   ./take_screenshots.sh en              # single language, all devices
-#   ./take_screenshots.sh en de fr        # specific languages, all devices
-#   ./take_screenshots.sh --iphone-only   # all languages, iPhone only
-#   ./take_screenshots.sh --ipad-only     # all languages, iPad only
+#   ./take_screenshots.sh                       # all languages, all devices
+#   ./take_screenshots.sh en                    # single language, all devices
+#   ./take_screenshots.sh en de fr              # specific languages, all devices
+#   ./take_screenshots.sh --iphone-only         # all languages, iPhone only
+#   ./take_screenshots.sh --ipad-only           # all languages, iPad only
+#   ./take_screenshots.sh --screen 01_home      # only capture one screen, all languages/devices
+#   ./take_screenshots.sh --screen 01_home en   # one screen, specific language
 #
 
 set -euo pipefail
@@ -44,20 +46,23 @@ currency_for_locale() {
 # Parse arguments
 LANGUAGES=()
 DEVICES=()
-for arg in "$@"; do
-    case "$arg" in
-        --iphone-only) DEVICES=("$IPHONE_DEVICE") ;;
-        --ipad-only)   DEVICES=("$IPAD_DEVICE") ;;
+SCREEN=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --iphone-only) DEVICES=("$IPHONE_DEVICE") ; shift ;;
+        --ipad-only)   DEVICES=("$IPAD_DEVICE") ; shift ;;
+        --screen)      SCREEN="$2" ; shift 2 ;;
         --help|-h)
-            echo "Usage: $0 [--iphone-only|--ipad-only] [lang1 lang2 ...]"
+            echo "Usage: $0 [--iphone-only|--ipad-only] [--screen <name>] [lang1 lang2 ...]"
             echo ""
             echo "Languages: ${ALL_LANGUAGES[*]}"
             echo "Devices: iPhone 16 Pro Max (6.7\"), iPad Pro 13\" (M4)"
+            echo "Screens: 01_home 02_horses 03_horse_detail 04_clients 05_client_detail"
+            echo "         06_schedule 07_accounting 08_reports 09_reports_charts 10_contract_types"
             exit 0
             ;;
         *)
-            LANGUAGES+=("$arg")
-            ;;
+            LANGUAGES+=("$1") ; shift ;;
     esac
 done
 
@@ -77,6 +82,7 @@ echo "=========================================="
 echo "  Languages: ${LANGUAGES[*]}"
 echo "  Devices:   $TOTAL_DEVICES"
 echo "  Total runs: $TOTAL_RUNS"
+[[ -n "$SCREEN" ]] && echo "  Screen:    $SCREEN"
 echo "  Output:    $SCREENSHOTS_DIR/{locale}/{device}/"
 echo "=========================================="
 echo ""
@@ -92,7 +98,8 @@ write_config() {
     "locale": "$locale",
     "device": "$device",
     "output_dir": "$output",
-    "currency": "$currency"
+    "currency": "$currency",
+    "target_screen": "$SCREEN"
 }
 JSONEOF
     cp "$CONFIG_FILE_PROJECT" "$CONFIG_FILE_TMP" 2>/dev/null || true

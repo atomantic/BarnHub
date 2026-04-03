@@ -35,6 +35,12 @@ final class ScreenshotTests: XCTestCase {
 
     private var currency: String { config["currency"] ?? "USD" }
 
+    /// Non-nil when only a single screen should be saved (e.g. "01_home").
+    private var targetScreen: String? {
+        let s = config["target_screen"] ?? ""
+        return s.isEmpty ? nil : s
+    }
+
     private var launchArgs: [String] {
         ["-SeedSampleData", "-ForceProMode",
          "-net.shadowpuppet.BarnBook.appLocale", locale,
@@ -216,6 +222,8 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func saveScreenshot(_ name: String) {
+        if let target = targetScreen, target != name { return }
+
         let screenshot = app.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = "\(locale)_\(deviceType)_\(name)"
