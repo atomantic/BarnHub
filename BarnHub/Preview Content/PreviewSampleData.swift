@@ -28,13 +28,13 @@ struct PreviewSampleData {
 
         // Link clients to horses
         if let jane = clients.first {
-            jane.horses = [horses[0], horses[1]]  // Jane rides Arrow and Bella
+            jane.horses = [horses[0], horses[1], horses[3]]  // Jane rides Arrow, Bella, Daisy
         }
         if clients.count > 1 {
-            clients[1].horses = [horses[2]]  // Mike boards Storm
+            clients[1].horses = [horses[2], horses[4]]  // Mike boards Storm and Cleo
         }
         if clients.count > 2 {
-            clients[2].horses = [horses[0]]  // Sarah trains on Arrow
+            clients[2].horses = [horses[0], horses[4]]  // Sarah trains on Arrow and Cleo
         }
 
         let transactions = createTransactions(clients: clients)
@@ -61,12 +61,11 @@ struct PreviewSampleData {
         try? context.save()
     }
 
-    private static func loadArrowPhoto() -> Data? {
+    private static func loadPhoto(_ name: String, ext: String = "jpeg") -> Data? {
         #if canImport(UIKit)
-        guard let url = Bundle.main.url(forResource: "arrow", withExtension: "jpeg"),
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext),
               let data = try? Data(contentsOf: url),
               let image = UIImage(data: data) else { return nil }
-        // Downsample for storage
         let maxDim: CGFloat = 800
         let scale = min(maxDim / max(image.size.width, image.size.height), 1.0)
         guard scale < 1.0 else { return data }
@@ -95,43 +94,59 @@ struct PreviewSampleData {
                 feedingSchedule: "2x daily: AM/PM grain + hay",
                 stallNumber: "A1",
                 isActive: true,
-                photoData: loadArrowPhoto()
+                photoData: loadPhoto("arrow")
             ),
             Horse(
                 name: "Bella",
                 breed: "Quarter Horse",
                 dateOfBirth: calendar.date(byAdding: .year, value: -12, to: .now) ?? .now,
-                colorMarkings: "Sorrel, no markings",
+                colorMarkings: "Sorrel with wide blaze",
                 weight: 1050,
                 purchasePrice: 8500,
                 medicalNotes: "History of mild colic, monitor feed changes",
                 feedingSchedule: "3x daily: small portions",
                 stallNumber: "A3",
-                isActive: true
+                isActive: true,
+                photoData: loadPhoto("bella")
             ),
             Horse(
                 name: "Storm",
                 breed: "Warmblood",
                 dateOfBirth: calendar.date(byAdding: .year, value: -5, to: .now) ?? .now,
-                colorMarkings: "Dark bay, four white socks",
+                colorMarkings: "Flea-bitten grey",
                 weight: 1250,
                 purchasePrice: 25000,
                 medicalNotes: "Cleared for jumping. Excellent temperament.",
                 feedingSchedule: "2x daily: performance feed + hay",
                 stallNumber: "B2",
-                isActive: true
+                isActive: true,
+                photoData: loadPhoto("storm", ext: "png")
             ),
             Horse(
                 name: "Daisy",
-                breed: "Paint Horse",
+                breed: "Morgan",
                 dateOfBirth: calendar.date(byAdding: .year, value: -10, to: .now) ?? .now,
-                colorMarkings: "Tobiano, black and white",
+                colorMarkings: "Dark bay",
                 weight: 1000,
                 purchasePrice: 6000,
                 medicalNotes: "Senior horse, joint supplements recommended",
                 feedingSchedule: "2x daily: senior feed + hay",
                 stallNumber: "B4",
-                isActive: true
+                isActive: true,
+                photoData: loadPhoto("daisy", ext: "png")
+            ),
+            Horse(
+                name: "Cleo",
+                breed: "Paint Horse",
+                dateOfBirth: calendar.date(byAdding: .year, value: -6, to: .now) ?? .now,
+                colorMarkings: "Tobiano, black and white, blue eye",
+                weight: 1100,
+                purchasePrice: 12000,
+                medicalNotes: "UV-sensitive around pink skin. Apply sunscreen on muzzle during turnout.",
+                feedingSchedule: "2x daily: grain + hay",
+                stallNumber: "C1",
+                isActive: true,
+                photoData: loadPhoto("cleo", ext: "png")
             )
         ]
     }
@@ -171,72 +186,86 @@ struct PreviewSampleData {
         ]
     }
 
+    /// Helper: date on given day of the current month (clamped to today)
+    private static func thisMonth(day: Int) -> Date {
+        let cal = Calendar.current
+        let now = Date.now
+        let comps = cal.dateComponents([.year, .month], from: now)
+        let maxDay = min(day, cal.component(.day, from: now))
+        return cal.date(from: DateComponents(year: comps.year, month: comps.month, day: maxDay)) ?? now
+    }
+
+    /// Helper: date N days before the 1st of the current month
+    private static func lastMonth(daysBeforeFirst: Int) -> Date {
+        let cal = Calendar.current
+        let first = cal.date(from: cal.dateComponents([.year, .month], from: .now)) ?? .now
+        return cal.date(byAdding: .day, value: -daysBeforeFirst, to: first) ?? .now
+    }
+
     static func createTransactions(clients: [Client]) -> [Transaction] {
-        let calendar = Calendar.current
         let jane = clients.first
         let mike = clients.count > 1 ? clients[1] : nil
         let sarah = clients.count > 2 ? clients[2] : nil
 
-        var transactions: [Transaction] = []
+        var txns: [Transaction] = []
 
-        // Current month — income
-        let lesson1 = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -2, to: .now) ?? .now, memo: "Weekly lesson — Jane on Arrow", category: .lesson, type: .income, isPaid: true)
-        lesson1.client = jane
-        transactions.append(lesson1)
+        func add(_ amount: Double, _ date: Date, _ memo: String,
+                 _ cat: TransactionCategory, _ type: TransactionType,
+                 paid: Bool = true, client: Client? = nil) {
+            let t = Transaction(amount: amount, date: date, memo: memo,
+                                category: cat, type: type, isPaid: paid)
+            t.client = client
+            txns.append(t)
+        }
 
-        let lesson2 = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -4, to: .now) ?? .now, memo: "Weekly lesson — Sarah on Arrow", category: .lesson, type: .income, isPaid: true)
-        lesson2.client = sarah
-        transactions.append(lesson2)
+        // ── Current month — income ──────────────────────
+        add(850, thisMonth(day: 1), "Monthly boarding — Storm (full care)", .boarding, .income, client: mike)
+        add(850, thisMonth(day: 1), "Monthly boarding — Daisy", .boarding, .income, client: jane)
+        add(75,  thisMonth(day: 2), "Weekly lesson — Jane on Arrow", .lesson, .income, client: jane)
+        add(200, thisMonth(day: 2), "Dressage training session — Storm", .training, .income, client: mike)
+        add(75,  thisMonth(day: 3), "Weekly lesson — Sarah on Arrow", .lesson, .income, client: sarah)
+        add(50,  thisMonth(day: 3), "Group trail ride — Saturday", .lesson, .income, client: jane)
 
-        let boarding1 = Transaction(amount: 850.00, date: calendar.date(byAdding: .day, value: -5, to: .now) ?? .now, memo: "Monthly boarding — Storm (full care)", category: .boarding, type: .income, isPaid: true)
-        boarding1.client = mike
-        transactions.append(boarding1)
+        // ── Current month — expenses ────────────────────
+        add(420, thisMonth(day: 1), "Hay delivery — 25 bales timothy", .feed, .expense)
+        add(95,  thisMonth(day: 1), "Grain restock — 6 bags performance feed", .feed, .expense)
+        add(250, thisMonth(day: 2), "Annual vaccinations — Arrow", .vetBill, .expense, paid: false)
+        add(175, thisMonth(day: 2), "Trim and reset front shoes — Arrow", .farrier, .expense)
+        add(85,  thisMonth(day: 2), "Barefoot trim — Bella", .farrier, .expense)
+        add(65,  thisMonth(day: 1), "Fly spray, wound care, leg wraps", .supplies, .expense)
+        add(140, thisMonth(day: 3), "Arena footing maintenance", .other, .expense)
 
-        let training1 = Transaction(amount: 200.00, date: calendar.date(byAdding: .day, value: -3, to: .now) ?? .now, memo: "Dressage training session — Storm", category: .training, type: .income, isPaid: true)
-        training1.client = mike
-        transactions.append(training1)
+        // ── Last month — income ─────────────────────────
+        add(850, lastMonth(daysBeforeFirst: 28), "Monthly boarding — Storm", .boarding, .income, client: mike)
+        add(850, lastMonth(daysBeforeFirst: 28), "Monthly boarding — Daisy", .boarding, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 21), "Weekly lesson — Jane", .lesson, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 14), "Weekly lesson — Jane", .lesson, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 7),  "Weekly lesson — Jane", .lesson, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 22), "Weekly lesson — Sarah", .lesson, .income, client: sarah)
+        add(75,  lastMonth(daysBeforeFirst: 15), "Weekly lesson — Sarah", .lesson, .income, client: sarah)
+        add(200, lastMonth(daysBeforeFirst: 18), "Dressage training — Storm", .training, .income, client: mike)
+        add(200, lastMonth(daysBeforeFirst: 11), "Dressage training — Storm", .training, .income, client: mike)
 
-        // Current month — expenses
-        transactions.append(Transaction(amount: 320.00, date: calendar.date(byAdding: .day, value: -6, to: .now) ?? .now, memo: "Hay delivery — 20 bales", category: .feed, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 85.00, date: calendar.date(byAdding: .day, value: -7, to: .now) ?? .now, memo: "Grain restock — 5 bags", category: .feed, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 250.00, date: calendar.date(byAdding: .day, value: -10, to: .now) ?? .now, memo: "Annual vaccinations — Arrow", category: .vetBill, type: .expense, isPaid: false))
-        transactions.append(Transaction(amount: 150.00, date: calendar.date(byAdding: .day, value: -8, to: .now) ?? .now, memo: "Trim and reset front shoes — Arrow", category: .farrier, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 45.00, date: calendar.date(byAdding: .day, value: -9, to: .now) ?? .now, memo: "Fly spray and wound care supplies", category: .supplies, type: .expense, isPaid: true))
+        // ── Last month — expenses ───────────────────────
+        add(380, lastMonth(daysBeforeFirst: 25), "Hay delivery — 22 bales", .feed, .expense)
+        add(85,  lastMonth(daysBeforeFirst: 20), "Grain — 5 bags", .feed, .expense)
+        add(180, lastMonth(daysBeforeFirst: 16), "Dental float — Bella", .vetBill, .expense)
+        add(150, lastMonth(daysBeforeFirst: 12), "Trim and shoes — Arrow", .farrier, .expense)
+        add(85,  lastMonth(daysBeforeFirst: 12), "Barefoot trim — Bella", .farrier, .expense)
+        add(45,  lastMonth(daysBeforeFirst: 8),  "Dewormer paste x4", .supplies, .expense)
 
-        // Last month
-        let lastLesson1 = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -35, to: .now) ?? .now, memo: "Weekly lesson — Jane", category: .lesson, type: .income, isPaid: true)
-        lastLesson1.client = jane
-        transactions.append(lastLesson1)
+        // ── Two months ago ──────────────────────────────
+        add(850, lastMonth(daysBeforeFirst: 58), "Monthly boarding — Storm", .boarding, .income, client: mike)
+        add(850, lastMonth(daysBeforeFirst: 58), "Monthly boarding — Daisy", .boarding, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 50), "Weekly lesson — Jane", .lesson, .income, client: jane)
+        add(75,  lastMonth(daysBeforeFirst: 43), "Weekly lesson — Jane", .lesson, .income, client: jane)
+        add(200, lastMonth(daysBeforeFirst: 45), "Dressage training — Storm", .training, .income, client: mike)
+        add(300, lastMonth(daysBeforeFirst: 55), "Hay delivery", .feed, .expense)
+        add(85,  lastMonth(daysBeforeFirst: 52), "Barefoot trim — Bella", .farrier, .expense)
+        add(120, lastMonth(daysBeforeFirst: 48), "New halters and lead ropes", .tack, .expense)
+        add(350, lastMonth(daysBeforeFirst: 46), "Pasture fence repair", .other, .expense)
 
-        let lastLesson2 = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -37, to: .now) ?? .now, memo: "Weekly lesson — Jane", category: .lesson, type: .income, isPaid: true)
-        lastLesson2.client = jane
-        transactions.append(lastLesson2)
-
-        let lastLesson3 = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -33, to: .now) ?? .now, memo: "Weekly lesson — Sarah", category: .lesson, type: .income, isPaid: true)
-        lastLesson3.client = sarah
-        transactions.append(lastLesson3)
-
-        let lastBoarding = Transaction(amount: 850.00, date: calendar.date(byAdding: .day, value: -36, to: .now) ?? .now, memo: "Monthly boarding — Storm", category: .boarding, type: .income, isPaid: true)
-        lastBoarding.client = mike
-        transactions.append(lastBoarding)
-
-        transactions.append(Transaction(amount: 280.00, date: calendar.date(byAdding: .day, value: -38, to: .now) ?? .now, memo: "Hay delivery — 18 bales", category: .feed, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 180.00, date: calendar.date(byAdding: .day, value: -40, to: .now) ?? .now, memo: "Dental float — Bella", category: .vetBill, type: .expense, isPaid: true))
-
-        // Two months ago
-        let oldLesson = Transaction(amount: 75.00, date: calendar.date(byAdding: .day, value: -65, to: .now) ?? .now, memo: "Weekly lesson — Jane", category: .lesson, type: .income, isPaid: true)
-        oldLesson.client = jane
-        transactions.append(oldLesson)
-
-        let oldBoarding = Transaction(amount: 850.00, date: calendar.date(byAdding: .day, value: -67, to: .now) ?? .now, memo: "Monthly boarding — Storm", category: .boarding, type: .income, isPaid: true)
-        oldBoarding.client = mike
-        transactions.append(oldBoarding)
-
-        transactions.append(Transaction(amount: 300.00, date: calendar.date(byAdding: .day, value: -68, to: .now) ?? .now, memo: "Hay delivery", category: .feed, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 85.00, date: calendar.date(byAdding: .day, value: -70, to: .now) ?? .now, memo: "Barefoot trim — Bella", category: .farrier, type: .expense, isPaid: true))
-        transactions.append(Transaction(amount: 120.00, date: calendar.date(byAdding: .day, value: -66, to: .now) ?? .now, memo: "New halters and lead ropes", category: .tack, type: .expense, isPaid: true))
-
-        return transactions
+        return txns
     }
 
     static func createVetRecords(horses: [Horse]) -> [VetRecord] {
@@ -248,7 +277,7 @@ struct PreviewSampleData {
             vetName: "Dr. Sarah Chen",
             descriptionText: "Annual vaccinations: EWT, Rabies, Influenza",
             cost: 250.00,
-            nextDueDate: calendar.date(byAdding: .year, value: 1, to: .now),
+            nextDueDate: dayOffset(-1, hour: 14),  // This week — vet checkup
             reminderFrequency: .annually
         )
         vaccines.horse = horses.first
@@ -284,11 +313,11 @@ struct PreviewSampleData {
         var visits: [FarrierVisit] = []
 
         let trim = FarrierVisit(
-            date: calendar.date(byAdding: .weekOfYear, value: -2, to: .now) ?? .now,
+            date: calendar.date(byAdding: .weekOfYear, value: -6, to: .now) ?? .now,
             farrierName: "Tom Bradley",
             serviceDescription: "Trim and reset front shoes",
             cost: 150.00,
-            nextDueDate: calendar.date(byAdding: .weekOfYear, value: 6, to: .now)
+            nextDueDate: dayOffset(-2, hour: 10)  // This week — farrier
         )
         trim.horse = horses.first
         visits.append(trim)
@@ -298,7 +327,7 @@ struct PreviewSampleData {
             farrierName: "Tom Bradley",
             serviceDescription: "Barefoot trim",
             cost: 85.00,
-            nextDueDate: calendar.date(byAdding: .weekOfYear, value: 4, to: .now)
+            nextDueDate: dayOffset(-2, hour: 11)  // Same day as trim
         )
         barefoot.horse = horses.count > 1 ? horses[1] : nil
         visits.append(barefoot)
@@ -343,89 +372,100 @@ struct PreviewSampleData {
         ]
     }
 
+    /// Helper: today at a specific hour
+    private static func todayAt(hour: Int) -> Date {
+        Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: .now) ?? .now
+    }
+
+    /// Helper: a day offset from today at a specific hour
+    private static func dayOffset(_ days: Int, hour: Int) -> Date {
+        let day = Calendar.current.date(byAdding: .day, value: days, to: .now) ?? .now
+        return Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: day) ?? day
+    }
+
     static func createLessons(horses: [Horse], clients: [Client]) -> [Lesson] {
         let calendar = Calendar.current
         let jane = clients.first
+        let mike = clients.count > 1 ? clients[1] : nil
         let sarah = clients.count > 2 ? clients[2] : nil
         var lessons: [Lesson] = []
 
-        let janeLesson = Lesson(
-            date: calendar.date(byAdding: .day, value: -3, to: .now) ?? .now,
-            duration: 60,
-            lessonType: .privateLesson,
-            notes: "Flatwork and jumping basics",
-            cost: 75.00,
-            isPaid: true,
-            frequency: .weekly,
-            nextDate: calendar.date(byAdding: .day, value: 4, to: .now)
-        )
-        janeLesson.horse = horses.first
-        janeLesson.client = jane
-        lessons.append(janeLesson)
+        func add(_ date: Date, _ dur: Int, _ type: LessonType, _ notes: String,
+                 _ cost: Double, paid: Bool, horse: Horse?, client: Client?,
+                 nextDate: Date?) {
+            let l = Lesson(date: date, duration: dur, lessonType: type, notes: notes,
+                           cost: cost, isPaid: paid, frequency: .weekly, nextDate: nextDate)
+            l.horse = horse
+            l.client = client
+            lessons.append(l)
+        }
 
-        let sarahLesson = Lesson(
-            date: calendar.date(byAdding: .day, value: -1, to: .now) ?? .now,
-            duration: 45,
-            lessonType: .privateLesson,
-            notes: "Walk/trot fundamentals, posting practice",
-            cost: 75.00,
-            isPaid: false,
-            frequency: .weekly,
-            nextDate: calendar.date(byAdding: .day, value: 6, to: .now)
-        )
-        sarahLesson.horse = horses.first
-        sarahLesson.client = sarah
-        lessons.append(sarahLesson)
+        // Lessons with nextDate spread across the current week
+        // Mon/Tue lessons (past this week — still shows on calendar)
+        add(dayOffset(-10, hour: 10), 60, .privateLesson, "Flatwork and jumping basics",
+            75, paid: true, horse: horses[0], client: jane,
+            nextDate: dayOffset(-3, hour: 10))
 
-        let groupLesson = Lesson(
-            date: calendar.date(byAdding: .day, value: -7, to: .now) ?? .now,
-            duration: 90,
-            lessonType: .group,
-            notes: "Saturday group trail ride and horsemanship",
-            cost: 50.00,
-            isPaid: true,
-            frequency: .weekly,
-            nextDate: calendar.date(byAdding: .day, value: 0, to: .now)
-        )
-        groupLesson.horse = horses.count > 3 ? horses[3] : nil
-        groupLesson.client = jane
-        lessons.append(groupLesson)
+        add(dayOffset(-9, hour: 14), 45, .privateLesson, "Walk/trot fundamentals",
+            75, paid: true, horse: horses[0], client: sarah,
+            nextDate: dayOffset(-2, hour: 14))
+
+        // Wed lesson
+        add(dayOffset(-8, hour: 11), 60, .privateLesson, "Dressage fundamentals",
+            75, paid: true, horse: horses[2], client: mike,
+            nextDate: dayOffset(-1, hour: 11))
+
+        // Today — two lessons
+        add(dayOffset(-7, hour: 10), 60, .privateLesson, "Canter work and lead changes",
+            75, paid: false, horse: horses[0], client: jane,
+            nextDate: todayAt(hour: 10))
+
+        add(dayOffset(-7, hour: 16), 90, .group, "Group trail ride and horsemanship",
+            50, paid: true, horse: horses.count > 3 ? horses[3] : nil, client: jane,
+            nextDate: todayAt(hour: 16))
+
+        // Tomorrow + weekend
+        add(dayOffset(-6, hour: 9), 60, .training, "Jump course practice — Cleo",
+            100, paid: true, horse: horses.count > 4 ? horses[4] : nil, client: mike,
+            nextDate: dayOffset(1, hour: 9))
+
+        add(dayOffset(-5, hour: 15), 45, .privateLesson, "Posting trot and diagonals",
+            75, paid: false, horse: horses.count > 3 ? horses[3] : nil, client: sarah,
+            nextDate: dayOffset(2, hour: 15))
 
         return lessons
     }
 
     static func createReminders(horses: [Horse]) -> [Reminder] {
-        let calendar = Calendar.current
         var reminders: [Reminder] = []
 
-        let deworming = Reminder(
-            title: "Deworming — Arrow",
-            notes: "Ivermectin rotation",
-            dueDate: calendar.date(byAdding: .weekOfYear, value: 2, to: .now) ?? .now,
-            isCompleted: false,
-            frequency: .quarterly
-        )
-        deworming.horse = horses.first
-        reminders.append(deworming)
+        func add(_ title: String, _ notes: String, _ dueDate: Date,
+                 _ freq: ReminderFrequency, horse: Horse? = nil) {
+            let r = Reminder(title: title, notes: notes, dueDate: dueDate,
+                             isCompleted: false, frequency: freq)
+            r.horse = horse
+            reminders.append(r)
+        }
 
-        let farrier = Reminder(
-            title: "Farrier visit — all horses",
-            notes: "Tom Bradley scheduled",
-            dueDate: calendar.date(byAdding: .weekOfYear, value: 4, to: .now) ?? .now,
-            isCompleted: false,
-            frequency: .monthly
-        )
-        reminders.append(farrier)
+        // This week — spread across days for a compelling week view
+        add("Stall bedding refresh", "Replace shavings in A1 and B2",
+            dayOffset(-3, hour: 8), .once)
+        add("Order grain refill", "Sweet feed running low — 3 bags left",
+            dayOffset(-2, hour: 9), .once)
+        add("Hay delivery", "40 bales timothy — confirm with supplier",
+            dayOffset(-1, hour: 8), .monthly)
+        add("Deworming — Arrow", "Ivermectin rotation",
+            dayOffset(0, hour: 9), .quarterly, horse: horses.first)
+        add("Check pasture fencing", "North paddock gate was loose yesterday",
+            dayOffset(1, hour: 7), .once)
+        add("Barn inspection", "County inspector visiting at 2 PM",
+            dayOffset(2, hour: 14), .once)
 
-        let dentist = Reminder(
-            title: "Dental checkup — Bella",
-            notes: "Dr. Chen, annual float",
-            dueDate: calendar.date(byAdding: .month, value: 3, to: .now) ?? .now,
-            isCompleted: false,
-            frequency: .annually
-        )
-        dentist.horse = horses.count > 1 ? horses[1] : nil
-        reminders.append(dentist)
+        // Future
+        add("Farrier visit — all horses", "Tom Bradley scheduled",
+            dayOffset(10, hour: 9), .monthly)
+        add("Dental checkup — Bella", "Dr. Chen, annual float",
+            dayOffset(60, hour: 10), .annually, horse: horses.count > 1 ? horses[1] : nil)
 
         return reminders
     }

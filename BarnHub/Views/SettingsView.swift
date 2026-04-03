@@ -20,6 +20,26 @@ struct SettingsView: View {
 
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
     @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
+    @AppStorage("net.shadowpuppet.BarnBook.currencyCode") private var currencyCode: String = ""
+
+    private var supportedCurrencies: [(code: String, name: String)] {[
+        ("USD", "US Dollar ($)"),
+        ("EUR", "Euro (€)"),
+        ("GBP", "British Pound (£)"),
+        ("CAD", "Canadian Dollar (C$)"),
+        ("AUD", "Australian Dollar (A$)"),
+        ("CHF", "Swiss Franc (CHF)"),
+        ("SEK", "Swedish Krona (kr)"),
+        ("NOK", "Norwegian Krone (kr)"),
+        ("DKK", "Danish Krone (kr)"),
+        ("BRL", "Brazilian Real (R$)"),
+        ("MXN", "Mexican Peso (MX$)"),
+        ("JPY", "Japanese Yen (¥)"),
+        ("NZD", "New Zealand Dollar (NZ$)"),
+        ("ZAR", "South African Rand (R)"),
+        ("ILS", "Israeli Shekel (₪)"),
+        ("AED", "UAE Dirham (د.إ)"),
+    ]}
 
     private var supportedLocales: [(id: String, name: String)] {[
         ("",       appLocalized("System Default", comment: "Language picker option")),
@@ -340,6 +360,12 @@ struct SettingsView: View {
                     UserDefaults.standard.removeObject(forKey: "AppleLanguages")
                 } else {
                     UserDefaults.standard.set([newValue], forKey: "AppleLanguages")
+                }
+            }
+            Picker("Currency", selection: $currencyCode) {
+                Text("US Dollar ($)").tag("")
+                ForEach(supportedCurrencies.filter { $0.code != "USD" }, id: \.code) { currency in
+                    Text(currency.name).tag(currency.code)
                 }
             }
         }

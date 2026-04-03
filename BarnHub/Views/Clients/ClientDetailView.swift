@@ -169,6 +169,7 @@ struct ClientDetailView: View {
                     } label: {
                         Label("Generate Contract", systemImage: "doc.richtext.fill")
                     }
+                    .accessibilityIdentifier("generate_contract")
                 }
             }
 

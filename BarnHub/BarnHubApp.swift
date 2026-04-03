@@ -172,6 +172,7 @@ struct ContentView: View {
                 ForEach(Router.AppTab.allCases, id: \.self) { tab in
                     Label(tab.title, systemImage: tab.icon)
                         .tag(tab)
+                        .accessibilityIdentifier("sidebar_\(tab.rawValue)")
                 }
             }
             .navigationTitle("BarnHub")

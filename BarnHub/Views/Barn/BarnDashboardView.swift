@@ -73,7 +73,7 @@ struct BarnDashboardView: View {
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
     @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
 
-    @State private var viewMode: CalendarViewMode = .month
+    @State private var viewMode: CalendarViewMode = .week
     @State private var selectedDate: Date = .now
 
     var body: some View {
@@ -110,10 +110,11 @@ struct BarnDashboardView: View {
 
         for record in vetRecords {
             guard let dueDate = record.nextDueDate else { continue }
+            let horseName = record.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
             events.append(ScheduleEvent(
                 id: "vet-\(record.persistentModelID.hashValue)",
                 date: dueDate,
-                title: record.horse?.name ?? "Unknown Horse",
+                title: "\(ScheduleEventType.vet.label): \(horseName)",
                 subtitle: record.vetName,
                 type: .vet,
                 modelID: record.persistentModelID,
@@ -123,10 +124,11 @@ struct BarnDashboardView: View {
 
         for visit in farrierVisits {
             guard let dueDate = visit.nextDueDate else { continue }
+            let horseName = visit.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
             events.append(ScheduleEvent(
                 id: "far-\(visit.persistentModelID.hashValue)",
                 date: dueDate,
-                title: visit.horse?.name ?? "Unknown Horse",
+                title: "\(ScheduleEventType.farrier.label): \(horseName)",
                 subtitle: visit.farrierName,
                 type: .farrier,
                 modelID: visit.persistentModelID,
