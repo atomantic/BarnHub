@@ -7,10 +7,10 @@ enum BalancePeriod: Int, CaseIterable, Identifiable {
 
     var id: Int { rawValue }
 
-    var displayName: String {
+    var displayName: LocalizedStringKey {
         switch self {
-        case .thisMonth: String(localized: "This Month", comment: "Balance period")
-        case .allTime:   String(localized: "All Time",   comment: "Balance period")
+        case .thisMonth: "This Month"
+        case .allTime:   "All Time"
         }
     }
 }
@@ -423,7 +423,7 @@ struct FeatureTile: View {
     let color: Color
     var badge: String? = nil
     var badgeColor: Color? = nil
-    var badgeDetail: String? = nil
+    var badgeDetail: LocalizedStringKey? = nil
     let action: () -> Void
 
     #if os(macOS)

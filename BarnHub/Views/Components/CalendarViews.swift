@@ -68,8 +68,14 @@ struct CalendarMonthView: View {
     let onEventTapped: (ScheduleEvent) -> Void
     var showEventsList: Bool = true
 
+    @Environment(\.locale) private var locale
     private let cal = Calendar.current
-    private let dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+    private var dayLabels: [String] {
+        var c = Calendar(identifier: .gregorian)
+        c.locale = locale
+        return c.shortWeekdaySymbols
+    }
 
     private var monthWeeks: [[Date?]] {
         guard let range = cal.range(of: .day, in: .month, for: monthStart) else { return [] }

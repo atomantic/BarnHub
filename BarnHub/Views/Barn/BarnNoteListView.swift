@@ -114,7 +114,7 @@ struct BarnNoteListView: View {
         }
     }
 
-    private func filterChip(label: String, icon: String? = nil, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    private func filterChip(label: LocalizedStringKey, icon: String? = nil, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 4) {
                 if let icon {
