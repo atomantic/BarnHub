@@ -93,7 +93,9 @@ struct BarnHubApp: App {
                     DeepLinkHandler.handle(url: url, router: router)
                 }
                 .task {
-                    await notificationService.requestAuthorization()
+                    // Refresh status only — never request cold. The actual permission
+                    // request happens after the user opts in via FirstLaunchSheet.
+                    await notificationService.refreshAuthorizationStatus()
                 }
                 #if os(macOS)
                 .onAppear {
@@ -134,6 +136,8 @@ struct ContentView: View {
     #endif
     @Environment(NotificationService.self) private var notificationService
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
+    @State private var showFirstLaunchSheet = false
 
     @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
     private var incompleteReminders: [Reminder]
@@ -154,6 +158,9 @@ struct ContentView: View {
             #endif
         }
         .task {
+            if !hasCompletedFirstLaunch {
+                showFirstLaunchSheet = true
+            }
             notificationService.scheduleAllPending(context: modelContext)
             let overdueRems = incompleteReminders.filter { $0.dueDate.isOverdue }.count
             let overdueVet = vetRecords.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
@@ -161,6 +168,9 @@ struct ContentView: View {
             let overdueCount = overdueRems + overdueVet + overdueFarrier
             let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
             notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
+        }
+        .sheet(isPresented: $showFirstLaunchSheet) {
+            FirstLaunchSheet()
         }
     }
 
@@ -383,5 +393,198 @@ private extension View {
                 case .paywall: PaywallView()
                 }
             }
+    }
+}
+
+// MARK: - First Launch Sheet
+
+/// Two-page introductory sheet shown the first time the app is launched.
+/// Page 1 surfaces the privacy promise (no accounts, iCloud sync, export anytime).
+/// Page 2 primes the notification permission so the iOS dialog never fires cold.
+/// Both pages can be skipped, but the user must dismiss the sheet explicitly via
+/// one of the buttons — `interactiveDismissDisabled` blocks swipe-to-dismiss to
+/// guarantee `hasCompletedFirstLaunch` is set before the sheet goes away.
+struct FirstLaunchSheet: View {
+    @Environment(NotificationService.self) private var notificationService
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
+
+    private enum Page { case welcome, notification }
+    @State private var page: Page = .welcome
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    switch page {
+                    case .welcome: welcomePage
+                    case .notification: notificationPage
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 32)
+                .padding(.bottom, 16)
+                .frame(maxWidth: 520)
+                .frame(maxWidth: .infinity)
+            }
+
+            footer
+        }
+        .background(Color.systemBackground)
+        #if os(macOS)
+        .frame(minWidth: 480, minHeight: 580)
+        #endif
+        .interactiveDismissDisabled(true)
+    }
+
+    @ViewBuilder
+    private var welcomePage: some View {
+        Image(systemName: "house.fill")
+            .font(.system(size: 56))
+            .foregroundStyle(.barnGreen)
+            .padding(.top, 16)
+            .accessibilityHidden(true)
+
+        Text(appLocalized("Welcome to BarnHub"))
+            .font(.title).fontWeight(.bold)
+            .multilineTextAlignment(.center)
+
+        Text(appLocalized("Your barn, in your pocket — and your iCloud."))
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
+
+        VStack(alignment: .leading, spacing: 16) {
+            privacyBullet(
+                icon: "lock.shield.fill",
+                title: appLocalized("Private by design"),
+                detail: appLocalized("No accounts, no servers, no telemetry. Your horse and client data is yours alone.")
+            )
+            privacyBullet(
+                icon: "icloud.fill",
+                title: appLocalized("Synced through your iCloud"),
+                detail: appLocalized("Encrypted by Apple and shared only with your other Apple devices — your iPhone, iPad, and Mac stay in sync automatically.")
+            )
+            privacyBullet(
+                icon: "square.and.arrow.up",
+                title: appLocalized("Export anytime"),
+                detail: appLocalized("Take your data with you. It never leaves your devices unless you explicitly share it.")
+            )
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 4)
+    }
+
+    @ViewBuilder
+    private var notificationPage: some View {
+        Image(systemName: "bell.badge.fill")
+            .font(.system(size: 56))
+            .foregroundStyle(.barnGreen)
+            .padding(.top, 16)
+            .accessibilityHidden(true)
+
+        Text(appLocalized("Stay on top of the barn"))
+            .font(.title).fontWeight(.bold)
+            .multilineTextAlignment(.center)
+
+        Text(appLocalized("BarnHub can quietly remind you about what's coming up."))
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
+
+        VStack(alignment: .leading, spacing: 16) {
+            privacyBullet(
+                icon: "stethoscope",
+                title: appLocalized("Vet & farrier visits"),
+                detail: appLocalized("Get a heads-up before each scheduled appointment so nothing slips.")
+            )
+            privacyBullet(
+                icon: "checklist",
+                title: appLocalized("Reminders & lessons"),
+                detail: appLocalized("A small nudge for the day's chores, lessons, and overdue tasks.")
+            )
+            privacyBullet(
+                icon: "lock.fill",
+                title: appLocalized("Stays on your device"),
+                detail: appLocalized("Reminders are scheduled by iOS itself. Nothing leaves your device.")
+            )
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 4)
+    }
+
+    @ViewBuilder
+    private var footer: some View {
+        VStack(spacing: 12) {
+            Divider()
+
+            switch page {
+            case .welcome:
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) { page = .notification }
+                } label: {
+                    Text(appLocalized("Continue"))
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.barnGreen)
+                .padding(.horizontal, 24)
+
+            case .notification:
+                VStack(spacing: 8) {
+                    Button {
+                        Task {
+                            await notificationService.requestAuthorization()
+                            complete()
+                        }
+                    } label: {
+                        Text(appLocalized("Turn on reminders"))
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.barnGreen)
+
+                    Button(appLocalized("Not now")) {
+                        complete()
+                    }
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+                }
+                .padding(.horizontal, 24)
+            }
+        }
+        .padding(.bottom, 16)
+        .padding(.top, 8)
+    }
+
+    @ViewBuilder
+    private func privacyBullet(icon: String, title: String, detail: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 20))
+                .foregroundStyle(.barnGreen)
+                .frame(width: 28, alignment: .center)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline).fontWeight(.semibold)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private func complete() {
+        hasCompletedFirstLaunch = true
+        dismiss()
     }
 }
