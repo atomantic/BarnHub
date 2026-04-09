@@ -186,9 +186,12 @@ capture_locale() {
     sleep 1
 
     # Launch with locale + sample data + light mode
+    # hasCompletedFirstLaunch=YES bypasses the onboarding sheet that would
+    # otherwise block every dashboard screenshot on a clean sandbox.
     open "$APP_PATH" --args \
         -SeedSampleData \
         -ForceProMode \
+        -net.shadowpuppet.BarnBook.hasCompletedFirstLaunch YES \
         -net.shadowpuppet.BarnBook.appLocale "$lang" \
         -net.shadowpuppet.BarnBook.currencyCode "$currency" \
         -net.shadowpuppet.BarnBook.appearanceMode 1 \
