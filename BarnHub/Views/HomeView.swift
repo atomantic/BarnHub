@@ -21,6 +21,9 @@ struct HomeView: View {
     @Environment(NotificationService.self) private var notificationService
     @Environment(SyncMonitor.self) private var syncMonitor
     @Environment(\.modelContext) private var modelContext
+    #if !os(macOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
 
     private var balancePeriod: BalancePeriod {
@@ -45,11 +48,22 @@ struct HomeView: View {
         GridItem(.flexible(), spacing: 12)
     ]
     #else
-    private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
-    ]
+    private var columns: [GridItem] {
+        if sizeClass == .regular {
+            return [
+                GridItem(.flexible(), spacing: 14),
+                GridItem(.flexible(), spacing: 14),
+                GridItem(.flexible(), spacing: 14),
+                GridItem(.flexible(), spacing: 14)
+            ]
+        } else {
+            return [
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16),
+                GridItem(.flexible(), spacing: 16)
+            ]
+        }
+    }
     #endif
 
     private var monthlyBalance: Double {
@@ -137,10 +151,14 @@ struct HomeView: View {
                 #if os(macOS)
                 macDashboard(balance: balance)
                 #else
-                if !todayRems.isEmpty {
-                    todaySection(reminders: todayRems)
+                if sizeClass == .regular {
+                    iPadDashboard(balance: balance)
+                } else {
+                    if !todayRems.isEmpty {
+                        todaySection(reminders: todayRems)
+                    }
+                    iconGrid(balance: balance)
                 }
-                iconGrid(balance: balance)
                 #endif
             }
         }
@@ -307,9 +325,7 @@ struct HomeView: View {
         .padding(.bottom, 32)
     }
 
-    // MARK: - macOS Dashboard
-
-    #if os(macOS)
+    // MARK: - Dashboard
 
     private func macDashboard(balance: Double) -> some View {
         VStack(spacing: 16) {
@@ -319,6 +335,17 @@ struct HomeView: View {
         }
         .padding(.bottom, 24)
     }
+
+    #if !os(macOS)
+    private func iPadDashboard(balance: Double) -> some View {
+        VStack(spacing: 20) {
+            statsStrip
+            widgetGrid
+            iconGrid(balance: balance)
+        }
+        .padding(.bottom, 32)
+    }
+    #endif
 
     private var statsStrip: some View {
         HStack(spacing: 12) {
@@ -655,8 +682,6 @@ struct HomeView: View {
             }
         }
     }
-
-    #endif
 }
 
 // MARK: - Feature Tile (iOS + macOS quick nav)
@@ -752,9 +777,7 @@ struct SwooshShape: Shape {
     }
 }
 
-// MARK: - macOS Dashboard Widget Primitives
-
-#if os(macOS)
+// MARK: - Dashboard Widget Primitives
 
 struct DashboardEvent: Identifiable {
     let id: String
@@ -984,5 +1007,3 @@ struct IncomeExpenseBar: View {
         .opacity(income + expenses > 0 ? 1 : 0.15)
     }
 }
-
-#endif
