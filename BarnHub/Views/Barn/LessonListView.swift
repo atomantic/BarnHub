@@ -19,7 +19,7 @@ struct LessonListView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if displayedLessons.isEmpty {
                 EmptyStateView(
                     icon: "book.fill",
@@ -29,12 +29,14 @@ struct LessonListView: View {
                         : "Add your first lesson to get started."
                 )
             } else {
-                ForEach(displayedLessons) { lesson in
-                    NavigationLink(value: BarnRoute.lessonEdit(lesson.persistentModelID)) {
-                        lessonRow(lesson)
+                List {
+                    ForEach(displayedLessons) { lesson in
+                        NavigationLink(value: BarnRoute.lessonEdit(lesson.persistentModelID)) {
+                            lessonRow(lesson)
+                        }
                     }
+                    .onDelete(perform: deleteLessons)
                 }
-                .onDelete(perform: deleteLessons)
             }
         }
         .navigationTitle("Lessons")

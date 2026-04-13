@@ -27,7 +27,7 @@ struct HorseDocumentsView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if documents.isEmpty {
                 EmptyStateView(
                     icon: "doc.text",
@@ -35,18 +35,20 @@ struct HorseDocumentsView: View {
                     subtitle: "Tap + to upload Coggins tests, health certificates, registration papers, and more."
                 )
             } else {
-                ForEach(documents, id: \.persistentModelID) { doc in
-                    documentRow(doc)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button("Delete", role: .destructive) {
-                                documentToDelete = doc
-                                showDeleteConfirmation = true
+                List {
+                    ForEach(documents, id: \.persistentModelID) { doc in
+                        documentRow(doc)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Delete", role: .destructive) {
+                                    documentToDelete = doc
+                                    showDeleteConfirmation = true
+                                }
+                                Button("Share") {
+                                    shareDocument(doc)
+                                }
+                                .tint(.blue)
                             }
-                            Button("Share") {
-                                shareDocument(doc)
-                            }
-                            .tint(.blue)
-                        }
+                    }
                 }
             }
         }

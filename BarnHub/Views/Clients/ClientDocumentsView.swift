@@ -28,7 +28,7 @@ struct ClientDocumentsView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if documents.isEmpty {
                 EmptyStateView(
                     icon: "doc.text",
@@ -36,18 +36,20 @@ struct ClientDocumentsView: View {
                     subtitle: "Tap + to upload a contract, agreement, or photo."
                 )
             } else {
-                ForEach(documents, id: \.persistentModelID) { doc in
-                    documentRow(doc)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button("Delete", role: .destructive) {
-                                documentToDelete = doc
-                                showDeleteConfirmation = true
+                List {
+                    ForEach(documents, id: \.persistentModelID) { doc in
+                        documentRow(doc)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Delete", role: .destructive) {
+                                    documentToDelete = doc
+                                    showDeleteConfirmation = true
+                                }
+                                Button("Share") {
+                                    shareDocument(doc)
+                                }
+                                .tint(.blue)
                             }
-                            Button("Share") {
-                                shareDocument(doc)
-                            }
-                            .tint(.blue)
-                        }
+                    }
                 }
             }
         }

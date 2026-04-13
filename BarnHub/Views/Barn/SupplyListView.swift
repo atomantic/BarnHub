@@ -20,7 +20,7 @@ struct SupplyListView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if filteredItems.isEmpty {
                 EmptyStateView(
                     icon: "shippingbox",
@@ -28,14 +28,16 @@ struct SupplyListView: View {
                     subtitle: "Tap + to add your first supply item."
                 )
             } else {
-                ForEach(filteredItems) { item in
-                    NavigationLink(value: BarnRoute.supplyEdit(item.persistentModelID)) {
-                        supplyRow(item)
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", role: .destructive) {
-                            itemToDelete = item
-                            showDeleteConfirmation = true
+                List {
+                    ForEach(filteredItems) { item in
+                        NavigationLink(value: BarnRoute.supplyEdit(item.persistentModelID)) {
+                            supplyRow(item)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button("Delete", role: .destructive) {
+                                itemToDelete = item
+                                showDeleteConfirmation = true
+                            }
                         }
                     }
                 }
