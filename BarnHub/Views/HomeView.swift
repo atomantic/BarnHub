@@ -36,6 +36,7 @@ struct HomeView: View {
     private var incompleteReminders: [Reminder]
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
+    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
     @Query(sort: \Transaction.date, order: .reverse) private var transactions: [Transaction]
     @Query(sort: \Lesson.date) private var lessons: [Lesson]
     @Query private var supplyItems: [SupplyItem]
@@ -115,6 +116,10 @@ struct HomeView: View {
         for visit in farrierVisits {
             guard let due = visit.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
             items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Farrier"))
+        }
+        for visit in dentistVisits {
+            guard let due = visit.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
+            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Dentist"))
         }
 
         return items.sorted().first?.label

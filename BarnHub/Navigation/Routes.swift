@@ -19,6 +19,7 @@ enum HorseRoute: Hashable {
     case edit(PersistentIdentifier?)
     case addVetRecord(PersistentIdentifier)
     case addFarrierVisit(PersistentIdentifier)
+    case addDentistVisit(PersistentIdentifier)
     case healthTimeline(PersistentIdentifier)
     case weightChart(PersistentIdentifier)
     case documents(PersistentIdentifier)
@@ -56,6 +57,8 @@ enum BarnRoute: Hashable {
     case addVetRecord
     case farrierSchedule
     case addFarrierVisit
+    case dentistSchedule
+    case addDentistVisit
     case lessons
     case lessonEdit(PersistentIdentifier?)
     case feedProducts

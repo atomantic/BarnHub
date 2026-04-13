@@ -52,7 +52,7 @@ struct BarnHubApp: App {
         do {
             let container = try ModelContainer(
                 for: Horse.self, Client.self, Transaction.self,
-                VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
                 Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
                 configurations: config
             )
@@ -67,7 +67,7 @@ struct BarnHubApp: App {
             do {
                 let fallback = try ModelContainer(
                     for: Horse.self, Client.self, Transaction.self,
-                    VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+                    VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
                     Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
                     configurations: ModelConfiguration(isStoredInMemoryOnly: true)
                 )
@@ -143,6 +143,7 @@ struct ContentView: View {
     private var incompleteReminders: [Reminder]
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
+    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
 
     var body: some View {
         @Bindable var router = router
@@ -165,7 +166,8 @@ struct ContentView: View {
             let overdueRems = incompleteReminders.filter { $0.dueDate.isOverdue }.count
             let overdueVet = vetRecords.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
             let overdueFarrier = farrierVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
-            let overdueCount = overdueRems + overdueVet + overdueFarrier
+            let overdueDentist = dentistVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
+            let overdueCount = overdueRems + overdueVet + overdueFarrier + overdueDentist
             let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
             notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
         }
@@ -351,6 +353,7 @@ private extension View {
                 case .edit(let id): HorseEditView(horseID: id)
                 case .addVetRecord(let id): VetRecordEditView(horseID: id)
                 case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
+                case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
                 case .healthTimeline(let id): HealthTimelineView(horseID: id)
                 case .weightChart(let id): WeightChartView(horseID: id)
                 case .documents(let id): HorseDocumentsView(horseID: id)
@@ -387,6 +390,8 @@ private extension View {
                 case .addVetRecord: VetRecordEditView(horseID: nil)
                 case .farrierSchedule: FarrierScheduleView()
                 case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
+                case .dentistSchedule: DentistScheduleView()
+                case .addDentistVisit: DentistVisitEditView(horseID: nil)
                 case .lessons: LessonListView()
                 case .lessonEdit(let id): LessonEditView(lessonID: id)
                 case .feedProducts: FeedProductListView()
@@ -502,7 +507,7 @@ struct FirstLaunchSheet: View {
         VStack(alignment: .leading, spacing: 16) {
             privacyBullet(
                 icon: "stethoscope",
-                title: appLocalized("Vet & farrier visits"),
+                title: appLocalized("Vet, farrier & dentist visits"),
                 detail: appLocalized("Get a heads-up before each scheduled appointment so nothing slips.")
             )
             privacyBullet(

@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 enum TransactionCategory: String, Codable, CaseIterable, Identifiable {
-    case lesson, boarding, training, vetBill, farrier, feed, supplies, tack, other
+    case lesson, boarding, training, vetBill, farrier, dentist, feed, supplies, tack, other
     var id: String { rawValue }
     var displayName: String {
         switch self {
@@ -11,6 +11,7 @@ enum TransactionCategory: String, Codable, CaseIterable, Identifiable {
         case .training:  return appLocalized("Training",  comment: "Transaction category")
         case .vetBill:   return appLocalized("Vet Bill",  comment: "Transaction category")
         case .farrier:   return appLocalized("Farrier",   comment: "Transaction category")
+        case .dentist:   return appLocalized("Dentist",   comment: "Transaction category")
         case .feed:      return appLocalized("Feed",      comment: "Transaction category")
         case .supplies:  return appLocalized("Supplies",  comment: "Transaction category")
         case .tack:      return appLocalized("Tack",      comment: "Transaction category")

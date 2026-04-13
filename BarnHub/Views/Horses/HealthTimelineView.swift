@@ -2,12 +2,13 @@ import SwiftUI
 import SwiftData
 
 enum TimelineEventType: String, CaseIterable {
-    case vet, farrier, weight
+    case vet, farrier, dentist, weight
 
     var label: String {
         switch self {
         case .vet: return "Vet"
         case .farrier: return "Farrier"
+        case .dentist: return "Dentist"
         case .weight: return "Weight"
         }
     }
@@ -16,6 +17,7 @@ enum TimelineEventType: String, CaseIterable {
         switch self {
         case .vet: return "cross.case.fill"
         case .farrier: return "hammer.fill"
+        case .dentist: return "mouth.fill"
         case .weight: return "scalemass.fill"
         }
     }
@@ -24,6 +26,7 @@ enum TimelineEventType: String, CaseIterable {
         switch self {
         case .vet: return .blue
         case .farrier: return .orange
+        case .dentist: return .purple
         case .weight: return .green
         }
     }
@@ -87,6 +90,20 @@ struct HealthTimelineView: View {
             }
         }
 
+        if activeFilters.contains(.dentist) {
+            for visit in horse.dentistVisits ?? [] {
+                result.append(TimelineEvent(
+                    id: "dentist-\(visit.persistentModelID)",
+                    date: visit.date,
+                    type: .dentist,
+                    title: visit.serviceDescription.isEmpty ? "Dentist Visit" : visit.serviceDescription,
+                    subtitle: visit.dentistName,
+                    detail: visit.nextDueDate.map { "Next due: \($0.shortFormatted)" },
+                    cost: visit.cost > 0 ? visit.cost : nil
+                ))
+            }
+        }
+
         if activeFilters.contains(.weight) {
             for entry in horse.weightEntries ?? [] {
                 result.append(TimelineEvent(
@@ -116,7 +133,7 @@ struct HealthTimelineView: View {
                 EmptyStateView(
                     icon: "heart.text.clipboard",
                     title: "No Health Events",
-                    subtitle: "Add vet visits, farrier visits, or weight logs to build a timeline."
+                    subtitle: "Add vet, farrier, or dentist visits, or weight logs to build a timeline."
                 )
             } else {
                 ForEach(events) { event in
@@ -143,6 +160,11 @@ struct HealthTimelineView: View {
                         router.navigate(to: HorseRoute.addFarrierVisit(horseID))
                     } label: {
                         Label("Add Farrier Visit", systemImage: TimelineEventType.farrier.icon)
+                    }
+                    Button {
+                        router.navigate(to: HorseRoute.addDentistVisit(horseID))
+                    } label: {
+                        Label("Add Dentist Visit", systemImage: TimelineEventType.dentist.icon)
                     }
                     Button {
                         showAddWeight = true

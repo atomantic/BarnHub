@@ -11,6 +11,7 @@ struct TransactionRowView: View {
         case .training: return "figure.equestrian.sports"
         case .vetBill: return "cross.case.fill"
         case .farrier: return "hammer.fill"
+        case .dentist: return "mouth.fill"
         case .feed: return "leaf.fill"
         case .supplies: return "shippingbox.fill"
         case .tack: return "tag.fill"

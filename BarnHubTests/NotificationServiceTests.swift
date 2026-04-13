@@ -17,7 +17,7 @@ final class NotificationServiceTests: XCTestCase {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
             Invoice.self, WeightEntry.self, ClientDocument.self,
             BarnNote.self, Lesson.self,
             configurations: config
@@ -64,6 +64,17 @@ final class NotificationServiceTests: XCTestCase {
 
         XCTAssertNotEqual(f1.persistentModelID, f2.persistentModelID,
                           "Two distinct FarrierVisit instances must have different persistentModelIDs")
+    }
+
+    func test_dentistVisit_persistentModelIDs_areUnique() throws {
+        let d1 = DentistVisit(dentistName: "Dr. A")
+        let d2 = DentistVisit(dentistName: "Dr. B")
+        context.insert(d1)
+        context.insert(d2)
+        try context.save()
+
+        XCTAssertNotEqual(d1.persistentModelID, d2.persistentModelID,
+                          "Two distinct DentistVisit instances must have different persistentModelIDs")
     }
 
     /// Cross-type IDs are also distinct (reminder vs vet record IDs don't collide)

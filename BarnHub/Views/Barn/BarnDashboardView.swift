@@ -18,13 +18,14 @@ enum CalendarViewMode: String, CaseIterable {
 // MARK: - Schedule Event Types
 
 enum ScheduleEventType: String, CaseIterable {
-    case reminder, vet, farrier, lesson
+    case reminder, vet, farrier, dentist, lesson
 
     var color: Color {
         switch self {
         case .reminder: .barnGreen
         case .vet: .red
         case .farrier: .orange
+        case .dentist: .purple
         case .lesson: .blue
         }
     }
@@ -34,6 +35,7 @@ enum ScheduleEventType: String, CaseIterable {
         case .reminder: "bell.fill"
         case .vet: "cross.case.fill"
         case .farrier: "hammer.fill"
+        case .dentist: "mouth.fill"
         case .lesson: "book.fill"
         }
     }
@@ -43,6 +45,7 @@ enum ScheduleEventType: String, CaseIterable {
         case .reminder: return appLocalized("Reminder", comment: "Schedule event type")
         case .vet:      return appLocalized("Vet",      comment: "Schedule event type")
         case .farrier:  return appLocalized("Farrier",  comment: "Schedule event type")
+        case .dentist:  return appLocalized("Dentist",  comment: "Schedule event type")
         case .lesson:   return appLocalized("Lesson",   comment: "Schedule event type")
         }
     }
@@ -71,6 +74,7 @@ struct BarnDashboardView: View {
 
     @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
     @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
+    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
     @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
 
     @State private var viewMode: CalendarViewMode = .week
@@ -131,6 +135,20 @@ struct BarnDashboardView: View {
                 title: "\(ScheduleEventType.farrier.label): \(horseName)",
                 subtitle: visit.farrierName,
                 type: .farrier,
+                modelID: visit.persistentModelID,
+                durationMinutes: 60
+            ))
+        }
+
+        for visit in dentistVisits {
+            guard let dueDate = visit.nextDueDate else { continue }
+            let horseName = visit.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
+            events.append(ScheduleEvent(
+                id: "den-\(visit.persistentModelID.hashValue)",
+                date: dueDate,
+                title: "\(ScheduleEventType.dentist.label): \(horseName)",
+                subtitle: visit.dentistName,
+                type: .dentist,
                 modelID: visit.persistentModelID,
                 durationMinutes: 60
             ))
@@ -218,6 +236,7 @@ struct BarnDashboardView: View {
         case .lesson: router.navigate(to: BarnRoute.lessonEdit(id), tab: .schedule)
         case .vet: router.navigate(to: BarnRoute.vetSchedule, tab: .schedule)
         case .farrier: router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule)
+        case .dentist: router.navigate(to: BarnRoute.dentistSchedule, tab: .schedule)
         }
     }
 
@@ -319,6 +338,9 @@ struct BarnDashboardView: View {
             Button { router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule) } label: {
                 Label("Farrier Schedule", systemImage: "hammer.fill")
             }
+            Button { router.navigate(to: BarnRoute.dentistSchedule, tab: .schedule) } label: {
+                Label("Dentist Schedule", systemImage: "mouth.fill")
+            }
             Button { router.navigate(to: BarnRoute.barnNotes, tab: .schedule) } label: {
                 Label("Barn Notes", systemImage: "note.text")
             }
@@ -343,6 +365,9 @@ struct BarnDashboardView: View {
             }
             Button { router.navigate(to: BarnRoute.addFarrierVisit, tab: .schedule) } label: {
                 Label("Farrier Visit", systemImage: "hammer.fill")
+            }
+            Button { router.navigate(to: BarnRoute.addDentistVisit, tab: .schedule) } label: {
+                Label("Dentist Visit", systemImage: "mouth.fill")
             }
             Button { router.navigate(to: BarnRoute.lessonEdit(nil), tab: .schedule) } label: {
                 Label("Lesson", systemImage: "book.fill")
@@ -503,6 +528,9 @@ struct BarnDashboardView: View {
                 }
                 Button { router.navigate(to: BarnRoute.addFarrierVisit, tab: .schedule) } label: {
                     Label("Farrier Visit", systemImage: "hammer.fill")
+                }
+                Button { router.navigate(to: BarnRoute.addDentistVisit, tab: .schedule) } label: {
+                    Label("Dentist Visit", systemImage: "mouth.fill")
                 }
                 Button { router.navigate(to: BarnRoute.lessonEdit(nil), tab: .schedule) } label: {
                     Label("Lesson", systemImage: "book.fill")
