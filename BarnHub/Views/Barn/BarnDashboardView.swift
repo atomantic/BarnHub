@@ -325,6 +325,9 @@ struct BarnDashboardView: View {
             Button { router.navigate(to: BarnRoute.lessons, tab: .schedule) } label: {
                 Label("Lessons", systemImage: "book.fill")
             }
+            Button { router.navigate(to: BarnRoute.feedProducts, tab: .schedule) } label: {
+                Label("Feed Products", systemImage: "leaf.fill")
+            }
         } label: {
             Image(systemName: "line.3.horizontal")
         }

@@ -11,8 +11,14 @@ final class Horse {
     var medicalNotes: String = ""
     var feedingSchedule: String = ""
     var stallNumber: String = ""
+    var genderRaw: String = HorseGender.mare.rawValue
     var purchasePrice: Double = 0
     var isActive: Bool = true
+
+    var gender: HorseGender {
+        get { HorseGender(rawValue: genderRaw) ?? .mare }
+        set { genderRaw = newValue.rawValue }
+    }
 
     @Attribute(.externalStorage)
     var photoData: Data? = nil
@@ -38,6 +44,12 @@ final class Horse {
     @Relationship(deleteRule: .cascade)
     var barnNotes: [BarnNote]? = nil
 
+    @Relationship(deleteRule: .cascade)
+    var documents: [HorseDocument]? = nil
+
+    @Relationship(deleteRule: .cascade)
+    var feedPlanEntries: [FeedPlanEntry]? = nil
+
     init(
         name: String = "",
         breed: String = "",
@@ -48,6 +60,7 @@ final class Horse {
         medicalNotes: String = "",
         feedingSchedule: String = "",
         stallNumber: String = "",
+        gender: HorseGender = .mare,
         isActive: Bool = true,
         photoData: Data? = nil
     ) {
@@ -60,6 +73,7 @@ final class Horse {
         self.medicalNotes = medicalNotes
         self.feedingSchedule = feedingSchedule
         self.stallNumber = stallNumber
+        self.genderRaw = gender.rawValue
         self.isActive = isActive
         self.photoData = photoData
     }

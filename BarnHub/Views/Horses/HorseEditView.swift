@@ -16,6 +16,7 @@ struct HorseEditView: View {
     @State private var medicalNotes = ""
     @State private var feedingSchedule = ""
     @State private var stallNumber = ""
+    @State private var gender: HorseGender = .mare
     @State private var isActive = true
 
     @State private var photoData: Data?
@@ -80,6 +81,11 @@ struct HorseEditView: View {
             TextField("Name", text: $name)
             TextField("Breed", text: $breed)
             DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
+            Picker("Gender", selection: $gender) {
+                ForEach(HorseGender.allCases) { g in
+                    Text(g.displayName).tag(g)
+                }
+            }
             TextField("Color/Markings", text: $colorMarkings)
         }
     }
@@ -142,7 +148,7 @@ struct HorseEditView: View {
                     do {
                         if let data = try await newItem.loadTransferable(type: Data.self) {
                             await MainActor.run {
-                                photoData = downsampleImageData(data, maxDimension: 800)
+                                photoData = data.downsampledImage(maxDimension: 800)
                                 selectedPhoto = nil
                             }
                         }
@@ -206,6 +212,7 @@ struct HorseEditView: View {
         medicalNotes = horse.medicalNotes
         feedingSchedule = horse.feedingSchedule
         stallNumber = horse.stallNumber
+        gender = horse.gender
         isActive = horse.isActive
         photoData = horse.photoData
     }
@@ -224,6 +231,7 @@ struct HorseEditView: View {
             horse.medicalNotes = medicalNotes
             horse.feedingSchedule = feedingSchedule
             horse.stallNumber = stallNumber
+            horse.gender = gender
             horse.isActive = isActive
             horse.photoData = photoData
             BarnHubLogger.info("Updating horse name=\(trimmedName)")
@@ -238,6 +246,7 @@ struct HorseEditView: View {
                 medicalNotes: medicalNotes,
                 feedingSchedule: feedingSchedule,
                 stallNumber: stallNumber,
+                gender: gender,
                 isActive: isActive,
                 photoData: photoData
             )
@@ -249,32 +258,4 @@ struct HorseEditView: View {
         toast.showAndDismiss(isNew ? appLocalized("Horse added") : appLocalized("Horse updated"), dismiss: dismiss)
     }
 
-    private func downsampleImageData(_ data: Data, maxDimension: CGFloat) -> Data {
-#if os(iOS) || targetEnvironment(macCatalyst)
-        guard let uiImage = UIImage(data: data) else { return data }
-        let size = uiImage.size
-        let scale = min(maxDimension / max(size.width, size.height), 1.0)
-        guard scale < 1.0 else { return data }
-        let newSize = CGSize(width: size.width * scale, height: size.height * scale)
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        let resized = renderer.image { _ in uiImage.draw(in: CGRect(origin: .zero, size: newSize)) }
-        return resized.jpegData(compressionQuality: 0.8) ?? data
-#else
-        guard let nsImage = NSImage(data: data) else { return data }
-        let size = nsImage.size
-        let scale = min(maxDimension / max(size.width, size.height), 1.0)
-        guard scale < 1.0 else { return data }
-        let newSize = NSSize(width: size.width * scale, height: size.height * scale)
-        let resized = NSImage(size: newSize)
-        resized.lockFocus()
-        nsImage.draw(in: NSRect(origin: .zero, size: newSize))
-        resized.unlockFocus()
-        guard let tiffData = resized.tiffRepresentation,
-              let bitmap = NSBitmapImageRep(data: tiffData),
-              let jpegData = bitmap.representation(using: .jpeg, properties: [.compressionFactor: NSNumber(value: 0.8)]) else {
-            return data
-        }
-        return jpegData
-#endif
-    }
 }

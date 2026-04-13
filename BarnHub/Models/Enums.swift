@@ -60,6 +60,65 @@ enum ReminderFrequency: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+enum HorseGender: String, Codable, CaseIterable, Identifiable {
+    case mare, stallion, gelding
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .mare:     return appLocalized("Mare",     comment: "Horse gender")
+        case .stallion: return appLocalized("Stallion", comment: "Horse gender")
+        case .gelding:  return appLocalized("Gelding",  comment: "Horse gender")
+        }
+    }
+}
+
+enum FeedUnit: String, Codable, CaseIterable, Identifiable {
+    case scoops, flakes, lbs, cups, oz, quarts, other
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .scoops: return appLocalized("scoops",  comment: "Feed unit")
+        case .flakes: return appLocalized("flakes",  comment: "Feed unit")
+        case .lbs:    return appLocalized("lbs",     comment: "Feed unit")
+        case .cups:   return appLocalized("cups",    comment: "Feed unit")
+        case .oz:     return appLocalized("oz",      comment: "Feed unit")
+        case .quarts: return appLocalized("quarts",  comment: "Feed unit")
+        case .other:  return appLocalized("units",   comment: "Feed unit")
+        }
+    }
+}
+
+enum FeedTime: String, Codable, CaseIterable, Identifiable, Comparable {
+    case morning, midday, evening
+    var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .morning: return appLocalized("Morning", comment: "Feed time of day")
+        case .midday:  return appLocalized("Midday",  comment: "Feed time of day")
+        case .evening: return appLocalized("Evening", comment: "Feed time of day")
+        }
+    }
+    var icon: String {
+        switch self {
+        case .morning: return "sunrise.fill"
+        case .midday:  return "sun.max.fill"
+        case .evening: return "sunset.fill"
+        }
+    }
+
+    private var sortOrder: Int {
+        switch self {
+        case .morning: return 0
+        case .midday:  return 1
+        case .evening: return 2
+        }
+    }
+
+    static func < (lhs: FeedTime, rhs: FeedTime) -> Bool {
+        lhs.sortOrder < rhs.sortOrder
+    }
+}
+
 enum BarnNoteCategory: String, Codable, CaseIterable, Identifiable {
     case general, observation, incident, maintenance, health, weather
     var id: String { rawValue }

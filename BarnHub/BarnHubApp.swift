@@ -53,7 +53,7 @@ struct BarnHubApp: App {
             let container = try ModelContainer(
                 for: Horse.self, Client.self, Transaction.self,
                 VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-                Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
+                Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
                 configurations: config
             )
             #if DEBUG
@@ -68,7 +68,7 @@ struct BarnHubApp: App {
                 let fallback = try ModelContainer(
                     for: Horse.self, Client.self, Transaction.self,
                     VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-                    Invoice.self, WeightEntry.self, ClientDocument.self, BarnNote.self, Lesson.self,
+                    Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
                     configurations: ModelConfiguration(isStoredInMemoryOnly: true)
                 )
                 return fallback
@@ -353,6 +353,9 @@ private extension View {
                 case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
                 case .healthTimeline(let id): HealthTimelineView(horseID: id)
                 case .weightChart(let id): WeightChartView(horseID: id)
+                case .documents(let id): HorseDocumentsView(horseID: id)
+                case .feedPlan(let id): HorseFeedPlanView(horseID: id)
+                case .editFeedEntry(let horseID, let entryID): FeedPlanEntryEditView(horseID: horseID, entryID: entryID)
                 }
             }
             .navigationDestination(for: ClientRoute.self) { route in
@@ -386,6 +389,8 @@ private extension View {
                 case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
                 case .lessons: LessonListView()
                 case .lessonEdit(let id): LessonEditView(lessonID: id)
+                case .feedProducts: FeedProductListView()
+                case .feedProductEdit(let id): FeedProductEditView(productID: id)
                 }
             }
             .navigationDestination(for: SubscriptionRoute.self) { route in
