@@ -140,9 +140,10 @@ struct ContractPDFService {
             "3. SERVICES: Boarding includes daily feeding (grain and hay), fresh water, stall cleaning, turnout as weather permits, and basic monitoring of the horse's health.",
             "4. VETERINARY CARE: The Barn Manager may authorize emergency veterinary care if the Owner cannot be reached. The Owner is responsible for all veterinary costs.",
             "5. FARRIER: The Owner is responsible for scheduling and paying for farrier services. The Barn Manager may schedule farrier visits if the horse's hooves are neglected.",
-            "6. INSURANCE: The Owner is strongly encouraged to maintain equine mortality and liability insurance. The Barn is not responsible for injury, illness, or death of the horse.",
-            "7. TERMINATION: Either party may terminate with 30 days written notice. All outstanding fees must be settled before the horse is removed from the premises.",
-            "8. GOVERNING LAW: This agreement is governed by the laws of the state in which the barn is located."
+            "6. DENTAL CARE: The Owner is responsible for scheduling and paying for equine dental services. The Barn Manager may schedule dentist visits if dental care appears overdue.",
+            "7. INSURANCE: The Owner is strongly encouraged to maintain equine mortality and liability insurance. The Barn is not responsible for injury, illness, or death of the horse.",
+            "8. TERMINATION: Either party may terminate with 30 days written notice. All outstanding fees must be settled before the horse is removed from the premises.",
+            "9. GOVERNING LAW: This agreement is governed by the laws of the state in which the barn is located."
         ]
         return drawTermsList(context: context, terms: terms, y: y, margin: margin, contentWidth: contentWidth, pageHeight: pageHeight)
     }
@@ -167,10 +168,11 @@ struct ContractPDFService {
             "2. TURNOUT: \(horseName) shall have daily turnout as weather and conditions permit. The Barn Manager will use best judgment regarding turnout during inclement weather.",
             "3. VETERINARY CARE: Routine veterinary care (vaccinations, dental, deworming) is the Owner's responsibility to schedule. The Barn Manager will provide access and assist as needed.",
             "4. FARRIER: Regular farrier visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if hoof care appears overdue.",
-            "5. MEDICATIONS: Any medications must be provided by the Owner with written instructions. The Barn Manager will administer as directed and log all medications given.",
-            "6. EXERCISE: Unless otherwise arranged, the Owner is responsible for the horse's exercise program. The Barn Manager provides basic daily monitoring only.",
-            "7. EMERGENCY PROCEDURES: In case of injury or illness, the Barn Manager will contact the Owner immediately. If the Owner cannot be reached, the emergency contact will be notified and emergency veterinary care may be authorized.",
-            "8. SPECIAL INSTRUCTIONS: Any special care requirements (supplements, blanketing, restricted turnout, etc.) must be provided in writing and updated as needed."
+            "5. DENTAL: Regular equine dental visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if dental care appears overdue.",
+            "6. MEDICATIONS: Any medications must be provided by the Owner with written instructions. The Barn Manager will administer as directed and log all medications given.",
+            "7. EXERCISE: Unless otherwise arranged, the Owner is responsible for the horse's exercise program. The Barn Manager provides basic daily monitoring only.",
+            "8. EMERGENCY PROCEDURES: In case of injury or illness, the Barn Manager will contact the Owner immediately. If the Owner cannot be reached, the emergency contact will be notified and emergency veterinary care may be authorized.",
+            "9. SPECIAL INSTRUCTIONS: Any special care requirements (supplements, blanketing, restricted turnout, etc.) must be provided in writing and updated as needed."
         ]
         return drawTermsList(context: context, terms: terms, y: y, margin: margin, contentWidth: contentWidth, pageHeight: pageHeight)
     }

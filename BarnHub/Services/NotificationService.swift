@@ -87,6 +87,23 @@ final class NotificationService {
         scheduleAtDate(nextDue, identifier: farrierVisitID(visit), content: content)
     }
 
+    // MARK: - Dentist Visit Notifications
+
+    func scheduleDentistVisit(_ visit: DentistVisit) {
+        guard let nextDue = visit.nextDueDate else {
+            cancelNotification(identifier: dentistVisitID(visit))
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Dentist Visit Due"
+        content.body = "\(visit.horse?.name ?? "Horse") — \(visit.dentistName)"
+        content.sound = .default
+        content.userInfo = ["type": "dentistVisit", "deepLink": "barnhub://schedule"]
+
+        scheduleAtDate(nextDue, identifier: dentistVisitID(visit), content: content)
+    }
+
     // MARK: - Bulk Scheduling
 
     func scheduleAllPending(context: ModelContext) {
@@ -96,6 +113,7 @@ final class NotificationService {
             let reminders = try context.fetch(FetchDescriptor<Reminder>())
             let vetRecords = try context.fetch(FetchDescriptor<VetRecord>())
             let farrierVisits = try context.fetch(FetchDescriptor<FarrierVisit>())
+            let dentistVisits = try context.fetch(FetchDescriptor<DentistVisit>())
 
             for reminder in reminders where !reminder.isCompleted {
                 scheduleReminder(reminder)
@@ -106,9 +124,12 @@ final class NotificationService {
             for visit in farrierVisits where visit.nextDueDate != nil {
                 scheduleFarrierVisit(visit)
             }
+            for visit in dentistVisits where visit.nextDueDate != nil {
+                scheduleDentistVisit(visit)
+            }
 
             lastScheduledDate = .now
-            BarnHubLogger.info("Scheduled notifications reminders=\(reminders.filter { !$0.isCompleted }.count) vet=\(vetRecords.filter { $0.nextDueDate != nil }.count) farrier=\(farrierVisits.filter { $0.nextDueDate != nil }.count)")
+            BarnHubLogger.info("Scheduled notifications reminders=\(reminders.filter { !$0.isCompleted }.count) vet=\(vetRecords.filter { $0.nextDueDate != nil }.count) farrier=\(farrierVisits.filter { $0.nextDueDate != nil }.count) dentist=\(dentistVisits.filter { $0.nextDueDate != nil }.count)")
         } catch {
             BarnHubLogger.error("scheduleAllPending fetch failed: \(error.localizedDescription) — will retry next launch")
         }
@@ -179,5 +200,9 @@ final class NotificationService {
 
     private func farrierVisitID(_ visit: FarrierVisit) -> String {
         "farrier-\(visit.persistentModelID)"
+    }
+
+    private func dentistVisitID(_ visit: DentistVisit) -> String {
+        "dentist-\(visit.persistentModelID)"
     }
 }

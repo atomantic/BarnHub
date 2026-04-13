@@ -23,6 +23,10 @@ struct HorseDetailView: View {
         (horse?.farrierVisits ?? []).sorted { $0.date > $1.date }
     }
 
+    private var sortedDentistVisits: [DentistVisit] {
+        (horse?.dentistVisits ?? []).sorted { $0.date > $1.date }
+    }
+
     private var sortedHorseClients: [Client] {
         (horse?.clients ?? []).sorted { $0.fullName < $1.fullName }
     }
@@ -43,7 +47,7 @@ struct HorseDetailView: View {
             ConfirmationDialog(
                 isPresented: $showDeleteConfirmation,
                 title: "Delete Horse",
-                message: "Are you sure you want to delete this horse? All associated vet records and farrier visits will also be removed.",
+                message: "Are you sure you want to delete this horse? All associated vet records, farrier visits, and dentist visits will also be removed.",
                 confirmTitle: "Delete",
                 confirmRole: .destructive,
                 onConfirm: deleteHorse
@@ -239,6 +243,51 @@ struct HorseDetailView: View {
         }
     }
 
+    private func dentistSection() -> some View {
+        Section {
+            if sortedDentistVisits.isEmpty {
+                Text("No dentist visits")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(sortedDentistVisits, id: \.persistentModelID) { visit in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(visit.date.shortFormatted)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            Spacer()
+                            Text(visit.cost.asCurrency)
+                                .font(.subheadline)
+                        }
+                        Text(visit.dentistName)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        if !visit.serviceDescription.isEmpty {
+                            Text(visit.serviceDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        if let nextDue = visit.nextDueDate {
+                            Text("Next due: \(nextDue.shortFormatted)")
+                                .font(.caption2)
+                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+                        }
+                    }
+                }
+            }
+        } header: {
+            HStack {
+                Text("Dentist Visits")
+                Spacer()
+                Button {
+                    router.navigate(to: HorseRoute.addDentistVisit(horseID))
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+            }
+        }
+    }
+
     @ViewBuilder
     private func documentsSection() -> some View {
         if FeatureGate.canStoreDocuments(storeService.isPro) {
@@ -294,6 +343,7 @@ struct HorseDetailView: View {
             notesSection(horse)
             vetSection()
             farrierSection()
+            dentistSection()
             documentsSection()
             clientsSection()
         }
@@ -336,6 +386,7 @@ struct HorseDetailView: View {
                     Form {
                         vetSection()
                         farrierSection()
+                        dentistSection()
                         documentsSection()
                         clientsSection()
                     }

@@ -46,6 +46,7 @@
 		3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		35B59EFCC0E73FCFD72E0F3E /* ClientDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC18AA0C1B44C3484703B2D /* ClientDocumentsView.swift */; };
 		3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
+		DENT00112233445566880005 /* DentistScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770005 /* DentistScheduleView.swift */; };
 		3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
 		3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2F746E98569B333351DB50 /* VetScheduleView.swift */; };
 		3CCE16FF2DC1E7E50B4756D2 /* SupplyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */; };
@@ -127,10 +128,12 @@
 		99812033B8BD7CDC0C7E876A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
 		9A6434B509C0867A7EAC6838 /* InvoicePDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */; };
 		9B15571082406ABE2413DA7F /* FarrierVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */; };
+		DENT00112233445566880001 /* DentistVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770001 /* DentistVisit.swift */; };
 		A1B2C3D4E5F60718293A4B5C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */; };
 		A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0003 /* FeatureGate.swift */; };
 		A3C9E32AAFF9260347DF7145 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
 		A40828345969CDFE498D7AF7 /* FarrierScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3762210D653233401BC7D64 /* FarrierScheduleView.swift */; };
+		DENT00112233445566880006 /* DentistScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770005 /* DentistScheduleView.swift */; };
 		A4D6CA97868E5513D7320EBE /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
 		A767DF6FDA03BB02F275316E /* Color+Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98791B230125578C3586BE55 /* Color+Brand.swift */; };
 		A90DBB40ABF1B1171A28B9CB /* HealthTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */; };
@@ -153,6 +156,7 @@
 		AADD112233445566LESS0006 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
 		AADD112233445566LESS0008 /* ClientPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0007 /* ClientPickerSection.swift */; };
 		AC93C1CF8FA3FC442D24B20F /* FarrierVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */; };
+		DENT00112233445566880002 /* DentistVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770001 /* DentistVisit.swift */; };
 		AD36F0C70EAB02DA9E20A7AD /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
 		B05821F5FB68C8E2C29600F4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
 		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
@@ -200,6 +204,7 @@
 		D2F743ADA258BD6436964D4F /* HorseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38356F6D87FBDFB2290568 /* HorseEditView.swift */; };
 		D4E8F2A6B3C7091524836D1E /* MailComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B3C9D1E5F2081634729A5B /* MailComposer.swift */; };
 		D66E57E90845459502336829 /* FarrierVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B61197773820D4015D429 /* FarrierVisitEditView.swift */; };
+		DENT00112233445566880003 /* DentistVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770003 /* DentistVisitEditView.swift */; };
 		D8294AE0F6DE17514A128ECF /* VetRecordEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4059FB68D68631292465BD /* VetRecordEditView.swift */; };
 		D951958762A712FCFA5B1646 /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9626486725CB190EBD898F44 /* DeepLinkHandler.swift */; };
 		DAEBFA20B41C7ED9CC192419 /* ModelContext+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */; };
@@ -222,6 +227,7 @@
 		EC84F06E9DEE752F44F00ED4 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11204D4698E5472A9F981077 /* Invoice.swift */; };
 		ED86C4CE2758404CE8F28BB1 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98B1AD6F6380A991933EEB /* EmptyStateView.swift */; };
 		EE76F23F713FF9E6D56BAFF2 /* FarrierVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B61197773820D4015D429 /* FarrierVisitEditView.swift */; };
+		DENT00112233445566880004 /* DentistVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770003 /* DentistVisitEditView.swift */; };
 		EF3E795ACB2AA94E4B1E06EE /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9960085725FD7B2D959B29 /* Transaction.swift */; };
 		EF64D5B5EDE7FB95341045B0 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0007 /* ProBadgeView.swift */; };
 		F1A2B3C4D5E6F78901234567 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
@@ -269,6 +275,7 @@
 		9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseFeedPlanView.swift; sourceTree = "<group>"; };
 		B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDocumentsView.swift; sourceTree = "<group>"; };
 		04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisit.swift; sourceTree = "<group>"; };
+		DENT00112233445566770001 /* DentistVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistVisit.swift; sourceTree = "<group>"; };
 		08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyListView.swift; sourceTree = "<group>"; };
 		09E279531F6A34C8031FA01E /* SupplyEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyEditView.swift; sourceTree = "<group>"; };
 		0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountingDashboardView.swift; sourceTree = "<group>"; };
@@ -280,6 +287,7 @@
 		1E512067702B1DE5393F4838 /* BarnHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubUITests.swift; sourceTree = "<group>"; };
 		1F0B2139601FAF7FAE12C875 /* HorseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseListView.swift; sourceTree = "<group>"; };
 		201B61197773820D4015D429 /* FarrierVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisitEditView.swift; sourceTree = "<group>"; };
+		DENT00112233445566770003 /* DentistVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistVisitEditView.swift; sourceTree = "<group>"; };
 		23D455C23A05576DE66AA068 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		24651A9A1646C3DE9212B3E8 /* View+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "View+PlatformCompat.swift"; sourceTree = "<group>"; };
 		24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "View+PlatformCompat.swift"; sourceTree = "<group>"; };
@@ -383,6 +391,7 @@
 		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRecordRow.swift; sourceTree = "<group>"; };
 		ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubApp.swift; sourceTree = "<group>"; };
 		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierScheduleView.swift; sourceTree = "<group>"; };
+		DENT00112233445566770005 /* DentistScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistScheduleView.swift; sourceTree = "<group>"; };
 		F607182930415263C4D5E6F7 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceGeneratorView.swift; sourceTree = "<group>"; };
 		F7850193B3E5ED0B66616F80 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -451,6 +460,7 @@
 			isa = PBXGroup;
 			children = (
 				201B61197773820D4015D429 /* FarrierVisitEditView.swift */,
+				DENT00112233445566770003 /* DentistVisitEditView.swift */,
 				0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */,
 				EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */,
 				9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */,
@@ -623,6 +633,7 @@
 				9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */,
 				2B633B5D058042761A458610 /* HorseDocument.swift */,
 				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
+				DENT00112233445566770001 /* DentistVisit.swift */,
 				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
 				35D07C62E43221D107F38191 /* FeedPlanEntry.swift */,
 				C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */,
@@ -710,6 +721,7 @@
 				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
 				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
 				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
+				DENT00112233445566770005 /* DentistScheduleView.swift */,
 				AADD112233445566LESS0005 /* LessonEditView.swift */,
 				AADD112233445566LESS0003 /* LessonListView.swift */,
 				93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */,
@@ -914,6 +926,7 @@
 				230B47D38D9F1F3B3B713D53 /* Client.swift in Sources */,
 				597B32CFF412D041C08C9702 /* Enums.swift in Sources */,
 				AC93C1CF8FA3FC442D24B20F /* FarrierVisit.swift in Sources */,
+				DENT00112233445566880002 /* DentistVisit.swift in Sources */,
 				7DD024A4E65E65BDF936111E /* Horse.swift in Sources */,
 				2CCCA7647794340CD2721473 /* FeedPlanEntry.swift in Sources */,
 				18EF50A28941205C01A9BCA5 /* FeedProduct.swift in Sources */,
@@ -954,12 +967,14 @@
 				6952CF8A2A79E00014E2C253 /* FeedProductEditView.swift in Sources */,
 				75B4FD3AA0BBBAD3386E4852 /* FeedProductListView.swift in Sources */,
 				A40828345969CDFE498D7AF7 /* FarrierScheduleView.swift in Sources */,
+				DENT00112233445566880006 /* DentistScheduleView.swift in Sources */,
 				7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */,
 				BA710B4811F5A0A34BF7D9C2 /* ReminderListView.swift in Sources */,
 				6614D4075F2C8BDF01097D13 /* SupplyEditView.swift in Sources */,
 				3CCE16FF2DC1E7E50B4756D2 /* SupplyListView.swift in Sources */,
 				CE727A00BDE9FA34DE9B187A /* VetScheduleView.swift in Sources */,
 				D66E57E90845459502336829 /* FarrierVisitEditView.swift in Sources */,
+				DENT00112233445566880003 /* DentistVisitEditView.swift in Sources */,
 				15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */,
 				15214452A2CA86E767CE264E /* FeedPlanEntryEditView.swift in Sources */,
 				800C84D6A8944EB5439F40EE /* HorseFeedPlanView.swift in Sources */,
@@ -1031,6 +1046,7 @@
 				CED0821BA15119005FF8CE2F /* Client.swift in Sources */,
 				0B326F92553B0A8255FB605C /* Enums.swift in Sources */,
 				9B15571082406ABE2413DA7F /* FarrierVisit.swift in Sources */,
+				DENT00112233445566880001 /* DentistVisit.swift in Sources */,
 				B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */,
 				A9BD98DB23C4FAD1C2FE2E94 /* FeedPlanEntry.swift in Sources */,
 				170B306BFCE3A42B5FAD40DF /* FeedProduct.swift in Sources */,
@@ -1071,12 +1087,14 @@
 				6249DA55F386C1970B32D8F0 /* FeedProductEditView.swift in Sources */,
 				3B1B89FFCB948F720C08AA89 /* FeedProductListView.swift in Sources */,
 				3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */,
+				DENT00112233445566880005 /* DentistScheduleView.swift in Sources */,
 				98705821AA69B804420F1126 /* ReminderEditView.swift in Sources */,
 				FA0ABB71EB312493CBBF9410 /* ReminderListView.swift in Sources */,
 				4F8AE239B5CE084622838C5D /* SupplyEditView.swift in Sources */,
 				0F02EE5F9B13BE4924497DDF /* SupplyListView.swift in Sources */,
 				3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */,
 				EE76F23F713FF9E6D56BAFF2 /* FarrierVisitEditView.swift in Sources */,
+				DENT00112233445566880004 /* DentistVisitEditView.swift in Sources */,
 				C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */,
 				871B87C01145F41586F0E278 /* FeedPlanEntryEditView.swift in Sources */,
 				68B0D221F5AABAC61C199688 /* HorseFeedPlanView.swift in Sources */,

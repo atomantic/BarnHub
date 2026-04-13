@@ -5,17 +5,20 @@ final class TimelineEventTests: XCTestCase {
     func testTimelineEventTypeProperties() {
         XCTAssertEqual(TimelineEventType.vet.label, "Vet")
         XCTAssertEqual(TimelineEventType.farrier.label, "Farrier")
+        XCTAssertEqual(TimelineEventType.dentist.label, "Dentist")
         XCTAssertEqual(TimelineEventType.weight.label, "Weight")
 
         XCTAssertEqual(TimelineEventType.vet.icon, "cross.case.fill")
         XCTAssertEqual(TimelineEventType.farrier.icon, "hammer.fill")
+        XCTAssertEqual(TimelineEventType.dentist.icon, "mouth.fill")
         XCTAssertEqual(TimelineEventType.weight.icon, "scalemass.fill")
     }
 
     func testAllCasesIncludesAll() {
-        XCTAssertEqual(TimelineEventType.allCases.count, 3)
+        XCTAssertEqual(TimelineEventType.allCases.count, 4)
         XCTAssertTrue(TimelineEventType.allCases.contains(.vet))
         XCTAssertTrue(TimelineEventType.allCases.contains(.farrier))
+        XCTAssertTrue(TimelineEventType.allCases.contains(.dentist))
         XCTAssertTrue(TimelineEventType.allCases.contains(.weight))
     }
 

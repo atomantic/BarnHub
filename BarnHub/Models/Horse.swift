@@ -33,6 +33,9 @@ final class Horse {
     var farrierVisits: [FarrierVisit]? = nil
 
     @Relationship(deleteRule: .cascade)
+    var dentistVisits: [DentistVisit]? = nil
+
+    @Relationship(deleteRule: .cascade)
     var reminders: [Reminder]? = nil
 
     @Relationship(deleteRule: .cascade)

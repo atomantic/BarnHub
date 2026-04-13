@@ -11,7 +11,7 @@ struct PreviewSampleData {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(
             for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
+            VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
             Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
             configurations: config
         )
@@ -47,6 +47,9 @@ struct PreviewSampleData {
 
         let farrierVisits = createFarrierVisits(horses: horses)
         farrierVisits.forEach { context.insert($0) }
+
+        let dentistVisits = createDentistVisits(horses: horses)
+        dentistVisits.forEach { context.insert($0) }
 
         let supplies = createSupplyItems()
         supplies.forEach { context.insert($0) }
@@ -348,6 +351,33 @@ struct PreviewSampleData {
         )
         barefoot.horse = horses.count > 1 ? horses[1] : nil
         visits.append(barefoot)
+
+        return visits
+    }
+
+    static func createDentistVisits(horses: [Horse]) -> [DentistVisit] {
+        let calendar = Calendar.current
+        var visits: [DentistVisit] = []
+
+        let floatVisit = DentistVisit(
+            date: calendar.date(byAdding: .month, value: -3, to: .now) ?? .now,
+            dentistName: "Dr. Lisa Morgan",
+            serviceDescription: "Routine dental float",
+            cost: 200.00,
+            nextDueDate: dayOffset(5, hour: 10)
+        )
+        floatVisit.horse = horses.first
+        visits.append(floatVisit)
+
+        let wolfTeeth = DentistVisit(
+            date: calendar.date(byAdding: .month, value: -6, to: .now) ?? .now,
+            dentistName: "Dr. Lisa Morgan",
+            serviceDescription: "Wolf teeth extraction",
+            cost: 350.00,
+            nextDueDate: dayOffset(30, hour: 9)
+        )
+        wolfTeeth.horse = horses.count > 2 ? horses[2] : nil
+        visits.append(wolfTeeth)
 
         return visits
     }
