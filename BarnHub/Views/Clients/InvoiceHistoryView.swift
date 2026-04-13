@@ -18,7 +18,7 @@ struct InvoiceHistoryView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if invoices.isEmpty {
                 EmptyStateView(
                     icon: "doc.text",
@@ -26,6 +26,7 @@ struct InvoiceHistoryView: View {
                     subtitle: "Generate an invoice from the client detail page."
                 )
             } else {
+                List {
                 ForEach(invoices, id: \.persistentModelID) { invoice in
                     Button {
                         reshareInvoice(invoice)
@@ -50,6 +51,7 @@ struct InvoiceHistoryView: View {
                     .buttonStyle(.plain)
                 }
                 .onDelete(perform: deleteInvoices)
+                }
             }
         }
         .navigationTitle("Invoice History")

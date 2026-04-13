@@ -27,7 +27,7 @@ struct HorseFeedPlanView: View {
     }
 
     var body: some View {
-        List {
+        Group {
             if entries.isEmpty {
                 EmptyStateView(
                     icon: "fork.knife",
@@ -35,33 +35,35 @@ struct HorseFeedPlanView: View {
                     subtitle: "Tap + to add feed items to this horse's daily plan."
                 )
             } else {
-                ForEach(FeedTime.allCases) { time in
-                    let timeEntries = entriesFor(time)
-                    if !timeEntries.isEmpty {
-                        Section {
-                            ForEach(timeEntries, id: \.persistentModelID) { entry in
-                                feedEntryRow(entry)
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                        Button("Delete", role: .destructive) {
-                                            entryToDelete = entry
-                                            showDeleteConfirmation = true
+                List {
+                    ForEach(FeedTime.allCases) { time in
+                        let timeEntries = entriesFor(time)
+                        if !timeEntries.isEmpty {
+                            Section {
+                                ForEach(timeEntries, id: \.persistentModelID) { entry in
+                                    feedEntryRow(entry)
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                            Button("Delete", role: .destructive) {
+                                                entryToDelete = entry
+                                                showDeleteConfirmation = true
+                                            }
+                                            Button("Edit") {
+                                                router.navigate(to: HorseRoute.editFeedEntry(horseID, entry.persistentModelID))
+                                            }
+                                            .tint(.barnGreen)
                                         }
-                                        Button("Edit") {
-                                            router.navigate(to: HorseRoute.editFeedEntry(horseID, entry.persistentModelID))
-                                        }
-                                        .tint(.barnGreen)
-                                    }
+                                }
+                            } header: {
+                                Label(time.displayName, systemImage: time.icon)
                             }
-                        } header: {
-                            Label(time.displayName, systemImage: time.icon)
                         }
                     }
-                }
 
-                if !legacyNotes.isEmpty {
-                    Section("Notes") {
-                        Text(legacyNotes)
-                            .foregroundStyle(.secondary)
+                    if !legacyNotes.isEmpty {
+                        Section("Notes") {
+                            Text(legacyNotes)
+                                .foregroundStyle(.secondary)
+                            }
                     }
                 }
             }

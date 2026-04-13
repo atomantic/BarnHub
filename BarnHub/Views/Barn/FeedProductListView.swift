@@ -12,7 +12,7 @@ struct FeedProductListView: View {
     @State private var toast = ToastState()
 
     var body: some View {
-        List {
+        Group {
             if products.isEmpty {
                 EmptyStateView(
                     icon: "leaf",
@@ -20,17 +20,19 @@ struct FeedProductListView: View {
                     subtitle: "Tap + to add grain, hay, supplements, and other feed products."
                 )
             } else {
-                ForEach(products, id: \.persistentModelID) { product in
-                    Button {
-                        router.navigate(to: BarnRoute.feedProductEdit(product.persistentModelID))
-                    } label: {
-                        productRow(product)
-                    }
-                    .tint(.primary)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", role: .destructive) {
-                            productToDelete = product
-                            showDeleteConfirmation = true
+                List {
+                    ForEach(products, id: \.persistentModelID) { product in
+                        Button {
+                            router.navigate(to: BarnRoute.feedProductEdit(product.persistentModelID))
+                        } label: {
+                            productRow(product)
+                        }
+                        .tint(.primary)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button("Delete", role: .destructive) {
+                                productToDelete = product
+                                showDeleteConfirmation = true
+                            }
                         }
                     }
                 }

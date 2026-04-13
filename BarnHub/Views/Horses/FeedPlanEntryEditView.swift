@@ -6,6 +6,7 @@ struct FeedPlanEntryEditView: View {
     let entryID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(Router.self) private var router
 
     @Query(sort: \FeedProduct.name) private var products: [FeedProduct]
 
@@ -22,24 +23,48 @@ struct FeedPlanEntryEditView: View {
     private var horse: Horse? { modelContext.model(for: horseID) as? Horse }
 
     var body: some View {
+        Group {
+            if products.isEmpty && isNew {
+                EmptyStateView(
+                    icon: "leaf.fill",
+                    title: "No Feed Products",
+                    subtitle: "Tap + to add grain, hay, supplements, and other feed products."
+                )
+            } else {
+                formContent
+            }
+        }
+        .navigationTitle(isNew ? "Add Feed Item" : "Edit Feed Item")
+        .inlineNavTitle()
+        .toolbar {
+            if products.isEmpty && isNew {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        router.navigate(to: BarnRoute.feedProductEdit(nil), tab: .schedule)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+        }
+        .toast(toast)
+        .task { loadExisting() }
+    }
+
+    private var formContent: some View {
         Form {
             Section("Feed Product") {
-                if products.isEmpty {
-                    Text("No feed products yet. Add one from the barn menu first.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    Picker("Product", selection: $selectedProduct) {
-                        Text("Select a product").tag(nil as FeedProduct?)
-                        ForEach(products, id: \.persistentModelID) { product in
-                            HStack {
-                                Text(product.name)
-                                if !product.brand.isEmpty {
-                                    Text("(\(product.brand))")
-                                        .foregroundStyle(.secondary)
-                                }
+                Picker("Product", selection: $selectedProduct) {
+                    Text("Select a product").tag(nil as FeedProduct?)
+                    ForEach(products, id: \.persistentModelID) { product in
+                        HStack {
+                            Text(product.name)
+                            if !product.brand.isEmpty {
+                                Text("(\(product.brand))")
+                                    .foregroundStyle(.secondary)
                             }
-                            .tag(product as FeedProduct?)
                         }
+                        .tag(product as FeedProduct?)
                     }
                 }
             }
@@ -82,10 +107,6 @@ struct FeedPlanEntryEditView: View {
                 .disabled(selectedProduct == nil)
             }
         }
-        .navigationTitle(isNew ? "Add Feed Item" : "Edit Feed Item")
-        .inlineNavTitle()
-        .toast(toast)
-        .task { loadExisting() }
     }
 
     private func loadExisting() {

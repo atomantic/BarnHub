@@ -18,7 +18,7 @@ struct ScheduleListView<Record: Identifiable>: View {
     let addLabel: LocalizedStringKey
 
     var body: some View {
-        List {
+        Group {
             if records.isEmpty {
                 EmptyStateView(
                     icon: emptyIcon,
@@ -26,19 +26,21 @@ struct ScheduleListView<Record: Identifiable>: View {
                     subtitle: emptySubtitle
                 )
             } else {
-                ForEach(records) { record in
-                    Button {
-                        guard let id = horseID(record) else { return }
-                        router.navigate(to: HorseRoute.detail(id))
-                    } label: {
-                        ScheduleRecordRow(
-                            horseName: horseName(record),
-                            providerName: providerName(record),
-                            description: description(record),
-                            nextDueDate: nextDueDate(record)
-                        )
+                List {
+                    ForEach(records) { record in
+                        Button {
+                            guard let id = horseID(record) else { return }
+                            router.navigate(to: HorseRoute.detail(id))
+                        } label: {
+                            ScheduleRecordRow(
+                                horseName: horseName(record),
+                                providerName: providerName(record),
+                                description: description(record),
+                                nextDueDate: nextDueDate(record)
+                            )
+                        }
+                        .tint(.primary)
                     }
-                    .tint(.primary)
                 }
             }
         }
