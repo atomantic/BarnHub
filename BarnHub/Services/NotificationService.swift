@@ -34,7 +34,7 @@ final class NotificationService {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = "Reminder"
+        content.title = appLocalized("Reminder", comment: "Notification title for a reminder")
         content.body = reminder.title
         if let horse = reminder.horse {
             content.body += " — \(horse.name)"
@@ -62,8 +62,8 @@ final class NotificationService {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = "Vet Appointment Due"
-        content.body = "\(record.horse?.name ?? "Horse") — \(record.vetName)"
+        content.title = appLocalized("Vet Appointment Due", comment: "Notification title for vet appointment")
+        content.body = "\(record.horse?.name ?? appLocalized("Horse", comment: "Fallback name for horse in notification")) — \(record.vetName)"
         content.sound = .default
         content.userInfo = ["type": "vetRecord", "deepLink": "barnhub://schedule"]
 
@@ -79,8 +79,8 @@ final class NotificationService {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = "Farrier Visit Due"
-        content.body = "\(visit.horse?.name ?? "Horse") — \(visit.farrierName)"
+        content.title = appLocalized("Farrier Visit Due", comment: "Notification title for farrier visit")
+        content.body = "\(visit.horse?.name ?? appLocalized("Horse", comment: "Fallback name for horse in notification")) — \(visit.farrierName)"
         content.sound = .default
         content.userInfo = ["type": "farrierVisit", "deepLink": "barnhub://schedule"]
 
@@ -96,8 +96,8 @@ final class NotificationService {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = "Dentist Visit Due"
-        content.body = "\(visit.horse?.name ?? "Horse") — \(visit.dentistName)"
+        content.title = appLocalized("Dentist Visit Due", comment: "Notification title for dentist visit")
+        content.body = "\(visit.horse?.name ?? appLocalized("Horse", comment: "Fallback name for horse in notification")) — \(visit.dentistName)"
         content.sound = .default
         content.userInfo = ["type": "dentistVisit", "deepLink": "barnhub://schedule"]
 
@@ -142,16 +142,19 @@ final class NotificationService {
         guard overdueCount > 0 || todayCount > 0 else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "Good Morning from BarnHub"
+        content.title = appLocalized("Good Morning from BarnHub", comment: "Morning summary notification title")
 
         var parts: [String] = []
         if overdueCount > 0 {
-            parts.append("\(overdueCount) overdue")
+            parts.append("\(overdueCount) \(appLocalized("overdue", comment: "Morning summary: overdue task count"))")
         }
         if todayCount > 0 {
-            parts.append("\(todayCount) due today")
+            parts.append("\(todayCount) \(appLocalized("due today", comment: "Morning summary: tasks due today count"))")
         }
-        content.body = "You have \(parts.joined(separator: " and ")) \(overdueCount + todayCount == 1 ? "task" : "tasks")."
+        let taskWord = overdueCount + todayCount == 1
+            ? appLocalized("task", comment: "Singular task in morning summary")
+            : appLocalized("tasks", comment: "Plural tasks in morning summary")
+        content.body = "\(appLocalized("You have", comment: "Morning summary prefix")) \(parts.joined(separator: " \(appLocalized("and", comment: "Conjunction in morning summary")) ")) \(taskWord)."
         content.sound = .default
         content.userInfo = ["type": "morning", "deepLink": "barnhub://home"]
 

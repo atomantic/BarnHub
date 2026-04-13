@@ -94,7 +94,7 @@ struct ContractPDFService {
             .font: UIFont.systemFont(ofSize: 10),
             .foregroundColor: UIColor.gray
         ]
-        ("Generated: \(Date.now.shortFormatted)" as NSString).draw(at: CGPoint(x: margin, y: y), withAttributes: dateAttrs)
+        ("\(appLocalized("Generated", comment: "PDF contract header label")): \(Date.now.shortFormatted)" as NSString).draw(at: CGPoint(x: margin, y: y), withAttributes: dateAttrs)
         y += 20
 
         drawLine(context: context.cgContext, y: y, margin: margin, width: contentWidth)
@@ -113,13 +113,14 @@ struct ContractPDFService {
             .foregroundColor: UIColor.darkGray
         ]
 
+        let na = appLocalized("N/A", comment: "Not available placeholder in contract PDF")
         let rows: [(String, String)] = [
-            ("Client:", clientName),
-            ("Phone:", clientPhone.isEmpty ? "N/A" : clientPhone),
-            ("Email:", clientEmail.isEmpty ? "N/A" : clientEmail),
-            ("Emergency Contact:", emergencyContact.isEmpty ? "N/A" : "\(emergencyContact) \(emergencyPhone)"),
-            ("Horse:", "\(horseName) (\(horseBreed.isEmpty ? "Breed not specified" : horseBreed))"),
-            ("Stall:", stallNumber.isEmpty ? "TBD" : stallNumber),
+            ("\(appLocalized("Client", comment: "Contract PDF label")):", clientName),
+            ("\(appLocalized("Phone", comment: "Contract PDF label")):", clientPhone.isEmpty ? na : clientPhone),
+            ("\(appLocalized("Email", comment: "Contract PDF label")):", clientEmail.isEmpty ? na : clientEmail),
+            ("\(appLocalized("Emergency Contact", comment: "Contract PDF label")):", emergencyContact.isEmpty ? na : "\(emergencyContact) \(emergencyPhone)"),
+            ("\(appLocalized("Horse", comment: "Contract PDF label")):", "\(horseName) (\(horseBreed.isEmpty ? appLocalized("Breed not specified", comment: "Fallback when horse breed is empty") : horseBreed))"),
+            ("\(appLocalized("Stall", comment: "Contract PDF label")):", stallNumber.isEmpty ? appLocalized("TBD", comment: "To be determined placeholder") : stallNumber),
         ]
 
         for (label, value) in rows {
@@ -135,44 +136,44 @@ struct ContractPDFService {
 
     private static func drawBoardingTerms(context: UIGraphicsPDFRendererContext, startDate: Date, monthlyRate: Double, y: CGFloat, margin: CGFloat, contentWidth: CGFloat, pageHeight: CGFloat) -> CGFloat {
         let terms = [
-            "1. TERM: This boarding agreement begins on \(startDate.shortFormatted) and continues on a month-to-month basis until terminated by either party with 30 days written notice.",
-            "2. BOARDING FEE: The monthly boarding fee is \(monthlyRate.asCurrency), due on the 1st of each month. Late payments are subject to a $25 late fee after the 10th.",
-            "3. SERVICES: Boarding includes daily feeding (grain and hay), fresh water, stall cleaning, turnout as weather permits, and basic monitoring of the horse's health.",
-            "4. VETERINARY CARE: The Barn Manager may authorize emergency veterinary care if the Owner cannot be reached. The Owner is responsible for all veterinary costs.",
-            "5. FARRIER: The Owner is responsible for scheduling and paying for farrier services. The Barn Manager may schedule farrier visits if the horse's hooves are neglected.",
-            "6. DENTAL CARE: The Owner is responsible for scheduling and paying for equine dental services. The Barn Manager may schedule dentist visits if dental care appears overdue.",
-            "7. INSURANCE: The Owner is strongly encouraged to maintain equine mortality and liability insurance. The Barn is not responsible for injury, illness, or death of the horse.",
-            "8. TERMINATION: Either party may terminate with 30 days written notice. All outstanding fees must be settled before the horse is removed from the premises.",
-            "9. GOVERNING LAW: This agreement is governed by the laws of the state in which the barn is located."
+            appLocalized("1. TERM: This boarding agreement begins on %@ and continues on a month-to-month basis until terminated by either party with 30 days written notice.", comment: "Boarding contract term 1").replacingOccurrences(of: "%@", with: startDate.shortFormatted),
+            appLocalized("2. BOARDING FEE: The monthly boarding fee is %@, due on the 1st of each month. Late payments are subject to a $25 late fee after the 10th.", comment: "Boarding contract term 2").replacingOccurrences(of: "%@", with: monthlyRate.asCurrency),
+            appLocalized("3. SERVICES: Boarding includes daily feeding (grain and hay), fresh water, stall cleaning, turnout as weather permits, and basic monitoring of the horse's health.", comment: "Boarding contract term 3"),
+            appLocalized("4. VETERINARY CARE: The Barn Manager may authorize emergency veterinary care if the Owner cannot be reached. The Owner is responsible for all veterinary costs.", comment: "Boarding contract term 4"),
+            appLocalized("5. FARRIER: The Owner is responsible for scheduling and paying for farrier services. The Barn Manager may schedule farrier visits if the horse's hooves are neglected.", comment: "Boarding contract term 5"),
+            appLocalized("6. DENTAL CARE: The Owner is responsible for scheduling and paying for equine dental services. The Barn Manager may schedule dentist visits if dental care appears overdue.", comment: "Boarding contract term 6"),
+            appLocalized("7. INSURANCE: The Owner is strongly encouraged to maintain equine mortality and liability insurance. The Barn is not responsible for injury, illness, or death of the horse.", comment: "Boarding contract term 7"),
+            appLocalized("8. TERMINATION: Either party may terminate with 30 days written notice. All outstanding fees must be settled before the horse is removed from the premises.", comment: "Boarding contract term 8"),
+            appLocalized("9. GOVERNING LAW: This agreement is governed by the laws of the state in which the barn is located.", comment: "Boarding contract term 9"),
         ]
         return drawTermsList(context: context, terms: terms, y: y, margin: margin, contentWidth: contentWidth, pageHeight: pageHeight)
     }
 
     private static func drawLiabilityTerms(context: UIGraphicsPDFRendererContext, y: CGFloat, margin: CGFloat, contentWidth: CGFloat, pageHeight: CGFloat) -> CGFloat {
         let terms = [
-            "1. ASSUMPTION OF RISK: The undersigned acknowledges that equine activities involve inherent risks including but not limited to: bodily injury, property damage, and death. These risks cannot be eliminated regardless of the care taken.",
-            "2. RELEASE: The undersigned hereby releases, waives, and discharges the Barn, its owners, employees, agents, and volunteers from any and all liability for injury, illness, death, or property damage arising from equine activities on the premises.",
-            "3. INDEMNIFICATION: The undersigned agrees to indemnify and hold harmless the Barn from any claims, suits, or actions arising from the undersigned's participation in equine activities.",
-            "4. EQUINE ACTIVITY LIABILITY: This release is governed by the applicable state's Equine Activity Liability Act, which provides that an equine activity sponsor is not liable for injuries resulting from the inherent risks of equine activities.",
-            "5. MEDICAL AUTHORIZATION: In case of emergency, the undersigned authorizes the Barn to arrange for emergency medical treatment. The undersigned is responsible for all medical costs.",
-            "6. PHOTO RELEASE: The undersigned grants permission for photographs taken during equine activities to be used for the Barn's promotional purposes.",
-            "7. SEVERABILITY: If any provision of this waiver is held invalid, the remaining provisions shall continue in full force and effect.",
-            "8. ACKNOWLEDGMENT: The undersigned has read this waiver, understands its terms, and signs it voluntarily."
+            appLocalized("1. ASSUMPTION OF RISK: The undersigned acknowledges that equine activities involve inherent risks including but not limited to: bodily injury, property damage, and death. These risks cannot be eliminated regardless of the care taken.", comment: "Liability waiver term 1"),
+            appLocalized("2. RELEASE: The undersigned hereby releases, waives, and discharges the Barn, its owners, employees, agents, and volunteers from any and all liability for injury, illness, death, or property damage arising from equine activities on the premises.", comment: "Liability waiver term 2"),
+            appLocalized("3. INDEMNIFICATION: The undersigned agrees to indemnify and hold harmless the Barn from any claims, suits, or actions arising from the undersigned's participation in equine activities.", comment: "Liability waiver term 3"),
+            appLocalized("4. EQUINE ACTIVITY LIABILITY: This release is governed by the applicable state's Equine Activity Liability Act, which provides that an equine activity sponsor is not liable for injuries resulting from the inherent risks of equine activities.", comment: "Liability waiver term 4"),
+            appLocalized("5. MEDICAL AUTHORIZATION: In case of emergency, the undersigned authorizes the Barn to arrange for emergency medical treatment. The undersigned is responsible for all medical costs.", comment: "Liability waiver term 5"),
+            appLocalized("6. PHOTO RELEASE: The undersigned grants permission for photographs taken during equine activities to be used for the Barn's promotional purposes.", comment: "Liability waiver term 6"),
+            appLocalized("7. SEVERABILITY: If any provision of this waiver is held invalid, the remaining provisions shall continue in full force and effect.", comment: "Liability waiver term 7"),
+            appLocalized("8. ACKNOWLEDGMENT: The undersigned has read this waiver, understands its terms, and signs it voluntarily.", comment: "Liability waiver term 8"),
         ]
         return drawTermsList(context: context, terms: terms, y: y, margin: margin, contentWidth: contentWidth, pageHeight: pageHeight)
     }
 
     private static func drawCareTerms(context: UIGraphicsPDFRendererContext, horseName: String, y: CGFloat, margin: CGFloat, contentWidth: CGFloat, pageHeight: CGFloat) -> CGFloat {
         let terms = [
-            "1. FEEDING: \(horseName) shall receive grain and hay according to the feeding schedule specified by the Owner. Any dietary changes must be approved by the Owner in writing.",
-            "2. TURNOUT: \(horseName) shall have daily turnout as weather and conditions permit. The Barn Manager will use best judgment regarding turnout during inclement weather.",
-            "3. VETERINARY CARE: Routine veterinary care (vaccinations, dental, deworming) is the Owner's responsibility to schedule. The Barn Manager will provide access and assist as needed.",
-            "4. FARRIER: Regular farrier visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if hoof care appears overdue.",
-            "5. DENTAL: Regular equine dental visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if dental care appears overdue.",
-            "6. MEDICATIONS: Any medications must be provided by the Owner with written instructions. The Barn Manager will administer as directed and log all medications given.",
-            "7. EXERCISE: Unless otherwise arranged, the Owner is responsible for the horse's exercise program. The Barn Manager provides basic daily monitoring only.",
-            "8. EMERGENCY PROCEDURES: In case of injury or illness, the Barn Manager will contact the Owner immediately. If the Owner cannot be reached, the emergency contact will be notified and emergency veterinary care may be authorized.",
-            "9. SPECIAL INSTRUCTIONS: Any special care requirements (supplements, blanketing, restricted turnout, etc.) must be provided in writing and updated as needed."
+            appLocalized("1. FEEDING: %@ shall receive grain and hay according to the feeding schedule specified by the Owner. Any dietary changes must be approved by the Owner in writing.", comment: "Care agreement term 1").replacingOccurrences(of: "%@", with: horseName),
+            appLocalized("2. TURNOUT: %@ shall have daily turnout as weather and conditions permit. The Barn Manager will use best judgment regarding turnout during inclement weather.", comment: "Care agreement term 2").replacingOccurrences(of: "%@", with: horseName),
+            appLocalized("3. VETERINARY CARE: Routine veterinary care (vaccinations, dental, deworming) is the Owner's responsibility to schedule. The Barn Manager will provide access and assist as needed.", comment: "Care agreement term 3"),
+            appLocalized("4. FARRIER: Regular farrier visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if hoof care appears overdue.", comment: "Care agreement term 4"),
+            appLocalized("5. DENTAL: Regular equine dental visits shall be maintained on a schedule agreed upon by the Owner. The Barn Manager will notify the Owner if dental care appears overdue.", comment: "Care agreement term 5"),
+            appLocalized("6. MEDICATIONS: Any medications must be provided by the Owner with written instructions. The Barn Manager will administer as directed and log all medications given.", comment: "Care agreement term 6"),
+            appLocalized("7. EXERCISE: Unless otherwise arranged, the Owner is responsible for the horse's exercise program. The Barn Manager provides basic daily monitoring only.", comment: "Care agreement term 7"),
+            appLocalized("8. EMERGENCY PROCEDURES: In case of injury or illness, the Barn Manager will contact the Owner immediately. If the Owner cannot be reached, the emergency contact will be notified and emergency veterinary care may be authorized.", comment: "Care agreement term 8"),
+            appLocalized("9. SPECIAL INSTRUCTIONS: Any special care requirements (supplements, blanketing, restricted turnout, etc.) must be provided in writing and updated as needed.", comment: "Care agreement term 9"),
         ]
         return drawTermsList(context: context, terms: terms, y: y, margin: margin, contentWidth: contentWidth, pageHeight: pageHeight)
     }
@@ -183,7 +184,7 @@ struct ContractPDFService {
             .font: UIFont.boldSystemFont(ofSize: 12),
             .foregroundColor: UIColor.black
         ]
-        ("Terms and Conditions" as NSString).draw(at: CGPoint(x: margin, y: y), withAttributes: sectionAttrs)
+        (appLocalized("Terms and Conditions", comment: "Contract PDF section header") as NSString).draw(at: CGPoint(x: margin, y: y), withAttributes: sectionAttrs)
         y += 22
 
         let termAttrs: [NSAttributedString.Key: Any] = [
@@ -229,17 +230,17 @@ struct ContractPDFService {
         ctx.move(to: CGPoint(x: margin, y: y + 30))
         ctx.addLine(to: CGPoint(x: margin + halfWidth, y: y + 30))
         ctx.strokePath()
-        ("Owner / Client: \(clientName)" as NSString).draw(at: CGPoint(x: margin, y: y + 34), withAttributes: labelAttrs)
+        ("\(appLocalized("Owner / Client", comment: "Contract PDF signature label")): \(clientName)" as NSString).draw(at: CGPoint(x: margin, y: y + 34), withAttributes: labelAttrs)
 
-        ("Date: _______________" as NSString).draw(at: CGPoint(x: margin, y: y + 54), withAttributes: labelAttrs)
+        ("\(appLocalized("Date", comment: "Contract PDF date label")): _______________" as NSString).draw(at: CGPoint(x: margin, y: y + 54), withAttributes: labelAttrs)
 
         // Barn Manager signature
         ctx.move(to: CGPoint(x: margin + halfWidth + 40, y: y + 30))
         ctx.addLine(to: CGPoint(x: margin + contentWidth, y: y + 30))
         ctx.strokePath()
-        ("Barn Manager" as NSString).draw(at: CGPoint(x: margin + halfWidth + 40, y: y + 34), withAttributes: labelAttrs)
+        (appLocalized("Barn Manager", comment: "Contract PDF signature label") as NSString).draw(at: CGPoint(x: margin + halfWidth + 40, y: y + 34), withAttributes: labelAttrs)
 
-        ("Date: _______________" as NSString).draw(at: CGPoint(x: margin + halfWidth + 40, y: y + 54), withAttributes: labelAttrs)
+        ("\(appLocalized("Date", comment: "Contract PDF date label")): _______________" as NSString).draw(at: CGPoint(x: margin + halfWidth + 40, y: y + 54), withAttributes: labelAttrs)
     }
 
     private static func drawLine(context: CGContext, y: CGFloat, margin: CGFloat, width: CGFloat) {

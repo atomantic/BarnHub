@@ -35,7 +35,7 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 24),
                 .foregroundColor: headerColor
             ]
-            let title = "BarnHub Invoice" as NSString
+            let title = appLocalized("BarnHub Invoice", comment: "Invoice PDF title") as NSString
             title.draw(at: CGPoint(x: margin, y: yOffset), withAttributes: titleAttrs)
             yOffset += 36
 
@@ -44,7 +44,7 @@ struct InvoicePDFService {
                 .font: UIFont.systemFont(ofSize: 12),
                 .foregroundColor: UIColor.darkGray
             ]
-            let info = "Client: \(clientName)\nPeriod: \(startDate.shortFormatted) – \(endDate.shortFormatted)\nGenerated: \(Date.now.shortFormatted)" as NSString
+            let info = "\(appLocalized("Client", comment: "Invoice PDF label")): \(clientName)\n\(appLocalized("Period", comment: "Invoice PDF label")): \(startDate.shortFormatted) – \(endDate.shortFormatted)\n\(appLocalized("Generated", comment: "Invoice PDF label")): \(Date.now.shortFormatted)" as NSString
             let infoRect = CGRect(x: margin, y: yOffset, width: contentWidth, height: 60)
             info.draw(in: infoRect, withAttributes: infoAttrs)
             yOffset += 70
@@ -58,10 +58,10 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 10),
                 .foregroundColor: UIColor.darkGray
             ]
-            ("Date" as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: headerAttrs)
-            ("Description" as NSString).draw(at: CGPoint(x: margin + 80, y: yOffset), withAttributes: headerAttrs)
-            ("Category" as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: headerAttrs)
-            ("Amount" as NSString).draw(at: CGPoint(x: margin + 450, y: yOffset), withAttributes: headerAttrs)
+            (appLocalized("Date", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: headerAttrs)
+            (appLocalized("Description", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 80, y: yOffset), withAttributes: headerAttrs)
+            (appLocalized("Category", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: headerAttrs)
+            (appLocalized("Amount", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 450, y: yOffset), withAttributes: headerAttrs)
             yOffset += 20
 
             drawLine(context: context.cgContext, y: yOffset, margin: margin, width: contentWidth)
@@ -102,7 +102,7 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 14),
                 .foregroundColor: UIColor.black
             ]
-            ("Total Due:" as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: totalAttrs)
+            (appLocalized("Total Due:", comment: "Invoice PDF total label") as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: totalAttrs)
             let totalStr = total.asCurrency as NSString
             let totalSize = totalStr.size(withAttributes: totalAttrs)
             totalStr.draw(at: CGPoint(x: margin + contentWidth - totalSize.width, y: yOffset), withAttributes: totalAttrs)
