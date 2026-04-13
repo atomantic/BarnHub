@@ -27,6 +27,9 @@
 		14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0001 /* StoreService.swift */; };
 		1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
+		15214452A2CA86E767CE264E /* FeedPlanEntryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */; };
+		800C84D6A8944EB5439F40EE /* HorseFeedPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */; };
+		EF42680B0902AE324FF04FBD /* HorseDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */; };
 		18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
 		F486DFDDF4594EE2BB0CDB49 /* Locale+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */; };
 		19744E0316C5D37A8B58644F /* ContractGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3B160418197643F8ED2A43 /* ContractGeneratorView.swift */; };
@@ -47,6 +50,7 @@
 		3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2F746E98569B333351DB50 /* VetScheduleView.swift */; };
 		3CCE16FF2DC1E7E50B4756D2 /* SupplyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */; };
 		3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
+		DAB0337F8B4EBAC58658FBCB /* HorseDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B633B5D058042761A458610 /* HorseDocument.swift */; };
 		3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
 		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
@@ -84,11 +88,14 @@
 		BBCC001122334455CLEO0001 /* cleo.png in Resources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455CLEO0000 /* cleo.png */; };
 		692A9AE37595F3DD59005684 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97DCBE13300D070AF058637A /* ToastView.swift */; };
 		69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
+		6952CF8A2A79E00014E2C253 /* FeedProductEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697DD7A05090DE80BFB8CA9 /* FeedProductEditView.swift */; };
+		75B4FD3AA0BBBAD3386E4852 /* FeedProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B31212244032FC2692B151A /* FeedProductListView.swift */; };
 		6BCEAFCD0BAFFF213E1D7B82 /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
 		6D9D1281FC23234FD21E8CB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC3340C45202B29152467289 /* Assets.xcassets */; };
 		6E4E6A10028C0E50D6BB0913 /* BarnHubProducts.storekit in Resources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB000D /* BarnHubProducts.storekit */; };
 		6F2082EDF8064FDEF27EE5BE /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2652CE0F629C99F95508DF5 /* Reminder.swift */; };
 		716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
+		BAF339757A773E0B89048E24 /* HorseDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B633B5D058042761A458610 /* HorseDocument.swift */; };
 		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
 		7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
 		77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
@@ -98,6 +105,8 @@
 		7B9F554D51AC55067789DD55 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
 		7DA874751B873AA29E9BE973 /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
 		7DD024A4E65E65BDF936111E /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
+		2CCCA7647794340CD2721473 /* FeedPlanEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D07C62E43221D107F38191 /* FeedPlanEntry.swift */; };
+		18EF50A28941205C01A9BCA5 /* FeedProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */; };
 		80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
 		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
@@ -149,6 +158,8 @@
 		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
 		B14FF81A91D05E1752D0D62F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B748DC85E941B06F934124AA /* ShareSheet.swift */; };
 		B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
+		A9BD98DB23C4FAD1C2FE2E94 /* FeedPlanEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D07C62E43221D107F38191 /* FeedPlanEntry.swift */; };
+		170B306BFCE3A42B5FAD40DF /* FeedProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */; };
 		B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
 		B5D01AEB5B1048CA46F63996 /* FeatureLockedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */; };
 		B70E0586CA22B751AE95AF59 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
@@ -162,10 +173,15 @@
 		BBCC001122334455DATA0004 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
 		BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
 		BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */; };
+		6249DA55F386C1970B32D8F0 /* FeedProductEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D697DD7A05090DE80BFB8CA9 /* FeedProductEditView.swift */; };
+		3B1B89FFCB948F720C08AA89 /* FeedProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B31212244032FC2692B151A /* FeedProductListView.swift */; };
 		BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */; };
 		C1069D979C46B814742EC22D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0269846B3293A3B59F5C78 /* Router.swift */; };
 		C11E2F2BC3971B7F17C19341 /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
 		C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
+		871B87C01145F41586F0E278 /* FeedPlanEntryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */; };
+		68B0D221F5AABAC61C199688 /* HorseFeedPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */; };
+		4D32FB1476BD4199E3B9C4CF /* HorseDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */; };
 		C17D7A8663679EB6A8CF2005 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
 		C18F89EBB9CC9DD5699FF806 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
 		C1F2B654B6643C4C364F5597 /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
@@ -249,6 +265,9 @@
 
 /* Begin PBXFileReference section */
 		0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDetailView.swift; sourceTree = "<group>"; };
+		EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlanEntryEditView.swift; sourceTree = "<group>"; };
+		9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseFeedPlanView.swift; sourceTree = "<group>"; };
+		B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDocumentsView.swift; sourceTree = "<group>"; };
 		04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisit.swift; sourceTree = "<group>"; };
 		08A43D72CE92845FAD1B2AB0 /* SupplyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyListView.swift; sourceTree = "<group>"; };
 		09E279531F6A34C8031FA01E /* SupplyEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyEditView.swift; sourceTree = "<group>"; };
@@ -270,6 +289,8 @@
 		39336BD3A0262B77EFBBEFA1 /* BarnHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarnHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B9960085725FD7B2D959B29 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnDashboardView.swift; sourceTree = "<group>"; };
+		D697DD7A05090DE80BFB8CA9 /* FeedProductEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProductEditView.swift; sourceTree = "<group>"; };
+		0B31212244032FC2692B151A /* FeedProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProductListView.swift; sourceTree = "<group>"; };
 		47E49121D576E6628ED2785E /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; };
 		4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
@@ -294,8 +315,11 @@
 		97DCBE13300D070AF058637A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		98791B230125578C3586BE55 /* Color+Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Brand.swift"; sourceTree = "<group>"; };
 		9B62EA806113EB26E9E1AE55 /* Horse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horse.swift; sourceTree = "<group>"; };
+		35D07C62E43221D107F38191 /* FeedPlanEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlanEntry.swift; sourceTree = "<group>"; };
+		C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProduct.swift; sourceTree = "<group>"; };
 		9EC91A420DFF31CCEA9FB261 /* Image+PlatformCompat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Image+PlatformCompat.swift"; sourceTree = "<group>"; };
 		9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDocument.swift; sourceTree = "<group>"; };
+		2B633B5D058042761A458610 /* HorseDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDocument.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorsePickerSection.swift; sourceTree = "<group>"; };
 		A1C67C37342285C253C4FB52 /* BarnHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BarnHub.entitlements; sourceTree = "<group>"; };
 		A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthTimelineView.swift; sourceTree = "<group>"; };
@@ -428,6 +452,9 @@
 			children = (
 				201B61197773820D4015D429 /* FarrierVisitEditView.swift */,
 				0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */,
+				EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */,
+				9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */,
+				B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */,
 				8C38356F6D87FBDFB2290568 /* HorseEditView.swift */,
 				1F0B2139601FAF7FAE12C875 /* HorseListView.swift */,
 				C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */,
@@ -594,8 +621,11 @@
 				C2F53930338F4A389921F640 /* WeightEntry.swift */,
 				11204D4698E5472A9F981077 /* Invoice.swift */,
 				9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */,
+				2B633B5D058042761A458610 /* HorseDocument.swift */,
 				04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */,
 				9B62EA806113EB26E9E1AE55 /* Horse.swift */,
+				35D07C62E43221D107F38191 /* FeedPlanEntry.swift */,
+				C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */,
 				D2652CE0F629C99F95508DF5 /* Reminder.swift */,
 				5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */,
 				AADD112233445566LESS0001 /* Lesson.swift */,
@@ -675,6 +705,8 @@
 			isa = PBXGroup;
 			children = (
 				4656BCC6E434A04B32EB946C /* BarnDashboardView.swift */,
+				D697DD7A05090DE80BFB8CA9 /* FeedProductEditView.swift */,
+				0B31212244032FC2692B151A /* FeedProductListView.swift */,
 				DD11223344556677BARN0005 /* BarnNoteEditView.swift */,
 				DD11223344556677BARN0003 /* BarnNoteListView.swift */,
 				F3762210D653233401BC7D64 /* FarrierScheduleView.swift */,
@@ -870,6 +902,7 @@
 				7DA874751B873AA29E9BE973 /* ContractPDFService.swift in Sources */,
 				EC84F06E9DEE752F44F00ED4 /* Invoice.swift in Sources */,
 				716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */,
+				DAB0337F8B4EBAC58658FBCB /* HorseDocument.swift in Sources */,
 				AD36F0C70EAB02DA9E20A7AD /* DataExportService.swift in Sources */,
 				0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */,
 				DCA9E258D8CD546FFEC8B9CE /* DataManagementView.swift in Sources */,
@@ -882,6 +915,8 @@
 				597B32CFF412D041C08C9702 /* Enums.swift in Sources */,
 				AC93C1CF8FA3FC442D24B20F /* FarrierVisit.swift in Sources */,
 				7DD024A4E65E65BDF936111E /* Horse.swift in Sources */,
+				2CCCA7647794340CD2721473 /* FeedPlanEntry.swift in Sources */,
+				18EF50A28941205C01A9BCA5 /* FeedProduct.swift in Sources */,
 				6F2082EDF8064FDEF27EE5BE /* Reminder.swift in Sources */,
 				8C4899F08B9237E107503E5A /* SupplyItem.swift in Sources */,
 				DF64EAA9B3F9B995F6FBC740 /* Transaction.swift in Sources */,
@@ -916,6 +951,8 @@
 				3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */,
 				1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */,
 				69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */,
+				6952CF8A2A79E00014E2C253 /* FeedProductEditView.swift in Sources */,
+				75B4FD3AA0BBBAD3386E4852 /* FeedProductListView.swift in Sources */,
 				A40828345969CDFE498D7AF7 /* FarrierScheduleView.swift in Sources */,
 				7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */,
 				BA710B4811F5A0A34BF7D9C2 /* ReminderListView.swift in Sources */,
@@ -924,6 +961,9 @@
 				CE727A00BDE9FA34DE9B187A /* VetScheduleView.swift in Sources */,
 				D66E57E90845459502336829 /* FarrierVisitEditView.swift in Sources */,
 				15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */,
+				15214452A2CA86E767CE264E /* FeedPlanEntryEditView.swift in Sources */,
+				800C84D6A8944EB5439F40EE /* HorseFeedPlanView.swift in Sources */,
+				EF42680B0902AE324FF04FBD /* HorseDocumentsView.swift in Sources */,
 				79CEBC2D5217C4F19E415478 /* HorseEditView.swift in Sources */,
 				5895B58A390D7DF70FD6B7D3 /* HorseListView.swift in Sources */,
 				A3C9E32AAFF9260347DF7145 /* HorseRowView.swift in Sources */,
@@ -979,6 +1019,7 @@
 				BEF7B8ECA2D1824569C0956F /* ContractPDFService.swift in Sources */,
 				03674AD350F1487688C795DF /* Invoice.swift in Sources */,
 				3EF9BDE104D044D19F6F01E8 /* ClientDocument.swift in Sources */,
+				BAF339757A773E0B89048E24 /* HorseDocument.swift in Sources */,
 				BBCC001122334455DATA0002 /* DataExportService.swift in Sources */,
 				BBCC001122334455DATA0004 /* DataImportService.swift in Sources */,
 				BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */,
@@ -991,6 +1032,8 @@
 				0B326F92553B0A8255FB605C /* Enums.swift in Sources */,
 				9B15571082406ABE2413DA7F /* FarrierVisit.swift in Sources */,
 				B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */,
+				A9BD98DB23C4FAD1C2FE2E94 /* FeedPlanEntry.swift in Sources */,
+				170B306BFCE3A42B5FAD40DF /* FeedProduct.swift in Sources */,
 				3178329AF5DF0E2532D684D4 /* Reminder.swift in Sources */,
 				6BCEAFCD0BAFFF213E1D7B82 /* SupplyItem.swift in Sources */,
 				EF3E795ACB2AA94E4B1E06EE /* Transaction.swift in Sources */,
@@ -1025,6 +1068,8 @@
 				SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,
 				BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */,
+				6249DA55F386C1970B32D8F0 /* FeedProductEditView.swift in Sources */,
+				3B1B89FFCB948F720C08AA89 /* FeedProductListView.swift in Sources */,
 				3765D3DA9DDAEA97631E4D6B /* FarrierScheduleView.swift in Sources */,
 				98705821AA69B804420F1126 /* ReminderEditView.swift in Sources */,
 				FA0ABB71EB312493CBBF9410 /* ReminderListView.swift in Sources */,
@@ -1033,6 +1078,9 @@
 				3C895B1BC62192073E796B8C /* VetScheduleView.swift in Sources */,
 				EE76F23F713FF9E6D56BAFF2 /* FarrierVisitEditView.swift in Sources */,
 				C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */,
+				871B87C01145F41586F0E278 /* FeedPlanEntryEditView.swift in Sources */,
+				68B0D221F5AABAC61C199688 /* HorseFeedPlanView.swift in Sources */,
+				4D32FB1476BD4199E3B9C4CF /* HorseDocumentsView.swift in Sources */,
 				D2F743ADA258BD6436964D4F /* HorseEditView.swift in Sources */,
 				80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */,
 				8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */,

@@ -6,6 +6,7 @@ struct HorseDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
+    @Environment(StoreService.self) private var storeService
 
     @State private var showDeleteConfirmation = false
     @State private var toast = ToastState()
@@ -71,6 +72,10 @@ struct HorseDetailView: View {
         }
     }
 
+    private var sortedFeedEntries: [FeedPlanEntry] {
+        (horse?.feedPlanEntries ?? []).sorted { $0.feedTime < $1.feedTime }
+    }
+
     private func quickLinksSection() -> some View {
         Section {
             NavigationLink(value: HorseRoute.healthTimeline(horseID)) {
@@ -81,12 +86,26 @@ struct HorseDetailView: View {
                 Label("Weight Trend", systemImage: "chart.line.uptrend.xyaxis")
                     .foregroundStyle(.barnGreen)
             }
+            NavigationLink(value: HorseRoute.feedPlan(horseID)) {
+                HStack {
+                    Label("Feed Plan", systemImage: "fork.knife")
+                        .foregroundStyle(.barnGreen)
+                    Spacer()
+                    let count = horse?.feedPlanEntries?.count ?? 0
+                    if count > 0 {
+                        Text("\(count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
         }
     }
 
     private func infoSection(_ horse: Horse) -> some View {
         Section("Info") {
             LabeledContent("Breed", value: horse.breed)
+            LabeledContent("Gender", value: horse.gender.displayName)
             LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)
             LabeledContent("Color/Markings", value: horse.colorMarkings)
             LabeledContent("Weight", value: horse.weight > 0 ? "\(Int(horse.weight)) lbs" : "--")
@@ -105,7 +124,25 @@ struct HorseDetailView: View {
                 Text(horse.medicalNotes)
             }
         }
-        if !horse.feedingSchedule.isEmpty {
+        if !sortedFeedEntries.isEmpty {
+            Section("Feeding Schedule") {
+                ForEach(sortedFeedEntries, id: \.persistentModelID) { entry in
+                    HStack(spacing: 8) {
+                        Image(systemName: entry.feedTime.icon)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 20)
+                        Text(entry.summary)
+                            .font(.subheadline)
+                        Spacer()
+                        if !entry.assignedPerson.isEmpty {
+                            Text(entry.assignedPerson)
+                                .font(.caption)
+                                .foregroundStyle(.barnGreen)
+                        }
+                    }
+                }
+            }
+        } else if !horse.feedingSchedule.isEmpty {
             Section("Feeding Schedule") {
                 Text(horse.feedingSchedule)
             }
@@ -202,6 +239,26 @@ struct HorseDetailView: View {
         }
     }
 
+    @ViewBuilder
+    private func documentsSection() -> some View {
+        if FeatureGate.canStoreDocuments(storeService.isPro) {
+            Section("Documents") {
+                NavigationLink(value: HorseRoute.documents(horseID)) {
+                    HStack {
+                        Label("Documents", systemImage: "folder.fill")
+                        Spacer()
+                        let count = horse?.documents?.count ?? 0
+                        if count > 0 {
+                            Text("\(count)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private func clientsSection() -> some View {
         Section("Clients") {
             if sortedHorseClients.isEmpty {
@@ -237,6 +294,7 @@ struct HorseDetailView: View {
             notesSection(horse)
             vetSection()
             farrierSection()
+            documentsSection()
             clientsSection()
         }
         .navigationTitle(horse.name)
@@ -278,6 +336,7 @@ struct HorseDetailView: View {
                     Form {
                         vetSection()
                         farrierSection()
+                        documentsSection()
                         clientsSection()
                     }
                     .formStyle(.grouped)
