@@ -26,18 +26,16 @@ struct SupplyEditView: View {
             Section("Details") {
                 TextField("Name", text: $name)
                 TextField("Category", text: $categoryRaw)
-                HStack {
-                    Text("Quantity")
-                    Spacer()
+                LabeledContent("Quantity") {
                     TextField("0", value: $quantity, format: .number)
+                        .labelsHidden()
                         .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                 }
                 TextField("Unit (e.g., lbs, bags)", text: $unit)
-                HStack {
-                    Text("Reorder Threshold")
-                    Spacer()
+                LabeledContent("Reorder Threshold") {
                     TextField("0", value: $reorderThreshold, format: .number)
+                        .labelsHidden()
                         .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                 }
