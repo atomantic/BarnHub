@@ -185,23 +185,25 @@ capture_window() {
     screencapture -R "100,100,${WINDOW_WIDTH},${WINDOW_HEIGHT}" -o -x "$output_path" 2>/dev/null
 }
 
-# Capture screenshots for one language
-capture_locale() {
+# Launch BarnHub with a specific screenshot route, wait, capture, kill.
+# Navigation is done in-app via -screenshotRoute (see ContentView.handleScreenshotRoute)
+# instead of AppleScript-clicking sidebar rows — the sub-page sidebar shifts row
+# indices and makes row-based clicking brittle.
+#
+# TODO: single-launch per locale. Current flow kills + relaunches the app for every
+# page (6 pages × 9 locales = 54 launches ≈ 5 min wasted). Faster alternative: register
+# a URL scheme ("barnhub://route/<name>") and have the script `open barnhub://...` to
+# navigate an already-running instance via .onOpenURL + DeepLinkHandler. Would cut
+# total capture time by ~80%.
+capture_route() {
     local lang="$1"
-    local currency
-    currency=$(currency_for_locale "$lang")
-    local out_dir="$SCREENSHOTS_DIR/$lang/macos"
-    mkdir -p "$out_dir"
+    local currency="$2"
+    local route="$3"
+    local output="$4"
 
-    echo "📸 Capturing $lang (currency: $currency)..."
-
-    # Kill any existing instance
     killall BarnHub 2>/dev/null || true
     sleep 1
 
-    # Launch with locale + sample data + light mode
-    # hasCompletedFirstLaunch=YES bypasses the onboarding sheet that would
-    # otherwise block every dashboard screenshot on a clean sandbox.
     open "$APP_PATH" --args \
         -SeedSampleData \
         -ForceProMode \
@@ -210,45 +212,43 @@ capture_locale() {
         -net.shadowpuppet.BarnBook.currencyCode "$currency" \
         -net.shadowpuppet.BarnBook.appearanceMode 1 \
         -AppleLanguages "($lang)" \
-        -AppleLocale "$lang"
+        -AppleLocale "$lang" \
+        -screenshotRoute "$route"
 
-    sleep 4
+    sleep 3
     setup_window
-    sleep 1
+    sleep 1.2
+    capture_window "$output"
+}
 
-    # 1. Home (row 1 — already selected by default)
-    capture_window "$out_dir/01_home.png"
+# Capture screenshots for one language — 6 images showcasing 1.6 features.
+capture_locale() {
+    local lang="$1"
+    local currency
+    currency=$(currency_for_locale "$lang")
+    local out_dir="$SCREENSHOTS_DIR/$lang/macos"
+    mkdir -p "$out_dir"
+    # Clear existing images so stale captures can't sneak into the App Store upload
+    rm -f "$out_dir"/*.png
 
-    # 2. Horses (row 2)
-    click_sidebar 2
-    sleep 1
-    capture_window "$out_dir/02_horses.png"
+    echo "📸 Capturing $lang (currency: $currency)..."
 
-    # 3. Horse detail — click first horse in the detail list
-    click_first_detail_row
-    sleep 1
-    capture_window "$out_dir/03_horse_detail.png"
-    go_back
-    sleep 1
+    capture_route "$lang" "$currency" home            "$out_dir/01_home.png"
+    capture_route "$lang" "$currency" horseDetail     "$out_dir/02_horse_detail.png"
+    capture_route "$lang" "$currency" schedule        "$out_dir/03_schedule.png"
+    capture_route "$lang" "$currency" feedProducts    "$out_dir/04_feed_products.png"
+    capture_route "$lang" "$currency" dentistSchedule "$out_dir/05_dentist_schedule.png"
+    capture_route "$lang" "$currency" accounting      "$out_dir/06_accounting.png"
 
-    # 4. Clients (row 3)
-    click_sidebar 3
-    sleep 1
-    capture_window "$out_dir/04_clients.png"
-
-    # 5. Schedule (row 4)
-    click_sidebar 4
-    sleep 1
-    capture_window "$out_dir/05_schedule.png"
-
-    # 6. Accounting (row 5)
-    click_sidebar 5
-    sleep 1
-    capture_window "$out_dir/06_accounting.png"
-
-    # Quit
     killall BarnHub 2>/dev/null || true
     sleep 1
+
+    # macOS App Store requires exactly 1280x800, 1440x900, 2560x1600, or 2880x1800.
+    # Captured region on 2× Retina lands a few pixels short (e.g. 2824x1764),
+    # so resize to the nearest spec before upload.
+    for f in "$out_dir"/*.png; do
+        sips --resampleHeightWidth 1800 2880 "$f" --out "$f" >/dev/null 2>&1
+    done
 
     local count
     count=$(ls "$out_dir"/*.png 2>/dev/null | wc -l | tr -d ' ')

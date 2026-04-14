@@ -170,9 +170,56 @@ struct ContentView: View {
             let overdueCount = overdueRems + overdueVet + overdueFarrier + overdueDentist
             let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
             notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
+            handleScreenshotRoute()
         }
         .sheet(isPresented: $showFirstLaunchSheet) {
             FirstLaunchSheet()
+        }
+    }
+
+    private func handleScreenshotRoute() {
+        let args = ProcessInfo.processInfo.arguments
+        guard let idx = args.firstIndex(of: "-screenshotRoute"),
+              idx + 1 < args.count else { return }
+        let page = args[idx + 1]
+        // Set the tab synchronously; defer detail-level navigation so
+        // SidebarView's own cascade (onChange → handleSelection → popToRoot)
+        // doesn't wipe our nav path on first render.
+        switch page {
+        case "home": router.selectedTab = .home
+        case "horses", "horseDetail": router.selectedTab = .horses
+        case "clients", "clientDetail": router.selectedTab = .clients
+        case "schedule", "feedProducts", "dentistSchedule", "reminders": router.selectedTab = .schedule
+        case "accounting": router.selectedTab = .accounting
+        default: return
+        }
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 400_000_000)
+            switch page {
+            case "horseDetail":
+                router.popToRoot(tab: .horses)
+                let d = FetchDescriptor<Horse>(predicate: #Predicate { $0.isActive }, sortBy: [SortDescriptor(\.name)])
+                if let h = try? modelContext.fetch(d).first {
+                    router.navigate(to: HorseRoute.detail(h.persistentModelID), tab: .horses)
+                }
+            case "clientDetail":
+                router.popToRoot(tab: .clients)
+                let d = FetchDescriptor<Client>(predicate: #Predicate { $0.isActive }, sortBy: [SortDescriptor(\.lastName)])
+                if let c = try? modelContext.fetch(d).first {
+                    router.navigate(to: ClientRoute.detail(c.persistentModelID), tab: .clients)
+                }
+            case "feedProducts":
+                router.popToRoot(tab: .schedule)
+                router.navigate(to: BarnRoute.feedProducts, tab: .schedule)
+            case "dentistSchedule":
+                router.popToRoot(tab: .schedule)
+                router.navigate(to: BarnRoute.dentistSchedule, tab: .schedule)
+            case "reminders":
+                router.popToRoot(tab: .schedule)
+                router.navigate(to: BarnRoute.reminders, tab: .schedule)
+            default:
+                break
+            }
         }
     }
 
