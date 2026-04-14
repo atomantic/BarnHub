@@ -81,6 +81,9 @@ struct HorseFeedPlanView: View {
                     FeedPlanEntryEditView(horseID: horseID, entryID: nil, initialTime: time)
                 }
             }
+            #if os(macOS)
+            .frame(minWidth: 480, idealWidth: 560, minHeight: 560, idealHeight: 640)
+            #endif
         }
         .overlay {
             ConfirmationDialog(

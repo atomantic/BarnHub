@@ -97,11 +97,18 @@ struct FeedPlanEntryEditView: View {
                 .disabled(selectedProduct == nil)
             }
         }
+        #if os(macOS)
+        .formStyle(.grouped)
+        #endif
         .navigationTitle(isNew ? "Add Feed Item" : "Edit Feed Item")
         .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(selectedProduct == nil)
             }
         }
         .toast(toast)
@@ -109,7 +116,15 @@ struct FeedPlanEntryEditView: View {
         .sheet(isPresented: $showProductSheet, onDismiss: autoSelectNewProduct) {
             NavigationStack {
                 FeedProductEditView(productID: nil)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { showProductSheet = false }
+                        }
+                    }
             }
+            #if os(macOS)
+            .frame(minWidth: 480, idealWidth: 560, minHeight: 560, idealHeight: 640)
+            #endif
         }
     }
 
