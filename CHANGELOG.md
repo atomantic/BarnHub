@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.6.0
+
+### New Features
+- **Mac App** — BarnHub is now available on macOS with a dashboard home screen, responsive layouts, and a hierarchical sidebar that reveals horse, client, and schedule sub-pages for quick navigation.
+- **iPad Dashboard** — summary widgets on the home screen give iPad users an at-a-glance view of their barn.
+- **Feed Planning** — build reusable feed plans per horse with inline product creation, a wider layout, and a cleaner sheet-based entry flow.
+- **Horse Documents & Gender** — attach documents to individual horses and record gender on the horse profile.
+- **Equine Dentist Tracking** — schedule and log equine dentist visits alongside vet and farrier appointments.
+- **Full Localization** — complete translation coverage across all 9 supported languages with reactive in-app language switching (no restart).
+
+### Improvements
+- Day / Week / Month calendar toggle on the Schedule page.
+- Light-mode and responsive layouts tuned for macOS across client, horse, and home views.
+- Consistent empty-state centering on macOS and iPad.
+
+### Bug Fixes
+- Fixed duplicated value rendering in form number fields.
+- Fixed feed entry sheet not rendering on macOS.
+- Fixed sidebar sub-item highlighting and widened the macOS sidebar to fit longer labels.
+- Removed an unnecessary restart prompt when switching languages.
+
 ## 1.3.0
 
 ### New Features

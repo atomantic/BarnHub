@@ -99,14 +99,18 @@ get_window_id() {
     ' 2>/dev/null
 }
 
-# Position and resize window
+# Position, resize, and raise BarnHub window above all other apps
 setup_window() {
     osascript -e "
+    tell application \"BarnHub\" to activate
+    delay 0.5
     tell application \"System Events\"
         tell process \"BarnHub\"
+            set frontmost to true
             if (count of windows) > 0 then
                 set position of first window to {100, 100}
                 set size of first window to {$WINDOW_WIDTH, $WINDOW_HEIGHT}
+                perform action \"AXRaise\" of first window
             end if
         end tell
     end tell" 2>/dev/null
@@ -157,18 +161,28 @@ go_back() {
 }
 
 # Take screenshot of BarnHub window
+#
+# Swift-based CGWindowListCopyWindowInfo requires Screen Recording permission
+# for the invoking binary; `swift -e` does not inherit the terminal's grant,
+# so it returns only the calling process's own windows (no BarnHub). That
+# makes `screencapture -l <wid>` infeasible — fall back to region capture
+# with a hard guarantee that BarnHub is frontmost (AXRaise) so no other
+# app's window bleeds into the capture region.
 capture_window() {
     local output_path="$1"
-    osascript -e 'tell application "BarnHub" to activate' 2>/dev/null
-    sleep 0.5
-    local wid
-    wid=$(get_window_id)
-    if [[ -n "$wid" ]]; then
-        screencapture -l "$wid" -o -x "$output_path" 2>/dev/null
-    else
-        # Fallback: capture by screen region
-        screencapture -R "100,100,${WINDOW_WIDTH},${WINDOW_HEIGHT}" -o -x "$output_path" 2>/dev/null
-    fi
+    osascript -e "
+    tell application \"BarnHub\" to activate
+    delay 0.2
+    tell application \"System Events\"
+        tell process \"BarnHub\"
+            set frontmost to true
+            if (count of windows) > 0 then
+                perform action \"AXRaise\" of first window
+            end if
+        end tell
+    end tell" 2>/dev/null || true
+    sleep 0.6
+    screencapture -R "100,100,${WINDOW_WIDTH},${WINDOW_HEIGHT}" -o -x "$output_path" 2>/dev/null
 }
 
 # Capture screenshots for one language
