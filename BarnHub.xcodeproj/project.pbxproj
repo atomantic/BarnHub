@@ -29,6 +29,7 @@
 		15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
 		15214452A2CA86E767CE264E /* FeedPlanEntryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */; };
 		800C84D6A8944EB5439F40EE /* HorseFeedPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */; };
+		SBVW1A2B3C4D5E6F7A8B9C01 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SBVW1A2B3C4D5E6F7A8B9C03 /* SidebarView.swift */; };
 		EF42680B0902AE324FF04FBD /* HorseDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */; };
 		18FE0CAF8DAE45A73B5D62B8 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9D153E3F9DEEA5A6B3B004 /* Date+Formatting.swift */; };
 		F486DFDDF4594EE2BB0CDB49 /* Locale+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4BB286DA44769A7EBBFC3 /* Locale+App.swift */; };
@@ -185,6 +186,7 @@
 		C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */; };
 		871B87C01145F41586F0E278 /* FeedPlanEntryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */; };
 		68B0D221F5AABAC61C199688 /* HorseFeedPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */; };
+		SBVW1A2B3C4D5E6F7A8B9C02 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SBVW1A2B3C4D5E6F7A8B9C03 /* SidebarView.swift */; };
 		4D32FB1476BD4199E3B9C4CF /* HorseDocumentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */; };
 		C17D7A8663679EB6A8CF2005 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD112233445566LESS0005 /* LessonEditView.swift */; };
 		C18F89EBB9CC9DD5699FF806 /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD7E9DE7984CD04A55CC3E /* TransactionListView.swift */; };
@@ -273,6 +275,7 @@
 		0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDetailView.swift; sourceTree = "<group>"; };
 		EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlanEntryEditView.swift; sourceTree = "<group>"; };
 		9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseFeedPlanView.swift; sourceTree = "<group>"; };
+		SBVW1A2B3C4D5E6F7A8B9C03 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		B430FBA37C6E0CA156DCBCA3 /* HorseDocumentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDocumentsView.swift; sourceTree = "<group>"; };
 		04D7E62EC64B9F7A1BF3D180 /* FarrierVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisit.swift; sourceTree = "<group>"; };
 		DENT00112233445566770001 /* DentistVisit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistVisit.swift; sourceTree = "<group>"; };
@@ -694,6 +697,7 @@
 				BBCC001122334455DATA0005 /* DataManagementView.swift */,
 				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
 				BB11223344556677AABB0003 /* SettingsView.swift */,
+				SBVW1A2B3C4D5E6F7A8B9C03 /* SidebarView.swift */,
 				75C45A74C0754D59FD90DAE5 /* Accounting */,
 				CE6CF664131C60DA461067A8 /* Barn */,
 				58A73D2D9F8B43A7E7D9336F /* Clients */,
@@ -978,6 +982,7 @@
 				15E585A42459296C3712A6C5 /* HorseDetailView.swift in Sources */,
 				15214452A2CA86E767CE264E /* FeedPlanEntryEditView.swift in Sources */,
 				800C84D6A8944EB5439F40EE /* HorseFeedPlanView.swift in Sources */,
+				SBVW1A2B3C4D5E6F7A8B9C01 /* SidebarView.swift in Sources */,
 				EF42680B0902AE324FF04FBD /* HorseDocumentsView.swift in Sources */,
 				79CEBC2D5217C4F19E415478 /* HorseEditView.swift in Sources */,
 				5895B58A390D7DF70FD6B7D3 /* HorseListView.swift in Sources */,
@@ -1098,6 +1103,7 @@
 				C1354DB6113B2170DAAB4A5E /* HorseDetailView.swift in Sources */,
 				871B87C01145F41586F0E278 /* FeedPlanEntryEditView.swift in Sources */,
 				68B0D221F5AABAC61C199688 /* HorseFeedPlanView.swift in Sources */,
+				SBVW1A2B3C4D5E6F7A8B9C02 /* SidebarView.swift in Sources */,
 				4D32FB1476BD4199E3B9C4CF /* HorseDocumentsView.swift in Sources */,
 				D2F743ADA258BD6436964D4F /* HorseEditView.swift in Sources */,
 				80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */,

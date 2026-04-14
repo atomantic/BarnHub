@@ -180,18 +180,10 @@ struct ContentView: View {
     private var sidebarLayout: some View {
         @Bindable var router = router
         NavigationSplitView {
-            List(selection: sidebarSelection) {
-                ForEach(Router.AppTab.allCases, id: \.self) { tab in
-                    Label(tab.title, systemImage: tab.icon)
-                        .tag(tab)
-                        .accessibilityIdentifier("sidebar_\(tab.rawValue)")
+            SidebarView()
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    sidebarFooter
                 }
-            }
-            .navigationTitle("BarnHub")
-            .listStyle(.sidebar)
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                sidebarFooter
-            }
         } detail: {
             sidebarDetailView
                 .id(router.selectedTab)
