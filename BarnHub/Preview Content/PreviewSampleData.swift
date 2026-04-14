@@ -63,7 +63,79 @@ struct PreviewSampleData {
         let lessons = createLessons(horses: horses, clients: clients)
         lessons.forEach { context.insert($0) }
 
+        let feedProducts = createFeedProducts()
+        feedProducts.forEach { context.insert($0) }
+
+        let feedPlanEntries = createFeedPlanEntries(horses: horses, products: feedProducts)
+        feedPlanEntries.forEach { context.insert($0) }
+
         try? context.save()
+    }
+
+    static func createFeedProducts() -> [FeedProduct] {
+        [
+            FeedProduct(name: "Sweet Feed", brand: "Purina", notes: "10% protein pellets", defaultUnit: .scoops),
+            FeedProduct(name: "Performance Feed", brand: "Triple Crown", notes: "14% protein for working horses", defaultUnit: .scoops),
+            FeedProduct(name: "Senior Feed", brand: "Nutrena", notes: "For older horses with soft texture", defaultUnit: .scoops),
+            FeedProduct(name: "Timothy Hay", brand: "", notes: "Local cut", defaultUnit: .flakes),
+            FeedProduct(name: "Alfalfa Cubes", brand: "Standlee", notes: "Soak before feeding", defaultUnit: .cups),
+            FeedProduct(name: "Joint Supplement", brand: "SmartPak", notes: "Glucosamine & MSM", defaultUnit: .scoops),
+        ]
+    }
+
+    static func createFeedPlanEntries(horses: [Horse], products: [FeedProduct]) -> [FeedPlanEntry] {
+        guard products.count >= 6, horses.count >= 2 else { return [] }
+        let sweetFeed = products[0]
+        let performance = products[1]
+        let senior = products[2]
+        let timothy = products[3]
+        let alfalfa = products[4]
+        let joint = products[5]
+
+        var entries: [FeedPlanEntry] = []
+
+        func add(_ amount: Double, _ unit: FeedUnit, _ time: FeedTime,
+                 person: String = "", notes: String = "",
+                 horse: Horse, product: FeedProduct) {
+            let e = FeedPlanEntry(amount: amount, unit: unit, feedTime: time,
+                                  assignedPerson: person, notes: notes)
+            e.horse = horse
+            e.product = product
+            entries.append(e)
+        }
+
+        // Arrow (horse 0) — morning + evening
+        add(2, .scoops, .morning, person: "Morning staff", horse: horses[0], product: sweetFeed)
+        add(3, .flakes, .morning, horse: horses[0], product: timothy)
+        add(1, .scoops, .evening, notes: "With water", horse: horses[0], product: joint)
+        add(2, .scoops, .evening, horse: horses[0], product: sweetFeed)
+        add(3, .flakes, .evening, horse: horses[0], product: timothy)
+
+        // Bella (horse 1) — 3x daily, small portions
+        add(1, .scoops, .morning, person: "Morning staff", horse: horses[1], product: sweetFeed)
+        add(2, .flakes, .morning, horse: horses[1], product: timothy)
+        add(1, .cups, .midday, notes: "Soaked 20 min", horse: horses[1], product: alfalfa)
+        add(1, .scoops, .evening, horse: horses[1], product: sweetFeed)
+        add(2, .flakes, .evening, horse: horses[1], product: timothy)
+
+        // Storm (horse 2) — performance feed
+        if horses.count > 2 {
+            add(3, .scoops, .morning, person: "Morning staff", horse: horses[2], product: performance)
+            add(4, .flakes, .morning, horse: horses[2], product: timothy)
+            add(3, .scoops, .evening, horse: horses[2], product: performance)
+            add(4, .flakes, .evening, horse: horses[2], product: timothy)
+        }
+
+        // Daisy (horse 3) — senior feed
+        if horses.count > 3 {
+            add(2, .scoops, .morning, person: "Morning staff", horse: horses[3], product: senior)
+            add(1, .scoops, .morning, notes: "Mixed in feed", horse: horses[3], product: joint)
+            add(3, .flakes, .morning, horse: horses[3], product: timothy)
+            add(2, .scoops, .evening, horse: horses[3], product: senior)
+            add(3, .flakes, .evening, horse: horses[3], product: timothy)
+        }
+
+        return entries
     }
 
     private static func loadPhoto(_ name: String, ext: String = "jpeg") -> Data? {
