@@ -4,9 +4,10 @@ import SwiftData
 struct FeedPlanEntryEditView: View {
     let horseID: PersistentIdentifier
     let entryID: PersistentIdentifier?
+    var initialTime: FeedTime? = nil
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(Router.self) private var router
 
     @Query(sort: \FeedProduct.name) private var products: [FeedProduct]
 
@@ -17,54 +18,43 @@ struct FeedPlanEntryEditView: View {
     @State private var assignedPerson = ""
     @State private var notes = ""
     @State private var toast = ToastState()
+    @State private var showProductSheet = false
+    @State private var productIDsBeforeCreation: Set<PersistentIdentifier> = []
 
     private var isNew: Bool { entryID == nil }
     private var existingEntry: FeedPlanEntry? { modelContext.existingModel(for: entryID) }
     private var horse: Horse? { modelContext.model(for: horseID) as? Horse }
 
     var body: some View {
-        Group {
-            if products.isEmpty && isNew {
-                EmptyStateView(
-                    icon: "leaf.fill",
-                    title: "No Feed Products",
-                    subtitle: "Tap + to add grain, hay, supplements, and other feed products."
-                )
-            } else {
-                formContent
-            }
-        }
-        .navigationTitle(isNew ? "Add Feed Item" : "Edit Feed Item")
-        .inlineNavTitle()
-        .toolbar {
-            if products.isEmpty && isNew {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        router.navigate(to: BarnRoute.feedProductEdit(nil), tab: .schedule)
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-        }
-        .toast(toast)
-        .task { loadExisting() }
-    }
-
-    private var formContent: some View {
         Form {
             Section("Feed Product") {
-                Picker("Product", selection: $selectedProduct) {
-                    Text("Select a product").tag(nil as FeedProduct?)
-                    ForEach(products, id: \.persistentModelID) { product in
-                        HStack {
-                            Text(product.name)
-                            if !product.brand.isEmpty {
-                                Text("(\(product.brand))")
-                                    .foregroundStyle(.secondary)
+                if products.isEmpty {
+                    Button {
+                        openProductSheet()
+                    } label: {
+                        Label("Create Feed Product", systemImage: "plus.circle.fill")
+                            .foregroundStyle(.barnGreen)
+                    }
+                } else {
+                    Picker("Product", selection: $selectedProduct) {
+                        Text("Select a product").tag(nil as FeedProduct?)
+                        ForEach(products, id: \.persistentModelID) { product in
+                            HStack {
+                                Text(product.name)
+                                if !product.brand.isEmpty {
+                                    Text("(\(product.brand))")
+                                        .foregroundStyle(.secondary)
+                                }
                             }
+                            .tag(product as FeedProduct?)
                         }
-                        .tag(product as FeedProduct?)
+                    }
+                    Button {
+                        openProductSheet()
+                    } label: {
+                        Label("New Product…", systemImage: "plus.circle")
+                            .foregroundStyle(.barnGreen)
+                            .font(.subheadline)
                     }
                 }
             }
@@ -107,16 +97,45 @@ struct FeedPlanEntryEditView: View {
                 .disabled(selectedProduct == nil)
             }
         }
+        .navigationTitle(isNew ? "Add Feed Item" : "Edit Feed Item")
+        .inlineNavTitle()
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") { dismiss() }
+            }
+        }
+        .toast(toast)
+        .task { loadExisting() }
+        .sheet(isPresented: $showProductSheet, onDismiss: autoSelectNewProduct) {
+            NavigationStack {
+                FeedProductEditView(productID: nil)
+            }
+        }
+    }
+
+    private func openProductSheet() {
+        productIDsBeforeCreation = Set(products.map(\.persistentModelID))
+        showProductSheet = true
+    }
+
+    private func autoSelectNewProduct() {
+        // Find any product inserted while the sheet was open and auto-select it
+        if let newProduct = products.first(where: { !productIDsBeforeCreation.contains($0.persistentModelID) }) {
+            selectedProduct = newProduct
+        }
     }
 
     private func loadExisting() {
-        guard let entry = existingEntry else { return }
-        selectedProduct = entry.product
-        amount = entry.amount
-        unit = entry.unit
-        feedTime = entry.feedTime
-        assignedPerson = entry.assignedPerson
-        notes = entry.notes
+        if let entry = existingEntry {
+            selectedProduct = entry.product
+            amount = entry.amount
+            unit = entry.unit
+            feedTime = entry.feedTime
+            assignedPerson = entry.assignedPerson
+            notes = entry.notes
+        } else if let initialTime {
+            feedTime = initialTime
+        }
     }
 
     private func save() {
