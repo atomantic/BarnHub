@@ -93,6 +93,9 @@ struct FeedProductEditView: View {
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
+        #if os(macOS)
+        .formStyle(.grouped)
+        #endif
         .navigationTitle(isNew ? "New Feed Product" : "Edit Product")
         .inlineNavTitle()
         .toast(toast)
