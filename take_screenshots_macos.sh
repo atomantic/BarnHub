@@ -185,21 +185,31 @@ capture_window() {
     screencapture -R "100,100,${WINDOW_WIDTH},${WINDOW_HEIGHT}" -o -x "$output_path" 2>/dev/null
 }
 
-# Launch BarnHub with a specific screenshot route, wait, capture, kill.
-# Navigation is done in-app via -screenshotRoute (see ContentView.handleScreenshotRoute)
-# instead of AppleScript-clicking sidebar rows — the sub-page sidebar shifts row
-# indices and makes row-based clicking brittle.
-#
-# TODO: single-launch per locale. Current flow kills + relaunches the app for every
-# page (6 pages × 9 locales = 54 launches ≈ 5 min wasted). Faster alternative: register
-# a URL scheme ("barnhub://route/<name>") and have the script `open barnhub://...` to
-# navigate an already-running instance via .onOpenURL + DeepLinkHandler. Would cut
-# total capture time by ~80%.
-capture_route() {
+# Navigate the running BarnHub to a screenshot page, then capture.
+# Sends a `barnhub://screenshot/<page>` URL event directly to the app via AppleScript
+# (bypasses LaunchServices scheme registration — the event is delivered to the named
+# target process and handled by .onOpenURL in ContentView).
+capture_page() {
+    local route="$1"
+    local output="$2"
+    osascript -e "tell application \"BarnHub\" to open location \"barnhub://screenshot/$route\"" 2>/dev/null || true
+    sleep 1.5
+    capture_window "$output"
+}
+
+# Capture screenshots for one language — 6 images showcasing 1.6 features.
+# Single launch per locale: kill, launch once, navigate between pages via URL events,
+# then kill at the end. ~6× faster than kill+relaunch per page.
+capture_locale() {
     local lang="$1"
-    local currency="$2"
-    local route="$3"
-    local output="$4"
+    local currency
+    currency=$(currency_for_locale "$lang")
+    local out_dir="$SCREENSHOTS_DIR/$lang/macos"
+    mkdir -p "$out_dir"
+    # Clear existing images so stale captures can't sneak into the App Store upload
+    rm -f "$out_dir"/*.png
+
+    echo "📸 Capturing $lang (currency: $currency)..."
 
     killall BarnHub 2>/dev/null || true
     sleep 1
@@ -212,33 +222,18 @@ capture_route() {
         -net.shadowpuppet.BarnBook.currencyCode "$currency" \
         -net.shadowpuppet.BarnBook.appearanceMode 1 \
         -AppleLanguages "($lang)" \
-        -AppleLocale "$lang" \
-        -screenshotRoute "$route"
+        -AppleLocale "$lang"
 
     sleep 3
     setup_window
-    sleep 1.2
-    capture_window "$output"
-}
+    sleep 1
 
-# Capture screenshots for one language — 6 images showcasing 1.6 features.
-capture_locale() {
-    local lang="$1"
-    local currency
-    currency=$(currency_for_locale "$lang")
-    local out_dir="$SCREENSHOTS_DIR/$lang/macos"
-    mkdir -p "$out_dir"
-    # Clear existing images so stale captures can't sneak into the App Store upload
-    rm -f "$out_dir"/*.png
-
-    echo "📸 Capturing $lang (currency: $currency)..."
-
-    capture_route "$lang" "$currency" home            "$out_dir/01_home.png"
-    capture_route "$lang" "$currency" horseDetail     "$out_dir/02_horse_detail.png"
-    capture_route "$lang" "$currency" schedule        "$out_dir/03_schedule.png"
-    capture_route "$lang" "$currency" feedProducts    "$out_dir/04_feed_products.png"
-    capture_route "$lang" "$currency" dentistSchedule "$out_dir/05_dentist_schedule.png"
-    capture_route "$lang" "$currency" accounting      "$out_dir/06_accounting.png"
+    capture_page home            "$out_dir/01_home.png"
+    capture_page horseDetail     "$out_dir/02_horse_detail.png"
+    capture_page schedule        "$out_dir/03_schedule.png"
+    capture_page feedProducts    "$out_dir/04_feed_products.png"
+    capture_page dentistSchedule "$out_dir/05_dentist_schedule.png"
+    capture_page accounting      "$out_dir/06_accounting.png"
 
     killall BarnHub 2>/dev/null || true
     sleep 1
