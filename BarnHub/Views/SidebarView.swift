@@ -1,6 +1,60 @@
 import SwiftUI
 import SwiftData
 
+enum SidebarSelection: Hashable {
+    case home
+    case horses
+    case horse(PersistentIdentifier)
+    case clients
+    case client(PersistentIdentifier)
+    case schedule
+    case schedulePage(ScheduleSubpage)
+    case accounting
+
+    enum ScheduleSubpage: String, Hashable, CaseIterable {
+        case reminders, vetSchedule, farrierSchedule, dentistSchedule, lessons, supplies, barnNotes, feedProducts
+
+        var barnRoute: BarnRoute {
+            switch self {
+            case .reminders: return .reminders
+            case .vetSchedule: return .vetSchedule
+            case .farrierSchedule: return .farrierSchedule
+            case .dentistSchedule: return .dentistSchedule
+            case .lessons: return .lessons
+            case .supplies: return .supplies
+            case .barnNotes: return .barnNotes
+            case .feedProducts: return .feedProducts
+            }
+        }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .reminders: return "Reminders"
+            case .vetSchedule: return "Vet Schedule"
+            case .farrierSchedule: return "Farrier Schedule"
+            case .dentistSchedule: return "Dentist Schedule"
+            case .lessons: return "Lessons"
+            case .supplies: return "Supplies"
+            case .barnNotes: return "Barn Notes"
+            case .feedProducts: return "Feed Products"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .reminders: return "bell.fill"
+            case .vetSchedule: return "stethoscope"
+            case .farrierSchedule: return "hammer.fill"
+            case .dentistSchedule: return "mouth.fill"
+            case .lessons: return "book.fill"
+            case .supplies: return "shippingbox.fill"
+            case .barnNotes: return "note.text"
+            case .feedProducts: return "leaf.fill"
+            }
+        }
+    }
+}
+
 struct SidebarView: View {
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
@@ -11,6 +65,8 @@ struct SidebarView: View {
     @Query(filter: #Predicate<Client> { $0.isActive }, sort: \Client.lastName)
     private var activeClients: [Client]
 
+    @State private var selection: SidebarSelection? = .home
+
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.horsesExpanded") private var horsesExpanded = true
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.clientsExpanded") private var clientsExpanded = true
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.scheduleExpanded") private var scheduleExpanded = true
@@ -18,72 +74,78 @@ struct SidebarView: View {
     private var isPro: Bool { storeService.isPro }
 
     var body: some View {
-        List(selection: sidebarSelection) {
+        List(selection: $selection) {
             Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon)
-                .tag(Router.AppTab.home)
+                .tag(SidebarSelection.home)
                 .accessibilityIdentifier("sidebar_home")
 
             DisclosureGroup(isExpanded: $horsesExpanded) {
                 ForEach(activeHorses, id: \.persistentModelID) { horse in
-                    Button {
-                        goToHorse(horse)
-                    } label: {
-                        horseRow(horse)
-                    }
-                    .buttonStyle(.plain)
+                    horseRow(horse)
+                        .tag(SidebarSelection.horse(horse.persistentModelID))
                 }
             } label: {
                 Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon)
-                    .tag(Router.AppTab.horses)
+                    .tag(SidebarSelection.horses)
                     .accessibilityIdentifier("sidebar_horses")
             }
 
             if isPro {
                 DisclosureGroup(isExpanded: $clientsExpanded) {
                     ForEach(activeClients, id: \.persistentModelID) { client in
-                        Button {
-                            goToClient(client)
-                        } label: {
-                            clientRow(client)
-                        }
-                        .buttonStyle(.plain)
+                        clientRow(client)
+                            .tag(SidebarSelection.client(client.persistentModelID))
                     }
                 } label: {
                     Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon)
-                        .tag(Router.AppTab.clients)
+                        .tag(SidebarSelection.clients)
                         .accessibilityIdentifier("sidebar_clients")
                 }
             } else {
                 Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon)
-                    .tag(Router.AppTab.clients)
+                    .tag(SidebarSelection.clients)
                     .accessibilityIdentifier("sidebar_clients")
             }
 
             DisclosureGroup(isExpanded: $scheduleExpanded) {
-                scheduleSubItem("Reminders", icon: "bell.fill", route: .reminders)
-                scheduleSubItem("Vet Schedule", icon: "stethoscope", route: .vetSchedule)
-                scheduleSubItem("Farrier Schedule", icon: "hammer.fill", route: .farrierSchedule)
-                scheduleSubItem("Dentist Schedule", icon: "mouth.fill", route: .dentistSchedule)
-                scheduleSubItem("Lessons", icon: "book.fill", route: .lessons)
-                scheduleSubItem("Supplies", icon: "shippingbox.fill", route: .supplies)
-                scheduleSubItem("Barn Notes", icon: "note.text", route: .barnNotes)
-                scheduleSubItem("Feed Products", icon: "leaf.fill", route: .feedProducts)
+                ForEach(SidebarSelection.ScheduleSubpage.allCases, id: \.self) { sub in
+                    Label(sub.title, systemImage: sub.icon)
+                        .font(.subheadline)
+                        .tag(SidebarSelection.schedulePage(sub))
+                }
             } label: {
                 Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon)
-                    .tag(Router.AppTab.schedule)
+                    .tag(SidebarSelection.schedule)
                     .accessibilityIdentifier("sidebar_schedule")
             }
 
             Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon)
-                .tag(Router.AppTab.accounting)
+                .tag(SidebarSelection.accounting)
                 .accessibilityIdentifier("sidebar_accounting")
         }
         .navigationTitle("BarnHub")
         .listStyle(.sidebar)
         .navigationSplitViewColumnWidth(min: 200, ideal: 240, max: 360)
+        .onChange(of: selection) { _, new in
+            guard let new else { return }
+            handleSelection(new)
+        }
+        .onAppear {
+            // Initialize selection from router state when view first appears
+            if selection == .home, router.selectedTab != .home {
+                selection = initialSelection(for: router.selectedTab)
+            }
+        }
+        .onChange(of: router.selectedTab) { _, new in
+            // Sync sidebar when tab changes externally (e.g., deep link, tab bar)
+            // Only if current selection is a top-level tab — don't clobber sub-item selection
+            if isTabSelection(selection) {
+                selection = initialSelection(for: new)
+            }
+        }
     }
 
-    // MARK: - Sub-item Rows
+    // MARK: - Row Views
 
     private func horseRow(_ horse: Horse) -> some View {
         HStack(spacing: 8) {
@@ -116,41 +178,52 @@ struct SidebarView: View {
         }
     }
 
-    @ViewBuilder
-    private func scheduleSubItem(_ title: LocalizedStringKey, icon: String, route: BarnRoute) -> some View {
-        Button {
-            goToScheduleRoute(route)
-        } label: {
-            Label(title, systemImage: icon)
-                .font(.subheadline)
+    // MARK: - Selection Handling
+
+    private func handleSelection(_ new: SidebarSelection) {
+        switch new {
+        case .home:
+            router.selectedTab = .home
+        case .horses:
+            router.selectedTab = .horses
+            router.popToRoot(tab: .horses)
+        case .horse(let id):
+            router.selectedTab = .horses
+            router.popToRoot(tab: .horses)
+            router.navigate(to: HorseRoute.detail(id), tab: .horses)
+        case .clients:
+            router.selectedTab = .clients
+            router.popToRoot(tab: .clients)
+        case .client(let id):
+            router.selectedTab = .clients
+            router.popToRoot(tab: .clients)
+            router.navigate(to: ClientRoute.detail(id), tab: .clients)
+        case .schedule:
+            router.selectedTab = .schedule
+            router.popToRoot(tab: .schedule)
+        case .schedulePage(let sub):
+            router.selectedTab = .schedule
+            router.popToRoot(tab: .schedule)
+            router.navigate(to: sub.barnRoute, tab: .schedule)
+        case .accounting:
+            router.selectedTab = .accounting
         }
-        .buttonStyle(.plain)
     }
 
-    // MARK: - Navigation
-
-    private func goToHorse(_ horse: Horse) {
-        router.selectedTab = .horses
-        router.popToRoot(tab: .horses)
-        router.navigate(to: HorseRoute.detail(horse.persistentModelID), tab: .horses)
+    private func initialSelection(for tab: Router.AppTab) -> SidebarSelection {
+        switch tab {
+        case .home: return .home
+        case .horses: return .horses
+        case .clients: return .clients
+        case .schedule: return .schedule
+        case .accounting: return .accounting
+        }
     }
 
-    private func goToClient(_ client: Client) {
-        router.selectedTab = .clients
-        router.popToRoot(tab: .clients)
-        router.navigate(to: ClientRoute.detail(client.persistentModelID), tab: .clients)
-    }
-
-    private func goToScheduleRoute(_ route: BarnRoute) {
-        router.selectedTab = .schedule
-        router.popToRoot(tab: .schedule)
-        router.navigate(to: route, tab: .schedule)
-    }
-
-    private var sidebarSelection: Binding<Router.AppTab?> {
-        Binding(
-            get: { router.selectedTab },
-            set: { if let tab = $0 { router.selectedTab = tab } }
-        )
+    private func isTabSelection(_ sel: SidebarSelection?) -> Bool {
+        switch sel {
+        case .home, .horses, .clients, .schedule, .accounting: return true
+        default: return false
+        }
     }
 }
