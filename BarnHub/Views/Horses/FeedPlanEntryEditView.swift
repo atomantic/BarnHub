@@ -60,10 +60,9 @@ struct FeedPlanEntryEditView: View {
             }
 
             Section("Amount") {
-                HStack {
-                    Text("Quantity")
-                    Spacer()
+                LabeledContent("Quantity") {
                     TextField("1", value: $amount, format: .number)
+                        .labelsHidden()
                         .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                         .frame(width: 80)

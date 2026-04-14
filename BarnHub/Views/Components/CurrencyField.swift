@@ -24,10 +24,9 @@ struct CurrencyField: View {
     }
 
     var body: some View {
-        HStack {
-            Text(label)
-            Spacer()
+        LabeledContent(label) {
             TextField(placeholder, value: $value, formatter: activeFormatter)
+                .labelsHidden()
                 .decimalKeyboard()
                 .multilineTextAlignment(.trailing)
         }

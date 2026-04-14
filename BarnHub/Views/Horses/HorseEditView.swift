@@ -92,17 +92,15 @@ struct HorseEditView: View {
 
     private var detailsSection: some View {
         Section("Details") {
-            HStack {
-                Text("Weight (lbs)")
-                Spacer()
+            LabeledContent("Weight (lbs)") {
                 TextField("0", value: $weight, format: .number)
+                    .labelsHidden()
                     .decimalKeyboard()
                     .multilineTextAlignment(.trailing)
             }
-            HStack {
-                Text("Purchase Price")
-                Spacer()
+            LabeledContent("Purchase Price") {
                 TextField("$0", value: $purchasePrice, format: .currency(code: "USD"))
+                    .labelsHidden()
                     .decimalKeyboard()
                     .multilineTextAlignment(.trailing)
             }
