@@ -15,6 +15,10 @@ struct SettingsView: View {
     @State private var showRedeemCodeSheet = false
     #endif
     @State private var showManageSubscription = false
+    @State private var showWelcomeSheet = false
+    #if os(macOS)
+    @State private var showPaywall = false
+    #endif
 
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
     @AppStorage("net.shadowpuppet.BarnBook.appLocale") private var appLocaleID: String = ""
@@ -104,6 +108,22 @@ struct SettingsView: View {
                 .ignoresSafeArea()
             }
             #endif
+            .sheet(isPresented: $showWelcomeSheet) {
+                FirstLaunchSheet()
+            }
+            #if os(macOS)
+            .sheet(isPresented: $showPaywall) {
+                NavigationStack {
+                    PaywallView()
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Close") { showPaywall = false }
+                            }
+                        }
+                }
+                .frame(minWidth: 520, minHeight: 640)
+            }
+            #endif
     }
 
     // MARK: - Layout
@@ -175,6 +195,11 @@ struct SettingsView: View {
                         }
                     }
                 }
+                Button {
+                    showWelcomeSheet = true
+                } label: {
+                    settingsRow("Show Welcome Screen", icon: "sparkles")
+                }
             }
 
             Section {
@@ -242,11 +267,14 @@ struct SettingsView: View {
                         settingsRow("Manage Subscription", icon: "creditcard")
                     }
                 } else {
-                    HStack {
-                        Text("Upgrade to Pro on iPhone or iPad")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        ProBadgeView()
+                    Button {
+                        showPaywall = true
+                    } label: {
+                        HStack {
+                            Text("Upgrade to Pro")
+                            Spacer()
+                            ProBadgeView()
+                        }
                     }
                     if let url = URL(string: "macappstore://apps.apple.com/redeem?ctx=offercodes") {
                         Link(destination: url) {
@@ -268,6 +296,11 @@ struct SettingsView: View {
                     Link(destination: url) {
                         settingsRow("Send Feedback", icon: "envelope")
                     }
+                }
+                Button {
+                    showWelcomeSheet = true
+                } label: {
+                    settingsRow("Show Welcome Screen", icon: "sparkles")
                 }
             }
         }
