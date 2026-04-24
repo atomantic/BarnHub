@@ -503,7 +503,6 @@ struct PreviewSampleData {
     }
 
     static func createLessons(horses: [Horse], clients: [Client]) -> [Lesson] {
-        let calendar = Calendar.current
         let jane = clients.first
         let mike = clients.count > 1 ? clients[1] : nil
         let sarah = clients.count > 2 ? clients[2] : nil
