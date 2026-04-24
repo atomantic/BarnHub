@@ -55,18 +55,6 @@ extension View {
 #endif
     }
 
-    /// `.offerCodeRedemption` on iOS; no-op on macOS.
-    @ViewBuilder
-    func barnOfferCodeRedemption(
-        isPresented: Binding<Bool>,
-        onCompletion: @escaping @Sendable (Result<Void, any Error>) -> Void
-    ) -> some View {
-#if os(iOS)
-        self.offerCodeRedemption(isPresented: isPresented, onCompletion: onCompletion)
-#else
-        self
-#endif
-    }
 }
 
 // MARK: - Toolbar placement wrappers

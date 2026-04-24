@@ -18,7 +18,7 @@ final class SyncMonitorTests: XCTestCase {
     }
 
     func test_syncStatus_failed_label() {
-        XCTAssertEqual(SyncStatus.failed("network error").label, "Sync error")
+        XCTAssertEqual(SyncStatus.failed.label, "Sync paused")
     }
 
     func test_syncStatus_notAvailable_label() {
@@ -40,7 +40,7 @@ final class SyncMonitorTests: XCTestCase {
     }
 
     func test_syncStatus_failed_icon() {
-        XCTAssertEqual(SyncStatus.failed("error").icon, "exclamationmark.icloud")
+        XCTAssertEqual(SyncStatus.failed.icon, "cloud")
     }
 
     func test_syncStatus_notAvailable_icon() {
@@ -55,8 +55,8 @@ final class SyncMonitorTests: XCTestCase {
     }
 
     func test_syncStatus_failed_equatability() {
-        XCTAssertEqual(SyncStatus.failed("msg"), SyncStatus.failed("msg"))
-        XCTAssertNotEqual(SyncStatus.failed("a"), SyncStatus.failed("b"))
+        XCTAssertEqual(SyncStatus.failed, SyncStatus.failed)
+        XCTAssertNotEqual(SyncStatus.failed, SyncStatus.idle)
     }
 
     func test_syncStatus_succeeded_equatability() {
@@ -73,42 +73,39 @@ final class SyncMonitorTests: XCTestCase {
     /// We test the logic-level rules below with a direct helper.
 
     func test_resolveStatus_logic_bothIdle_returnsIdle() {
-        let result = resolveStatus(import: .idle, export: .idle)
+        let result = resolveStatus(import: .idle, export: .idle, lastSuccessfulSync: nil)
         XCTAssertEqual(result, .idle)
     }
 
     func test_resolveStatus_logic_importSyncing_returnsSyncing() {
-        let result = resolveStatus(import: .syncing, export: .idle)
+        let result = resolveStatus(import: .syncing, export: .idle, lastSuccessfulSync: nil)
         XCTAssertEqual(result, .syncing)
     }
 
     func test_resolveStatus_logic_exportSyncing_returnsSyncing() {
-        let result = resolveStatus(import: .idle, export: .syncing)
+        let result = resolveStatus(import: .idle, export: .syncing, lastSuccessfulSync: nil)
         XCTAssertEqual(result, .syncing)
     }
 
-    func test_resolveStatus_logic_importFailed_returnsFailed() {
-        let result = resolveStatus(import: .failed("import err"), export: .idle)
-        if case .failed(let msg) = result {
-            XCTAssertEqual(msg, "import err")
-        } else {
-            XCTFail("Expected .failed, got \(result)")
-        }
+    func test_resolveStatus_logic_importFailed_beforeFirstSync_returnsIdle() {
+        let result = resolveStatus(import: .failed, export: .idle, lastSuccessfulSync: nil)
+        XCTAssertEqual(result, .idle)
     }
 
-    func test_resolveStatus_logic_exportFailed_returnsFailed() {
-        let result = resolveStatus(import: .idle, export: .failed("export err"))
-        if case .failed(let msg) = result {
-            XCTAssertEqual(msg, "export err")
-        } else {
-            XCTFail("Expected .failed, got \(result)")
-        }
+    func test_resolveStatus_logic_importFailed_afterFirstSync_returnsFailed() {
+        let result = resolveStatus(import: .failed, export: .idle, lastSuccessfulSync: Date())
+        XCTAssertEqual(result, .failed)
+    }
+
+    func test_resolveStatus_logic_exportFailed_afterFirstSync_returnsFailed() {
+        let result = resolveStatus(import: .idle, export: .failed, lastSuccessfulSync: Date())
+        XCTAssertEqual(result, .failed)
     }
 
     func test_resolveStatus_logic_bothSucceeded_picksLatestDate() {
         let earlier = Date(timeIntervalSinceReferenceDate: 1000)
         let later   = Date(timeIntervalSinceReferenceDate: 2000)
-        let result = resolveStatus(import: .succeeded(earlier), export: .succeeded(later))
+        let result = resolveStatus(import: .succeeded(earlier), export: .succeeded(later), lastSuccessfulSync: earlier)
         if case .succeeded(let d) = result {
             XCTAssertEqual(d, later)
         } else {
@@ -118,7 +115,7 @@ final class SyncMonitorTests: XCTestCase {
 
     func test_resolveStatus_logic_oneSucceededOneIdle_returnsSucceeded() {
         let d = Date(timeIntervalSinceReferenceDate: 500)
-        let result = resolveStatus(import: .succeeded(d), export: .idle)
+        let result = resolveStatus(import: .succeeded(d), export: .idle, lastSuccessfulSync: d)
         if case .succeeded(let rd) = result {
             XCTAssertEqual(rd, d)
         } else {
@@ -137,17 +134,22 @@ final class SyncMonitorTests: XCTestCase {
 
     // MARK: - Private helper: replicates SyncMonitor.resolveStatus logic
 
-    private func resolveStatus(import importStatus: SyncStatus, export exportStatus: SyncStatus) -> SyncStatus {
+    private func resolveStatus(
+        import importStatus: SyncStatus,
+        export exportStatus: SyncStatus,
+        lastSuccessfulSync: Date?
+    ) -> SyncStatus {
         if case .syncing = importStatus { return .syncing }
         if case .syncing = exportStatus { return .syncing }
 
-        if case .failed(let msg) = importStatus { return .failed(msg) }
-        if case .failed(let msg) = exportStatus { return .failed(msg) }
+        if lastSuccessfulSync != nil, importStatus == .failed || exportStatus == .failed {
+            return .failed
+        }
 
         var latest: Date?
         if case .succeeded(let d) = importStatus { latest = d }
         if case .succeeded(let d) = exportStatus {
-            if let existing = latest { latest = max(existing, d) } else { latest = d }
+            latest = latest.map { max($0, d) } ?? d
         }
 
         if let latest {
