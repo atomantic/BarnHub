@@ -93,7 +93,7 @@ Summary: 71/73 findings fixed across 60 files. PR merged 2026-03-28.
 | HorseRowView.swift | Platform & SwiftUI | MEDIUM: Color.green + a11y |
 | ClientRowView.swift | Platform & SwiftUI | MEDIUM: Color.green |
 | SyncIndicatorView.swift | Platform & SwiftUI | LOW |
-| StoreService.swift | Security | MEDIUM: hash + UserDefaults |
+| ~~StoreService.swift~~ | ~~Security~~ | ~~MEDIUM: hash + UserDefaults~~ (resolved — secret-code flow removed) |
 | Logger.swift | Security | MEDIUM: PII logging |
 | BarnHub.entitlements | Security | LOW: aps-environment |
 | SettingsView.swift | Code Quality | HIGH: force unwrap URL |
@@ -123,7 +123,7 @@ Summary: 71/73 findings fixed across 60 files. PR merged 2026-03-28.
 | PreviewSampleData.swift | Architecture | LOW |
 
 - [ ] **[LOW]** `BarnHub.entitlements:6` — aps-environment hardcoded to development
-- [ ] **[LOW]** `SettingsView.swift:174` — Secret code uses plain TextField instead of SecureField
+- [x] ~~**[LOW]** `SettingsView.swift:174` — Secret code uses plain TextField instead of SecureField~~ (resolved — secret-code flow removed)
 - [ ] **[LOW]** `ClientDocumentsView.swift:175` — Temp files without explicit file protection
 - [ ] **[LOW]** `BarnHub.entitlements` — Missing default-data-protection entitlement
 - [ ] **[LOW]** `DeepLinkHandler.swift:42-46` — Supplies reachable via both Home and Schedule tabs

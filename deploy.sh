@@ -125,30 +125,32 @@ if ! $SKIP_TESTS; then
 import json, sys
 data = json.load(sys.stdin)
 preferred = ['iPhone 17 Pro', 'iPhone 17', 'iPhone 16 Pro', 'iPhone 16', 'iPhone 15']
+# Prefer latest iOS runtime, then fall back.
+def runtime_key(rt):
+    parts = rt.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
+    try: return tuple(int(p) for p in parts)
+    except: return (0,)
+runtimes = sorted(
+    (rt for rt in data.get('devices', {}) if 'iOS' in rt),
+    key=runtime_key, reverse=True
+)
 for name in preferred:
-    for runtime, devices in data.get('devices', {}).items():
-        if 'iOS' not in runtime:
-            continue
-        parts = runtime.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
-        os_ver = '.'.join(parts)
-        for d in devices:
+    for rt in runtimes:
+        for d in data['devices'][rt]:
             if d.get('isAvailable') and d.get('name') == name:
-                print(f'{name},{os_ver}'); sys.exit(0)
-for runtime, devices in data.get('devices', {}).items():
-    if 'iOS' not in runtime:
-        continue
-    parts = runtime.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
-    os_ver = '.'.join(parts)
-    for d in devices:
+                print(f\"{d['name']},{d['udid']}\"); sys.exit(0)
+for rt in runtimes:
+    for d in data['devices'][rt]:
         if d.get('isAvailable') and 'iPhone' in d.get('name', ''):
-            print(f\"{d['name']},{os_ver}\"); sys.exit(0)
+            print(f\"{d['name']},{d['udid']}\"); sys.exit(0)
 " 2>/dev/null)
         SIM_NAME="${SIMINFO%%,*}"
-        SIM_OS="${SIMINFO##*,}"
-        if [ -n "$SIM_NAME" ] && [ -n "$SIM_OS" ]; then
-            echo "platform=iOS Simulator,name=$SIM_NAME,OS=$SIM_OS"
+        SIM_UDID="${SIMINFO##*,}"
+        if [ -n "$SIM_UDID" ]; then
+            echo "📱 Test device: $SIM_NAME ($SIM_UDID)" >&2
+            echo "platform=iOS Simulator,id=$SIM_UDID"
         else
-            echo "platform=iOS Simulator,name=iPhone 16,OS=18.6"
+            echo "platform=iOS Simulator,name=iPhone 16"
         fi
     )
     echo "📱 Test destination: $DESTINATION"
@@ -229,6 +231,76 @@ if $BUILD_IOS; then
         ls -la "$EXPORT_IOS/"
         exit 1
     fi
+
+    # Re-sign iOS app with explicit entitlements.
+    # The unsigned-archive + signed-export pattern above produces an IPA whose
+    # binary claims only the four default entitlements (application-identifier,
+    # team-identifier, beta-reports-active, get-task-allow). Capability
+    # entitlements from BarnHub.entitlements (CloudKit, APS) get silently
+    # stripped because -exportArchive has no .xcent to read from the unsigned
+    # archive and won't re-read the project's .entitlements file.
+    # See skill: xcodebuild-unsigned-archive-strips-entitlements.
+    RESIGN_DIR="$BUILD_DIR/resign_ios"
+    rm -rf "$RESIGN_DIR" && mkdir -p "$RESIGN_DIR"
+    unzip -q "$IPA_PATH" -d "$RESIGN_DIR"
+    RESIGN_APP="$RESIGN_DIR/Payload/${APP_NAME}.app"
+    IOS_BUNDLE_ID="net.shadowpuppet.BarnBook"
+    ICLOUD_CONTAINER="iCloud.${IOS_BUNDLE_ID}"
+    cat > "$RESIGN_DIR/signing.entitlements" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>application-identifier</key>
+    <string>${TEAM_ID}.${IOS_BUNDLE_ID}</string>
+    <key>aps-environment</key>
+    <string>production</string>
+    <key>beta-reports-active</key>
+    <true/>
+    <key>com.apple.developer.icloud-container-environment</key>
+    <string>Production</string>
+    <key>com.apple.developer.icloud-container-identifiers</key>
+    <array><string>${ICLOUD_CONTAINER}</string></array>
+    <key>com.apple.developer.icloud-services</key>
+    <array><string>CloudKit</string></array>
+    <key>com.apple.developer.team-identifier</key>
+    <string>${TEAM_ID}</string>
+    <key>com.apple.developer.ubiquity-container-identifiers</key>
+    <array><string>${ICLOUD_CONTAINER}</string></array>
+    <key>get-task-allow</key>
+    <false/>
+    <key>keychain-access-groups</key>
+    <array>
+        <string>${TEAM_ID}.*</string>
+        <string>com.apple.token</string>
+    </array>
+</dict>
+</plist>
+EOF
+
+    SIGN_IDENTITY=$(security find-identity -v -p codesigning | grep -E "Apple Distribution|iPhone Distribution" | grep "$TEAM_ID" | head -1 | sed 's/.*"\(.*\)".*/\1/')
+    if [ -z "$SIGN_IDENTITY" ]; then
+        echo "❌ No distribution signing identity for team $TEAM_ID found in keychain."
+        echo "   Run once via Xcode → Product → Archive to prime the cert, or import the distribution cert manually."
+        exit 1
+    fi
+    echo "🔏 Re-signing iOS app: $SIGN_IDENTITY"
+    codesign --force \
+        --sign "$SIGN_IDENTITY" \
+        --entitlements "$RESIGN_DIR/signing.entitlements" \
+        --preserve-metadata=identifier,flags,runtime \
+        "$RESIGN_APP"
+
+    if ! codesign -d --entitlements :- "$RESIGN_APP" 2>/dev/null \
+        | grep -q "com.apple.developer.icloud-container-identifiers"; then
+        echo "❌ Re-sign did not embed CloudKit entitlements — aborting"
+        codesign -d --entitlements :- "$RESIGN_APP" 2>&1 | head
+        exit 1
+    fi
+    echo "✅ Re-signed iOS app; CloudKit + APS entitlements verified"
+
+    rm -f "$IPA_PATH"
+    (cd "$RESIGN_DIR" && zip -qr "$IPA_PATH" Payload)
 
     inter_upload_delay
     echo "🚀 Uploading iOS to TestFlight..."

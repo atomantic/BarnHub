@@ -6,7 +6,7 @@ enum SyncStatus: Equatable {
     case idle
     case syncing
     case succeeded(Date)
-    case failed(String)
+    case failed
     case notAvailable
 
     var label: String {
@@ -14,7 +14,7 @@ enum SyncStatus: Equatable {
         case .idle:         return appLocalized("Waiting",            comment: "Sync status")
         case .syncing:      return appLocalized("Syncing…",           comment: "Sync status")
         case .succeeded:    return appLocalized("Up to date",         comment: "Sync status")
-        case .failed:       return appLocalized("Sync error",         comment: "Sync status")
+        case .failed:       return appLocalized("Sync paused",        comment: "Sync status shown when CloudKit sync can't complete")
         case .notAvailable: return appLocalized("iCloud unavailable", comment: "Sync status")
         }
     }
@@ -24,7 +24,7 @@ enum SyncStatus: Equatable {
         case .idle: "cloud"
         case .syncing: "arrow.triangle.2.circlepath.icloud"
         case .succeeded: "checkmark.icloud"
-        case .failed: "exclamationmark.icloud"
+        case .failed: "cloud"
         case .notAvailable: "icloud.slash"
         }
     }
@@ -34,7 +34,7 @@ enum SyncStatus: Equatable {
         case .idle: .secondary
         case .syncing: .barnGreen
         case .succeeded: .barnGreen
-        case .failed: .red
+        case .failed: .secondary
         case .notAvailable: .secondary
         }
     }
@@ -47,7 +47,6 @@ final class SyncMonitor {
 
     private var importStatus: SyncStatus = .idle
     private var exportStatus: SyncStatus = .idle
-    private var setupComplete = false
 
     init() {
         if FileManager.default.ubiquityIdentityToken == nil {
@@ -80,7 +79,6 @@ final class SyncMonitor {
         Task { @MainActor in
             if type == .setup {
                 if ended {
-                    setupComplete = error == nil
                     if let error {
                         BarnHubLogger.error("CloudKit setup failed: \(error.localizedDescription)")
                     } else {
@@ -94,7 +92,7 @@ final class SyncMonitor {
             if !ended {
                 eventStatus = .syncing
             } else if let error {
-                eventStatus = .failed(error.localizedDescription)
+                eventStatus = .failed
                 BarnHubLogger.error("CloudKit \(type == .import ? "import" : "export") failed: \(error.localizedDescription)")
             } else {
                 eventStatus = .succeeded(Date())
@@ -112,26 +110,36 @@ final class SyncMonitor {
     }
 
     private func resolveStatus() {
-        // If either direction is actively syncing, show syncing
-        if case .syncing = importStatus { status = .syncing; return }
-        if case .syncing = exportStatus { status = .syncing; return }
+        let newStatus = computeStatus()
+        if let date = latestSucceededDate(), lastSuccessfulSync != date {
+            lastSuccessfulSync = date
+        }
+        if status != newStatus { status = newStatus }
+    }
 
-        // If either failed, show failed
-        if case .failed(let msg) = importStatus { status = .failed(msg); return }
-        if case .failed(let msg) = exportStatus { status = .failed(msg); return }
+    private func computeStatus() -> SyncStatus {
+        if case .syncing = importStatus { return .syncing }
+        if case .syncing = exportStatus { return .syncing }
 
-        // Both idle or succeeded — pick latest success
+        // Surface failures only after a prior successful sync — fresh installs
+        // commonly hit transient errors (CloudKit setup, account reconciliation)
+        // that aren't meaningful to the user.
+        if lastSuccessfulSync != nil, importStatus == .failed || exportStatus == .failed {
+            return .failed
+        }
+
+        if let latest = latestSucceededDate() {
+            return .succeeded(latest)
+        }
+        return .idle
+    }
+
+    private func latestSucceededDate() -> Date? {
         var latest: Date?
         if case .succeeded(let d) = importStatus { latest = d }
         if case .succeeded(let d) = exportStatus {
-            if let existing = latest { latest = max(existing, d) } else { latest = d }
+            latest = latest.map { max($0, d) } ?? d
         }
-
-        if let latest {
-            lastSuccessfulSync = latest
-            status = .succeeded(latest)
-        } else {
-            status = .idle
-        }
+        return latest
     }
 }
