@@ -1,6 +1,35 @@
 # Done Log
 
-Completed items archived from PLAN.md. For release notes, see `.changelogs/`.
+Completed items archived from PLAN.md. For release notes, see `CHANGELOG.md`.
+
+## 2026-04-28
+
+- iPad/macOS sidebar layout — NavigationSplitView with hierarchical sub-page links, selected sub-item highlighting, sidebar width tuned for label fit
+- Localization complete for all 8 target locales (de, fr, nl, sv, es-ES, es-MX, pt-BR, it) — full coverage in `Localizable.xcstrings`; reactive in-app language switching
+- Localization workflow documentation moved to [scripts/LOCALIZATION.md](./scripts/LOCALIZATION.md)
+- Onboarding flow (1.6.1) — 5-stage first-launch sheet (welcome → notifications → first horse → clients → Pro offer)
+- Cross-platform Pro purchase (StoreKit) — iOS + macOS parity
+- macOS dashboard home + first-launch sheet
+- macOS App Store screenshot automation, single-launch URL-event capture, sales-focused captures
+- Calendar view replaces schedule dashboard with Day/Week/Month toggle and unified Add Event dropdown
+- Equine dentist visit tracking and scheduling
+- Horse documents, gender field, and feed planning system (with sheets, wide layout, inline product creation)
+- iPad dashboard layout with summary widgets on home screen
+- Two-column horse form
+- Better Swift Audit follow-up fixes (continuation of 2026-03-28 PR #8):
+  - `BarnHubApp.swift` — replaced `try!` with safe in-memory container fallback
+  - `WeightChartView.swift` — removed `plotFrame!` force unwrap
+  - `SyncMonitor.swift` — added `removeObserver` in deinit
+  - `ConfirmationDialog.swift` — accessibility traits (`.isModal`, `.contain`, sort priority)
+  - `Color+Brand.swift` — explicit dark-mode variants via `Color(light:dark:)`
+  - `Logger.swift` — `privacy: .private` on all PII fields
+  - `SettingsView.swift` — replaced URL force-unwrap with safe `if let url`
+  - `BarnNoteListView.swift` — calendar-based grouping with `appLocalized()` instead of fragile string compare
+  - `DeepLinkHandler.swift` — Supplies single-route disambiguation (Home only)
+  - DRY nav destinations — centralized via `.withRouteDestinations()` extension in BarnHubApp.swift
+  - StoreService — secret-code flow removed, hash + UserDefaults concern resolved
+- macOS-target fixes — encryption compliance, sidebar width, empty-state centering, feed entry sheet rendering, form number-field duplicate label
+- App Store rejection resolution (1.6.0) — macOS code-signing and iOS signing gaps
 
 ## 2026-03-28
 
