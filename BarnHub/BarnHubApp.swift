@@ -104,15 +104,36 @@ struct BarnHubApp: App {
         .modelContainer(modelContainer)
         #if os(macOS)
         .defaultSize(width: 1200, height: 800)
+        #elseif targetEnvironment(macCatalyst)
+        .defaultSize(width: 1024, height: 768)
+        #endif
         .commands {
+            SidebarCommands()
+
+            CommandMenu("Go") {
+                ForEach(Router.AppTab.allCases, id: \.self) { tab in
+                    Button {
+                        // Match iOS tab-bar semantics: switch preserves the stack;
+                        // re-pressing the current tab's shortcut pops to root.
+                        if router.selectedTab == tab {
+                            router.popToRoot(tab: tab)
+                        } else {
+                            router.selectedTab = tab
+                        }
+                    } label: {
+                        Label(tab.title, systemImage: tab.icon)
+                    }
+                    .keyboardShortcut(tab.keyboardShortcut, modifiers: .command)
+                }
+            }
+
+            #if os(macOS)
             CommandGroup(replacing: .appTermination) {
                 Button("Quit BarnHub") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q", modifiers: .command)
             }
+            #endif
         }
-        #elseif targetEnvironment(macCatalyst)
-        .defaultSize(width: 1024, height: 768)
-        #endif
 
         #if os(macOS)
         Settings {
