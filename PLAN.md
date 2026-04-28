@@ -12,18 +12,14 @@ For completed work, see [DONE.md](./DONE.md). For localization workflow, see [sc
 
 ## Backlog
 
-- [ ] Verify `NotificationService.swift` hashValue collision is safe (audit flagged HIGH; default Hashable in use)
 - [ ] `ToastView.swift` — replace hardcoded `Color.red` with brand error color
 - [ ] `BarnHub.entitlements` — make `aps-environment` build-config dependent (currently hardcoded `development`)
 - [ ] `BarnHub.entitlements` — add default-data-protection entitlement
 - [ ] `ClientDocumentsView.swift:196` — set `FileProtectionLevel` on temp files (e.g., `.completeUntilFirstUserAuthentication`)
-- [ ] `PreviewSampleData.swift` — wrap entire file in `#if DEBUG`
-- [ ] `DataExportService.swift` / `DataImportService.swift` — surface silent `try?` failures via toast
+- [ ] `PreviewSampleData.swift` — wrap entire file in `#if DEBUG` (only the UIKit/AppKit imports are conditional today)
 - [ ] `ContractPDFService.swift` / `InvoicePDFService.swift` — replace `UIColor` with platform-agnostic `Color` for macOS parity
-- [ ] `ToastModifier.swift` — replace empty catch with logged error
-- [ ] `Date+Formatting.swift` — uncached formatter performance pass
-- [ ] DRY duplicate views: `VetScheduleView` / `FarrierScheduleView` share more than just the row component
-- [ ] DRY filter chains: `BarnDashboardView`, `ReportsView` (`summaryCard` + `asShortCurrency`)
+- [ ] PDF service test coverage — `ContractPDFService` (278 LOC) and `InvoicePDFService` (180 LOC) are revenue-critical and untested
+- [ ] `DataManagementView.swift:220` — surface specific CSV import errors (currently generic toast on silent `try?` failure)
 - [ ] DRY toast state: `PaywallView`, `ClientHorsesView`
 
 ## Future / Ideas

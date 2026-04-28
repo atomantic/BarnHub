@@ -4,6 +4,7 @@ Completed items archived from PLAN.md. For release notes, see `CHANGELOG.md`.
 
 ## 2026-04-28
 
+- Replan audit verified backlog — confirmed-done: `NotificationService` hashValue (default Hashable safe), `DataExportService`/`DataImportService` silent failures (no silent `try?` left), `ToastModifier` empty catch (handles `CancellationError`), `VetScheduleView`/`FarrierScheduleView` DRY (extracted `ScheduleRecordRow`), `Date+Formatting` uncached formatter (`compactFormatter` cached); pruned stale `BarnDashboardView`/`ReportsView` summaryCard DRY (only `ReportsView` uses those helpers)
 - iPad/macOS sidebar layout — NavigationSplitView with hierarchical sub-page links, selected sub-item highlighting, sidebar width tuned for label fit
 - Localization complete for all 8 target locales (de, fr, nl, sv, es-ES, es-MX, pt-BR, it) — full coverage in `Localizable.xcstrings`; reactive in-app language switching
 - Localization workflow documentation moved to [scripts/LOCALIZATION.md](./scripts/LOCALIZATION.md)
