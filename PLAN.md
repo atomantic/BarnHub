@@ -4,7 +4,7 @@ For completed work, see [DONE.md](./DONE.md).
 
 ## Next Up
 
-- iPad-optimized sidebar layout with split view
+_(no items)_
 
 ## Localization
 

@@ -32,6 +32,16 @@ final class Router {
             case .accounting: "dollarsign.circle.fill"
             }
         }
+
+        var keyboardShortcut: KeyEquivalent {
+            switch self {
+            case .home: "1"
+            case .horses: "2"
+            case .clients: "3"
+            case .schedule: "4"
+            case .accounting: "5"
+            }
+        }
     }
 
     func navigate(to route: any Hashable, tab: AppTab? = nil) {

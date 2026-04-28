@@ -113,4 +113,10 @@ final class RouterTests: XCTestCase {
         router.navigate(to: HorseRoute.list)
         XCTAssertEqual(router.horsesPath.count, 3)
     }
+
+    func testTabKeyboardShortcuts_areUniqueAndSequential() {
+        let shortcuts = Router.AppTab.allCases.map(\.keyboardShortcut.character)
+        XCTAssertEqual(shortcuts, ["1", "2", "3", "4", "5"], "Tabs should map to Cmd-1..5 in declaration order")
+        XCTAssertEqual(Set(shortcuts).count, shortcuts.count, "Each tab must have a unique keyboard shortcut")
+    }
 }
