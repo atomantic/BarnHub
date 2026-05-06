@@ -22,6 +22,18 @@ For completed work, see [DONE.md](./DONE.md). For localization workflow, see [sc
 - [ ] `DataManagementView.swift:220` — surface specific CSV import errors (currently generic toast on silent `try?` failure)
 - [ ] DRY toast state: `PaywallView`, `ClientHorsesView`
 
+## Competitive Gaps
+
+Verified against competitor public feature/pricing pages on 2026-05-05. Each entry cites the source so we can re-check as competitors evolve.
+
+- [ ] **Multi-user / staff access (CloudKit shared zones)** — Stable Secretary offers customizable staff/provider/owner permissions (stablesecretary.com/features); Barn Manager offers unlimited team users on its plans (barnmanager.com). BarnHub today is single-Apple-ID. Foundational gap for boarding barns with multiple staff in the system simultaneously.
+- [ ] **Boarder-facing client portal** — Stable Secretary ships Client Invoice & Booking Portals (stablesecretary.com/features); EquineGenie's clientGenie ($199 add-on) provides remote data entry (equinegenie.com). BarnHub has no logged-in client surface today; PDFs are emailed.
+- [ ] **Stripe / card payment processing** — Stable Secretary's Professional tier collects board payments via Stripe inside the app (stablesecretary.com/features). BarnHub records payments but does not process them. Investigate whether StoreKit/Apple Pay or a Stripe SDK integration fits the "no third-party server" privacy model.
+- [ ] **QuickBooks Online sync for invoices/transactions** — Barn Manager Pro tier syncs invoices to QuickBooks Online (barnmanager.com). BarnHub already exports CSV; direct QuickBooks API integration would close the gap. Already loosely tracked under "Export to QuickBooks/Xero" below — promote to Backlog when prioritized.
+- [ ] **Show / competition tracking module** — EquineGenie has show/race/event tracking (equinegenie.com); Barn Manager has competition scheduling (barnmanager.com). BarnHub has no first-class shows feature; users currently fake it with reminders + notes.
+- [ ] **Breeding / foaling records** — EquineGenie's BREEDER tier ($449) is built around stallion books, mare cycles, and foaling logs; Stable Secretary lists breeding records (equinegenie.com, stablesecretary.com/features). BarnHub has no breeding data model. Niche but high-value for breeding operations.
+- [ ] **Structured training plans / skill progression** — EquineGenie's TRAINER tier ($399) covers training records (equinegenie.com). BarnHub tracks lessons (date, horse, client, notes) but not multi-stage training programs across many horses.
+
 ## Future / Ideas
 
 - Home screen widgets for at-a-glance barn stats
