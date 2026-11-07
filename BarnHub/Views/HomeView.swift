@@ -177,7 +177,11 @@ struct HomeView: View {
                 #if os(macOS)
                 .frame(height: 200)
                 #else
-                .frame(height: 260)
+                // Scale with the container instead of a fixed iPhone height, so the
+                // short, wide iPhone Duo outer display (and landscape) keeps room for content.
+                .containerRelativeFrame(.vertical) { height, _ in
+                    min(260, max(210, height * 0.32))
+                }
                 #endif
 
             VStack(spacing: 6) {

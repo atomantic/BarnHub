@@ -48,12 +48,18 @@ struct LessonListView: View {
                 }
             }
             ToolbarItem(placement: .leadingBar) {
-                Picker("Filter", selection: $showUpcomingOnly) {
-                    Text("All").tag(false)
-                    Text("Upcoming").tag(true)
+                // A menu with a title + symbol adapts to vertical bars and the
+                // overflow menu on iPhone Duo; a fixed-width segmented control can't.
+                Menu {
+                    Picker("Filter", selection: $showUpcomingOnly) {
+                        Text("All").tag(false)
+                        Text("Upcoming").tag(true)
+                    }
+                } label: {
+                    Label("Filter", systemImage: showUpcomingOnly
+                          ? "line.3.horizontal.decrease.circle.fill"
+                          : "line.3.horizontal.decrease.circle")
                 }
-                .pickerStyle(.segmented)
-                .frame(width: 160)
             }
         }
     }

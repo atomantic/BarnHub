@@ -43,7 +43,7 @@ struct HorseListView: View {
                 Button {
                     router.navigate(to: HorseRoute.edit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("Add Horse", systemImage: "plus")
                 }
             }
             ToolbarItem(placement: .leadingBar) {

@@ -146,7 +146,7 @@ struct HealthTimelineView: View {
         .toolbar {
             ToolbarItem(placement: .trailingBar) {
                 NavigationLink(value: HorseRoute.weightChart(horseID)) {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
+                    Label("Weight Trend", systemImage: "chart.line.uptrend.xyaxis")
                 }
             }
             ToolbarItem(placement: .primaryAction) {
@@ -172,7 +172,7 @@ struct HealthTimelineView: View {
                         Label("Log Weight", systemImage: TimelineEventType.weight.icon)
                     }
                 } label: {
-                    Image(systemName: "plus")
+                    Label("Add Event", systemImage: "plus")
                 }
             }
         }
