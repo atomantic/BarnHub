@@ -32114,6 +32114,536 @@
           }
         }
       }
+    },
+    "Report a Bug" : {
+      "comment" : "Settings row and screen title for sending a bug report",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler melden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informar de un error"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reportar un error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaler un bug"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnala un bug"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bug melden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relatar um bug"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapportera en bugg"
+          }
+        }
+      }
+    },
+    "What happened?" : {
+      "comment" : "Bug report section header for the problem description",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist passiert?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué ha pasado?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué pasó?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que s’est-il passé ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cosa è successo?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wat is er gebeurd?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que aconteceu?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vad hände?"
+          }
+        }
+      }
+    },
+    "Describe what you expected and what happened instead." : {
+      "comment" : "Bug report description footer",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschreibe, was du erwartet hast und was stattdessen passiert ist."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Describe lo que esperabas y lo que ocurrió en su lugar."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Describe lo que esperabas y lo que pasó en su lugar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Décrivez ce que vous attendiez et ce qui s’est passé à la place."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descrivi cosa ti aspettavi e cosa è successo invece."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschrijf wat je verwachtte en wat er in plaats daarvan gebeurde."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descreva o que você esperava e o que aconteceu no lugar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beskriv vad du förväntade dig och vad som hände i stället."
+          }
+        }
+      }
+    },
+    "Steps to reproduce (optional)" : {
+      "comment" : "Bug report section header for optional reproduction steps",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte zum Nachstellen (optional)"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasos para reproducirlo (opcional)"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasos para reproducirlo (opcional)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étapes pour reproduire (facultatif)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passaggi per riprodurlo (facoltativo)"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stappen om het te reproduceren (optioneel)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passos para reproduzir (opcional)"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steg för att återskapa (valfritt)"
+          }
+        }
+      }
+    },
+    "Include diagnostic info" : {
+      "comment" : "Bug report toggle to attach diagnostic data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnosedaten anhängen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir información de diagnóstico"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir información de diagnóstico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclure les infos de diagnostic"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Includi informazioni diagnostiche"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostische gegevens toevoegen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir informações de diagnóstico"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkludera diagnostikinformation"
+          }
+        }
+      }
+    },
+    "Preview diagnostic info" : {
+      "comment" : "Bug report disclosure that shows the diagnostic data that will be sent",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnosedaten ansehen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver información de diagnóstico"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver información de diagnóstico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu des infos de diagnostic"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anteprima informazioni diagnostiche"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostische gegevens bekijken"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver informações de diagnóstico"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visa diagnostikinformation"
+          }
+        }
+      }
+    },
+    "Diagnostic info includes the app version, device model, settings, iCloud sync status, record counts, and recent error messages. It never includes names, notes, contacts, amounts, or anything else you've entered." : {
+      "comment" : "Bug report footer explaining what diagnostic data is included",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Diagnosedaten enthalten App-Version, Gerätemodell, Einstellungen, iCloud-Sync-Status, Anzahl der Einträge und aktuelle Fehlermeldungen. Namen, Notizen, Kontakte, Beträge oder andere von dir eingegebene Inhalte sind nie enthalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La información de diagnóstico incluye la versión de la app, el modelo del dispositivo, los ajustes, el estado de sincronización de iCloud, el número de registros y los mensajes de error recientes. Nunca incluye nombres, notas, contactos, importes ni nada que hayas introducido."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La información de diagnóstico incluye la versión de la app, el modelo del dispositivo, la configuración, el estado de sincronización de iCloud, la cantidad de registros y los mensajes de error recientes. Nunca incluye nombres, notas, contactos, montos ni nada que hayas ingresado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les infos de diagnostic comprennent la version de l’app, le modèle de l’appareil, les réglages, l’état de la synchronisation iCloud, le nombre d’enregistrements et les messages d’erreur récents. Elles n’incluent jamais de noms, notes, contacts, montants ni rien de ce que vous avez saisi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le informazioni diagnostiche includono versione dell’app, modello del dispositivo, impostazioni, stato della sincronizzazione iCloud, numero di record e messaggi di errore recenti. Non includono mai nomi, note, contatti, importi o altri dati che hai inserito."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostische gegevens bevatten de appversie, het apparaatmodel, instellingen, de iCloud-synchronisatiestatus, aantallen records en recente foutmeldingen. Namen, notities, contacten, bedragen of andere dingen die je hebt ingevoerd worden nooit meegestuurd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As informações de diagnóstico incluem a versão do app, o modelo do dispositivo, os ajustes, o status da sincronização com o iCloud, a quantidade de registros e mensagens de erro recentes. Nunca incluem nomes, notas, contatos, valores ou qualquer outra coisa que você tenha inserido."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostikinformationen innehåller appversion, enhetsmodell, inställningar, status för iCloud-synkning, antal poster och senaste felmeddelanden. Den innehåller aldrig namn, anteckningar, kontakter, belopp eller något annat du har angett."
+          }
+        }
+      }
+    },
+    "Send Report" : {
+      "comment" : "Bug report button that opens an email to support",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bericht senden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar informe"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar reporte"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer le rapport"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invia segnalazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapport verzenden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar relatório"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skicka rapport"
+          }
+        }
+      }
+    },
+    "Copy Report" : {
+      "comment" : "Bug report button that copies the report to the clipboard",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bericht kopieren"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar informe"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar reporte"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le rapport"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copia segnalazione"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapport kopiëren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar relatório"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiera rapport"
+          }
+        }
+      }
+    },
+    "Report copied. Paste it into an email to %@." : {
+      "comment" : "Toast after copying a bug report; the argument is the support email address",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bericht kopiert. Füge ihn in eine E-Mail an %@ ein."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informe copiado. Pégalo en un correo a %@."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reporte copiado. Pégalo en un correo a %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapport copié. Collez-le dans un e-mail à %@."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnalazione copiata. Incollala in un’email a %@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapport gekopieerd. Plak het in een e-mail aan %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relatório copiado. Cole-o em um e-mail para %@."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rapporten har kopierats. Klistra in den i ett mejl till %@."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
