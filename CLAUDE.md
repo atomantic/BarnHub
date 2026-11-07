@@ -13,12 +13,12 @@ Equine barn management iOS app for tracking horses, clients, schedules, supplies
 ```bash
 # Build
 xcodebuild build -project BarnHub.xcodeproj -scheme BarnHub \
-  -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
+  -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 
 # Run tests
 xcodebuild test -project BarnHub.xcodeproj -scheme BarnHub \
   -only-testing:BarnHubTests \
-  -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
+  -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 ```
 
 ## Git Workflow
