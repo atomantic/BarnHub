@@ -218,9 +218,8 @@ struct ContentView: View {
     }
 
     private func navigateToScreenshotPage(_ page: String) {
-        // Set the tab synchronously; defer detail-level navigation so
-        // SidebarView's own cascade (onChange → handleSelection → popToRoot)
-        // doesn't wipe our nav path on first render.
+        // Set the tab synchronously; defer detail-level navigation until the
+        // layout (tab bar or sidebar) has rendered its first frame.
         let tab: Router.AppTab
         switch page {
         case "home": tab = .home
