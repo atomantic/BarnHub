@@ -85,7 +85,7 @@ struct BarnNoteListView: View {
                 Button {
                     router.navigate(to: BarnRoute.barnNoteEdit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("New Note", systemImage: "plus")
                 }
             }
         }

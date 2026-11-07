@@ -51,7 +51,7 @@ struct SupplyListView: View {
                 Button {
                     router.navigate(to: BarnRoute.supplyEdit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("New Supply", systemImage: "plus")
                 }
             }
         }

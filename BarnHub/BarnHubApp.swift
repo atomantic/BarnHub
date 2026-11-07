@@ -374,10 +374,9 @@ private extension View {
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
-                    Image(systemName: "gearshape.fill")
+                    Label("Settings", systemImage: "gearshape.fill")
                         .foregroundStyle(.white)
                 }
-                .accessibilityLabel(appLocalized("Settings"))
             }
         }
     }

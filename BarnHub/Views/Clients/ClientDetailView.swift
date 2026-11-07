@@ -205,20 +205,18 @@ struct ClientDetailView: View {
 
     @ToolbarContentBuilder
     private var clientToolbar: some ToolbarContent {
-        ToolbarItem(placement: .trailingBar) {
-            Menu {
-                Button {
-                    router.navigate(to: ClientRoute.edit(clientID))
-                } label: {
-                    Label("Edit", systemImage: "pencil")
-                }
-                Button(role: .destructive) {
-                    showDeleteConfirmation = true
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
+        // Standalone items (instead of a custom "…" menu) so iPhone Duo can lay
+        // them out vertically and fold them into the system overflow menu.
+        ToolbarItemGroup(placement: .trailingBar) {
+            Button {
+                router.navigate(to: ClientRoute.edit(clientID))
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Label("Edit", systemImage: "pencil")
+            }
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
         }
     }

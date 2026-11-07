@@ -428,20 +428,18 @@ struct HorseDetailView: View {
 
     @ToolbarContentBuilder
     private var horseToolbar: some ToolbarContent {
-        ToolbarItem(placement: .trailingBar) {
-            Menu {
-                Button {
-                    router.navigate(to: HorseRoute.edit(horseID))
-                } label: {
-                    Label("Edit", systemImage: "pencil")
-                }
-                Button(role: .destructive) {
-                    showDeleteConfirmation = true
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
+        // Standalone items (instead of a custom "…" menu) so iPhone Duo can lay
+        // them out vertically and fold them into the system overflow menu.
+        ToolbarItemGroup(placement: .trailingBar) {
+            Button {
+                router.navigate(to: HorseRoute.edit(horseID))
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Label("Edit", systemImage: "pencil")
+            }
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete", systemImage: "trash")
             }
         }
     }
