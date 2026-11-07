@@ -16,6 +16,7 @@ struct SettingsView: View {
     #endif
     @State private var showManageSubscription = false
     @State private var showWelcomeSheet = false
+    @State private var showBugReport = false
     #if os(macOS)
     @State private var showPaywall = false
     #endif
@@ -111,6 +112,9 @@ struct SettingsView: View {
             .sheet(isPresented: $showWelcomeSheet) {
                 FirstLaunchSheet()
             }
+            .sheet(isPresented: $showBugReport) {
+                BugReportView()
+            }
             #if os(macOS)
             .sheet(isPresented: $showPaywall) {
                 NavigationStack {
@@ -194,6 +198,11 @@ struct SettingsView: View {
                             settingsRow("Send Feedback", icon: "envelope")
                         }
                     }
+                }
+                Button {
+                    showBugReport = true
+                } label: {
+                    settingsRow("Report a Bug", icon: "ladybug")
                 }
                 Button {
                     showWelcomeSheet = true
@@ -296,6 +305,11 @@ struct SettingsView: View {
                     Link(destination: url) {
                         settingsRow("Send Feedback", icon: "envelope")
                     }
+                }
+                Button {
+                    showBugReport = true
+                } label: {
+                    settingsRow("Report a Bug", icon: "ladybug")
                 }
                 Button {
                     showWelcomeSheet = true

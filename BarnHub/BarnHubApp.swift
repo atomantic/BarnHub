@@ -50,6 +50,7 @@ struct BarnHubApp: App {
         let config = isSeedMode
             ? ModelConfiguration(isStoredInMemoryOnly: true)
             : ModelConfiguration(cloudKitDatabase: .automatic)
+        StorageMode.current = isSeedMode ? .inMemorySeed : .cloudKit
         do {
             let container = try ModelContainer(
                 for: Horse.self, Client.self, Transaction.self,
@@ -72,6 +73,7 @@ struct BarnHubApp: App {
                     Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
                     configurations: ModelConfiguration(isStoredInMemoryOnly: true)
                 )
+                StorageMode.current = .inMemoryFallback
                 return fallback
             } catch {
                 BarnHubLogger.error("Fallback in-memory ModelContainer init also failed: \(error.localizedDescription)")
@@ -425,6 +427,9 @@ private extension View {
                 case .addVetRecord(let id): VetRecordEditView(horseID: id)
                 case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
                 case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
+                case .editVetRecord(let id): VetRecordEditView(horseID: nil, recordID: id)
+                case .editFarrierVisit(let id): FarrierVisitEditView(horseID: nil, visitID: id)
+                case .editDentistVisit(let id): DentistVisitEditView(horseID: nil, visitID: id)
                 case .healthTimeline(let id): HealthTimelineView(horseID: id)
                 case .weightChart(let id): WeightChartView(horseID: id)
                 case .documents(let id): HorseDocumentsView(horseID: id)
