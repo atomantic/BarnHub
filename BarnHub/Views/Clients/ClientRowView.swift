@@ -15,23 +15,33 @@ struct ClientRowView: View {
                 Text(client.fullName)
                     .font(.headline)
 
-                HStack(spacing: 12) {
-                    if !client.phone.isEmpty {
-                        Label(client.phone, systemImage: "phone")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    if !client.email.isEmpty {
-                        Label(client.email, systemImage: "envelope")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                    }
+                // Side by side when there's room; stacked on narrow widths such as
+                // the iPhone Duo outer display, so the phone number never wraps.
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 12) { contactLabels }
+                    VStack(alignment: .leading, spacing: 2) { contactLabels }
                 }
             }
 
             Spacer()
         }
         .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private var contactLabels: some View {
+        if !client.phone.isEmpty {
+            Label(client.phone, systemImage: "phone")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+        }
+        if !client.email.isEmpty {
+            Label(client.email, systemImage: "envelope")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
 }
