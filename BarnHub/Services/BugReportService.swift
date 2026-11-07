@@ -277,8 +277,10 @@ enum BugReport {
     static let supportEmail = "support@barnhub.online"
 
     /// mailto: URLs get unreliable past a few thousand characters, so the fallback
-    /// path trims diagnostics (oldest log lines go first) to stay under this.
-    static let mailtoBodyLimit = 6000
+    /// path caps the full percent-encoded URL at this length, trimming the oldest
+    /// log lines first and giving up (so the caller copies the report) if it still
+    /// doesn't fit.
+    static let mailtoURLLimit = 8000
 
     static func subject(diagnostics: AppDiagnostics?) -> String {
         guard let diagnostics else { return "BarnHub Bug Report" }
@@ -301,20 +303,31 @@ enum BugReport {
         return sections.joined(separator: "\n")
     }
 
-    /// Builds a mailto: URL, dropping the oldest log lines if the body is too long.
+    /// Builds a mailto: URL no longer than `mailtoURLLimit` once percent-encoded,
+    /// dropping the oldest log lines as needed. Returns nil when the report can't
+    /// fit even without any log lines, so the caller can fall back to copying the
+    /// full report instead of handing the mail client a truncated one.
     static func mailtoURL(description: String, steps: String, diagnostics: AppDiagnostics?) -> URL? {
+        let subject = Self.subject(diagnostics: diagnostics)
         var trimmed = diagnostics
-        var body = Self.body(description: description, steps: steps, diagnostics: trimmed)
-        while body.count > mailtoBodyLimit, var d = trimmed, !d.recentLogs.isEmpty {
+        while true {
+            let body = Self.body(description: description, steps: steps, diagnostics: trimmed)
+            if let url = encodedMailto(subject: subject, body: body),
+               url.absoluteString.count <= mailtoURLLimit {
+                return url
+            }
+            guard var d = trimmed, !d.recentLogs.isEmpty else { return nil }
             d.recentLogs.removeFirst(max(1, d.recentLogs.count / 4))
             trimmed = d
-            body = Self.body(description: description, steps: steps, diagnostics: trimmed)
         }
+    }
+
+    private static func encodedMailto(subject: String, body: String) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = supportEmail
         components.queryItems = [
-            URLQueryItem(name: "subject", value: subject(diagnostics: diagnostics)),
+            URLQueryItem(name: "subject", value: subject),
             URLQueryItem(name: "body", value: body),
         ]
         return components.url
