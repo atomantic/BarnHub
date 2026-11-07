@@ -113,4 +113,72 @@ final class RouterTests: XCTestCase {
         router.navigate(to: HorseRoute.list)
         XCTAssertEqual(router.horsesPath.count, 3)
     }
+
+    func testTabKeyboardShortcuts_areUniqueAndSequential() {
+        let shortcuts = Router.AppTab.allCases.map(\.keyboardShortcut.character)
+        XCTAssertEqual(shortcuts, ["1", "2", "3", "4", "5"], "Tabs should map to Cmd-1..5 in declaration order")
+        XCTAssertEqual(Set(shortcuts).count, shortcuts.count, "Each tab must have a unique keyboard shortcut")
+    }
+
+    // MARK: - Sidebar selection sync
+
+    /// Simulates SidebarView: an external tab change syncs the selection, and the
+    /// resulting binding change is fed back through `userSelectionChanged`.
+    private func syncSidebar(_ sync: inout SidebarSelectionSync, selection: inout SidebarSelection?, to tab: Router.AppTab, router: Router) {
+        router.selectedTab = tab
+        if let synced = sync.syncFromRouter(tab: tab, current: selection) {
+            selection = synced
+            sync.userSelectionChanged(to: synced, router: router)
+        }
+    }
+
+    func testSidebarSync_switchingAwayAndBackPreservesTabStack() {
+        let router = Router()
+        var sync = SidebarSelectionSync()
+        var selection: SidebarSelection? = .horses
+        SidebarSelection.horses.apply(to: router)
+        router.navigate(to: HorseRoute.list, tab: .horses)
+        XCTAssertEqual(router.horsesPath.count, 1)
+
+        syncSidebar(&sync, selection: &selection, to: .home, router: router)
+        XCTAssertEqual(selection, .home)
+        syncSidebar(&sync, selection: &selection, to: .horses, router: router)
+
+        XCTAssertEqual(selection, .horses)
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertEqual(router.horsesPath.count, 1, "Returning via keyboard shortcut must not pop the stack")
+        XCTAssertNil(sync.pendingSync)
+    }
+
+    func testSidebarSync_keepsSubItemSelectionWithinSameTab() {
+        var sync = SidebarSelectionSync()
+        let current = SidebarSelection.schedulePage(.lessons)
+        XCTAssertNil(sync.syncFromRouter(tab: .schedule, current: current))
+        XCTAssertEqual(sync.syncFromRouter(tab: .home, current: current), .home)
+    }
+
+    func testSidebarUserTapOnTopLevelRowPopsToRoot() {
+        let router = Router()
+        var sync = SidebarSelectionSync()
+        router.navigate(to: HorseRoute.list, tab: .horses)
+
+        sync.userSelectionChanged(to: .horses, router: router)
+
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertTrue(router.horsesPath.isEmpty, "A user tap on a top-level row resets that tab")
+    }
+
+    func testSidebarUserTapAfterSyncIsNotSwallowed() {
+        let router = Router()
+        var sync = SidebarSelectionSync()
+        router.navigate(to: HorseRoute.list, tab: .horses)
+        _ = sync.syncFromRouter(tab: .home, current: .horses)
+
+        // The binding change for the sync was coalesced away; the next change is a real tap.
+        sync.userSelectionChanged(to: .horses, router: router)
+
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertTrue(router.horsesPath.isEmpty)
+        XCTAssertNil(sync.pendingSync)
+    }
 }

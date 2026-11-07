@@ -15557,6 +15557,59 @@
         }
       }
     },
+    "Go" : {
+      "comment" : "Navigation menu name (keyboard shortcuts for tab switching)",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehe zu"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aller"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vai"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga naar"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gå till"
+          }
+        }
+      }
+    },
     "Good Morning from BarnHub" : {
       "localizations" : {
         "de" : {
