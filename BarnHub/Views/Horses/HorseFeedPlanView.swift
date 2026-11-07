@@ -68,7 +68,7 @@ struct HorseFeedPlanView: View {
                 Button {
                     sheetState = .add(.morning)
                 } label: {
-                    Image(systemName: "plus")
+                    Label("Add", systemImage: "plus")
                 }
             }
         }

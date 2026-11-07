@@ -67,7 +67,7 @@ struct ReminderListView: View {
                 Button {
                     router.navigate(to: BarnRoute.reminderEdit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("New Reminder", systemImage: "plus")
                 }
             }
             ToolbarItem(placement: .secondaryAction) {

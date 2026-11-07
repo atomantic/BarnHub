@@ -190,6 +190,33 @@ final class ScreenshotTests: XCTestCase {
         saveScreenshot("07_reports")
     }
 
+    // MARK: - iPhone Duo Screenshots
+    // Run once with the simulator closed (outer display) and once open (inner display);
+    // take_screenshots.sh passes the matching folder (duo_outer / duo_inner) via config.
+    // Each screen relaunches straight to its route, because bar positions (vertical on the
+    // side vs. horizontal) differ between poses and make tab-tapping unreliable.
+
+    func testCaptureDuoScreenshots() {
+        guard deviceType.hasPrefix("duo") else { return }
+
+        let screens: [(name: String, route: String)] = [
+            ("01_home", "home"),
+            ("02_horses", "horses"),
+            ("03_horse_detail", "horseDetail"),
+            ("04_clients", "clients"),
+            ("05_client_detail", "clientDetail"),
+            ("06_schedule", "schedule"),
+            ("07_accounting", "accounting"),
+        ]
+        for (index, screen) in screens.enumerated() {
+            if let target = targetScreen, target != screen.name { continue }
+            if index > 0 || targetScreen != nil {
+                relaunch(route: screen.route)
+            }
+            saveScreenshot(screen.name)
+        }
+    }
+
     // MARK: - Helpers
 
     private func tapTile(_ identifier: String) {
@@ -200,8 +227,8 @@ final class ScreenshotTests: XCTestCase {
         }
     }
 
-    private func relaunch() {
-        app.launchArguments = launchArgs
+    private func relaunch(route: String? = nil) {
+        app.launchArguments = launchArgs + (route.map { ["-screenshotRoute", $0] } ?? [])
         app.launch()
         sleep(2)
         dismissSystemAlerts()
