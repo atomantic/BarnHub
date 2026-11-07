@@ -77,6 +77,9 @@ struct BarnDashboardView: View {
     @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
     @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
 
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     @State private var viewMode: CalendarViewMode = .week
     @State private var selectedDate: Date = .now
 
@@ -244,12 +247,28 @@ struct BarnDashboardView: View {
 
     #if os(iOS)
 
+    /// At regular width (iPad, iPhone Duo inner display) Month and Week show the
+    /// selected day's events beside the calendar instead of drilling into Day view.
+    private var showsDayPanel: Bool {
+        sizeClass == .regular && viewMode != .day
+    }
+
     private var iOSCalendar: some View {
-        VStack(spacing: 0) {
-            calendarControlBar
-            Divider()
-            calendarContent
-                .frame(maxHeight: .infinity)
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                calendarControlBar
+                Divider()
+                calendarContent
+                    .frame(maxHeight: .infinity)
+            }
+            .frame(maxWidth: .infinity)
+
+            if showsDayPanel {
+                Divider()
+                // Equal halves keep the split on the fold when iPhone Duo is partially open.
+                dayDetailPanel
+                    .frame(maxWidth: .infinity)
+            }
         }
         .background(Color.barnOffWhite)
     }
@@ -308,14 +327,18 @@ struct BarnDashboardView: View {
                 monthStart: monthStart,
                 selectedDate: selectedDate,
                 onDateSelected: { selectedDate = $0 },
-                onEventTapped: navigateToEvent
+                onEventTapped: navigateToEvent,
+                showEventsList: !showsDayPanel
             )
         case .week:
             CalendarWeekView(
                 eventsByDay: eventsByDay,
                 weekStart: weekStart,
                 selectedDate: selectedDate,
-                onDateSelected: { date in selectedDate = date; viewMode = .day },
+                onDateSelected: { date in
+                    selectedDate = date
+                    if !showsDayPanel { viewMode = .day }
+                },
                 onEventTapped: navigateToEvent
             )
         case .day:
@@ -351,7 +374,7 @@ struct BarnDashboardView: View {
                 Label("Feed Products", systemImage: "leaf.fill")
             }
         } label: {
-            Image(systemName: "line.3.horizontal")
+            Label("Browse", systemImage: "line.3.horizontal")
         }
     }
 
@@ -373,7 +396,7 @@ struct BarnDashboardView: View {
                 Label("Lesson", systemImage: "book.fill")
             }
         } label: {
-            Image(systemName: "plus")
+            Label("Add Event", systemImage: "plus")
         }
     }
 
@@ -476,7 +499,9 @@ struct BarnDashboardView: View {
         }
     }
 
-    // MARK: Day Detail Panel (macOS month view)
+    #endif
+
+    // MARK: Day Detail Panel (macOS, and iOS at regular width — e.g. iPhone Duo inner display)
 
     private var dayDetailPanel: some View {
         let cal = Calendar.current
@@ -510,7 +535,7 @@ struct BarnDashboardView: View {
                 ScrollView {
                     VStack(spacing: 2) {
                         ForEach(dayEvents) { event in
-                            macOSEventRow(event)
+                            dayPanelEventRow(event)
                         }
                     }
                     .padding(.vertical, 8)
@@ -552,9 +577,7 @@ struct BarnDashboardView: View {
         .background(Color.barnCardBackground)
     }
 
-    private func macOSEventRow(_ event: ScheduleEvent) -> some View {
+    private func dayPanelEventRow(_ event: ScheduleEvent) -> some View {
         ScheduleEventRow(event: event, onTap: { navigateToEvent(event) }, showTime: false, verticalPadding: 6)
     }
-
-    #endif
 }

@@ -45,7 +45,7 @@ struct FeedProductListView: View {
                 Button {
                     router.navigate(to: BarnRoute.feedProductEdit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("New Feed Product", systemImage: "plus")
                 }
             }
         }

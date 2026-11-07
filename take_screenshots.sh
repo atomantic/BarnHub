@@ -8,6 +8,8 @@
 #   ./take_screenshots.sh en de fr              # specific languages, all devices
 #   ./take_screenshots.sh --iphone-only         # all languages, iPhone only
 #   ./take_screenshots.sh --ipad-only           # all languages, iPad only
+#   ./take_screenshots.sh --duo-outer en        # iPhone Duo closed (outer display)
+#   ./take_screenshots.sh --duo-inner en        # iPhone Duo open (inner display)
 #   ./take_screenshots.sh --screen 01_home      # only capture one screen, all languages/devices
 #   ./take_screenshots.sh --screen 01_home en   # one screen, specific language
 #
@@ -27,6 +29,12 @@ DERIVED_DATA="$PROJECT_DIR/.build/DerivedData"
 # Format: "Simulator Name|OS version|folder_name|test_method"
 IPHONE_DEVICE="iPhone 16 Pro Max|18.6|iphone_6.7|testCaptureIPhoneScreenshots"
 IPAD_DEVICE="iPad Pro 13-inch (M4)|18.6|ipad_13|testCaptureIPadScreenshots"
+# iPhone Duo (Xcode 27.1+). Set the pose in Xcode's Device Hub before running:
+# closed for --duo-outer (1398x2034 px), fully open for --duo-inner (2007x2853 px).
+DUO_NAME="${DUO_SIMULATOR_NAME:-iPhone Duo}"
+DUO_OS="${DUO_SIMULATOR_OS:-27.1}"
+DUO_OUTER_DEVICE="$DUO_NAME|$DUO_OS|duo_outer|testCaptureDuoScreenshots"
+DUO_INNER_DEVICE="$DUO_NAME|$DUO_OS|duo_inner|testCaptureDuoScreenshots"
 
 # All supported languages (matching Localizable.xcstrings)
 ALL_LANGUAGES=("en" "de" "fr" "nl" "sv" "es-ES" "es-MX" "pt-BR" "it")
@@ -51,12 +59,14 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --iphone-only) DEVICES=("$IPHONE_DEVICE") ; shift ;;
         --ipad-only)   DEVICES=("$IPAD_DEVICE") ; shift ;;
+        --duo-outer)   DEVICES=("$DUO_OUTER_DEVICE") ; shift ;;
+        --duo-inner)   DEVICES=("$DUO_INNER_DEVICE") ; shift ;;
         --screen)      SCREEN="$2" ; shift 2 ;;
         --help|-h)
-            echo "Usage: $0 [--iphone-only|--ipad-only] [--screen <name>] [lang1 lang2 ...]"
+            echo "Usage: $0 [--iphone-only|--ipad-only|--duo-outer|--duo-inner] [--screen <name>] [lang1 lang2 ...]"
             echo ""
             echo "Languages: ${ALL_LANGUAGES[*]}"
-            echo "Devices: iPhone 16 Pro Max (6.7\"), iPad Pro 13\" (M4)"
+            echo "Devices: iPhone 16 Pro Max (6.7\"), iPad Pro 13\" (M4), iPhone Duo outer/inner (opt-in)"
             echo "Screens: 01_home 02_horses 03_horse_detail 04_clients 05_client_detail"
             echo "         06_schedule 07_accounting 08_reports 09_reports_charts 10_contract_types"
             exit 0

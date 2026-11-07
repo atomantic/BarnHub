@@ -76,7 +76,7 @@ struct ClientDocumentsView: View {
                     }
                     #endif
                 } label: {
-                    Image(systemName: "plus")
+                    Label("Add Document", systemImage: "plus")
                 }
             }
         }

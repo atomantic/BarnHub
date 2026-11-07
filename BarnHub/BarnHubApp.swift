@@ -151,7 +151,13 @@ struct ContentView: View {
             #if os(macOS)
             sidebarLayout
             #else
-            if sizeClass == .regular {
+            if #available(iOS 18.0, *) {
+                // One view hierarchy for every size: the system shows a tab bar at
+                // compact width and a sidebar at regular width. Opening or closing
+                // iPhone Duo (or resizing on iPad) keeps screens, sheets and
+                // half-typed forms instead of rebuilding the whole tree.
+                adaptiveTabLayout
+            } else if sizeClass == .regular {
                 sidebarLayout
             } else {
                 tabBarLayout
@@ -277,6 +283,21 @@ struct ContentView: View {
     }
 
     #if os(iOS)
+    @available(iOS 18.0, *)
+    private var adaptiveTabLayout: some View {
+        @Bindable var router = router
+        return TabView(selection: $router.selectedTab) {
+            ForEach(Router.AppTab.allCases, id: \.self) { tab in
+                Tab(tab.title, systemImage: tab.icon, value: tab) {
+                    tabStack(for: tab)
+                        .withNavControls(router: router)
+                }
+            }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+        .tint(.barnGreen)
+    }
+
     @ViewBuilder
     private var tabBarLayout: some View {
         @Bindable var router = router
@@ -325,6 +346,10 @@ struct ContentView: View {
     }
     #endif
 
+    private var sidebarDetailView: some View {
+        tabStack(for: router.selectedTab)
+    }
+
     private var sidebarSelection: Binding<Router.AppTab?> {
         Binding(
             get: { router.selectedTab },
@@ -332,10 +357,11 @@ struct ContentView: View {
         )
     }
 
+    /// The navigation stack for one tab, bound to that tab's path in the router.
     @ViewBuilder
-    private var sidebarDetailView: some View {
+    private func tabStack(for tab: Router.AppTab) -> some View {
         @Bindable var router = router
-        switch router.selectedTab {
+        switch tab {
         case .home:
             NavigationStack(path: $router.homePath) {
                 HomeView()
@@ -374,10 +400,9 @@ private extension View {
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
-                    Image(systemName: "gearshape.fill")
+                    Label("Settings", systemImage: "gearshape.fill")
                         .foregroundStyle(.white)
                 }
-                .accessibilityLabel(appLocalized("Settings"))
             }
         }
     }

@@ -64,7 +64,7 @@ struct TransactionListView: View {
                 Button {
                     router.navigate(to: AccountingRoute.edit(nil))
                 } label: {
-                    Image(systemName: "plus")
+                    Label("New Transaction", systemImage: "plus")
                 }
             }
         }

@@ -49,7 +49,7 @@ struct ClientListView: View {
                     Button {
                         router.navigate(to: ClientRoute.edit(nil))
                     } label: {
-                        Image(systemName: "plus")
+                        Label("Add Client", systemImage: "plus")
                     }
                 }
                 ToolbarItem(placement: .leadingBar) {
