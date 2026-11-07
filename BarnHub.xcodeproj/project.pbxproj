@@ -118,6 +118,7 @@
 		8B9CD2483134330C854AFA3B /* ToastModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B781D8E8A8631CE421A278E /* ToastModifier.swift */; };
 		8C4899F08B9237E107503E5A /* SupplyItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6FC53E1EA941C370B70F5 /* SupplyItem.swift */; };
 		90C3F661BAE4F4FE75540326 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		BUGRPT00000000000000B001 /* BugReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F001 /* BugReportService.swift */; };
 		92E748C25DB3202C01DCA4D5 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
 		9388F61BA60E4CB0CAC35354 /* InvoiceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74F1093CC7348AB905C23BF /* InvoiceGeneratorView.swift */; };
 		955EE1B9866BB5DDF2A04263 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
@@ -160,6 +161,7 @@
 		DENT00112233445566880002 /* DentistVisit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DENT00112233445566770001 /* DentistVisit.swift */; };
 		AD36F0C70EAB02DA9E20A7AD /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
 		B05821F5FB68C8E2C29600F4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
+		BUGRPT00000000000000B003 /* BugReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F002 /* BugReportView.swift */; };
 		B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */; };
 		B14FF81A91D05E1752D0D62F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B748DC85E941B06F934124AA /* ShareSheet.swift */; };
 		B40E3BE2654B949A6C3C0873 /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B62EA806113EB26E9E1AE55 /* Horse.swift */; };
@@ -174,6 +176,7 @@
 		BA710B4811F5A0A34BF7D9C2 /* ReminderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E66197FAA363BF926741C13 /* ReminderListView.swift */; };
 		BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0001 /* AppearanceManager.swift */; };
 		BB11223344556677AABB0004 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11223344556677AABB0003 /* SettingsView.swift */; };
+		BUGRPT00000000000000B004 /* BugReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F002 /* BugReportView.swift */; };
 		BBCC001122334455DATA0002 /* DataExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0001 /* DataExportService.swift */; };
 		BBCC001122334455DATA0004 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
 		BBCC001122334455DATA0006 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0005 /* DataManagementView.swift */; };
@@ -216,6 +219,7 @@
 		DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0003 /* BarnNoteListView.swift */; };
 		DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677BARN0005 /* BarnNoteEditView.swift */; };
 		DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0001 /* SyncMonitor.swift */; };
+		BUGRPT00000000000000B002 /* BugReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F001 /* BugReportService.swift */; };
 		DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD11223344556677SYNC0003 /* SyncIndicatorView.swift */; };
 		DEC1FFDB4FEF4FD49F399DED /* InvoiceHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A783091571746209645CF10 /* InvoiceHistoryView.swift */; };
 		DF64EAA9B3F9B995F6FBC740 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9960085725FD7B2D959B29 /* Transaction.swift */; };
@@ -249,6 +253,7 @@
 		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
 		TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0005000000000001 /* StoreServiceTests.swift */; };
 		TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0006000000000001 /* SyncMonitorTests.swift */; };
+		BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F003 /* BugReportServiceTests.swift */; };
 		TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0007000000000001 /* AppearanceManagerTests.swift */; };
 		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
 		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
@@ -359,6 +364,7 @@
 		B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB11223344556677AABB0001 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
 		BB11223344556677AABB0003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BUGRPT00000000000000F002 /* BugReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportView.swift; sourceTree = "<group>"; };
 		BBCC001122334455DATA0001 /* DataExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportService.swift; sourceTree = "<group>"; };
 		BBCC001122334455DATA0003 /* DataImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportService.swift; sourceTree = "<group>"; };
 		BBCC001122334455DATA0005 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
@@ -389,6 +395,7 @@
 		DD11223344556677BARN0003 /* BarnNoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnNoteListView.swift; sourceTree = "<group>"; };
 		DD11223344556677BARN0005 /* BarnNoteEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnNoteEditView.swift; sourceTree = "<group>"; };
 		DD11223344556677SYNC0001 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitor.swift; sourceTree = "<group>"; };
+		BUGRPT00000000000000F001 /* BugReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportService.swift; sourceTree = "<group>"; };
 		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncIndicatorView.swift; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEventTests.swift; sourceTree = "<group>"; };
 		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRecordRow.swift; sourceTree = "<group>"; };
@@ -410,6 +417,7 @@
 		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitorTests.swift; sourceTree = "<group>"; };
+		BUGRPT00000000000000F003 /* BugReportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManagerTests.swift; sourceTree = "<group>"; };
 		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsTests.swift; sourceTree = "<group>"; };
 		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
@@ -570,6 +578,7 @@
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
+				BUGRPT00000000000000F001 /* BugReportService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -685,6 +694,7 @@
 				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
 				TESTNEW0005000000000001 /* StoreServiceTests.swift */,
 				TESTNEW0006000000000001 /* SyncMonitorTests.swift */,
+				BUGRPT00000000000000F003 /* BugReportServiceTests.swift */,
 				TESTNEW0007000000000001 /* AppearanceManagerTests.swift */,
 				TESTNEW0008000000000001 /* EnumsTests.swift */,
 			);
@@ -697,6 +707,7 @@
 				BBCC001122334455DATA0005 /* DataManagementView.swift */,
 				B2C3D4E5F6071829A3B4C5D6 /* HomeView.swift */,
 				BB11223344556677AABB0003 /* SettingsView.swift */,
+				BUGRPT00000000000000F002 /* BugReportView.swift */,
 				SBVW1A2B3C4D5E6F7A8B9C03 /* SidebarView.swift */,
 				75C45A74C0754D59FD90DAE5 /* Accounting */,
 				CE6CF664131C60DA461067A8 /* Barn */,
@@ -1001,10 +1012,12 @@
 				F525745099D801FC3DC33B75 /* ClientsUpgradeView.swift in Sources */,
 				5A86E38B23BCAAB5D2130D59 /* AppearanceManager.swift in Sources */,
 				B05821F5FB68C8E2C29600F4 /* SettingsView.swift in Sources */,
+				BUGRPT00000000000000B003 /* BugReportView.swift in Sources */,
 				47D9EBB787629D19F306343D /* BarnNote.swift in Sources */,
 				92E748C25DB3202C01DCA4D5 /* BarnNoteListView.swift in Sources */,
 				1D195657269C5D4EAEDEF2EA /* BarnNoteEditView.swift in Sources */,
 				90C3F661BAE4F4FE75540326 /* SyncMonitor.swift in Sources */,
+				BUGRPT00000000000000B001 /* BugReportService.swift in Sources */,
 				58B1A407D45B9090A0188F83 /* SyncIndicatorView.swift in Sources */,
 				DC73955B346D32B7D0995445 /* Lesson.swift in Sources */,
 				A9C48EE5FD7ADFBDB37BEE45 /* LessonListView.swift in Sources */,
@@ -1122,10 +1135,12 @@
 				AA11223344556677AABB000C /* ClientsUpgradeView.swift in Sources */,
 				BB11223344556677AABB0002 /* AppearanceManager.swift in Sources */,
 				BB11223344556677AABB0004 /* SettingsView.swift in Sources */,
+				BUGRPT00000000000000B004 /* BugReportView.swift in Sources */,
 				DD11223344556677BARN0002 /* BarnNote.swift in Sources */,
 				DD11223344556677BARN0004 /* BarnNoteListView.swift in Sources */,
 				DD11223344556677BARN0006 /* BarnNoteEditView.swift in Sources */,
 				DD11223344556677SYNC0002 /* SyncMonitor.swift in Sources */,
+				BUGRPT00000000000000B002 /* BugReportService.swift in Sources */,
 				DD11223344556677SYNC0004 /* SyncIndicatorView.swift in Sources */,
 				AADD112233445566LESS0002 /* Lesson.swift in Sources */,
 				AADD112233445566LESS0004 /* LessonListView.swift in Sources */,
@@ -1155,6 +1170,7 @@
 				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
 				TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */,
 				TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */,
+				BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */,
 				TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */,
 				TESTNEW0008000000000002 /* EnumsTests.swift in Sources */,
 			);
@@ -1183,7 +1199,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1213,7 +1229,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
@@ -1232,7 +1248,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BarnHub/BarnHub.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_ASSET_PATHS = "\"BarnHub/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1263,7 +1279,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
@@ -1408,7 +1424,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_APP_SANDBOX = YES;
@@ -1441,7 +1457,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookUITests;
@@ -1458,7 +1474,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookTests;
@@ -1478,7 +1494,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BarnHub/BarnHub-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_APP_SANDBOX = YES;
