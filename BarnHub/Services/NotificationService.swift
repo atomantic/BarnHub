@@ -55,6 +55,10 @@ final class NotificationService {
 
     // MARK: - Vet Record Notifications
 
+    func cancelVetRecord(_ record: VetRecord) {
+        cancelNotification(identifier: vetRecordID(record))
+    }
+
     func scheduleVetRecord(_ record: VetRecord) {
         guard let nextDue = record.nextDueDate else {
             cancelNotification(identifier: vetRecordID(record))
@@ -72,6 +76,10 @@ final class NotificationService {
 
     // MARK: - Farrier Visit Notifications
 
+    func cancelFarrierVisit(_ visit: FarrierVisit) {
+        cancelNotification(identifier: farrierVisitID(visit))
+    }
+
     func scheduleFarrierVisit(_ visit: FarrierVisit) {
         guard let nextDue = visit.nextDueDate else {
             cancelNotification(identifier: farrierVisitID(visit))
@@ -88,6 +96,10 @@ final class NotificationService {
     }
 
     // MARK: - Dentist Visit Notifications
+
+    func cancelDentistVisit(_ visit: DentistVisit) {
+        cancelNotification(identifier: dentistVisitID(visit))
+    }
 
     func scheduleDentistVisit(_ visit: DentistVisit) {
         guard let nextDue = visit.nextDueDate else {
