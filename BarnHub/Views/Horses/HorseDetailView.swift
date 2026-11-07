@@ -160,29 +160,36 @@ struct HorseDetailView: View {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(sortedVetRecords, id: \.persistentModelID) { record in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(record.date.shortFormatted)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Spacer()
-                            Text(record.cost.asCurrency)
-                                .font(.subheadline)
-                        }
-                        Text(record.vetName)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        if !record.descriptionText.isEmpty {
-                            Text(record.descriptionText)
+                    Button {
+                        router.navigate(to: HorseRoute.editVetRecord(record.persistentModelID))
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(record.date.shortFormatted)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Text(record.cost.asCurrency)
+                                    .font(.subheadline)
+                            }
+                            Text(record.vetName)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            if !record.descriptionText.isEmpty {
+                                Text(record.descriptionText)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            if let nextDue = record.nextDueDate {
+                                Text("Next due: \(nextDue.shortFormatted)")
+                                    .font(.caption2)
+                                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+                            }
                         }
-                        if let nextDue = record.nextDueDate {
-                            Text("Next due: \(nextDue.shortFormatted)")
-                                .font(.caption2)
-                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                 }
             }
         } header: {
@@ -194,6 +201,7 @@ struct HorseDetailView: View {
                 } label: {
                     Image(systemName: "plus.circle")
                 }
+                .accessibilityLabel("Add Vet Record")
             }
         }
     }
@@ -205,29 +213,36 @@ struct HorseDetailView: View {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(sortedFarrierVisits, id: \.persistentModelID) { visit in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(visit.date.shortFormatted)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Spacer()
-                            Text(visit.cost.asCurrency)
-                                .font(.subheadline)
-                        }
-                        Text(visit.farrierName)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        if !visit.serviceDescription.isEmpty {
-                            Text(visit.serviceDescription)
+                    Button {
+                        router.navigate(to: HorseRoute.editFarrierVisit(visit.persistentModelID))
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(visit.date.shortFormatted)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Text(visit.cost.asCurrency)
+                                    .font(.subheadline)
+                            }
+                            Text(visit.farrierName)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            if !visit.serviceDescription.isEmpty {
+                                Text(visit.serviceDescription)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            if let nextDue = visit.nextDueDate {
+                                Text("Next due: \(nextDue.shortFormatted)")
+                                    .font(.caption2)
+                                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+                            }
                         }
-                        if let nextDue = visit.nextDueDate {
-                            Text("Next due: \(nextDue.shortFormatted)")
-                                .font(.caption2)
-                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                 }
             }
         } header: {
@@ -239,6 +254,7 @@ struct HorseDetailView: View {
                 } label: {
                     Image(systemName: "plus.circle")
                 }
+                .accessibilityLabel("Add Farrier Visit")
             }
         }
     }
@@ -250,29 +266,36 @@ struct HorseDetailView: View {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(sortedDentistVisits, id: \.persistentModelID) { visit in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(visit.date.shortFormatted)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Spacer()
-                            Text(visit.cost.asCurrency)
-                                .font(.subheadline)
-                        }
-                        Text(visit.dentistName)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        if !visit.serviceDescription.isEmpty {
-                            Text(visit.serviceDescription)
+                    Button {
+                        router.navigate(to: HorseRoute.editDentistVisit(visit.persistentModelID))
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(visit.date.shortFormatted)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Text(visit.cost.asCurrency)
+                                    .font(.subheadline)
+                            }
+                            Text(visit.dentistName)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                            if !visit.serviceDescription.isEmpty {
+                                Text(visit.serviceDescription)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            if let nextDue = visit.nextDueDate {
+                                Text("Next due: \(nextDue.shortFormatted)")
+                                    .font(.caption2)
+                                    .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
+                            }
                         }
-                        if let nextDue = visit.nextDueDate {
-                            Text("Next due: \(nextDue.shortFormatted)")
-                                .font(.caption2)
-                                .foregroundStyle(nextDue.isOverdue ? .red : .secondary)
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                 }
             }
         } header: {
@@ -284,6 +307,7 @@ struct HorseDetailView: View {
                 } label: {
                     Image(systemName: "plus.circle")
                 }
+                .accessibilityLabel("Add Dentist Visit")
             }
         }
     }

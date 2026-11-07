@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.2
+
+### New Features
+- **Report a Bug** — send a bug report from Settings with app, device, sync status, and recent error details attached automatically (no personal data), so support can help faster.
+
+### Bug Fixes
+- **Edit vet records** — tap any vet record on a horse's page to change or delete it. Farrier and dentist visits can now be edited and deleted the same way. Previously these records could only be added.
+- **iCloud sync on Mac** — the Mac app can now receive push updates from iCloud, so changes made on iPhone appear without relaunching.
+- **iCloud sync on iPhone** — enabled background updates so changes from other devices arrive while the app isn't open.
+
 ## 1.6.0
 
 ### New Features
