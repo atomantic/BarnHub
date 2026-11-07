@@ -43,6 +43,8 @@ final class ScreenshotTests: XCTestCase {
 
     private var launchArgs: [String] {
         ["-SeedSampleData", "-ForceProMode",
+         // Skip the first-launch welcome sheet (fresh simulator clones have no defaults).
+         "-net.shadowpuppet.BarnBook.hasCompletedFirstLaunch", "YES",
          "-net.shadowpuppet.BarnBook.appLocale", locale,
          "-net.shadowpuppet.BarnBook.currencyCode", currency,
          "-AppleLanguages", "(\(locale))",
