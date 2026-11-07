@@ -66,6 +66,7 @@ struct SidebarView: View {
     private var activeClients: [Client]
 
     @State private var selection: SidebarSelection? = .home
+    @State private var selectionSync = SidebarSelectionSync()
 
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.horsesExpanded") private var horsesExpanded = true
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.clientsExpanded") private var clientsExpanded = true
@@ -128,19 +129,18 @@ struct SidebarView: View {
         .navigationSplitViewColumnWidth(min: 200, ideal: 240, max: 360)
         .onChange(of: selection) { _, new in
             guard let new else { return }
-            handleSelection(new)
+            selectionSync.userSelectionChanged(to: new, router: router)
         }
         .onAppear {
             // Initialize selection from router state when view first appears
-            if selection == .home, router.selectedTab != .home {
-                selection = initialSelection(for: router.selectedTab)
+            if let synced = selectionSync.syncFromRouter(tab: router.selectedTab, current: selection) {
+                selection = synced
             }
         }
         .onChange(of: router.selectedTab) { _, new in
-            // Sync sidebar when tab changes externally (e.g., deep link, tab bar)
-            // Only if current selection is a top-level tab — don't clobber sub-item selection
-            if isTabSelection(selection) {
-                selection = initialSelection(for: new)
+            // Sync sidebar when tab changes externally (e.g., deep link, Cmd-1..5)
+            if let synced = selectionSync.syncFromRouter(tab: new, current: selection) {
+                selection = synced
             }
         }
     }
@@ -177,53 +177,76 @@ struct SidebarView: View {
                 .lineLimit(1)
         }
     }
+}
 
-    // MARK: - Selection Handling
+// MARK: - Selection Handling
 
-    private func handleSelection(_ new: SidebarSelection) {
-        switch new {
-        case .home:
-            router.selectedTab = .home
-        case .horses:
-            router.selectedTab = .horses
-            router.popToRoot(tab: .horses)
-        case .horse(let id):
-            router.selectedTab = .horses
-            router.popToRoot(tab: .horses)
-            router.navigate(to: HorseRoute.detail(id), tab: .horses)
-        case .clients:
-            router.selectedTab = .clients
-            router.popToRoot(tab: .clients)
-        case .client(let id):
-            router.selectedTab = .clients
-            router.popToRoot(tab: .clients)
-            router.navigate(to: ClientRoute.detail(id), tab: .clients)
-        case .schedule:
-            router.selectedTab = .schedule
-            router.popToRoot(tab: .schedule)
-        case .schedulePage(let sub):
-            router.selectedTab = .schedule
-            router.popToRoot(tab: .schedule)
-            router.navigate(to: sub.barnRoute, tab: .schedule)
-        case .accounting:
-            router.selectedTab = .accounting
-        }
-    }
-
-    private func initialSelection(for tab: Router.AppTab) -> SidebarSelection {
-        switch tab {
+extension SidebarSelection {
+    var tab: Router.AppTab {
+        switch self {
         case .home: return .home
-        case .horses: return .horses
-        case .clients: return .clients
-        case .schedule: return .schedule
+        case .horses, .horse: return .horses
+        case .clients, .client: return .clients
+        case .schedule, .schedulePage: return .schedule
         case .accounting: return .accounting
         }
     }
 
-    private func isTabSelection(_ sel: SidebarSelection?) -> Bool {
-        switch sel {
-        case .home, .horses, .clients, .schedule, .accounting: return true
-        default: return false
+    init(tab: Router.AppTab) {
+        switch tab {
+        case .home: self = .home
+        case .horses: self = .horses
+        case .clients: self = .clients
+        case .schedule: self = .schedule
+        case .accounting: self = .accounting
         }
+    }
+
+    /// Applies a user-initiated sidebar selection: tapping a sidebar row resets
+    /// that tab's stack and pushes the row's destination, if any.
+    func apply(to router: Router) {
+        router.selectedTab = tab
+        switch self {
+        case .home, .accounting:
+            break
+        case .horses, .clients, .schedule:
+            router.popToRoot(tab: tab)
+        case .horse(let id):
+            router.popToRoot(tab: .horses)
+            router.navigate(to: HorseRoute.detail(id), tab: .horses)
+        case .client(let id):
+            router.popToRoot(tab: .clients)
+            router.navigate(to: ClientRoute.detail(id), tab: .clients)
+        case .schedulePage(let sub):
+            router.popToRoot(tab: .schedule)
+            router.navigate(to: sub.barnRoute, tab: .schedule)
+        }
+    }
+}
+
+/// Keeps the sidebar's selection in step with `Router.selectedTab` without
+/// treating router-driven changes (keyboard shortcuts, deep links) as user taps.
+/// A synced selection only highlights the row; it must not pop the tab's stack.
+struct SidebarSelectionSync {
+    private(set) var pendingSync: SidebarSelection?
+
+    /// Returns the selection the sidebar should show for an external tab change,
+    /// or nil to leave it as is. A selection already inside `tab` (including a
+    /// sub-item such as a specific horse) is kept so it isn't clobbered.
+    mutating func syncFromRouter(tab: Router.AppTab, current: SidebarSelection?) -> SidebarSelection? {
+        guard current?.tab != tab else { return nil }
+        let target = SidebarSelection(tab: tab)
+        pendingSync = target
+        return target
+    }
+
+    /// Handles a change of the sidebar's selection binding. Changes made by
+    /// `syncFromRouter` are swallowed; anything else is a user tap.
+    mutating func userSelectionChanged(to new: SidebarSelection, router: Router) {
+        if let pending = pendingSync {
+            pendingSync = nil
+            if pending == new { return }
+        }
+        new.apply(to: router)
     }
 }

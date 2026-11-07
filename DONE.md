@@ -32,6 +32,10 @@ Completed items archived from PLAN.md. For release notes, see `CHANGELOG.md`.
 - macOS-target fixes — encryption compliance, sidebar width, empty-state centering, feed entry sheet rendering, form number-field duplicate label
 - App Store rejection resolution (1.6.0) — macOS code-signing and iOS signing gaps
 
+## 2026-04-28
+
+- iPad-optimized sidebar layout with split view — added Cmd-1..5 keyboard shortcuts for tab switching, system sidebar-toggle command, and a localized "Go" menu. Works on iPad with hardware keyboard, macOS, and Mac Catalyst.
+
 ## 2026-03-28
 
 - iCloud sync with CloudKit — enabled automatic cloud sync via SwiftData, added SyncMonitor service to track sync events, sync status indicator in Home toolbar, and sync details in Settings
