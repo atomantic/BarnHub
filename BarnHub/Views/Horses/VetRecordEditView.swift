@@ -3,6 +3,7 @@ import SwiftData
 
 struct VetRecordEditView: View {
     let horseID: PersistentIdentifier?
+    var recordID: PersistentIdentifier? = nil
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(NotificationService.self) private var notificationService
@@ -15,21 +16,24 @@ struct VetRecordEditView: View {
     @State private var nextDueDate = Date.now
     @State private var reminderFrequency: ReminderFrequency = .once
     @State private var selectedHorseID: PersistentIdentifier?
+    @State private var showDeleteConfirmation = false
 
     @State private var toast = ToastState()
 
+    private var isNew: Bool { recordID == nil }
+    private var existingRecord: VetRecord? { modelContext.existingModel(for: recordID) }
+
     private var resolvedHorseID: PersistentIdentifier? {
-        horseID ?? selectedHorseID
+        horseID ?? existingRecord?.horse?.persistentModelID ?? selectedHorseID
     }
 
     private var horse: Horse? {
-        guard let id = resolvedHorseID else { return nil }
-        return modelContext.model(for: id) as? Horse
+        modelContext.existingModel(for: resolvedHorseID)
     }
 
     var body: some View {
         Form {
-            if horseID == nil {
+            if horseID == nil && isNew {
                 HorsePickerSection(selectedHorseID: $selectedHorseID, placeholder: "Select a horse")
             }
 
@@ -54,38 +58,85 @@ struct VetRecordEditView: View {
             }
 
             Section {
-                Button("Save Vet Record") {
+                Button(isNew ? "Save Vet Record" : "Save Changes") {
                     save()
                 }
                 .frame(maxWidth: .infinity)
                 .disabled(vetName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
             }
+
+            if !isNew {
+                Section {
+                    Button("Delete Vet Record", role: .destructive) {
+                        showDeleteConfirmation = true
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
         }
-        .navigationTitle("New Vet Record")
+        .navigationTitle(isNew ? "New Vet Record" : "Edit Vet Record")
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
         .frame(maxWidth: 600)
         .frame(maxWidth: .infinity)
         #endif
+        .task { loadExisting() }
+        .overlay {
+            ConfirmationDialog(
+                isPresented: $showDeleteConfirmation,
+                title: "Delete Vet Record",
+                message: "Are you sure you want to delete this vet record?",
+                confirmTitle: "Delete",
+                confirmRole: .destructive,
+                onConfirm: deleteRecord
+            )
+        }
         .toast(toast)
+    }
+
+    private func loadExisting() {
+        guard let record = existingRecord else { return }
+        date = record.date
+        vetName = record.vetName
+        descriptionText = record.descriptionText
+        cost = record.cost
+        hasNextDue = record.nextDueDate != nil
+        nextDueDate = record.nextDueDate ?? .now
+        reminderFrequency = record.reminderFrequency
     }
 
     private func save() {
         guard let horse else { return }
-        let record = VetRecord(
-            date: date,
-            vetName: vetName.trimmingCharacters(in: .whitespaces),
-            descriptionText: descriptionText,
-            cost: cost,
-            nextDueDate: hasNextDue ? nextDueDate : nil,
-            reminderFrequency: reminderFrequency
-        )
-        record.horse = horse
-        modelContext.insert(record)
-        BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(record.vetName)")
+        let trimmedName = vetName.trimmingCharacters(in: .whitespaces)
+        let record: VetRecord
+        if let existing = existingRecord {
+            record = existing
+            BarnHubLogger.info("Updating vet record horse=\(horse.name) vet=\(trimmedName)")
+        } else {
+            record = VetRecord()
+            record.horse = horse
+            modelContext.insert(record)
+            BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(trimmedName)")
+        }
+        record.date = date
+        record.vetName = trimmedName
+        record.descriptionText = descriptionText
+        record.cost = cost
+        record.nextDueDate = hasNextDue ? nextDueDate : nil
+        record.reminderFrequency = reminderFrequency
+
         modelContext.saveWithLogging()
         notificationService.scheduleVetRecord(record)
-        toast.showAndDismiss("Vet record saved", dismiss: dismiss)
+        toast.showAndDismiss(appLocalized("Vet record saved", comment: "Toast after saving a vet record"), dismiss: dismiss)
+    }
+
+    private func deleteRecord() {
+        guard let record = existingRecord else { return }
+        BarnHubLogger.info("Deleting vet record vet=\(record.vetName)")
+        notificationService.cancelVetRecord(record)
+        modelContext.delete(record)
+        modelContext.saveWithLogging()
+        toast.showAndDismiss(appLocalized("Vet record deleted", comment: "Toast after deleting a vet record"), dismiss: dismiss)
     }
 }
