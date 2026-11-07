@@ -15,12 +15,7 @@ struct ClientRowView: View {
                 Text(client.fullName)
                     .font(.headline)
 
-                // Side by side when there's room; stacked on narrow widths such as
-                // the iPhone Duo outer display, so the phone number never wraps.
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: 12) { contactLabels }
-                    VStack(alignment: .leading, spacing: 2) { contactLabels }
-                }
+                HStack(spacing: 12) { contactLabels }
             }
 
             Spacer()
@@ -35,7 +30,9 @@ struct ClientRowView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
-                .fixedSize(horizontal: true, vertical: false)
+                // Keep the phone number whole on narrow widths (e.g. the iPhone Duo
+                // outer display); the email truncates instead.
+                .layoutPriority(1)
         }
         if !client.email.isEmpty {
             Label(client.email, systemImage: "envelope")
