@@ -162,6 +162,7 @@ struct BugReportView: View {
     }
 }
 
+#if DEBUG
 #Preview {
     BugReportView()
         .environment(StoreService())
@@ -169,3 +170,4 @@ struct BugReportView: View {
         .environment(AppearanceManager())
         .modelContainer(PreviewSampleData.previewContainer)
 }
+#endif
