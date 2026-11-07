@@ -120,7 +120,31 @@ final class BugReportServiceTests: XCTestCase {
         let components = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false))
         XCTAssertEqual(components.path, BugReport.supportEmail)
         let body = try XCTUnwrap(components.queryItems?.first { $0.name == "body" }?.value)
-        XCTAssertLessThanOrEqual(body.count, BugReport.mailtoBodyLimit)
+        XCTAssertLessThanOrEqual(url.absoluteString.count, BugReport.mailtoURLLimit)
         XCTAssertTrue(body.contains("error 199"), "newest log lines should be kept")
+        XCTAssertFalse(body.contains("error 0 "), "oldest log lines should be dropped")
+    }
+
+    func test_mailtoURL_returnsNilForLongDescriptionWithoutDiagnostics() {
+        let description = String(repeating: "a", count: BugReport.mailtoURLLimit)
+        XCTAssertNil(BugReport.mailtoURL(description: description, steps: "", diagnostics: nil))
+    }
+
+    func test_mailtoURL_returnsNilForLongSteps() {
+        let steps = String(repeating: "step ", count: BugReport.mailtoURLLimit / 4)
+        XCTAssertNil(BugReport.mailtoURL(description: "Crash", steps: steps, diagnostics: makeDiagnostics()))
+    }
+
+    func test_mailtoURL_accountsForMultibyteEncoding() {
+        // 2,000 characters fits decoded, but each "é" percent-encodes to 6 characters.
+        let description = String(repeating: "é", count: 2000)
+        XCTAssertNil(BugReport.mailtoURL(description: description, steps: "", diagnostics: nil))
+    }
+
+    func test_mailtoURL_keepsShortReportIntact() throws {
+        let url = try XCTUnwrap(BugReport.mailtoURL(description: "Crash", steps: "", diagnostics: makeDiagnostics()))
+        let components = try XCTUnwrap(URLComponents(url: url, resolvingAgainstBaseURL: false))
+        let body = try XCTUnwrap(components.queryItems?.first { $0.name == "body" }?.value)
+        XCTAssertEqual(body, BugReport.body(description: "Crash", steps: "", diagnostics: makeDiagnostics()))
     }
 }
