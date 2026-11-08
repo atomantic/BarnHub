@@ -4977,58 +4977,6 @@
         }
       }
     },
-    "Are you sure you want to delete this client? All associated transactions will also be removed." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Möchtest du diesen Kunden wirklich löschen? Alle zugehörigen Transaktionen werden ebenfalls entfernt."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este cliente? Todas las transacciones asociadas también se eliminarán."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este cliente? Todas las transacciones asociadas también se eliminarán."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer ce client ? Toutes les transactions associées seront également supprimées."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sei sicuro di voler eliminare questo cliente? Tutte le transazioni associate verranno rimosse."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je zeker dat je deze klant wilt verwijderen? Alle bijbehorende transacties worden ook verwijderd."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tem certeza que deseja excluir este cliente? Todas as transações associadas também serão removidas."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Är du säker på att du vill ta bort denna klient? Alla tillhörande transaktioner tas också bort."
-          }
-        }
-      }
-    },
     "Are you sure you want to delete this dentist visit?" : {
       "comment" : "Confirmation message before deleting a dentist visit",
       "localizations" : {
@@ -5184,58 +5132,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Är du säker på att du vill ta bort denna häst? Alla tillhörande veterinärjournaler och hovslagarbesoek tas också bort."
-          }
-        }
-      }
-    },
-    "Are you sure you want to delete this horse? All associated vet records, farrier visits, and dentist visits will also be removed." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Möchtest du dieses Pferd wirklich löschen? Alle zugehörigen Tierarztberichte, Hufschmiedbesuche und Zahnarztbesuche werden ebenfalls entfernt."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este caballo? Todos los registros veterinarios, visitas del herrador y visitas del dentista asociados también se eliminarán."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este caballo? Todos los registros veterinarios, visitas del herrador y visitas del dentista asociados también se eliminarán."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer ce cheval ? Tous les dossiers vétérinaires, visites du maréchal-ferrant et visites dentaires associés seront également supprimés."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sei sicuro di voler eliminare questo cavallo? Tutti i registri veterinari, le visite del maniscalco e le visite dentistiche associati verranno rimossi."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je zeker dat je dit paard wilt verwijderen? Alle bijbehorende dierenartsdossiers, hoefsmeedbezoeken en tandartsbezoeken worden ook verwijderd."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tem certeza que deseja excluir este cavalo? Todos os registros veterinários, visitas do ferreiro e visitas do dentista associados também serão removidos."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Är du säker på att du vill ta bort denna häst? Alla tillhörande veterinärjournaler, hovslagarebesök och tandläkarbesök tas också bort."
           }
         }
       }
@@ -7377,6 +7273,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kund tillagd"
+          }
+        }
+      }
+    },
+    "Client deactivated" : {
+      "comment" : "Toast after deactivating a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktiviert"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desactivado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desactivado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client désactivé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente disattivato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant gedeactiveerd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desativado"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kund inaktiverad"
+          }
+        }
+      }
+    },
+    "Client deleted" : {
+      "comment" : "Toast after deleting a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde gelöscht"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client supprimé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant verwijderd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente excluído"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kund borttagen"
           }
         }
       }
@@ -9841,6 +9843,218 @@
         }
       }
     },
+    "Deactivate or Delete Client?" : {
+      "comment" : "Title of the dialog shown when removing a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktivieren oder löschen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desactivar o eliminar cliente?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desactivar o eliminar cliente?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactiver ou supprimer le client ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattivare o eliminare il cliente?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant deactiveren of verwijderen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar ou excluir cliente?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaktivera eller ta bort kund?"
+          }
+        }
+      }
+    },
+    "Deactivating hides this client from the list but keeps their invoices, transactions, lessons and documents, so Reports stay the same. Turn on Show Inactive to see them, and reactivate them any time with Edit.\n\nDeleting removes the client with their invoices and documents. Their transactions and lessons are kept without a client." : {
+      "comment" : "Message of the dialog shown when removing a client: what Deactivate and Delete each do",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Deaktivieren verschwindet dieser Kunde aus der Liste, seine Rechnungen, Transaktionen, Unterrichtsstunden und Dokumente bleiben aber erhalten, sodass die Berichte unverändert bleiben. Mit „Inaktive anzeigen“ siehst du ihn weiterhin und kannst ihn jederzeit über „Bearbeiten“ wieder aktivieren.\n\nBeim Löschen werden der Kunde sowie seine Rechnungen und Dokumente entfernt. Seine Transaktionen und Unterrichtsstunden bleiben ohne Kunde erhalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al desactivarlo, este cliente desaparece de la lista, pero se conservan sus facturas, transacciones, clases y documentos, así que los informes no cambian. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el cliente, sus facturas y sus documentos. Sus transacciones y clases se conservan sin cliente."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al desactivarlo, este cliente desaparece de la lista, pero se conservan sus facturas, transacciones, clases y documentos, así que los informes no cambian. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el cliente, sus facturas y sus documentos. Sus transacciones y clases se conservan sin cliente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La désactivation masque ce client de la liste mais conserve ses factures, transactions, leçons et documents : les rapports restent identiques. Activez Afficher les inactifs pour le voir, et réactivez-le à tout moment via Modifier.\n\nLa suppression retire le client ainsi que ses factures et documents. Ses transactions et leçons sont conservées, sans client."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattivando il cliente, scompare dall'elenco ma fatture, transazioni, lezioni e documenti restano, quindi i report non cambiano. Attiva Mostra inattivi per vederlo e riattivalo quando vuoi da Modifica.\n\nEliminandolo, vengono rimossi il cliente, le sue fatture e i suoi documenti. Transazioni e lezioni restano, senza cliente."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deactiveren verbergt deze klant in de lijst, maar houdt facturen, transacties, lessen en documenten, zodat de rapporten gelijk blijven. Zet Toon inactieven aan om de klant te zien, en activeer hem altijd weer via Bewerken.\n\nVerwijderen haalt de klant met zijn facturen en documenten weg. Transacties en lessen blijven bewaard, zonder klant."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar oculta este cliente da lista, mas mantém faturas, transações, aulas e documentos, então os relatórios não mudam. Ative Mostrar inativos para vê-lo e reative-o quando quiser em Editar.\n\nExcluir remove o cliente com suas faturas e documentos. As transações e aulas são mantidas, sem cliente."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Att inaktivera döljer kunden i listan men behåller fakturor, transaktioner, lektioner och dokument, så rapporterna blir oförändrade. Slå på Visa inaktiva för att se kunden och återaktivera den när som helst med Redigera.\n\nAtt ta bort raderar kunden med fakturor och dokument. Transaktioner och lektioner behålls utan kund."
+          }
+        }
+      }
+    },
+    "Deactivate Client" : {
+      "comment" : "Recommended button: hide a client but keep their history",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktivieren"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivar cliente"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivar cliente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactiver le client"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattiva cliente"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant deactiveren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar cliente"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaktivera kund"
+          }
+        }
+      }
+    },
+    "Delete Client and Invoices" : {
+      "comment" : "Destructive button: delete a client with their invoices and documents",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde und Rechnungen löschen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar cliente y facturas"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar cliente y facturas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le client et ses factures"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina cliente e fatture"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant en facturen verwijderen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir cliente e faturas"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort kund och fakturor"
+          }
+        }
+      }
+    },
     "Delete Dentist Visit" : {
       "comment" : "Button and confirmation title to delete a dentist visit",
       "localizations" : {
@@ -10154,6 +10368,218 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta bort häst"
+          }
+        }
+      }
+    },
+    "Mark Inactive or Delete Horse?" : {
+      "comment" : "Title of the dialog shown when removing a horse",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd als inaktiv markieren oder löschen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Marcar como inactivo o eliminar el caballo?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Marcar como inactivo o eliminar el caballo?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer le cheval comme inactif ou le supprimer ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnare il cavallo come inattivo o eliminarlo?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard als inactief markeren of verwijderen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo ou excluir o cavalo?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera hästen som inaktiv eller ta bort den?"
+          }
+        }
+      }
+    },
+    "Marking inactive hides this horse from the list but keeps all of its records. Turn on Show Inactive to see it, and reactivate it any time with Edit.\n\nDeleting removes the horse with its vet, farrier and dentist records, reminders, weights, barn notes, documents and feed plan. Its lessons are kept without a horse." : {
+      "comment" : "Message of the dialog shown when removing a horse: what Mark Inactive and Delete each do",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inaktiv markiert verschwindet dieses Pferd aus der Liste, alle seine Einträge bleiben aber erhalten. Mit „Inaktive anzeigen“ siehst du es weiterhin und kannst es jederzeit über „Bearbeiten“ wieder aktivieren.\n\nBeim Löschen werden das Pferd und seine Tierarzt-, Hufschmied- und Zahnarzteinträge, Erinnerungen, Gewichte, Stallnotizen, Dokumente und der Fütterungsplan entfernt. Seine Unterrichtsstunden bleiben ohne Pferd erhalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al marcarlo como inactivo, este caballo desaparece de la lista, pero se conservan todos sus registros. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el caballo y sus registros de veterinario, herrador y dentista, recordatorios, pesos, notas del establo, documentos y plan de alimentación. Sus clases se conservan sin caballo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al marcarlo como inactivo, este caballo desaparece de la lista, pero se conservan todos sus registros. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el caballo y sus registros de veterinario, herrador y dentista, recordatorios, pesos, notas del establo, documentos y plan de alimentación. Sus clases se conservan sin caballo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer comme inactif masque ce cheval de la liste mais conserve tous ses enregistrements. Activez Afficher les inactifs pour le voir, et réactivez-le à tout moment via Modifier.\n\nLa suppression retire le cheval avec ses dossiers vétérinaire, maréchal-ferrant et dentiste, rappels, pesées, notes d'écurie, documents et plan d'alimentation. Ses leçons sont conservées, sans cheval."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnandolo come inattivo, questo cavallo scompare dall'elenco ma tutti i suoi record restano. Attiva Mostra inattivi per vederlo e riattivalo quando vuoi da Modifica.\n\nEliminandolo, vengono rimossi il cavallo e i suoi record di veterinario, maniscalco e dentista, promemoria, pesi, note di scuderia, documenti e piano alimentare. Le sue lezioni restano, senza cavallo."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inactief markeren verbergt dit paard in de lijst, maar houdt al zijn gegevens. Zet Toon inactieven aan om het te zien, en activeer het altijd weer via Bewerken.\n\nVerwijderen haalt het paard weg met zijn dierenarts-, hoefsmid- en tandartsgegevens, herinneringen, gewichten, stalaantekeningen, documenten en voederplan. Zijn lessen blijven bewaard, zonder paard."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo oculta este cavalo da lista, mas mantém todos os seus registros. Ative Mostrar inativos para vê-lo e reative-o quando quiser em Editar.\n\nExcluir remove o cavalo com seus registros de veterinário, ferrador e dentista, lembretes, pesos, notas do estábulo, documentos e plano de alimentação. As aulas dele são mantidas, sem cavalo."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Att markera som inaktiv döljer hästen i listan men behåller alla dess poster. Slå på Visa inaktiva för att se den och återaktivera den när som helst med Redigera.\n\nAtt ta bort raderar hästen med veterinär-, hovslagar- och tandläkarposter, påminnelser, vikter, stallanteckningar, dokument och foderplan. Dess lektioner behålls utan häst."
+          }
+        }
+      }
+    },
+    "Mark Inactive" : {
+      "comment" : "Recommended button: hide a horse but keep its records",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inaktiv markieren"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inactivo"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inactivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer comme inactif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segna come inattivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inactief markeren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera som inaktiv"
+          }
+        }
+      }
+    },
+    "Delete Horse and Records" : {
+      "comment" : "Destructive button: delete a horse with its records",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd und Einträge löschen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar caballo y registros"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar caballo y registros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le cheval et ses dossiers"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina cavallo e record"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard en gegevens verwijderen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir cavalo e registros"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort häst och poster"
           }
         }
       }
@@ -16511,6 +16937,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Häst uppdaterad"
+          }
+        }
+      }
+    },
+    "Horse marked inactive" : {
+      "comment" : "Toast after marking a horse inactive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd als inaktiv markiert"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo marcado como inactivo"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo marcado como inactivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheval marqué comme inactif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavallo segnato come inattivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard als inactief gemarkeerd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavalo marcado como inativo"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Häst markerad som inaktiv"
+          }
+        }
+      }
+    },
+    "Horse deleted" : {
+      "comment" : "Toast after deleting a horse",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd gelöscht"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo eliminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheval supprimé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavallo eliminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard verwijderd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavalo excluído"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Häst borttagen"
           }
         }
       }

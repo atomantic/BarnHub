@@ -210,6 +210,14 @@ final class NotificationService {
         BarnHubLogger.info("Cancelled all notifications")
     }
 
+    /// Cancels the reminder and due-date notifications for a horse about to be deleted.
+    func cancelNotifications(for horse: Horse) {
+        for reminder in horse.reminders ?? [] { cancelReminder(reminder) }
+        for record in horse.vetRecords ?? [] { cancelVetRecord(record) }
+        for visit in horse.farrierVisits ?? [] { cancelFarrierVisit(visit) }
+        for visit in horse.dentistVisits ?? [] { cancelDentistVisit(visit) }
+    }
+
     private func cancelNotification(identifier: String) {
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
     }
