@@ -7,6 +7,7 @@ struct ReportsView: View {
     @Environment(StoreService.self) private var storeService
 
     @State private var selectedPeriod: ReportPeriod = .thisMonth
+    @Environment(\.locale) private var locale
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -137,15 +138,15 @@ struct ReportsView: View {
 
             Chart {
                 BarMark(
-                    x: .value("Type", "Income"),
-                    y: .value("Amount", data.totalIncome)
+                    x: .value(typeLabel, incomeLabel),
+                    y: .value(amountLabel, data.totalIncome)
                 )
                 .foregroundStyle(Color.green.gradient)
                 .cornerRadius(6)
 
                 BarMark(
-                    x: .value("Type", "Expenses"),
-                    y: .value("Amount", data.totalExpenses)
+                    x: .value(typeLabel, expensesLabel),
+                    y: .value(amountLabel, data.totalExpenses)
                 )
                 .foregroundStyle(Color.red.gradient)
                 .cornerRadius(6)
@@ -175,36 +176,36 @@ struct ReportsView: View {
 
             Chart(data.monthlyTotals) { total in
                 LineMark(
-                    x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income),
-                    series: .value("Series", "Income")
+                    x: .value(monthLabel, total.month, unit: .month),
+                    y: .value(incomeLabel, total.income),
+                    series: .value(seriesLabel, incomeLabel)
                 )
                 .foregroundStyle(.green)
                 .symbol(Circle())
                 .interpolationMethod(.catmullRom)
 
                 AreaMark(
-                    x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income),
-                    series: .value("Series", "Income"),
+                    x: .value(monthLabel, total.month, unit: .month),
+                    y: .value(incomeLabel, total.income),
+                    series: .value(seriesLabel, incomeLabel),
                     stacking: .unstacked
                 )
                 .foregroundStyle(.green.opacity(0.1))
                 .interpolationMethod(.catmullRom)
 
                 LineMark(
-                    x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses),
-                    series: .value("Series", "Expenses")
+                    x: .value(monthLabel, total.month, unit: .month),
+                    y: .value(expensesLabel, total.expenses),
+                    series: .value(seriesLabel, expensesLabel)
                 )
                 .foregroundStyle(.red)
                 .symbol(Circle())
                 .interpolationMethod(.catmullRom)
 
                 AreaMark(
-                    x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses),
-                    series: .value("Series", "Expenses"),
+                    x: .value(monthLabel, total.month, unit: .month),
+                    y: .value(expensesLabel, total.expenses),
+                    series: .value(seriesLabel, expensesLabel),
                     stacking: .unstacked
                 )
                 .foregroundStyle(.red.opacity(0.1))
@@ -242,7 +243,7 @@ struct ReportsView: View {
     // MARK: - Category Breakdown
 
     private func categoryBreakdownSection(
-        _ title: String,
+        _ title: LocalizedStringKey,
         data: [(category: TransactionCategory, amount: Double)],
         total: Double,
         colors: [Color]
@@ -253,7 +254,7 @@ struct ReportsView: View {
 
             Chart(Array(data.enumerated()), id: \.element.category) { index, item in
                 SectorMark(
-                    angle: .value("Amount", item.amount),
+                    angle: .value(amountLabel, item.amount),
                     innerRadius: .ratio(0.6),
                     angularInset: 1.5
                 )
@@ -358,7 +359,7 @@ struct ReportsView: View {
 
     // MARK: - Helpers
 
-    private func legendDot(color: Color, label: String) -> some View {
+    private func legendDot(color: Color, label: LocalizedStringKey) -> some View {
         HStack(spacing: 4) {
             Circle()
                 .fill(color)
@@ -369,10 +370,18 @@ struct ReportsView: View {
     }
 
     private func percentString(_ value: Double, of total: Double) -> String {
-        guard total > 0 else { return "0%" }
-        let pct = (value / total) * 100
-        return "\(Int(pct))%"
+        let fraction = total > 0 ? value / total : 0
+        return fraction.formatted(.percent.precision(.fractionLength(0)).locale(locale))
     }
+
+    // Chart labels and series names, read by VoiceOver and shown on the bar
+    // chart's axis. Charts takes plain strings here, so localize them up front.
+    private var typeLabel: String { appLocalized("Type", comment: "Reports chart: label of the income/expenses axis") }
+    private var amountLabel: String { appLocalized("Amount", comment: "Reports chart: label of the amount axis") }
+    private var monthLabel: String { appLocalized("Month", comment: "Reports chart: label of the month axis") }
+    private var seriesLabel: String { appLocalized("Series", comment: "Reports chart: label of the income/expenses lines in the monthly trend") }
+    private var incomeLabel: String { appLocalized("Income", comment: "Reports chart: income bar and trend line") }
+    private var expensesLabel: String { appLocalized("Expenses", comment: "Reports chart: expenses bar and trend line") }
 
     private var expenseCategoryColors: [Color] {
         [.red, .orange, .yellow, .pink, .purple, .brown, .indigo, .mint, .teal]

@@ -1,7 +1,7 @@
 import XCTest
 @testable import BarnHub
 
-/// #35: amounts typed without a symbol, and week starts.
+/// #35: amounts typed without a symbol, chart axis currency, and week starts.
 final class LocaleFormattingTests: XCTestCase {
 
     private let us = Locale(identifier: "en_US")
@@ -38,6 +38,24 @@ final class LocaleFormattingTests: XCTestCase {
             XCTAssertEqual(CurrencyField.parse(CurrencyField.editingText(value, locale: german), locale: german), value)
             XCTAssertEqual(CurrencyField.parse(CurrencyField.editingText(value, locale: us), locale: us), value)
         }
+    }
+
+    // MARK: - Short currency
+
+    func testShortCurrencyKeepsAxisLabelsDistinct() {
+        let labels = [0, 500, 1000, 1500, 2000, 2500].map { Double.shortCurrency(Double($0), code: "USD", locale: us) }
+        XCTAssertEqual(labels, ["$0", "$500", "$1K", "$1.5K", "$2K", "$2.5K"])
+        XCTAssertEqual(Set([1200.0, 1250, 1300].map { Double.shortCurrency($0, code: "USD", locale: us) }).count, 3)
+    }
+
+    func testShortCurrencyFormatsNegativesWithTheSignFirst() {
+        XCTAssertEqual(Double.shortCurrency(-1500, code: "USD", locale: us), "-$1.5K")
+    }
+
+    func testShortCurrencyFollowsTheLocale() {
+        let euro = Double.shortCurrency(500, code: "EUR", locale: german)
+        XCTAssertTrue(euro.hasSuffix("€"), euro)
+        XCTAssertTrue(euro.hasPrefix("500"), euro)
     }
 
     // MARK: - Week start
