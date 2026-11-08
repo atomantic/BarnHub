@@ -8,6 +8,10 @@ struct DeepLinkHandler {
         let pathComponents = url.pathComponents.filter { $0 != "/" }
 
         switch host {
+        case "home":
+            router.popToRoot(tab: .home)
+            router.switchTab(.home)
+
         case "horses":
             router.popToRoot(tab: .horses)
             router.switchTab(.horses)
@@ -34,6 +38,12 @@ struct DeepLinkHandler {
                     router.navigate(to: BarnRoute.barnNotes, tab: .schedule)
                 case "lessons":
                     router.navigate(to: BarnRoute.lessons, tab: .schedule)
+                case "vet":
+                    router.navigate(to: BarnRoute.vetSchedule, tab: .schedule)
+                case "farrier":
+                    router.navigate(to: BarnRoute.farrierSchedule, tab: .schedule)
+                case "dentist":
+                    router.navigate(to: BarnRoute.dentistSchedule, tab: .schedule)
                 default:
                     break
                 }
