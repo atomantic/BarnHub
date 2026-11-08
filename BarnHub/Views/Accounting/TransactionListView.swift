@@ -210,8 +210,3 @@ struct TransactionListView: View {
         }
     }
 }
-
-extension Transaction {
-    /// Income positive, expenses negative, for sorting the Amount column.
-    var signedAmount: Double { type == .income ? amount : -amount }
-}

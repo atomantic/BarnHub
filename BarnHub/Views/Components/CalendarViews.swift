@@ -13,7 +13,7 @@ private func hourLabel(_ hour: Int) -> String {
     comps.hour = hour
     comps.minute = 0
     guard let date = Calendar.current.date(from: comps) else { return "\(hour)" }
-    return date.formatted(.dateTime.hour())
+    return date.formatted(.dateTime.hour().locale(.app))
 }
 
 private func eventYOffset(_ date: Date, hourHeight: CGFloat) -> CGFloat {

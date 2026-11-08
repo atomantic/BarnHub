@@ -61,4 +61,40 @@ final class InvoiceBuilderTests: XCTestCase {
         XCTAssertEqual(range.start, date(15, 0))
         XCTAssertEqual(range.end, date(16, 0))
     }
+
+    // MARK: - Client Payment History (#51)
+
+    func testClientBalanceUnpaidMatchesInvoiceTotalDue() {
+        let transactions = [
+            Transaction(amount: 100, date: date(3), category: .lesson, type: .income),
+            Transaction(amount: 120, date: date(4), category: .vetBill, type: .expense),
+            Transaction(amount: 40, date: date(6), category: .farrier, type: .expense, isPaid: true),
+            Transaction(amount: 850, date: date(1), category: .boarding, type: .income, isPaid: true),
+            Transaction(amount: 60, date: date(9), category: .training, type: .income),
+        ]
+        let balance = ClientBalance(transactions)
+        let invoice = InvoiceBuilder(transactions: transactions, from: date(1), through: date(30), calendar: calendar)
+        XCTAssertEqual(balance.unpaid, invoice.totalDue)
+        XCTAssertEqual(balance, ClientBalance(charged: 1010, paid: 850, unpaid: 160, linkedExpenses: 160))
+    }
+
+    func testLinkedExpensesDontChangeTheClientTotals() {
+        let lesson = Transaction(amount: 100, date: date(3), category: .lesson, type: .income)
+        let withoutExpenses = ClientBalance([lesson])
+        let withExpenses = ClientBalance([
+            lesson,
+            Transaction(amount: 120, date: date(4), category: .vetBill, type: .expense),
+            Transaction(amount: 30, date: date(5), category: .supplies, type: .expense, isPaid: true),
+        ])
+        XCTAssertEqual(withExpenses.charged, withoutExpenses.charged)
+        XCTAssertEqual(withExpenses.paid, withoutExpenses.paid)
+        XCTAssertEqual(withExpenses.unpaid, 100)
+        XCTAssertEqual(withExpenses.linkedExpenses, 150)
+        XCTAssertEqual(withoutExpenses.linkedExpenses, 0)
+    }
+
+    func testExpensesReadAsNegativeAmounts() {
+        XCTAssertEqual(Transaction(amount: 120, type: .expense).signedAmount, -120)
+        XCTAssertEqual(Transaction(amount: 100, type: .income).signedAmount, 100)
+    }
 }

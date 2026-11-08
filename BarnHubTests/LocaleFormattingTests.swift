@@ -88,4 +88,56 @@ final class LocaleFormattingTests: XCTestCase {
         XCTAssertEqual(monday.weekdaySymbolsStartingOnFirstWeekday(symbols).last, "Sun")
         XCTAssertEqual(sunday.weekdaySymbolsStartingOnFirstWeekday(symbols), symbols)
     }
+
+    // MARK: - App-language currency, dates and numbers (#52)
+
+    func testCurrencyFollowsTheLocale() {
+        XCTAssertEqual(Double.currency(1250, code: "USD", locale: us), "$1,250.00")
+        let dollars = Double.currency(1250, code: "USD", locale: german)
+        XCTAssertTrue(dollars.hasPrefix("1.250,00"), dollars)
+        XCTAssertTrue(dollars.hasSuffix("$"), dollars)
+        let euro = Double.currency(-12.5, code: "EUR", locale: german)
+        XCTAssertTrue(euro.hasPrefix("-12,50"), euro)
+        XCTAssertTrue(euro.hasSuffix("€"), euro)
+    }
+
+    func testShortDatesFollowTheLocale() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let date = calendar.date(from: DateComponents(year: 2026, month: 1, day: 15, hour: 12))!
+        XCTAssertEqual(date.shortFormatted(locale: us), "01/15/2026")
+        XCTAssertEqual(date.shortFormatted(locale: german), "15.01.2026")
+        XCTAssertEqual(date.shortFormatted(locale: Locale(identifier: "de")), "15.01.2026", "the in-app language has no region")
+    }
+
+    func testRelativeDatesFollowTheLocale() {
+        let now = Date(timeIntervalSinceReferenceDate: 800_000_000)
+        let twoDaysAgo = now.addingTimeInterval(-2 * 86_400)
+        XCTAssertEqual(twoDaysAgo.relativeDateString(relativeTo: now, locale: us), "2 days ago")
+        XCTAssertEqual(twoDaysAgo.relativeDateString(relativeTo: now, locale: german), "vor 2 Tagen")
+    }
+
+    func testLowStockDetailFormatsNumbersForTheLocale() {
+        // The words come from the app language's catalog (English in tests);
+        // the numbers follow the locale.
+        XCTAssertEqual(SupplyItem.lowStockDetail(quantity: 1.5, unit: "bags", reorderAt: 4, locale: us), "1.5 bags · reorder at 4")
+        XCTAssertEqual(SupplyItem.lowStockDetail(quantity: 1.5, unit: "bags", reorderAt: 4, locale: german), "1,5 bags · reorder at 4")
+        XCTAssertEqual(SupplyItem.lowStockDetail(quantity: 3, unit: " ", reorderAt: 2.5, locale: us), "3 · reorder at 2.5")
+    }
+
+    func testFormatKeysResolveInTheAppLanguage() {
+        let key = "net.shadowpuppet.BarnBook.appLocale"
+        let saved = UserDefaults.standard.string(forKey: key)
+        UserDefaults.standard.set("de", forKey: key)
+        Bundle.resetAppBundleCache()
+        defer {
+            if let saved { UserDefaults.standard.set(saved, forKey: key) } else { UserDefaults.standard.removeObject(forKey: key) }
+            Bundle.resetAppBundleCache()
+        }
+        let horse = "Star"
+        XCTAssertEqual(appLocalized("Vet: \(horse)"), "Tierarzt: Star")
+        XCTAssertEqual(SupplyItem.lowStockDetail(quantity: 1.5, unit: "Säcke", reorderAt: 4, locale: .app), "1,5 Säcke · Nachbestellen bei 4")
+        XCTAssertEqual(1250.0.asCurrency, Double.currency(1250, code: Double.appCurrencyCode, locale: Locale(identifier: "de")))
+        XCTAssertTrue(1250.0.asCurrency.hasPrefix("1.250,00"), 1250.0.asCurrency)
+    }
 }
