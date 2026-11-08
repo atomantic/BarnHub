@@ -105,7 +105,7 @@ struct FeedPlanEntryEditView: View {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }
             }
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem(placement: .pinnedConfirmation) {
                 Button(isNew ? "Add" : "Save") { save() }
                     .disabled(selectedProduct == nil)
             }

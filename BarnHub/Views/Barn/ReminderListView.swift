@@ -62,14 +62,14 @@ struct ReminderListView: View {
         }
         .navigationTitle("Reminders")
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    router.navigate(to: BarnRoute.reminderEdit(nil))
-                } label: {
-                    Label("New Reminder", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: BarnRoute.reminderEdit(nil))
+            } label: {
+                Label("New Reminder", systemImage: "plus")
             }
+        }
+        .toolbar {
             ToolbarItem(placement: .secondaryAction) {
                 Toggle("Show Completed", isOn: $showCompleted)
             }

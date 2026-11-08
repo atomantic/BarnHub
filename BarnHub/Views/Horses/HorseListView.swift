@@ -38,14 +38,14 @@ struct HorseListView: View {
         .navigationTitle("Horses")
         .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search horses")
-        .toolbar {
-            ToolbarItem(placement: .trailingBar) {
-                Button {
-                    router.navigate(to: HorseRoute.edit(nil))
-                } label: {
-                    Label("Add Horse", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .trailingBar) {
+            Button {
+                router.navigate(to: HorseRoute.edit(nil))
+            } label: {
+                Label("Add Horse", systemImage: "plus")
             }
+        }
+        .toolbar {
             ToolbarItem(placement: .leadingBar) {
                 Toggle(isOn: $showInactive) {
                     Label("Show Inactive", systemImage: "eye")
