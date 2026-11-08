@@ -373,6 +373,24 @@ final class NotificationServiceTests: XCTestCase {
                        "You have 2 overdue tasks and 1 task due today.")
     }
 
+    /// #59: both counts pluralize independently in a translated summary.
+    func test_summaryBody_pluralizesInGerman() {
+        let key = "net.shadowpuppet.BarnBook.appLocale"
+        let saved = UserDefaults.standard.string(forKey: key)
+        UserDefaults.standard.set("de", forKey: key)
+        Bundle.resetAppBundleCache()
+        defer {
+            if let saved { UserDefaults.standard.set(saved, forKey: key) } else { UserDefaults.standard.removeObject(forKey: key) }
+            Bundle.resetAppBundleCache()
+        }
+        XCTAssertEqual(NotificationPlanner.summaryBody(overdue: 1, dueToday: 2),
+                       "Sie haben 1 überfällige Aufgabe und 2 heute fällige Aufgaben.")
+        XCTAssertEqual(NotificationPlanner.summaryBody(overdue: 2, dueToday: 1),
+                       "Sie haben 2 überfällige Aufgaben und 1 heute fällige Aufgabe.")
+        XCTAssertEqual(NotificationPlanner.summaryBody(overdue: 1, dueToday: 0), "Sie haben 1 überfällige Aufgabe.")
+        XCTAssertEqual(NotificationPlanner.summaryBody(overdue: 0, dueToday: 2), "Sie haben 2 heute fällige Aufgaben.")
+    }
+
     func test_requestsCarryDeepLinks() async throws {
         let context = try makeContext()
         let horse = addHorse("Arrow", to: context)
