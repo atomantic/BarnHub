@@ -51,8 +51,19 @@ struct BarnHubApp: App {
         UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
     }
 
+    /// `-SeedSampleData` (Debug builds only): an in-memory store filled with sample
+    /// data. A release build must never trade the user's iCloud store for an
+    /// in-memory one because of a launch argument.
+    private static var isSeedModeRequested: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
+        #else
+        false
+        #endif
+    }
+
     private var modelContainer: ModelContainer = {
-        let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
+        let isSeedMode = Self.isSeedModeRequested
         let config = isSeedMode
             ? ModelConfiguration(isStoredInMemoryOnly: true)
             : ModelConfiguration(cloudKitDatabase: .automatic)
@@ -178,8 +189,8 @@ struct ContentView: View {
     @Environment(StoreService.self) private var storeService
     @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(\.modelContext) private var modelContext
-    #if os(macOS)
-    @Environment(\.openSettings) private var openSettings
+    #if os(macOS) && DEBUG
+    @Environment(\.openSettings) private var openSettings  // screenshot routes only
     #endif
     @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
     @State private var showFirstLaunchSheet = false
@@ -217,7 +228,9 @@ struct ContentView: View {
             }
             notificationService.attach(to: modelContext)
             notificationService.requestSync(delay: .zero)
+            #if DEBUG
             handleScreenshotRouteFromLaunchArgs()
+            #endif
             routeNotificationTap()
         }
         .onChange(of: scenePhase) {
@@ -291,12 +304,14 @@ struct ContentView: View {
     }
 
     private func handleIncomingURL(_ url: URL) {
+        #if DEBUG
         if url.scheme == "barnhub", url.host() == "screenshot" {
             let page = url.pathComponents.filter { $0 != "/" }.first ?? ""
             navigateToScreenshotPage(page)
-        } else {
-            DeepLinkHandler.handle(url: url, router: router)
+            return
         }
+        #endif
+        DeepLinkHandler.handle(url: url, router: router)
     }
 
     private func routeNotificationTap() {
@@ -304,6 +319,11 @@ struct ContentView: View {
         DeepLinkHandler.handle(url: url, router: router)
     }
 
+    // MARK: Screenshot routes (debug builds only)
+
+    // Drive navigation for the screenshot UI tests and scripts. Release builds
+    // leave these out so no other app or web page can steer navigation.
+    #if DEBUG
     private func handleScreenshotRouteFromLaunchArgs() {
         let args = ProcessInfo.processInfo.arguments
         guard let idx = args.firstIndex(of: "-screenshotRoute"),
@@ -365,6 +385,7 @@ struct ContentView: View {
             }
         }
     }
+    #endif
 
     @ViewBuilder
     private var sidebarLayout: some View {
