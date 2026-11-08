@@ -78,4 +78,6 @@ xcodebuild test \
 
 ## License
 
-Copyright 2026 ShadowPuppet LLC. All rights reserved.
+BarnHub's source code is released under the [MIT License](LICENSE). Copyright (c) 2025-2026 ShadowPuppet, LLC.
+
+The license covers the code only. The BarnHub name, logo and app icon are trademarks of ShadowPuppet, LLC and aren't licensed for reuse. If you publish your own build, give it a different name and icon.

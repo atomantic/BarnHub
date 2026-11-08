@@ -398,7 +398,7 @@ if $BUILD_WATCH; then
 fi
 
 echo "✅ Build $NEW_BUILD submitted to TestFlight."
-echo "🔗 https://appstoreconnect.apple.com/teams/69a6de6e-c0f9-47e3-e053-5b8c7c11a4d1/apps/6760518680/testflight"
+echo "🔗 https://appstoreconnect.apple.com/apps/6760518680/testflight"
 
 # Commit the build-number bump only after every upload succeeds, so a failed
 # deploy doesn't leave a consumed build number on main.

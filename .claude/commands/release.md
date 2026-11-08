@@ -23,9 +23,9 @@ Build, archive, and upload to TestFlight locally.
    - The deploy script auto-commits the build number bump
    - Push the build number bump: `git push`
    - Inform the user the build should appear in TestFlight within 5-10 minutes
-   - Provide the TestFlight link: https://appstoreconnect.apple.com/teams/69a6de6e-c0f9-47e3-e053-5b8c7c11a4d1/apps/6760518680/testflight
+   - Provide the TestFlight link: https://appstoreconnect.apple.com/apps/6760518680/testflight
 
 5. **If deploy.sh doesn't exist or .env is missing**:
    - Create `.env` from `.env.example`
-   - The API key is at `~/Library/Mobile Documents/com~apple~CloudDocs/AppDev/AuthKey_DLJTLUDW5X.p8`
+   - Fill in the App Store Connect API key ID, issuer ID and the path to your `.p8` key file
    - See the `ios-app-store-connect-setup` skill for full setup details
