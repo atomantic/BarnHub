@@ -1,6 +1,7 @@
 import XCTest
 import SwiftData
 import CoreGraphics
+import os
 @testable import BarnHub
 
 /// Restore All Data (#71): an All Data export folder restored into the store,
@@ -335,12 +336,12 @@ final class AllDataRestoreTests: XCTestCase {
             try csv.write(to: url, atomically: true, encoding: .utf8)
 
             let start = Date()
-            var cancelledAt: Date?
+            let cancelledAt = OSAllocatedUnfairLock<Date?>(initialState: nil)
             do {
                 _ = try await restore(folder) { index, _, _ in
                     // Step 17, the last file, runs after every weigh-in was saved.
                     if index == 17 {
-                        cancelledAt = Date()
+                        cancelledAt.withLock { $0 = Date() }
                         withUnsafeCurrentTask { $0?.cancel() }
                     }
                 }
@@ -349,7 +350,7 @@ final class AllDataRestoreTests: XCTestCase {
             }
             let end = Date()
 
-            let cancelled = try XCTUnwrap(cancelledAt)
+            let cancelled = try XCTUnwrap(cancelledAt.withLock { $0 })
             print("#77 timing horseExists=\(horseExists): restore \(cancelled.timeIntervalSince(start)) s, rollback \(end.timeIntervalSince(cancelled)) s")
             XCTAssertEqual(try snapshot(), before, "horseExists=\(horseExists)")
             // Generous ceiling (well under 10 s on an M-series simulator) so a slow runner doesn't flake.
