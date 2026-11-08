@@ -23,6 +23,8 @@ struct FeedPlanEntryEditView: View {
 
     private var isNew: Bool { entryID == nil }
     private var existingEntry: FeedPlanEntry? { modelContext.existingModel(for: entryID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(entryID, as: FeedPlanEntry.self) }
     private var horse: Horse? { modelContext.existingModel(for: horseID) }
 
     var body: some View {
@@ -110,6 +112,7 @@ struct FeedPlanEntryEditView: View {
                     .disabled(selectedProduct == nil)
             }
         }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
         .task { loadExisting() }
         .sheet(isPresented: $showProductSheet, onDismiss: autoSelectNewProduct) {
@@ -153,6 +156,11 @@ struct FeedPlanEntryEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         guard let product = selectedProduct else { return }
 
         if let entry = existingEntry {

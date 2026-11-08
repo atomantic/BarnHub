@@ -151,6 +151,24 @@ struct ChoiceDialog: View {
     }
 }
 
+extension View {
+    /// Covers an edit form with "This item was deleted" when the record it edits no
+    /// longer exists (deleted on this device or another), so it can't be re-saved.
+    func deletedRecordNotice(_ isDeleted: Bool) -> some View {
+        overlay {
+            if isDeleted {
+                EmptyStateView(
+                    icon: "trash.slash",
+                    title: "This item was deleted",
+                    subtitle: "It was deleted on this or another device, so your changes can't be saved."
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.background)
+            }
+        }
+    }
+}
+
 #Preview {
     ConfirmationDialog(
         isPresented: .constant(true),

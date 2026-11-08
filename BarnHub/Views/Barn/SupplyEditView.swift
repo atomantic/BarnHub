@@ -19,6 +19,8 @@ struct SupplyEditView: View {
 
     private var isNew: Bool { supplyItemID == nil }
     private var existingItem: SupplyItem? { modelContext.existingModel(for: supplyItemID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(supplyItemID, as: SupplyItem.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Supply" : "Edit Supply" }
 
     var body: some View {
@@ -80,6 +82,7 @@ struct SupplyEditView: View {
             }
         }
         .task { loadExisting() }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -95,6 +98,11 @@ struct SupplyEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let item: SupplyItem
         if let existing = existingItem {
             item = existing
