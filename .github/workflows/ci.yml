@@ -44,7 +44,7 @@ jobs:
 
       - name: Run tests
         run: |
-          if [ "${{ inputs.suite }}" = "full" ]; then ./scripts/test.sh; else ./scripts/test.sh --unit; fi
+          if [ "${{ inputs.suite }}" = "full" ]; then ./scripts/test.sh --all; else ./scripts/test.sh --unit; fi
 
       - name: Upload test results
         if: failure()

@@ -20,9 +20,9 @@ xcodebuild test -project BarnHub.xcodeproj -scheme BarnHub \
   -only-testing:BarnHubTests \
   -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 
-# Full suite, the same one deploy.sh and CI run: unit tests, then the UI
-# screen walk on iPhone, iPad and the Mac app
-./scripts/test.sh            # or pick steps: --unit / --iphone / --ipad / --mac
+# Full suite, the same one deploy.sh runs: unit tests, then the UI screen
+# walk on iPhone and iPad. --all adds the Mac app (opt-in, see below)
+./scripts/test.sh            # or pick steps: --unit / --iphone / --ipad / --mac / --all
 ./scripts/test.sh --iphone --only testHorseScreens   # one UI test method
 ```
 
@@ -33,7 +33,7 @@ on both the oldest iOS you have (26.x) and the newest. SwiftData behaves
 differently across them; for example, batched fetches lose relationships before
 iOS 27 (#69).
 
-`scripts/test.sh` runs `BarnHubTests`, then `ScreenWalkTests` (in `BarnHubUITests` for iPhone and iPad, and `BarnHubMacUITests` for the native Mac app). The screen walk opens every screen with `-SeedSampleData` and fails when a screen crashes or doesn't show its sample content, including the document viewers and the invoice share sheet. It picks the newest runtime's iPhone 17 and iPad Pro 13-inch (M5); set `SIM_OS=26.5` to run on an older runtime, or `IPHONE_SIM` / `IPAD_SIM` for other devices. Results and failure screenshots land in `.build/test-results/<step>.xcresult`. Quit BarnHub on the Mac first, and don't use the Mac while the Mac step drives its window.
+`scripts/test.sh` runs `BarnHubTests`, then `ScreenWalkTests` (in `BarnHubUITests` for iPhone and iPad, and `BarnHubMacUITests` for the native Mac app). The screen walk opens every screen with `-SeedSampleData` and fails when a screen crashes or doesn't show its sample content, including the document viewers and the invoice share sheet. It picks the newest runtime's iPhone 17 and iPad Pro 13-inch (M5); set `SIM_OS=26.5` to run on an older runtime, or `IPHONE_SIM` / `IPAD_SIM` for other devices. Results and failure screenshots land in `.build/test-results/<step>.xcresult`. The Mac step (`--mac`, or `--all`) is opt-in: it drives real windows, and the test app shares BarnHub's bundle ID, so XCUITest would quit a BarnHub that's open. It refuses to start while BarnHub is running; never start it while Adam is using the Mac without asking first.
 
 ## Git Workflow
 
@@ -56,7 +56,7 @@ Local deploy via `./deploy.sh` (used when CI build credits are exhausted):
 
 Requires `.env` file with App Store Connect API credentials (see `.env.example`).
 
-CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It is **manual-only** (`workflow_dispatch`), never automatic: the repo is private and GitHub's macOS minutes run out fast. Start it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`; it runs only `--unit` unless you pick `suite=full`. The real release gate is `./deploy.sh`, which runs the full `./scripts/test.sh` on Adam's Mac. Before merging, run `./scripts/test.sh` locally (at least `--unit`, see Build Commands). CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
+CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It is **manual-only** (`workflow_dispatch`), never automatic: the repo is private and GitHub's macOS minutes run out fast. Start it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`; it runs only `--unit` unless you pick `suite=full` (`--all`). The real release gate is `./deploy.sh`, which runs the full `./scripts/test.sh` on Adam's Mac. Before merging, run `./scripts/test.sh` locally (at least `--unit`, see Build Commands). CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
 
 ## Key Patterns
 
