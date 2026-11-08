@@ -32,26 +32,45 @@ struct ScreenshotRouter {
         }
         // Set the tab synchronously; defer detail-level navigation until the
         // layout (tab bar or sidebar) has rendered its first frame.
-        router.selectedTab = tab
-        router.popToRoot(tab: tab)
+        let apply = {
+            router.selectedTab = tab
+            router.popToRoot(tab: tab)
+        }
+        apply()
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 400_000_000)
-            // On a loaded machine the first push can land before the tab's
-            // stack is ready and be dropped. Until the route has taken effect,
-            // open it again; once it has, leave the app alone.
-            let before = state
+            let unopened = state
             open()
             guard page != "settings" else { return }
+            // On a busy simulator, especially right after a UI test relaunches
+            // the app, the first frames can drop the push or put the tab back
+            // to Home. Watch for a few seconds and reapply the route if it
+            // never took (nothing changed) or its tab, stack, sheet or
+            // selection was undone. Tab-only pages change nothing, so they
+            // only check the tab.
+            let opensScreen = unopened != state
+            var expected = state
             for _ in 0..<8 {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                guard state == before else { return }
+                let dropped = !opensScreen && entryOpensScreen(page) && state == unopened
+                guard state != expected || dropped else { continue }
+                BarnHubLogger.warning("Screenshot route was undone; reapplying")
+                apply()
+                try? await Task.sleep(nanoseconds: 300_000_000)
                 open()
+                expected = state
             }
         }
     }
 
-    /// What a route changes: the stacks, the form sheet and the split selections.
+    /// Whether the page opens something beyond its tab's root screen.
+    private func entryOpensScreen(_ page: String) -> Bool {
+        !["home", "horses", "clients", "schedule", "accounting"].contains(page)
+    }
+
+    /// What a route sets: the tab, the stacks, the form sheet and the split selections.
     private struct NavigationState: Equatable {
+        let tab: Router.AppTab
         let pathCounts: [Int]
         let formID: UUID?
         let horseID: PersistentIdentifier?
@@ -60,6 +79,7 @@ struct ScreenshotRouter {
 
     private var state: NavigationState {
         NavigationState(
+            tab: router.selectedTab,
             pathCounts: [router.homePath.count, router.horsesPath.count, router.clientsPath.count,
                          router.schedulePath.count, router.accountingPath.count],
             formID: router.presentedForm?.id,

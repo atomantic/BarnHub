@@ -330,8 +330,8 @@ final class ScreenWalkTests: XCTestCase {
     }
 
     /// Taps the first control showing `text`, scrolling down to find it.
-    /// Plain text is only tapped when no button or row shows it, so a section
-    /// header doesn't win over the row beneath it.
+    /// Plain text is only tapped when no button or row shows it, and then the
+    /// last match, so a section header doesn't win over the row beneath it.
     private func tapText(_ text: String, file: StaticString = #filePath, line: UInt = #line) {
         let byLabel = NSPredicate(format: "label CONTAINS[c] %@", text)
         let controls = [app.buttons.matching(byLabel), app.cells.matching(byLabel)]
@@ -340,8 +340,16 @@ final class ScreenWalkTests: XCTestCase {
             app.staticTexts.matching(NSPredicate(format: "value CONTAINS[c] %@", text)),
         ]
         for attempt in 0..<12 {
-            let candidates = controls.contains { $0.firstMatch.exists } ? controls : texts
-            if let target = candidates.lazy.map(\.firstMatch).first(where: { $0.exists && $0.isHittable }) {
+            if controls.contains(where: { $0.firstMatch.exists }) {
+                if let target = controls.lazy.map(\.firstMatch).first(where: { $0.exists && $0.isHittable }) {
+                    press(target)
+                    return
+                }
+            } else if let target = texts.lazy.compactMap({ query in
+                // The last match: a section header comes before the row
+                // that repeats its title.
+                query.allElementsBoundByIndex.last { $0.exists && $0.isHittable }
+            }).first {
                 press(target)
                 return
             }
