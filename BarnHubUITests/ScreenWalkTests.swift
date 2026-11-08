@@ -29,7 +29,8 @@ final class ScreenWalkTests: XCTestCase {
         Screen(page: "home", expect: ["tile_horses", "tile_reports", "5 horses"]),
         Screen(page: "horses", expect: ["Arrow", "Cleo"]),
         Screen(page: "clients", expect: ["Chen", "Rivera"]),
-        Screen(page: "schedule", expect: ["Vet Schedule", "Feed Products"]),
+        // iPhone lists the schedule screens; iPad shows a calendar with them in a menu.
+        Screen(page: "schedule", expect: [], anyOf: ["Vet Schedule", "Add Event"]),
         Screen(page: "accounting", expect: ["This Month", "Recent Transactions"],
                anyOf: ["Arena footing", "Weekly lesson", "Group trail ride", "Dressage training"]),
     ]
@@ -224,12 +225,15 @@ final class ScreenWalkTests: XCTestCase {
         let dialog = app.dialogs.matching(titled).firstMatch
         XCTAssertTrue(panel.waitForExistence(timeout: 10) || dialog.exists, "\(title): no Quick Look panel opened")
         #else
-        // Quick Look's own bar: a Done button over the file, titled with its name.
-        let done = app.buttons["Done"]
-        XCTAssertTrue(done.waitForExistence(timeout: 10), "\(title): no viewer opened (no Done button)")
-        let titled = app.navigationBars.matching(NSPredicate(format: "identifier CONTAINS[c] %@ OR label CONTAINS[c] %@", title, title))
-            .firstMatch.exists || element(containing: title) != nil
-        XCTAssertTrue(titled, "\(title): viewer doesn't name the file")
+        // Quick Look's own bar: a close (Done) button over the file, titled with
+        // the file's name (spaces become underscores in the temp file name).
+        let close = app.buttons.matching(NSPredicate(
+            format: "identifier == 'QLOverlayDoneButtonAccessibilityIdentifier' OR label == 'Done' OR label ==[c] 'close'"
+        )).firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 10), "\(title): no viewer opened (no close button)")
+        let fileName = title.replacingOccurrences(of: " ", with: "_")
+        XCTAssertTrue(element(containing: fileName) != nil || element(containing: title) != nil,
+                      "\(title): viewer doesn't name the file")
         #endif
         attachScreenshot(named: "\(page) \(title)")
         assertStillRunning(title)
@@ -241,8 +245,12 @@ final class ScreenWalkTests: XCTestCase {
         let reveal = app.buttons["Reveal in Finder"]
         XCTAssertTrue(reveal.waitForExistence(timeout: 10), "\(name): share sheet missing or blank")
         #else
+        // The share sheet's activity list, or its Copy action (iPad popovers
+        // don't always expose the list by name).
         let sheet = app.otherElements["ActivityListView"]
-        XCTAssertTrue(sheet.waitForExistence(timeout: 10), "\(name): share sheet missing or blank")
+        let copy = app.buttons["Copy"]
+        let shown = sheet.waitForExistence(timeout: 10) || copy.exists
+        XCTAssertTrue(shown, "\(name): share sheet missing or blank")
         #endif
         attachScreenshot(named: "\(name) share sheet")
         assertStillRunning(name)
@@ -353,9 +361,14 @@ final class ScreenWalkTests: XCTestCase {
                            file: StaticString = #filePath, line: UInt = #line) {
         let tabBarButton = app.tabBars.buttons[title]
         let sidebarItem = app.descendants(matching: .any)[sidebarID]
+        // iPad on iOS 18+ shows the tabs as a floating bar of plain buttons.
+        // Home's tiles share the titles, so leave out anything tagged tile_.
+        let floatingTab = app.buttons.matching(NSPredicate(
+            format: "label == %@ AND NOT (identifier BEGINSWITH 'tile_')", title
+        )).firstMatch
         let deadline = Date().addingTimeInterval(10)
         while Date() < deadline {
-            for item in [tabBarButton, sidebarItem] where item.exists && item.isHittable {
+            for item in [tabBarButton, sidebarItem, floatingTab] where item.exists && item.isHittable {
                 press(item)
                 return
             }
