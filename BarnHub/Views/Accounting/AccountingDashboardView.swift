@@ -64,9 +64,12 @@ struct AccountingDashboardView: View {
                     )
                 } else {
                     ForEach(recentTransactions) { transaction in
-                        NavigationLink(value: AccountingRoute.edit(transaction.persistentModelID)) {
+                        Button {
+                            router.navigate(to: AccountingRoute.edit(transaction.persistentModelID))
+                        } label: {
                             TransactionRowView(transaction: transaction)
                         }
+                        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                     }
                 }
             }

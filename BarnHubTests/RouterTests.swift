@@ -283,3 +283,180 @@ final class RouterTests: XCTestCase {
         XCTAssertFalse(Router.isForm(HomeRoute.settings))
     }
 }
+
+// MARK: - Every route
+
+/// One value of every case of every route enum, built from a single record ID.
+/// Each list is checked against an exhaustive switch, so adding a route case
+/// fails to compile until it's listed here too.
+enum AllRoutes {
+    static func home() -> [HomeRoute] {
+        let all: [HomeRoute] = [.horses, .clients, .schedule, .supplies, .accounting,
+                                .reports, .barnNotes, .settings, .dataManagement]
+        for route in all {
+            switch route {
+            case .horses, .clients, .schedule, .supplies, .accounting, .reports,
+                 .barnNotes, .settings, .dataManagement: break
+            }
+        }
+        return all
+    }
+
+    static func horse(_ id: PersistentIdentifier) -> [HorseRoute] {
+        let all: [HorseRoute] = [
+            .list, .detail(id), .edit(id), .edit(nil), .addVetRecord(id), .addFarrierVisit(id),
+            .addDentistVisit(id), .editVetRecord(id), .editFarrierVisit(id), .editDentistVisit(id),
+            .healthTimeline(id), .weightChart(id), .documents(id), .feedPlan(id),
+            .editFeedEntry(id, nil), .editFeedEntry(id, id),
+        ]
+        for route in all {
+            switch route {
+            case .list, .detail, .edit, .addVetRecord, .addFarrierVisit, .addDentistVisit,
+                 .editVetRecord, .editFarrierVisit, .editDentistVisit, .healthTimeline,
+                 .weightChart, .documents, .feedPlan, .editFeedEntry: break
+            }
+        }
+        return all
+    }
+
+    static func client(_ id: PersistentIdentifier) -> [ClientRoute] {
+        let all: [ClientRoute] = [.list, .detail(id), .edit(id), .edit(nil), .manageHorses(id),
+                                  .invoiceHistory(id), .paymentHistory(id), .documents(id)]
+        for route in all {
+            switch route {
+            case .list, .detail, .edit, .manageHorses, .invoiceHistory, .paymentHistory, .documents: break
+            }
+        }
+        return all
+    }
+
+    static func accounting(_ id: PersistentIdentifier) -> [AccountingRoute] {
+        let all: [AccountingRoute] = [.list, .edit(id), .edit(nil)]
+        for route in all {
+            switch route {
+            case .list, .edit: break
+            }
+        }
+        return all
+    }
+
+    static func subscription() -> [SubscriptionRoute] {
+        let all: [SubscriptionRoute] = [.paywall]
+        for route in all {
+            switch route {
+            case .paywall: break
+            }
+        }
+        return all
+    }
+
+    static func barn(_ id: PersistentIdentifier) -> [BarnRoute] {
+        let all: [BarnRoute] = [
+            .supplies, .supplyEdit(id), .supplyEdit(nil), .reminders, .reminderEdit(id),
+            .reminderEdit(nil), .barnNotes, .barnNoteEdit(id), .barnNoteEdit(nil),
+            .vetSchedule, .addVetRecord, .farrierSchedule, .addFarrierVisit,
+            .dentistSchedule, .addDentistVisit, .lessons, .lessonEdit(id), .lessonEdit(nil),
+            .feedProducts, .feedProductEdit(id), .feedProductEdit(nil),
+        ]
+        for route in all {
+            switch route {
+            case .supplies, .supplyEdit, .reminders, .reminderEdit, .barnNotes, .barnNoteEdit,
+                 .vetSchedule, .addVetRecord, .farrierSchedule, .addFarrierVisit,
+                 .dentistSchedule, .addDentistVisit, .lessons, .lessonEdit,
+                 .feedProducts, .feedProductEdit: break
+            }
+        }
+        return all
+    }
+
+    static func all(_ id: PersistentIdentifier) -> [any Hashable] {
+        home() + horse(id) + client(id) + accounting(id) + subscription() + barn(id)
+    }
+}
+
+final class RouteFormTests: XCTestCase {
+    private var container: ModelContainer!
+    private var id: PersistentIdentifier!
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        container = try ModelContainer(
+            for: BarnHubSchema.schema,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        let context = ModelContext(container)
+        let horse = Horse(name: "Arrow")
+        context.insert(horse)
+        try context.save()
+        id = horse.persistentModelID
+    }
+
+    override func tearDown() {
+        container = nil
+        id = nil
+        super.tearDown()
+    }
+
+    /// The add/edit screens, spelled out by name so a route can't silently
+    /// become (or stop being) a form.
+    private func expectedForm(_ route: any Hashable) -> Bool {
+        switch route {
+        case let r as HorseRoute:
+            switch r {
+            case .edit, .addVetRecord, .addFarrierVisit, .addDentistVisit,
+                 .editVetRecord, .editFarrierVisit, .editDentistVisit: return true
+            default: return false  // .editFeedEntry opens in the feed plan's own sheet
+            }
+        case let r as ClientRoute:
+            if case .edit = r { return true }
+            return false
+        case let r as AccountingRoute:
+            if case .edit = r { return true }
+            return false
+        case let r as BarnRoute:
+            switch r {
+            case .supplyEdit, .reminderEdit, .barnNoteEdit, .lessonEdit, .feedProductEdit,
+                 .addVetRecord, .addFarrierVisit, .addDentistVisit: return true
+            default: return false
+            }
+        default:
+            return false
+        }
+    }
+
+    func test_isForm_matchesEveryAddAndEditRoute() {
+        let routes = AllRoutes.all(id)
+        XCTAssertEqual(routes.count, 9 + 16 + 8 + 3 + 1 + 21)
+        for route in routes {
+            XCTAssertEqual(Router.isForm(route), expectedForm(route), "isForm wrong for \(route)")
+        }
+    }
+
+    func test_isForm_unknownRouteType_isNotForm() {
+        XCTAssertFalse(Router.isForm("not a route"))
+    }
+
+    func test_navigate_presentsEveryFormAsSheet_andPushesTheRest() {
+        for route in AllRoutes.all(id) {
+            let router = Router()
+            router.presentsFormsAsSheets = true
+            router.navigate(to: route, tab: .home)
+            if Router.isForm(route) {
+                XCTAssertEqual(router.presentedForm?.route, AnyHashable(route), "\(route)")
+                XCTAssertTrue(router.homePath.isEmpty, "\(route) should not push")
+            } else {
+                XCTAssertNil(router.presentedForm, "\(route)")
+                XCTAssertEqual(router.homePath.count, 1, "\(route) should push")
+            }
+        }
+    }
+
+    func test_navigate_pushesFormsWhenNotPresentingSheets() {
+        for route in AllRoutes.all(id) where Router.isForm(route) {
+            let router = Router()
+            router.navigate(to: route, tab: .schedule)
+            XCTAssertNil(router.presentedForm)
+            XCTAssertEqual(router.schedulePath.count, 1, "\(route)")
+        }
+    }
+}
