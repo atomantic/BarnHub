@@ -24,6 +24,7 @@ struct HorseEditView: View {
     @State private var isActive = true
 
     @State private var photoData: Data?
+    @State private var thumbnailData: Data?
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoLoadTask: Task<Void, Never>?
 
@@ -40,12 +41,16 @@ struct HorseEditView: View {
     private var photoSection: some View {
         Section {
             VStack(spacing: 12) {
-                if let photoData, let image = Image(photoData: photoData) {
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 120, height: 120)
-                        .clipShape(Circle())
+                if photoData != nil {
+                    CachedPhotoView(data: photoData, maxPixelSize: 360) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Color.secondary.opacity(0.15)
+                    }
+                    .frame(width: 120, height: 120)
+                    .clipShape(Circle())
                 } else {
                     Image(systemName: "photo.circle.fill")
                         .resizable()
@@ -65,6 +70,7 @@ struct HorseEditView: View {
                         Button(role: .destructive) {
                             withAnimation {
                                 photoData = nil
+                                thumbnailData = nil
                                 selectedPhoto = nil
                             }
                         } label: {
@@ -145,21 +151,24 @@ struct HorseEditView: View {
                 photoLoadTask?.cancel()
                 photoLoadTask = Task {
                     do {
-                        if let data = try await newItem.loadTransferable(type: Data.self) {
-                            await MainActor.run {
-                                photoData = data.downsampledImage(maxDimension: 800)
-                                selectedPhoto = nil
-                            }
+                        guard let data = try await newItem.loadTransferable(type: Data.self) else { return }
+                        let processed = await ImageProcessing.processPhoto(from: data)
+                        guard !Task.isCancelled else { return }
+                        guard let processed else {
+                            toast.show(appLocalized("Failed to load photo"), isError: true)
+                            return
                         }
+                        photoData = processed.photo
+                        thumbnailData = processed.thumbnail
+                        selectedPhoto = nil
                     } catch is CancellationError {
                         // Cancelled by a newer selection
                     } catch {
-                        await MainActor.run {
-                            toast.show(appLocalized("Failed to load photo"), isError: true)
-                        }
+                        toast.show(appLocalized("Failed to load photo"), isError: true)
                     }
                 }
             }
+            .onDisappear { photoLoadTask?.cancel() }
     }
 
     @ViewBuilder
@@ -215,6 +224,7 @@ struct HorseEditView: View {
         gender = horse.gender
         isActive = horse.isActive
         photoData = horse.photoData
+        thumbnailData = horse.thumbnailData
     }
 
     private func save() {
@@ -235,6 +245,7 @@ struct HorseEditView: View {
             horse.gender = gender
             horse.isActive = isActive
             horse.photoData = photoData
+            horse.thumbnailData = thumbnailData
             BarnHubLogger.info("Updating horse name=\(trimmedName)")
         } else {
             let horse = Horse(
@@ -251,6 +262,7 @@ struct HorseEditView: View {
                 isActive: isActive,
                 photoData: photoData
             )
+            horse.thumbnailData = thumbnailData
             modelContext.insert(horse)
             BarnHubLogger.info("Creating horse name=\(trimmedName)")
             newHorse = horse

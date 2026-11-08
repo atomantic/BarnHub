@@ -12,10 +12,10 @@ struct ClientDocumentsView: View {
     @State private var showCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoLoadTask: Task<Void, Never>?
+    @State private var fileImportTask: Task<Void, Never>?
     @State private var showDeleteConfirmation = false
     @State private var documentToDelete: ClientDocument?
-    @State private var showToast = false
-    @State private var toastMessage = ""
+    @State private var toast = ToastState()
     @State private var showShareSheet = false
     @State private var shareURL: URL?
 
@@ -94,8 +94,14 @@ struct ClientDocumentsView: View {
             photoLoadTask = Task {
                 do {
                     if let data = try await newItem.loadTransferable(type: Data.self) {
-                        await MainActor.run {
-                            addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: data)
+                        let jpeg = await ImageProcessing.downsampledJPEGInBackground(
+                            from: data, maxPixelSize: ImageProcessing.documentMaxPixelSize
+                        )
+                        guard !Task.isCancelled else { return }
+                        if let jpeg {
+                            addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: jpeg)
+                        } else {
+                            toast.show(appLocalized("Failed to load photo"), isError: true)
                         }
                     }
                 } catch is CancellationError {
@@ -103,8 +109,7 @@ struct ClientDocumentsView: View {
                     return
                 } catch {
                     await MainActor.run {
-                        toastMessage = appLocalized("Failed to load photo")
-                        showToast = true
+                        toast.show(appLocalized("Failed to load photo"), isError: true)
                     }
                 }
                 await MainActor.run { selectedPhoto = nil }
@@ -112,8 +117,21 @@ struct ClientDocumentsView: View {
         }
         #if os(iOS)
         .fullScreenCover(isPresented: $showCamera) {
-            CameraView { imageData in
-                addDocument(title: "Scan \(Date.now.shortFormatted)", type: .photo, data: imageData)
+            CameraView { capture in
+                photoLoadTask?.cancel()
+                photoLoadTask = Task {
+                    let jpeg = await ImageProcessing.downsampledJPEGInBackground(
+                        from: capture.image,
+                        orientation: capture.orientation,
+                        maxPixelSize: ImageProcessing.documentMaxPixelSize
+                    )
+                    guard !Task.isCancelled else { return }
+                    if let jpeg {
+                        addDocument(title: "Scan \(Date.now.shortFormatted)", type: .photo, data: jpeg)
+                    } else {
+                        toast.show(appLocalized("Failed to load photo"), isError: true)
+                    }
+                }
             }
         }
         #endif
@@ -127,13 +145,19 @@ struct ClientDocumentsView: View {
             ) {
                 guard let doc = documentToDelete else { return }
                 modelContext.deleteWithLogging(doc)
-                toastMessage = appLocalized("Document deleted")
-                showToast = true
+                toast.show(appLocalized("Document deleted"))
                 documentToDelete = nil
             }
         }
-        .toast(isPresented: $showToast, message: toastMessage)
-        .sheet(isPresented: $showShareSheet) {
+        .toast(toast)
+        .onDisappear {
+            photoLoadTask?.cancel()
+            fileImportTask?.cancel()
+        }
+        .sheet(isPresented: $showShareSheet, onDismiss: {
+            ShareTempFiles.cleanUp(shareURL)
+            shareURL = nil
+        }) {
             if let url = shareURL {
                 ShareSheet(items: [url])
             }
@@ -171,13 +195,28 @@ struct ClientDocumentsView: View {
     }
 
     private func handlePDFImport(_ result: Result<[URL], Error>) {
-        guard case .success(let urls) = result, let url = urls.first else { return }
-        guard url.startAccessingSecurityScopedResource() else { return }
-        defer { url.stopAccessingSecurityScopedResource() }
-
-        guard let data = try? Data(contentsOf: url) else { return }
-        let name = url.deletingPathExtension().lastPathComponent
-        addDocument(title: name, type: .pdf, data: data)
+        let url: URL
+        switch result {
+        case .success(let urls):
+            guard let first = urls.first else { return }
+            url = first
+        case .failure(let error):
+            BarnHubLogger.error("PDF picker failed error=\(error.localizedDescription)")
+            toast.show(appLocalized("Could not open file: \(error.localizedDescription)", comment: "File open error"), isError: true)
+            return
+        }
+        fileImportTask?.cancel()
+        fileImportTask = Task {
+            do {
+                let data = try await DocumentImport.readFile(at: url)
+                guard !Task.isCancelled else { return }
+                addDocument(title: url.deletingPathExtension().lastPathComponent, type: .pdf, data: data)
+            } catch {
+                guard !Task.isCancelled else { return }
+                BarnHubLogger.error("PDF import failed error=\(error.localizedDescription)")
+                toast.show(error.localizedDescription, isError: true)
+            }
+        }
     }
 
     private func addDocument(title: String, type: DocumentType, data: Data) {
@@ -186,26 +225,35 @@ struct ClientDocumentsView: View {
         doc.client = client
         modelContext.insert(doc)
         modelContext.saveWithLogging()
-        toastMessage = appLocalized("Document added")
-        showToast = true
+        toast.show(appLocalized("Document added"))
         BarnHubLogger.success("Document added client=\(client.fullName) title=\(title) type=\(type.rawValue)")
     }
 
     private func shareDocument(_ doc: ClientDocument) {
         guard let data = doc.fileData else { return }
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(doc.fileName)
-        try? data.write(to: tempURL)
-        shareURL = tempURL
-        showShareSheet = true
+        do {
+            ShareTempFiles.cleanUp(shareURL)
+            shareURL = try ShareTempFiles.write(data, fileName: doc.title, fileExtension: doc.fileExtension)
+            showShareSheet = true
+        } catch {
+            BarnHubLogger.error("Failed to write document for sharing error=\(error.localizedDescription)")
+            toast.show(appLocalized("Failed to share document"), isError: true)
+        }
     }
 }
 
 #if os(iOS)
 // MARK: - Camera View
 
+/// A camera picture as captured: sensor-oriented pixels plus the rotation to apply.
+struct CapturedPhoto {
+    let image: CGImage
+    let orientation: CGImagePropertyOrientation
+}
+
 struct CameraView: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
-    let onCapture: (Data) -> Void
+    let onCapture: (CapturedPhoto) -> Void
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
@@ -223,9 +271,10 @@ struct CameraView: UIViewControllerRepresentable {
         init(_ parent: CameraView) { self.parent = parent }
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage,
-               let data = image.jpegData(compressionQuality: 0.8) {
-                parent.onCapture(data)
+            // Hand over the decoded image; callers downsample and encode it once,
+            // off the main actor.
+            if let image = info[.originalImage] as? UIImage, let cgImage = image.cgImage {
+                parent.onCapture(CapturedPhoto(image: cgImage, orientation: CGImagePropertyOrientation(image.imageOrientation)))
             }
             parent.dismiss()
         }

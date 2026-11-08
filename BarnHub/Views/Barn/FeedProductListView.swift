@@ -66,13 +66,13 @@ struct FeedProductListView: View {
 
     private func productRow(_ product: FeedProduct) -> some View {
         HStack(spacing: 12) {
-            if let photoData = product.photoData, let image = Image(photoData: photoData) {
+            CachedPhotoView(data: product.thumbnailData) { image in
                 image
                     .resizable()
                     .scaledToFill()
                     .frame(width: 44, height: 44)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-            } else {
+            } placeholder: {
                 Image(systemName: "leaf.fill")
                     .foregroundStyle(.barnGreen)
                     .font(.title3)
@@ -80,6 +80,7 @@ struct FeedProductListView: View {
                     .background(Color.barnGreen.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
+            .backfillsThumbnail(for: product)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(product.name)
