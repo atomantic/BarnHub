@@ -21,6 +21,13 @@ xcodebuild test -project BarnHub.xcodeproj -scheme BarnHub \
   -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 ```
 
+When more than one iOS runtime is installed, `name=iPhone 17` matches several
+simulators and xcodebuild picks one. Pin the OS (`...,name=iPhone 17,OS=26.5`) or
+use `id=<udid>` from `xcrun simctl list devices`. Run tests that touch SwiftData
+on both the oldest iOS you have (26.x) and the newest. SwiftData behaves
+differently across them; for example, batched fetches lose relationships before
+iOS 27 (#69).
+
 ## Git Workflow
 
 After every feature or bug fix:
