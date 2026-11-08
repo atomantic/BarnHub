@@ -3,6 +3,10 @@ import SwiftData
 
 struct ClientDetailView: View {
     let clientID: PersistentIdentifier
+    /// True when shown as the detail pane beside the client list.
+    var isEmbedded = false
+    /// Called after the client is deleted, so an embedded pane can clear its selection.
+    var onDelete: (() -> Void)? = nil
     @Environment(\.modelContext) private var modelContext
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -229,7 +233,11 @@ struct ClientDetailView: View {
     @ViewBuilder
     private func clientContent(_ client: Client) -> some View {
         #if os(macOS)
-        macOSClientLayout(client)
+        if isEmbedded {
+            macOSClientPaneLayout(client)
+        } else {
+            macOSClientLayout(client)
+        }
         #else
         iOSClientLayout(client)
         #endif
@@ -241,6 +249,7 @@ struct ClientDetailView: View {
             if sizeClass == .regular {
                 // Same split as macOS: contact + horses left, money + documents right.
                 WideColumns {
+                    if isEmbedded { DetailPaneHeader(title: client.fullName) }
                     contactSection(client)
                     emergencySection(client)
                     notesSection(client)
@@ -251,6 +260,7 @@ struct ClientDetailView: View {
                 }
             } else {
                 List {
+                    if isEmbedded { DetailPaneHeader(title: client.fullName) }
                     contactSection(client)
                     emergencySection(client)
                     notesSection(client)
@@ -260,8 +270,7 @@ struct ClientDetailView: View {
                 }
             }
         }
-        .navigationTitle(client.fullName)
-        .inlineNavTitle()
+        .detailNavigationTitle(client.fullName, isEmbedded: isEmbedded)
         .sheet(isPresented: $showInvoiceGenerator) {
             InvoiceGeneratorView(clientID: clientID)
         }
@@ -273,6 +282,28 @@ struct ClientDetailView: View {
     #endif
 
     #if os(macOS)
+    /// One column for the detail pane beside the client list, which is too narrow
+    /// for the two-column window layout.
+    private func macOSClientPaneLayout(_ client: Client) -> some View {
+        Form {
+            DetailPaneHeader(title: client.fullName)
+            contactSection(client)
+            emergencySection(client)
+            notesSection(client)
+            horsesSection(client)
+            transactionsSection(client)
+            proSections()
+        }
+        .formStyle(.grouped)
+        .sheet(isPresented: $showInvoiceGenerator) {
+            InvoiceGeneratorView(clientID: clientID)
+        }
+        .sheet(isPresented: $showContractGenerator) {
+            ContractGeneratorView(clientID: clientID)
+        }
+        .toolbar { clientToolbar }
+    }
+
     private func macOSClientLayout(_ client: Client) -> some View {
         ScrollView {
             HStack(alignment: .top, spacing: 24) {
@@ -300,8 +331,7 @@ struct ClientDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(client.fullName)
-        .inlineNavTitle()
+        .detailNavigationTitle(client.fullName, isEmbedded: isEmbedded)
         .sheet(isPresented: $showInvoiceGenerator) {
             InvoiceGeneratorView(clientID: clientID)
         }
@@ -316,6 +346,10 @@ struct ClientDetailView: View {
         guard let client else { return }
         BarnHubLogger.info("Deleting client name=\(client.fullName)")
         modelContext.deleteWithLogging(client)
-        dismiss()
+        if let onDelete {
+            onDelete()
+        } else {
+            dismiss()
+        }
     }
 }
