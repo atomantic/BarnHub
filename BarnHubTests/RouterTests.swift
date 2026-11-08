@@ -310,6 +310,30 @@ final class RouterTests: XCTestCase {
         XCTAssertEqual(router.presentedForm?.route, AnyHashable(HorseRoute.edit(nil)))
     }
 
+    // #65: a doubled tap on View Plans pushes the paywall once.
+    func testNavigate_sameRouteTwiceInQuickSuccession_pushesOnce() {
+        let router = Router()
+        router.selectedTab = .clients
+        let now = Date()
+        router.navigate(to: SubscriptionRoute.paywall, now: now)
+        router.navigate(to: SubscriptionRoute.paywall, now: now.addingTimeInterval(0.1))
+        XCTAssertEqual(router.clientsPath.count, 1)
+
+        router.presentsFormsAsSheets = true
+        router.navigate(to: ClientRoute.edit(nil))
+        router.navigate(to: SubscriptionRoute.paywall, now: now.addingTimeInterval(2))
+        router.navigate(to: SubscriptionRoute.paywall, now: now.addingTimeInterval(2.1))
+        XCTAssertEqual(router.formPath.count, 1)
+    }
+
+    func testNavigate_sameRouteAfterTheRepeatInterval_pushesAgain() {
+        let router = Router()
+        let now = Date()
+        router.navigate(to: SubscriptionRoute.paywall, now: now)
+        router.navigate(to: SubscriptionRoute.paywall, now: now.addingTimeInterval(Router.repeatPushInterval + 0.1))
+        XCTAssertEqual(router.homePath.count, 2)
+    }
+
     func testNavigate_nonFormRouteWithoutFormSheet_pushesOntoTab() {
         let router = Router()
         router.selectedTab = .clients
