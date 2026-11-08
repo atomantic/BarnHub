@@ -41,6 +41,7 @@ struct HorseListView: View {
         @Bindable var router = router
         // Filtered once per render.
         let filteredHorses = self.filteredHorses
+        let hasInactiveHorses = horses.contains { !$0.isActive }
         return Group {
             if filteredHorses.isEmpty {
                 EmptyStateView(
@@ -83,6 +84,10 @@ struct HorseListView: View {
         .onChange(of: showsSplit, initial: true) { _, split in
             router.horsesShowSplit = split
         }
+        .onChange(of: hasInactiveHorses) { _, hasInactive in
+            // The toggle hides with the last inactive horse; don't leave it on unseen.
+            if !hasInactive { showInactive = false }
+        }
         .overlay {
             HorseRemovalDialog(
                 isPresented: Binding(
@@ -106,14 +111,31 @@ struct HorseListView: View {
             .help(Text("Add Horse"))
         }
         .toolbar {
-            ToolbarItem(placement: .leadingBar) {
-                Toggle(isOn: $showInactive) {
-                    Label("Show Inactive", systemImage: "eye")
+            // Only useful when there's an inactive horse to show or hide.
+            if hasInactiveHorses {
+                ToolbarItem(placement: .leadingBar) {
+                    Toggle(isOn: showInactiveBinding) {
+                        Label("Show Inactive", systemImage: showInactive ? "eye" : "eye.slash")
+                    }
+                    .toggleStyle(.button)
+                    .help(Text("Show Inactive"))
                 }
-                .toggleStyle(.button)
-                .help(Text("Show Inactive"))
             }
         }
+    }
+
+    /// Toggles the filter and says what the list now shows, since the eye icon
+    /// alone doesn't explain it.
+    private var showInactiveBinding: Binding<Bool> {
+        Binding(
+            get: { showInactive },
+            set: { newValue in
+                showInactive = newValue
+                toast.show(newValue
+                    ? appLocalized("Showing all horses", comment: "Toast after turning on Show Inactive on the Horses list")
+                    : appLocalized("Showing only active horses", comment: "Toast after turning off Show Inactive on the Horses list"))
+            }
+        )
     }
 
     /// Right-click (Mac) or long-press actions on a horse row.
