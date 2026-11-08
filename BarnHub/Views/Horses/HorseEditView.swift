@@ -220,6 +220,7 @@ struct HorseEditView: View {
     private func save() {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
+        var newHorse: Horse?
 
         if let horse = existingHorse {
             horse.name = trimmedName
@@ -252,13 +253,16 @@ struct HorseEditView: View {
             )
             modelContext.insert(horse)
             BarnHubLogger.info("Creating horse name=\(trimmedName)")
-            // Show the new horse beside the list when the split is up.
-            if router.horsesShowSplit {
-                router.selectedHorseID = horse.persistentModelID
-            }
+            newHorse = horse
         }
 
         modelContext.saveWithLogging()
+        // Show the new horse beside the list when the split is up. Read the ID only
+        // after saving: before that it's temporary, and a view that resolves a
+        // temporary ID traps once SwiftData swaps in the permanent one.
+        if let newHorse, router.horsesShowSplit {
+            router.selectedHorseID = newHorse.persistentModelID
+        }
         toast.showAndDismiss(isNew ? appLocalized("Horse added") : appLocalized("Horse updated"), dismiss: dismiss)
     }
 
