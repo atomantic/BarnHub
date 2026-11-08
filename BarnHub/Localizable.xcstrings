@@ -13954,55 +13954,108 @@
         }
       }
     },
-    "Failed to share document" : {
-      "comment" : "Error toast when a document can't be written out for the share sheet",
+    "Failed to open document" : {
+      "comment" : "Error toast when a stored document can't be written out to preview or share",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dokument konnte nicht geteilt werden"
+            "value" : "Dokument konnte nicht geöffnet werden"
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error al compartir el documento"
+            "value" : "No se pudo abrir el documento"
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Error al compartir el documento"
+            "value" : "No se pudo abrir el documento"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Échec du partage du document"
+            "value" : "Impossible d’ouvrir le document"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossibile condividere il documento"
+            "value" : "Impossibile aprire il documento"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Document delen mislukt"
+            "value" : "Document openen mislukt"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Falha ao compartilhar documento"
+            "value" : "Não foi possível abrir o documento"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Misslyckades med att dela dokument"
+            "value" : "Det gick inte att öppna dokumentet"
+          }
+        }
+      }
+    },
+    "This file is still downloading from iCloud. Try again in a moment." : {
+      "comment" : "Toast when a synced document's file hasn't arrived yet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Datei wird noch aus iCloud geladen. Versuche es gleich noch einmal."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo aún se está descargando de iCloud. Inténtalo de nuevo en un momento."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo aún se está descargando de iCloud. Inténtalo de nuevo en un momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier est encore en cours de téléchargement depuis iCloud. Réessayez dans un instant."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo file è ancora in fase di download da iCloud. Riprova tra un momento."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit bestand wordt nog gedownload van iCloud. Probeer het zo opnieuw."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este arquivo ainda está sendo baixado do iCloud. Tente novamente em instantes."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filen laddas fortfarande ned från iCloud. Försök igen om en stund."
           }
         }
       }
