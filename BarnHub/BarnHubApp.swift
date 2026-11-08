@@ -123,6 +123,9 @@ struct BarnHubApp: App {
                     BarnHubMacAppDelegate.reopenWindow = nil
                 }
                 #endif
+                // Deliver barnhub:// URLs to the open window instead of
+                // opening a second one: BarnHub is a single-window app.
+                .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
         }
         .modelContainer(modelContainer)
         #if os(macOS)
