@@ -292,6 +292,14 @@
 		2B4B4ED006705DFF736FD022 /* ScreenshotRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */; };
 		64D42B70EC39E1D39C74B7CA /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */; };
 		D89115FE7CE4F2B78E792CD6 /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */; };
+		69486C95A2805DB0A1BD4DCA /* FeatureTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CCBD2DA8D0F0ABDA1DD2D0 /* FeatureTile.swift */; };
+		A29D35BC213EEB3F5F82ED61 /* FeatureTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CCBD2DA8D0F0ABDA1DD2D0 /* FeatureTile.swift */; };
+		830D091E2DE6BA903A0F7505 /* SwooshShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EE5653D344048C615898F /* SwooshShape.swift */; };
+		859E78811AB5A49809424E11 /* SwooshShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EE5653D344048C615898F /* SwooshShape.swift */; };
+		4286444FA44629E70F583CBC /* DashboardWidgetPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */; };
+		968FF857EC73D34927BD79C9 /* DashboardWidgetPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */; };
+		C717CFB4EC81F0E37690233C /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */; };
+		AEA5BCB2BDC4A6439D5CD43A /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -477,6 +485,10 @@
 		942259A89B70A6D91883C694 /* FirstLaunchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheet.swift; sourceTree = "<group>"; };
 		97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRouter.swift; sourceTree = "<group>"; };
 		1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSheet.swift; sourceTree = "<group>"; };
+		E6CCBD2DA8D0F0ABDA1DD2D0 /* FeatureTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureTile.swift; sourceTree = "<group>"; };
+		E72EE5653D344048C615898F /* SwooshShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwooshShape.swift; sourceTree = "<group>"; };
+		F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWidgetPrimitives.swift; sourceTree = "<group>"; };
+		5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWidgets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -686,6 +698,7 @@
 				AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */,
 				B748DC85E941B06F934124AA /* ShareSheet.swift */,
 				1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */,
+				7533A81F6F7FAE7D717BDEAB /* Dashboard */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -857,6 +870,17 @@
 				97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */,
 			);
 			path = Debug;
+			sourceTree = "<group>";
+		};
+		7533A81F6F7FAE7D717BDEAB /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				E6CCBD2DA8D0F0ABDA1DD2D0 /* FeatureTile.swift */,
+				E72EE5653D344048C615898F /* SwooshShape.swift */,
+				F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */,
+				5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1141,6 +1165,10 @@
 				C26EC43D598670EA99350BBC /* FirstLaunchSheet.swift in Sources */,
 				78B1A5E25D28AE60C5BEF268 /* ScreenshotRouter.swift in Sources */,
 				64D42B70EC39E1D39C74B7CA /* FormSheet.swift in Sources */,
+				69486C95A2805DB0A1BD4DCA /* FeatureTile.swift in Sources */,
+				830D091E2DE6BA903A0F7505 /* SwooshShape.swift in Sources */,
+				4286444FA44629E70F583CBC /* DashboardWidgetPrimitives.swift in Sources */,
+				C717CFB4EC81F0E37690233C /* HomeWidgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1278,6 +1306,10 @@
 				7DB1D62A2AD0D20CB5108555 /* FirstLaunchSheet.swift in Sources */,
 				2B4B4ED006705DFF736FD022 /* ScreenshotRouter.swift in Sources */,
 				D89115FE7CE4F2B78E792CD6 /* FormSheet.swift in Sources */,
+				A29D35BC213EEB3F5F82ED61 /* FeatureTile.swift in Sources */,
+				859E78811AB5A49809424E11 /* SwooshShape.swift in Sources */,
+				968FF857EC73D34927BD79C9 /* DashboardWidgetPrimitives.swift in Sources */,
+				AEA5BCB2BDC4A6439D5CD43A /* HomeWidgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
