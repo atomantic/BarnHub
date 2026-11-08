@@ -34,7 +34,7 @@ struct DataManagementView: View {
             } header: {
                 Text("Export")
             } footer: {
-                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record, with IDs that link related records, plus horse and feed photos, horse and client documents and invoice PDFs in folders next to the files. With many photos or documents it can be large.")
             }
 
             Section {
@@ -71,7 +71,7 @@ struct DataManagementView: View {
     private var dataContent: some View {
         List {
             Section {
-                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record, with IDs that link related records, plus horse and feed photos, horse and client documents and invoice PDFs in folders next to the files. With many photos or documents it can be large.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowBackground(Color.clear)
@@ -206,6 +206,12 @@ struct DataManagementView: View {
                     .font(.headline)
                 ProgressView(value: csvJob.progress)
                     .frame(width: 220)
+                if let detail = csvJob.detail {
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
                 Button("Cancel", role: .cancel) { csvJob.cancel() }
             }
             .padding(20)
@@ -221,47 +227,55 @@ struct DataManagementView: View {
         modelContext.saveWithLogging()
         let container = modelContext.container
         let options = CSVOptions()
-        let isFolder = type == .all
-        // Each export gets its own tmp/BarnHubShare/<UUID>/ folder, deleted when
-        // the share sheet closes (or at the next launch). "All Data" shares a
-        // "BarnHub Export" subfolder so the recipient sees a readable name.
+        let title = appLocalized("Exporting…", comment: "CSV export progress title")
+        if type == .all {
+            // Writes into its own tmp/BarnHubShare/<UUID>/BarnHub Export/ folder,
+            // which it deletes itself on failure or cancel.
+            csvJob.run(title: title) { progress, step in
+                let actor = CSVDataActor(modelContainer: container)
+                return Optional(try await actor.exportAllData(options: options, progress: progress, step: step))
+            } onSuccess: { showExport($0, type) } onFailure: { exportFailed($0, shareFolder: nil) }
+            return
+        }
+
+        // Each single-file export gets its own tmp/BarnHubShare/<UUID>/ folder,
+        // deleted when the share sheet closes (or at the next launch).
         let shareFolder: URL
-        let directory: URL
         do {
             shareFolder = try ShareTempFiles.makeShareFolder()
-            directory = isFolder ? shareFolder.appendingPathComponent("BarnHub Export", isDirectory: true) : shareFolder
-            if isFolder {
-                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-            }
         } catch {
             BarnHubLogger.error("Failed to create export directory error=\(error.localizedDescription)")
             toast.show(appLocalized("Export failed"), isError: true)
             return
         }
-
-        csvJob.run(title: appLocalized("Exporting…", comment: "CSV export progress title")) { progress in
+        csvJob.run(title: title) { progress, _ in
             let actor = CSVDataActor(modelContainer: container)
-            let urls = try await actor.export(type.kinds, to: directory, filePrefix: isFolder ? "" : "barnhub_",
-                                              options: options, progress: progress)
-            return isFolder ? directory : urls.first
+            let urls = try await actor.export(type.kinds, to: shareFolder, filePrefix: "barnhub_", options: options, progress: progress)
+            return urls.first
         } onSuccess: { url in
-            guard let url else {
-                ShareTempFiles.discardShareFolder(shareFolder)
-                toast.show(appLocalized("Export failed"), isError: true)
-                return
-            }
-            ShareTempFiles.cleanUp(exportURL)
-            exportURL = url
-            showExportSheet = true
-            BarnHubLogger.success("Exported \(type.label) files=\(type.kinds.count)")
-        } onFailure: { error in
-            ShareTempFiles.discardShareFolder(shareFolder)
-            if error is CancellationError {
-                toast.show(appLocalized("Export cancelled", comment: "Toast after the user cancels a CSV export"))
-            } else {
-                BarnHubLogger.error("Export failed error=\(error.localizedDescription)")
-                toast.show(appLocalized("Export failed"), isError: true)
-            }
+            if url == nil { ShareTempFiles.discardShareFolder(shareFolder) }
+            showExport(url, type)
+        } onFailure: { exportFailed($0, shareFolder: shareFolder) }
+    }
+
+    private func showExport(_ url: URL?, _ type: ExportDataType) {
+        guard let url else {
+            toast.show(appLocalized("Export failed"), isError: true)
+            return
+        }
+        ShareTempFiles.cleanUp(exportURL)
+        exportURL = url
+        showExportSheet = true
+        BarnHubLogger.success("Exported \(type.label) files=\(type.kinds.count)")
+    }
+
+    private func exportFailed(_ error: Error, shareFolder: URL?) {
+        if let shareFolder { ShareTempFiles.discardShareFolder(shareFolder) }
+        if error is CancellationError {
+            toast.show(appLocalized("Export cancelled", comment: "Toast after the user cancels a CSV export"))
+        } else {
+            BarnHubLogger.error("Export failed error=\(error.localizedDescription)")
+            toast.show(appLocalized("Export failed"), isError: true)
         }
     }
 
@@ -294,7 +308,7 @@ struct DataManagementView: View {
 
         let container = modelContext.container
         let options = CSVOptions()
-        csvJob.run(title: appLocalized("Importing…", comment: "CSV import progress title")) { progress in
+        csvJob.run(title: appLocalized("Importing…", comment: "CSV import progress title")) { progress, _ in
             defer { url.stopAccessingSecurityScopedResource() }
             let actor = CSVDataActor(modelContainer: container)
             return try await actor.importCSV(type, from: url, options: options, progress: progress)
@@ -438,24 +452,34 @@ enum ImportDataType {
 private final class CSVJob {
     /// Non-nil while a job runs; shown above the progress bar.
     private(set) var title: String?
+    /// Which file an export is writing, shown below the bar.
+    private(set) var detail: String?
     private(set) var progress: Double = 0
     private var task: Task<Void, Never>?
 
     func run<T: Sendable>(
         title: String,
-        work: @escaping @Sendable (@escaping CSVProgressHandler) async throws -> T,
+        work: @escaping @Sendable (@escaping CSVProgressHandler, @escaping CSVStepHandler) async throws -> T,
         onSuccess: @escaping (T) -> Void,
         onFailure: @escaping (Error) -> Void
     ) {
         guard task == nil else { return }
         self.title = title
+        detail = nil
         progress = 0
         let report: CSVProgressHandler = { [weak self] value in
             Task { @MainActor in self?.progress = value }
         }
+        let step: CSVStepHandler = { [weak self] index, count, kind in
+            Task { @MainActor in
+                guard self?.title != nil else { return }
+                self?.detail = appLocalized("Step \(index) of \(count): \(kind.rawValue).csv",
+                                            comment: "Export progress: which file is being written, e.g. Step 3 of 17: transactions.csv")
+            }
+        }
         task = Task {
             // Detached so the @ModelActor is created, and runs, off the main thread.
-            let worker = Task.detached(priority: .userInitiated) { try await work(report) }
+            let worker = Task.detached(priority: .userInitiated) { try await work(report, step) }
             do {
                 let value = try await withTaskCancellationHandler {
                     try await worker.value
@@ -467,6 +491,7 @@ private final class CSVJob {
                 onFailure(error)
             }
             self.title = nil
+            self.detail = nil
             self.task = nil
         }
     }

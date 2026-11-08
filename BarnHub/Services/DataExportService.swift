@@ -143,6 +143,55 @@ struct DataExportService {
         }
     }
 
+    /// Columns an "All Data" bundle adds after the standalone columns: link IDs
+    /// pointing at rows of other files, then the relative path of the record's
+    /// file. Every bundle file also starts with an "ID" column.
+    static func bundleExtras(for kind: CSVExportKind) -> [String] {
+        switch kind {
+        case .horses: return ["Photo"]
+        case .clients, .supplies: return []
+        case .transactions: return ["Client ID"]
+        case .horseClients: return []
+        case .vetRecords, .farrierVisits, .dentistVisits, .weightEntries, .reminders, .barnNotes: return ["Horse ID"]
+        case .feedProducts: return ["Photo"]
+        case .feedPlan: return ["Horse ID", "Product ID"]
+        case .lessons: return ["Client ID", "Horse ID"]
+        case .invoices: return ["Client ID", "File"]
+        case .horseDocuments: return ["Horse ID", "File"]
+        case .clientDocuments: return ["Client ID", "File"]
+        }
+    }
+
+    /// The header of `kind`'s file in an "All Data" bundle. `horse_clients` is a
+    /// pure join table there: it lists ID pairs, not names.
+    static func bundleHeader(for kind: CSVExportKind) -> [String] {
+        if kind == .horseClients { return ["ID", "Horse ID", "Client ID"] }
+        return ["ID"] + header(for: kind) + bundleExtras(for: kind)
+    }
+
+    /// Prefix of the export-scoped IDs in `kind`'s "ID" column ("horse-1").
+    static func idPrefix(for kind: CSVExportKind) -> String {
+        switch kind {
+        case .horses: return "horse"
+        case .clients: return "client"
+        case .transactions: return "transaction"
+        case .horseClients: return "link"
+        case .vetRecords: return "vet"
+        case .farrierVisits: return "farrier"
+        case .dentistVisits: return "dentist"
+        case .weightEntries: return "weight"
+        case .feedProducts: return "feed"
+        case .feedPlan: return "plan"
+        case .reminders: return "reminder"
+        case .lessons: return "lesson"
+        case .barnNotes: return "note"
+        case .supplies: return "supply"
+        case .invoices: return "invoice"
+        case .horseDocuments: return "horse-document"
+        case .clientDocuments: return "client-document"
+        }
+    }
+
     /// Writes one model type to `writer`, fetching in batches of 500 so memory
     /// stays flat, and throwing `CancellationError` if the task is cancelled.
     /// Dates are `yyyy-MM-dd` (plus a 24-hour `HH:mm` column for lessons and
@@ -151,113 +200,162 @@ struct DataExportService {
     /// stored raw value, not the localized label.
     ///
     /// Related records name their horse ("Horse") or client ("Client", first and
-    /// last name), and `horse_clients` lists each horse/client pair. Photos,
-    /// document files and invoice PDFs are not written: the document and invoice
-    /// files list their details only, so the external-storage blobs are never
-    /// faulted in.
+    /// last name), and `horse_clients` lists each horse/client pair.
+    ///
+    /// With a `bundle` ("All Data"), each row also gets an export-scoped "ID",
+    /// related records carry the ID of their horse, client or product, and
+    /// photos, document files and invoice PDFs are copied into the bundle's
+    /// subfolders one at a time, with the row holding the file's relative path.
+    /// Without one, no blob is ever faulted in.
     static func export(_ kind: CSVExportKind, from context: ModelContext, to writer: CSVWriter,
-                       options: CSVOptions = CSVOptions(), progress: CSVProgressHandler? = nil) throws {
+                       options: CSVOptions = CSVOptions(), bundle: CSVExportBundle? = nil,
+                       progress: CSVProgressHandler? = nil) throws {
         let dates = CSVDateCodec(options: options)
         let num = CSVWriter.number
         func day(_ date: Date?) -> String { date.map(dates.string(from:)) ?? "" }
-        try writer.writeRow(header(for: kind))
+        let prefix = idPrefix(for: kind)
+        /// Writes the standalone columns, or in a bundle the row's ID, those
+        /// columns and the extras (which may copy a file, so they're lazy).
+        func row(id: @autoclosure () -> String, _ fields: [String], extras: () throws -> [String] = { [] }) throws {
+            if bundle != nil {
+                try writer.writeRow([id()] + fields + extras())
+            } else {
+                try writer.writeRow(fields)
+            }
+        }
+        func nextID() -> String { bundle?.nextID(prefix) ?? "" }
+        func horseID(_ horse: Horse?) -> String { bundle?.id(for: horse, prefix: idPrefix(for: .horses)) ?? "" }
+        func clientID(_ client: Client?) -> String { bundle?.id(for: client, prefix: idPrefix(for: .clients)) ?? "" }
+        func productID(_ product: FeedProduct?) -> String { bundle?.id(for: product, prefix: idPrefix(for: .feedProducts)) ?? "" }
+
+        try writer.writeRow(bundle == nil ? header(for: kind) : bundleHeader(for: kind))
         switch kind {
         case .horses:
             try paged(FetchDescriptor<Horse>(sortBy: [SortDescriptor(\.name)]), context, progress) { h in
-                try writer.writeRow([h.name, h.breed, day(h.dateOfBirth), h.colorMarkings, num(h.weight),
-                                     num(h.purchasePrice), h.stallNumber, h.medicalNotes, h.feedingSchedule, "\(h.isActive)", h.gender.rawValue])
+                try row(id: horseID(h), [h.name, h.breed, day(h.dateOfBirth), h.colorMarkings, num(h.weight),
+                                         num(h.purchasePrice), h.stallNumber, h.medicalNotes, h.feedingSchedule, "\(h.isActive)", h.gender.rawValue]) {
+                    [try bundle!.copyImage(of: h, \.photoData, to: CSVExportBundle.horsePhotosFolder, named: h.name)]
+                }
             }
         case .clients:
             try paged(FetchDescriptor<Client>(sortBy: [SortDescriptor(\.lastName)]), context, progress) { c in
-                try writer.writeRow([c.firstName, c.lastName, c.email, c.phone, c.emergencyContact,
-                                     c.emergencyPhone, c.notes, "\(c.isActive)"])
+                try row(id: clientID(c), [c.firstName, c.lastName, c.email, c.phone, c.emergencyContact,
+                                          c.emergencyPhone, c.notes, "\(c.isActive)"])
             }
         case .transactions:
             try paged(prefetching(FetchDescriptor<Transaction>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.client),
                       context, progress) { t in
-                try writer.writeRow([day(t.date), t.type.rawValue, t.category.rawValue, num(t.amount),
-                                     t.memo, t.client?.fullName ?? "", "\(t.isPaid)"])
+                try row(id: nextID(), [day(t.date), t.type.rawValue, t.category.rawValue, num(t.amount),
+                                       t.memo, t.client?.fullName ?? "", "\(t.isPaid)"]) { [clientID(t.client)] }
             }
         case .horseClients:
             try paged(prefetching(FetchDescriptor<Horse>(sortBy: [SortDescriptor(\.name)]), \.clients), context, progress) { h in
-                for name in (h.clients ?? []).map(\.fullName).sorted() {
-                    try writer.writeRow([h.name, name])
+                let clients = (h.clients ?? []).sorted { $0.fullName < $1.fullName }
+                for client in clients {
+                    if bundle != nil {
+                        try writer.writeRow([nextID(), horseID(h), clientID(client)])
+                    } else {
+                        try writer.writeRow([h.name, client.fullName])
+                    }
                 }
             }
         case .vetRecords:
             try paged(prefetching(FetchDescriptor<VetRecord>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.horse),
                       context, progress) { r in
-                try writer.writeRow([day(r.date), r.horse?.name ?? "", r.vetName, r.descriptionText, num(r.cost),
-                                     day(r.nextDueDate), r.reminderFrequencyRaw])
+                try row(id: nextID(), [day(r.date), r.horse?.name ?? "", r.vetName, r.descriptionText, num(r.cost),
+                                       day(r.nextDueDate), r.reminderFrequencyRaw]) { [horseID(r.horse)] }
             }
         case .farrierVisits:
             try paged(prefetching(FetchDescriptor<FarrierVisit>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.horse),
                       context, progress) { v in
-                try writer.writeRow([day(v.date), v.horse?.name ?? "", v.farrierName, v.serviceDescription,
-                                     num(v.cost), day(v.nextDueDate)])
+                try row(id: nextID(), [day(v.date), v.horse?.name ?? "", v.farrierName, v.serviceDescription,
+                                       num(v.cost), day(v.nextDueDate)]) { [horseID(v.horse)] }
             }
         case .dentistVisits:
             try paged(prefetching(FetchDescriptor<DentistVisit>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.horse),
                       context, progress) { v in
-                try writer.writeRow([day(v.date), v.horse?.name ?? "", v.dentistName, v.serviceDescription,
-                                     num(v.cost), day(v.nextDueDate)])
+                try row(id: nextID(), [day(v.date), v.horse?.name ?? "", v.dentistName, v.serviceDescription,
+                                       num(v.cost), day(v.nextDueDate)]) { [horseID(v.horse)] }
             }
         case .weightEntries:
             try paged(prefetching(FetchDescriptor<WeightEntry>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.horse),
                       context, progress) { w in
-                try writer.writeRow([day(w.date), w.horse?.name ?? "", num(w.weight)])
+                try row(id: nextID(), [day(w.date), w.horse?.name ?? "", num(w.weight)]) { [horseID(w.horse)] }
             }
         case .feedProducts:
             try paged(FetchDescriptor<FeedProduct>(sortBy: [SortDescriptor(\.name)]), context, progress) { p in
-                try writer.writeRow([p.name, p.brand, p.defaultUnitRaw, p.notes])
+                try row(id: productID(p), [p.name, p.brand, p.defaultUnitRaw, p.notes]) {
+                    [try bundle!.copyImage(of: p, \.photoData, to: CSVExportBundle.feedPhotosFolder, named: p.name)]
+                }
             }
         case .feedPlan:
             var descriptor = FetchDescriptor<FeedPlanEntry>()
             descriptor.relationshipKeyPathsForPrefetching = [\.horse, \.product]
             try paged(descriptor, context, progress) { e in
-                try writer.writeRow([e.horse?.name ?? "", e.feedTimeRaw, e.product?.name ?? "", e.product?.brand ?? "",
-                                     num(e.amount), e.unitRaw, e.assignedPerson, e.notes])
+                try row(id: nextID(), [e.horse?.name ?? "", e.feedTimeRaw, e.product?.name ?? "", e.product?.brand ?? "",
+                                       num(e.amount), e.unitRaw, e.assignedPerson, e.notes]) {
+                    [horseID(e.horse), productID(e.product)]
+                }
             }
         case .reminders:
             try paged(prefetching(FetchDescriptor<Reminder>(sortBy: [SortDescriptor(\.dueDate)]), \.horse), context, progress) { r in
-                try writer.writeRow([day(r.dueDate), dates.timeString(from: r.dueDate), r.title, r.horse?.name ?? "",
-                                     r.frequencyRaw, "\(r.isCompleted)", r.notes])
+                try row(id: nextID(), [day(r.dueDate), dates.timeString(from: r.dueDate), r.title, r.horse?.name ?? "",
+                                       r.frequencyRaw, "\(r.isCompleted)", r.notes]) { [horseID(r.horse)] }
             }
         case .lessons:
             var descriptor = FetchDescriptor<Lesson>(sortBy: [SortDescriptor(\.date, order: .reverse)])
             descriptor.relationshipKeyPathsForPrefetching = [\.horse, \.client]
             try paged(descriptor, context, progress) { l in
-                try writer.writeRow([day(l.date), dates.timeString(from: l.date), "\(l.duration)", l.lessonTypeRaw,
-                                     l.client?.fullName ?? "", l.horse?.name ?? "", num(l.cost), "\(l.isPaid)",
-                                     l.frequencyRaw, day(l.nextDate), l.notes])
+                try row(id: nextID(), [day(l.date), dates.timeString(from: l.date), "\(l.duration)", l.lessonTypeRaw,
+                                       l.client?.fullName ?? "", l.horse?.name ?? "", num(l.cost), "\(l.isPaid)",
+                                       l.frequencyRaw, day(l.nextDate), l.notes]) { [clientID(l.client), horseID(l.horse)] }
             }
         case .barnNotes:
             try paged(prefetching(FetchDescriptor<BarnNote>(sortBy: [SortDescriptor(\.date, order: .reverse)]), \.horse),
                       context, progress) { n in
-                try writer.writeRow([day(n.date), n.categoryRaw, n.horse?.name ?? "", n.content])
+                try row(id: nextID(), [day(n.date), n.categoryRaw, n.horse?.name ?? "", n.content]) { [horseID(n.horse)] }
             }
         case .supplies:
             try paged(FetchDescriptor<SupplyItem>(sortBy: [SortDescriptor(\.name)]), context, progress) { s in
-                try writer.writeRow([s.name, s.categoryRaw, num(s.quantity), s.unit, num(s.reorderThreshold),
-                                     day(s.lastOrderedDate)])
+                try row(id: nextID(), [s.name, s.categoryRaw, num(s.quantity), s.unit, num(s.reorderThreshold),
+                                       day(s.lastOrderedDate)])
             }
         case .invoices:
             try paged(prefetching(FetchDescriptor<Invoice>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]), \.client),
                       context, progress) { i in
-                try writer.writeRow([day(i.createdAt), i.client?.fullName ?? "", day(i.startDate), day(i.endDate),
-                                     num(i.totalAmount)])
+                let clientName = i.client?.fullName ?? ""
+                try row(id: nextID(), [day(i.createdAt), clientName, day(i.startDate), day(i.endDate),
+                                       num(i.totalAmount)]) {
+                    let name = ["Invoice", clientName, day(i.startDate), day(i.endDate)].filter { !$0.isEmpty }.joined(separator: " ")
+                    return [clientID(i.client), try bundle!.copyFile(of: i, \.pdfData, to: CSVExportBundle.invoicesFolder,
+                                                                     named: name, fileExtension: { _ in "pdf" })]
+                }
             }
         case .horseDocuments:
             try paged(prefetching(FetchDescriptor<HorseDocument>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]), \.horse),
                       context, progress) { d in
-                try writer.writeRow([day(d.createdAt), d.horse?.name ?? "", d.title, d.typeRaw])
+                try row(id: nextID(), [day(d.createdAt), d.horse?.name ?? "", d.title, d.typeRaw]) {
+                    let folder = bundle!.ownerFolder(for: d.horse, named: d.horse?.name ?? "", in: CSVExportBundle.horseDocumentsFolder)
+                    return [horseID(d.horse), try bundle!.copyFile(of: d, \.fileData, to: folder, named: d.title,
+                                                                   fileExtension: documentExtension(d.documentType))]
+                }
             }
         case .clientDocuments:
             try paged(prefetching(FetchDescriptor<ClientDocument>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]), \.client),
                       context, progress) { d in
-                try writer.writeRow([day(d.createdAt), d.client?.fullName ?? "", d.title, d.typeRaw])
+                try row(id: nextID(), [day(d.createdAt), d.client?.fullName ?? "", d.title, d.typeRaw]) {
+                    let folder = bundle!.ownerFolder(for: d.client, named: d.client?.fullName ?? "", in: CSVExportBundle.clientDocumentsFolder)
+                    return [clientID(d.client), try bundle!.copyFile(of: d, \.fileData, to: folder, named: d.title,
+                                                                     fileExtension: documentExtension(d.documentType))]
+                }
             }
         }
+    }
+
+    /// Same rule as `HorseDocument.fileExtension`, applied to bytes already read,
+    /// so the model's own blob is never faulted in.
+    private static func documentExtension(_ type: DocumentType) -> (Data) -> String {
+        { data in type == .photo ? ImageProcessing.fileExtension(forImageData: data) : "pdf" }
     }
 
     private static func prefetching<T: PersistentModel, R>(_ descriptor: FetchDescriptor<T>,
@@ -315,5 +413,123 @@ struct DataExportService {
 
     static func exportTransactionsCSV(from context: ModelContext, options: CSVOptions = CSVOptions()) throws -> String {
         try exportCSV(.transactions, from: context, options: options)
+    }
+}
+
+// MARK: - All Data bundle
+
+/// State shared by every file of one "All Data" export: the export-scoped row
+/// IDs and the files copied next to the CSVs.
+///
+/// IDs ("horse-1", "client-3") are assigned the first time a record is seen,
+/// keyed by `persistentModelID`, so they're unique and consistent across the
+/// files of one export (the link columns use them) but not across exports.
+/// Nothing is stored on the models, so this needs no schema change.
+///
+/// Blobs are read through a short-lived scratch context that's replaced every
+/// few files, and written straight to disk, so a large library is copied with
+/// flat memory: no array of `Data`, and the main export context never faults
+/// in a photo or PDF.
+final class CSVExportBundle {
+    static let horsePhotosFolder = "Photos/Horses"
+    static let feedPhotosFolder = "Photos/Feed"
+    static let horseDocumentsFolder = "Documents/Horses"
+    static let clientDocumentsFolder = "Documents/Clients"
+    static let invoicesFolder = "Invoices"
+    private static let readsPerScratchContext = 10
+
+    let root: URL
+    private let container: ModelContainer
+    private var scratch: ModelContext?
+    private var scratchReads = 0
+    private var ids: [PersistentIdentifier: String] = [:]
+    private var counters: [String: Int] = [:]
+    /// Lowercased names already used in each relative folder (APFS and most
+    /// share targets are case-insensitive).
+    private var usedNames: [String: Set<String>] = [:]
+    private var ownerFolders: [PersistentIdentifier: String] = [:]
+    private(set) var filesWritten = 0
+
+    init(root: URL, container: ModelContainer) {
+        self.root = root
+        self.container = container
+    }
+
+    /// The next ID for a record nothing links to.
+    func nextID(_ prefix: String) -> String {
+        let n = (counters[prefix] ?? 0) + 1
+        counters[prefix] = n
+        return "\(prefix)-\(n)"
+    }
+
+    /// The record's ID, assigned on first use; "" for no record.
+    func id<T: PersistentModel>(for model: T?, prefix: String) -> String {
+        guard let model else { return "" }
+        let key = model.persistentModelID
+        if let existing = ids[key] { return existing }
+        let id = nextID(prefix)
+        ids[key] = id
+        return id
+    }
+
+    /// A per-owner subfolder of `parent` ("Documents/Horses/Storm"), unique
+    /// even when two horses share a name ("Storm-2"). Records without an owner
+    /// go straight into `parent`.
+    func ownerFolder<T: PersistentModel>(for owner: T?, named name: String, in parent: String) -> String {
+        guard let owner else { return parent }
+        let key = owner.persistentModelID
+        if let folder = ownerFolders[key] { return folder }
+        let folder = parent + "/" + uniqueName(ShareTempFiles.sanitizedFileName(name, fileExtension: ""), extension: "", in: parent)
+        ownerFolders[key] = folder
+        return folder
+    }
+
+    /// Copies a photo, named after `name` with the extension its bytes call for.
+    func copyImage<T: PersistentModel>(of model: T, _ keyPath: KeyPath<T, Data?>, to folder: String, named name: String) throws -> String {
+        try copyFile(of: model, keyPath, to: folder, named: name, fileExtension: ImageProcessing.fileExtension(forImageData:))
+    }
+
+    /// Writes the blob at `keyPath` to `<folder>/<sanitized name>.<ext>` and
+    /// returns that path relative to `root`, or "" when the record has no file.
+    func copyFile<T: PersistentModel>(of model: T, _ keyPath: KeyPath<T, Data?>, to folder: String, named name: String,
+                                      fileExtension: (Data) -> String) throws -> String {
+        try Task.checkCancellation()
+        return try autoreleasepool {
+            guard let data = blob(of: model, keyPath), !data.isEmpty else { return "" }
+            let ext = fileExtension(data)
+            // Sanitize with the extension so a title ending in ".pdf" isn't doubled.
+            let base = String(ShareTempFiles.sanitizedFileName(name, fileExtension: ext).dropLast(ext.count + 1))
+            let fileName = uniqueName(base, extension: ext, in: folder)
+            let directory = root.appendingPathComponent(folder, isDirectory: true)
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try data.write(to: directory.appendingPathComponent(fileName))
+            filesWritten += 1
+            return folder + "/" + fileName
+        }
+    }
+
+    private func blob<T: PersistentModel>(of model: T, _ keyPath: KeyPath<T, Data?>) -> Data? {
+        if scratch == nil || scratchReads >= Self.readsPerScratchContext {
+            scratch = ModelContext(container)
+            scratchReads = 0
+        }
+        scratchReads += 1
+        guard let copy = scratch?.model(for: model.persistentModelID) as? T else { return nil }
+        return copy[keyPath: keyPath]
+    }
+
+    /// `base.ext`, or `base-2.ext`, `base-3.ext`… when that name is taken in `folder`.
+    private func uniqueName(_ base: String, extension ext: String, in folder: String) -> String {
+        func name(_ n: Int) -> String {
+            let stem = n == 1 ? base : "\(base)-\(n)"
+            return ext.isEmpty ? stem : "\(stem).\(ext)"
+        }
+        var used = usedNames[folder] ?? []
+        var n = 1
+        while used.contains(name(n).lowercased()) { n += 1 }
+        let result = name(n)
+        used.insert(result.lowercased())
+        usedNames[folder] = used
+        return result
     }
 }
