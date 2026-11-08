@@ -168,6 +168,13 @@ final class DataImportServiceTests: XCTestCase {
         XCTAssertEqual(txns.first?.memo, "Monthly boarding")
     }
 
+    func test_importTransactions_camelCaseCategory_matchesIgnoringCase() throws {
+        let csv = "Date,Type,Category,Amount\n2026-01-15,expense,vetBill,85\n2026-01-16,Expense,VETBILL,90\n"
+        let result = try DataImportService.importTransactions(from: csv, context: context)
+        XCTAssertEqual(result.imported, 2)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Transaction>()).map(\.category), [.vetBill, .vetBill])
+    }
+
     func test_importTransactions_zeroAmount_skipsRow() throws {
         let csv = "Amount,Type,Category\n0,income,boarding\n"
         let result = try DataImportService.importTransactions(from: csv, context: context)

@@ -686,13 +686,14 @@ struct DataImportService {
                     date = parsed
                 }
 
-                let explicitType = row.text("type").flatMap { TransactionType(rawValue: $0.lowercased()) }
+                let explicitType = row.text("type").flatMap { raw in TransactionType.allCases.first { $0.rawValue.lowercased() == raw.lowercased() } }
                 var type = explicitType ?? .expense
                 if signed < 0, explicitType != nil {
                     type = type == .income ? .expense : .income
                 }
                 let amount = abs(signed)
-                let category = row.text("category").flatMap { TransactionCategory(rawValue: $0.lowercased()) } ?? .other
+                // Case-insensitive, so the exported camelCase "vetBill" reads back as Vet Bill, not Other.
+                let category = row.text("category").flatMap { raw in TransactionCategory.allCases.first { $0.rawValue.lowercased() == raw.lowercased() } } ?? .other
                 let memo = row.text("memo", "description") ?? ""
                 let clientName = row.text("client") ?? ""
                 let client = clientName.isEmpty ? nil : clientsByName[clientName.lowercased()]
