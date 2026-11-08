@@ -219,6 +219,25 @@ final class ModelSchemaTests: XCTestCase {
         XCTAssertNil(Horse(name: "Unlinked").clients)
         XCTAssertNil(Client(firstName: "Solo").horses)
     }
+
+    // MARK: - CareVisit (shared farrier / dentist edit form)
+
+    /// `CareVisitEditView` writes the provider through `providerName`; it must land
+    /// in each model's own stored field so saved visits read back unchanged.
+    func test_careVisit_providerNameMapsOntoEachModelsField() throws {
+        let dentist = DentistVisit.makeNew()
+        dentist.providerName = "Dr. Molar"
+        let farrier = FarrierVisit.makeNew()
+        farrier.providerName = "Sam Shoe"
+        context.insert(dentist)
+        context.insert(farrier)
+        try context.save()
+
+        XCTAssertEqual(try context.fetch(FetchDescriptor<DentistVisit>()).first?.dentistName, "Dr. Molar")
+        XCTAssertEqual(try context.fetch(FetchDescriptor<FarrierVisit>()).first?.farrierName, "Sam Shoe")
+        XCTAssertNotNil(dentist.notificationKey)
+        XCTAssertNotNil(farrier.notificationKey)
+    }
 }
 
 /// Adding `BarnHubSchemaV1` and the migration plan must not change existing

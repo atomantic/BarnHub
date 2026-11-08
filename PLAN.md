@@ -4,9 +4,9 @@ For completed work, see [DONE.md](./DONE.md). For localization workflow, see [sc
 
 ## Next Up
 
-1. **Test coverage for major views** — HomeView (1014 LOC), BarnDashboardView (560 LOC), HorseDetailView, ReportsView, InvoiceGeneratorView, ContractGeneratorView are uncovered. Core revenue and dashboard surfaces need regression protection.
+1. **Test coverage for major views** — HomeView and its dashboard widgets, BarnDashboardView (560 LOC), HorseDetailView, ReportsView, InvoiceGeneratorView, ContractGeneratorView are uncovered. Core revenue and dashboard surfaces need regression protection.
 2. **Address remaining audit perf items (HIGH/MEDIUM)** — cache computed sorts in HomeView, HealthTimelineView, ClientPaymentHistoryView; resolve photo task races in HorseEditView and ClientDocumentsView.
-3. **Refactor oversize views** — extract domain-specific subviews from HomeView (1014 LOC), BarnHubApp.swift (915 LOC), BarnDashboardView (560 LOC) for testability.
+3. **Refactor oversize views** — extract domain-specific subviews from BarnDashboardView (560 LOC) for testability (HomeView and BarnHubApp.swift were split in #36).
 4. **macOS parity test suite** — recent fix-on-fix pattern (sidebar width, empty-state centering, feed entry sheet, form duplicate labels) suggests need for a macOS-specific layout/snapshot test matrix.
 5. **Onboarding conversion telemetry** — first-launch sheet ships in 1.6.1; add completion-rate tracking and per-stage drop-off metrics.
 
