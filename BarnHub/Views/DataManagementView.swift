@@ -255,8 +255,8 @@ struct DataManagementView: View {
                 toast.show(error.localizedDescription, isError: true)
                 return
             }
-            guard deleteAllData(keepDocuments: keepDocuments) else { return }
-            performRestore(url, afterDelete: true)
+            // The restore starts once the delete has saved its last batch.
+            deleteAllData(keepDocuments: keepDocuments) { performRestore(url, afterDelete: true) }
         }
     }
 
@@ -276,8 +276,10 @@ struct DataManagementView: View {
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
                 }
-                Button("Cancel", role: .cancel) { csvJob.cancel() }
-                    .disabled(csvJob.isCancelling)
+                if csvJob.isCancellable {
+                    Button("Cancel", role: .cancel) { csvJob.cancel() }
+                        .disabled(csvJob.isCancelling)
+                }
             }
             .padding(20)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
@@ -484,19 +486,25 @@ struct DataManagementView: View {
 
     // MARK: - Delete All
 
-    /// Returns whether everything was deleted.
-    @discardableResult
-    private func deleteAllData(keepDocuments: Bool) -> Bool {
-        do {
-            try RecordRemoval.deleteAllData(in: modelContext, keepDocuments: keepDocuments)
+    /// Deletes everything off the main actor, with progress (#83), then runs
+    /// `then` if every record was deleted. It can't be cancelled: the deletes
+    /// already saved can't be undone.
+    private func deleteAllData(keepDocuments: Bool, then: (() -> Void)? = nil) {
+        // Pending edits are saved first so they're deleted too, not saved again afterwards.
+        modelContext.saveWithLogging()
+        let container = modelContext.container
+        csvJob.run(title: appLocalized("Deleting…", comment: "Delete All Data progress title"), isCancellable: false) { progress, _ in
+            let actor = CSVDataActor(modelContainer: container)
+            try await actor.deleteAllData(keepDocuments: keepDocuments, progress: progress)
+        } onSuccess: {
             NotificationService.cancelAllNotifications()
-            BarnHubLogger.success("Deleted all data keepDocuments=\(keepDocuments)")
+            // Same hook as a save on the main context, so derived state re-syncs.
+            NotificationCenter.default.post(name: .barnHubModelContextDidSave, object: modelContext)
             toast.show(appLocalized("All data deleted"))
-            return true
-        } catch {
+            then?()
+        } onFailure: { error in
             BarnHubLogger.error("Failed to delete all data error=\(error.localizedDescription)")
             toast.show(appLocalized("Failed to delete data"), isError: true)
-            return false
         }
     }
 
@@ -564,7 +572,8 @@ enum ImportDataType {
 }
 
 
-/// A CSV import or export running off the main actor, with progress and cancel.
+/// A CSV import, export or restore, or Delete All Data, running off the main
+/// actor with progress and (except for Delete All Data) cancel.
 @MainActor
 @Observable
 private final class CSVJob {
@@ -575,10 +584,13 @@ private final class CSVJob {
     private(set) var progress: Double = 0
     /// Cancel was tapped; the job is stopping (a restore undoes what it added).
     private(set) var isCancelling = false
+    /// The overlay offers Cancel. Delete All Data doesn't: its saved deletes can't be undone.
+    private(set) var isCancellable = true
     private var task: Task<Void, Never>?
 
     func run<T: Sendable>(
         title: String,
+        isCancellable: Bool = true,
         work: @escaping @Sendable (@escaping CSVProgressHandler, @escaping CSVStepHandler) async throws -> T,
         onSuccess: @escaping (T) -> Void,
         onFailure: @escaping (Error) -> Void
@@ -588,6 +600,7 @@ private final class CSVJob {
         detail = nil
         progress = 0
         isCancelling = false
+        self.isCancellable = isCancellable
         let report: CSVProgressHandler = { [weak self] value in
             Task { @MainActor in self?.progress = value }
         }
@@ -602,25 +615,31 @@ private final class CSVJob {
         task = Task {
             // Detached so the @ModelActor is created, and runs, off the main thread.
             let worker = Task.detached(priority: .userInitiated) { try await work(report, step) }
+            let outcome: Swift.Result<T, Error>
             do {
-                let value = try await withTaskCancellationHandler {
+                outcome = .success(try await withTaskCancellationHandler {
                     try await worker.value
                 } onCancel: {
                     worker.cancel()
-                }
-                onSuccess(value)
+                })
             } catch {
-                onFailure(error)
+                outcome = .failure(error)
             }
+            // Finish before the handlers run, so one can start the next job
+            // (Delete All Data, Then Restore).
             self.title = nil
             self.detail = nil
             self.isCancelling = false
             self.task = nil
+            switch outcome {
+            case .success(let value): onSuccess(value)
+            case .failure(let error): onFailure(error)
+            }
         }
     }
 
     func cancel() {
-        guard let task, !isCancelling else { return }
+        guard let task, isCancellable, !isCancelling else { return }
         isCancelling = true
         task.cancel()
     }
