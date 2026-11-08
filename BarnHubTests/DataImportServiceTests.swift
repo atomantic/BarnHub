@@ -555,4 +555,51 @@ final class DataImportServiceTests: XCTestCase {
         XCTAssertEqual(result.imported, 0)
         XCTAssertEqual(try ModelContext(actorContainer).fetchCount(FetchDescriptor<Horse>()), 0)
     }
+
+    // MARK: - Old and new export formats
+
+    /// Files exported before All Data had ID, link-ID and file columns.
+    func test_import_oldFormatFilesWithoutIDColumns() throws {
+        let horses = DataImportService.importHorses(from: """
+        Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active,Gender
+        Storm,Arabian,2018-04-02,Grey,950.0,0.0,A1,,,true,gelding
+        """, context: context)
+        let clients = DataImportService.importClients(from: """
+        First Name,Last Name,Email,Phone,Emergency Contact,Emergency Phone,Notes,Active
+        Jane,Doe,jane@example.com,,,,,true
+        """, context: context)
+        let txns = try DataImportService.importTransactions(from: """
+        Date,Type,Category,Amount,Memo,Client,Paid
+        2026-03-01,income,boarding,50.0,March,Jane Doe,true
+        """, context: context)
+
+        XCTAssertEqual([horses.imported, clients.imported, txns.imported], [1, 1, 1])
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Horse>()).first?.gender, .gelding)
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Transaction>()).first?.client?.fullName, "Jane Doe")
+    }
+
+    /// All Data files add ID, link-ID and file-path columns (and a reader may
+    /// reorder columns); the importers match by header name and ignore the rest.
+    func test_import_newFormatFilesWithIDAndPathColumns() throws {
+        let horses = DataImportService.importHorses(from: """
+        ID,Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active,Gender,Photo
+        horse-1,Storm,Arabian,2018-04-02,Grey,950.0,0.0,A1,,,true,gelding,Photos/Horses/Storm.jpg
+        horse-2,Storm,Quarter Horse,2019-05-03,Bay,1000.0,0.0,A2,,,true,mare,Photos/Horses/Storm-2.jpg
+        """, context: context)
+        let clients = DataImportService.importClients(from: """
+        Notes,ID,Last Name,First Name,Email,Phone,Emergency Contact,Emergency Phone,Active
+        ,client-1,Doe,Jane,jane@example.com,,,,true
+        """, context: context)
+        let txns = try DataImportService.importTransactions(from: """
+        ID,Date,Type,Category,Amount,Memo,Client,Paid,Client ID
+        transaction-1,2026-03-01,income,boarding,50.0,March,Jane Doe,true,client-1
+        """, context: context)
+
+        XCTAssertEqual([horses.imported, clients.imported, txns.imported], [2, 1, 1])
+        XCTAssertEqual([horses.skipped, clients.skipped, txns.skipped], [0, 0, 0])
+        XCTAssertEqual(Set(try context.fetch(FetchDescriptor<Horse>()).map(\.breed)), ["Arabian", "Quarter Horse"])
+        let client = try XCTUnwrap(context.fetch(FetchDescriptor<Client>()).first)
+        XCTAssertEqual([client.firstName, client.lastName, client.email], ["Jane", "Doe", "jane@example.com"])
+        XCTAssertEqual(try context.fetch(FetchDescriptor<Transaction>()).first?.client?.fullName, "Jane Doe")
+    }
 }

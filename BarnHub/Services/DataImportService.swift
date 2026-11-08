@@ -4,6 +4,9 @@ import SwiftData
 /// Reports how far a long-running CSV import or export has got, from 0 to 1.
 typealias CSVProgressHandler = @Sendable (Double) -> Void
 
+/// Reports which file an export is writing: step (1-based), step count, kind.
+typealias CSVStepHandler = @Sendable (Int, Int, CSVExportKind) -> Void
+
 /// Time zone and locale used to read and write CSV dates and amounts.
 /// Captured once per import/export so every row is interpreted the same way,
 /// and injectable so tests can run in a non-UTC zone and a European locale.
@@ -753,19 +756,31 @@ actor CSVDataActor {
     }
 
     /// Writes each kind to `<directory>/<filePrefix><kind>.csv` and returns the file URLs.
-    /// Throws `CancellationError` (after removing partial files) when cancelled.
-    func export(_ kinds: [CSVExportKind], to directory: URL, filePrefix: String = "", options: CSVOptions, progress: CSVProgressHandler?) throws -> [URL] {
+    /// With a `bundle`, the files get ID columns and the records' files are
+    /// copied into the bundle's subfolders. `step` is told which file is being
+    /// written (1-based). Throws `CancellationError` (after removing partial
+    /// files) when cancelled.
+    func export(_ kinds: [CSVExportKind], to directory: URL, filePrefix: String = "", options: CSVOptions,
+                bundle: CSVExportBundle? = nil, progress: CSVProgressHandler?, step: CSVStepHandler? = nil) throws -> [URL] {
         var urls: [URL] = []
+        // Kinds that copy files take longer, so they get a bigger share of the bar.
+        let weights = kinds.map { bundle != nil && Self.copiesFiles($0) ? 4.0 : 1.0 }
+        let totalWeight = weights.reduce(0, +)
+        var done = 0.0
         do {
             for (i, kind) in kinds.enumerated() {
+                try Task.checkCancellation()
+                step?(i + 1, kinds.count, kind)
                 let url = directory.appendingPathComponent("\(filePrefix)\(kind.rawValue).csv")
                 urls.append(url)
                 let writer = try CSVWriter(url: url)
-                let base = Double(i) / Double(kinds.count)
-                try DataExportService.export(kind, from: modelContext, to: writer, options: options) { fraction in
-                    progress?(base + fraction / Double(kinds.count))
+                let base = done
+                let weight = weights[i]
+                try DataExportService.export(kind, from: modelContext, to: writer, options: options, bundle: bundle) { fraction in
+                    progress?((base + fraction * weight) / totalWeight)
                 }
                 try writer.finish()
+                done += weight
             }
         } catch {
             for url in urls { try? FileManager.default.removeItem(at: url) }
@@ -773,5 +788,31 @@ actor CSVDataActor {
         }
         progress?(1)
         return urls
+    }
+
+    /// Name of the folder an "All Data" export shares.
+    static let allDataFolderName = "BarnHub Export"
+
+    /// Writes every kind, with IDs and the records' photos, documents and
+    /// invoice PDFs, to a new `tmp/BarnHubShare/<UUID>/BarnHub Export/` folder
+    /// and returns it. On any error, cancellation included, the whole share
+    /// folder is deleted before rethrowing.
+    func exportAllData(options: CSVOptions, progress: CSVProgressHandler?, step: CSVStepHandler? = nil) throws -> URL {
+        let shareFolder = try ShareTempFiles.makeShareFolder()
+        do {
+            let directory = shareFolder.appendingPathComponent(Self.allDataFolderName, isDirectory: true)
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            let bundle = CSVExportBundle(root: directory, container: modelContainer)
+            _ = try export(CSVExportKind.allCases, to: directory, options: options, bundle: bundle, progress: progress, step: step)
+            BarnHubLogger.info("All Data export wrote files=\(bundle.filesWritten)")
+            return directory
+        } catch {
+            ShareTempFiles.discardShareFolder(shareFolder)
+            throw error
+        }
+    }
+
+    private static func copiesFiles(_ kind: CSVExportKind) -> Bool {
+        !DataExportService.bundleExtras(for: kind).filter { $0 == "Photo" || $0 == "File" }.isEmpty
     }
 }
