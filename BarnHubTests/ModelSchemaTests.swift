@@ -137,4 +137,25 @@ final class ModelSchemaTests: XCTestCase {
         XCTAssertEqual(results.first?.duration, 45)
         XCTAssertEqual(results.first?.lessonType, .group)
     }
+
+    /// #28: onboarding inserts a horse, then links clients. With a `= nil` default on
+    /// the many-to-many, early macOS 14 / iOS 17 asserted inside Horse.init.
+    func test_Horse_insertThenLinkClient_saves() throws {
+        let horse = Horse(name: "First Horse")
+        context.insert(horse)
+        let client = Client(firstName: "Owner")
+        context.insert(client)
+        horse.clients = [client]
+        try context.save()
+
+        let horses = try context.fetch(FetchDescriptor<Horse>())
+        XCTAssertEqual(horses.count, 1)
+        XCTAssertEqual(horses.first?.clients?.map(\.firstName), ["Owner"])
+        XCTAssertEqual(client.horses?.map(\.name), ["First Horse"])
+    }
+
+    func test_Horse_newInstance_hasNoClients() {
+        XCTAssertNil(Horse(name: "Unlinked").clients)
+        XCTAssertNil(Client(firstName: "Solo").horses)
+    }
 }
