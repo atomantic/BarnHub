@@ -122,7 +122,7 @@ struct TransactionListView: View {
             TableColumn("Date", value: \.date) { txn in
                 Text(txn.date, format: .dateTime.year().month(.abbreviated).day())
             }
-            .width(min: 80, ideal: 100, max: 120)
+            .width(min: 95, ideal: 115, max: 140)
             TableColumn("Category", value: \.categoryRaw) { txn in
                 Text(txn.category.displayName)
             }
