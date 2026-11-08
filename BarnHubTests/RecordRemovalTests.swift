@@ -108,7 +108,7 @@ final class RecordRemovalTests: XCTestCase {
     func test_deleteAllData_leavesZeroRecordsOfEveryModelType() throws {
         try populateEveryModel()
 
-        try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
 
         for type in BarnHubSchema.models {
             XCTAssertEqual(try totalCount(of: type), 0, "\(type) survived Delete All")
@@ -118,7 +118,7 @@ final class RecordRemovalTests: XCTestCase {
     func test_deleteAllData_keepingDocuments_keepsOnlyDocumentsAndTheirOwners() throws {
         try populateEveryModel()
 
-        try RecordRemoval.deleteAllData(in: context, keepDocuments: true)
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: true)
 
         XCTAssertEqual(try context.fetch(FetchDescriptor<Horse>()).map(\.name), ["Blaze"])
         XCTAssertEqual(try context.fetch(FetchDescriptor<Client>()).map(\.firstName), ["Anna"])
@@ -127,6 +127,59 @@ final class RecordRemovalTests: XCTestCase {
         let kept: Set<String> = ["Horse", "Client", "HorseDocument", "ClientDocument"]
         for type in BarnHubSchema.models where !kept.contains(String(describing: type)) {
             XCTAssertEqual(try totalCount(of: type), 0, "\(type) survived Delete All")
+        }
+    }
+
+    /// Delete All Data runs in its own contexts (#83); the main context then
+    /// finds nothing, even for records it had loaded, and progress ends at 1.
+    @MainActor
+    func test_deleteAllData_reportsProgressAndTheMainContextSeesAnEmptyStore() throws {
+        try populateEveryModel()
+        let main = container.mainContext
+        XCTAssertFalse(try main.fetch(FetchDescriptor<Horse>()).isEmpty)
+        var reported: [Double] = []
+
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: false) { reported.append($0) }
+
+        XCTAssertEqual(reported.last, 1)
+        XCTAssertEqual(reported, reported.sorted(), "progress only goes up")
+        func mainCount<T: PersistentModel>(_: T.Type) throws -> Int { try main.fetchCount(FetchDescriptor<T>()) }
+        for type in BarnHubSchema.models {
+            XCTAssertEqual(try mainCount(type), 0, "\(type) still visible to the main context")
+        }
+        XCTAssertTrue(try main.fetch(FetchDescriptor<Horse>()).isEmpty)
+    }
+
+    /// #83: 20,000 weigh-ins for one horse. Deleting each one while the horse
+    /// still listed it made SwiftData rewrite the list per row, so the delete
+    /// took minutes on the main actor.
+    func test_deleteAllData_withTwentyThousandRowsForOneHorse_isQuick() throws {
+        for keepDocuments in [false, true] {
+            let horse = Horse(name: "Storm")
+            context.insert(horse)
+            var entries: [WeightEntry] = []
+            for i in 0..<20_000 {
+                let entry = WeightEntry(weight: 900 + Double(i) / 100)
+                context.insert(entry)
+                entries.append(entry)
+            }
+            horse.weightEntries = entries
+            let document = HorseDocument(title: "Coggins")
+            context.insert(document)
+            horse.documents = [document]
+            try context.save()
+
+            let start = Date()
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: keepDocuments)
+            let elapsed = Date().timeIntervalSince(start)
+
+            print("#83 timing keepDocuments=\(keepDocuments): delete \(elapsed) s")
+            XCTAssertEqual(try count(WeightEntry.self), 0)
+            XCTAssertEqual(try count(Horse.self), keepDocuments ? 1 : 0)
+            XCTAssertEqual(try count(HorseDocument.self), keepDocuments ? 1 : 0)
+            // Generous ceiling so a slow runner doesn't flake.
+            XCTAssertLessThan(elapsed, 30, "keepDocuments=\(keepDocuments)")
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
         }
     }
 
