@@ -10,7 +10,7 @@ struct HorseFeedPlanView: View {
 
     @State private var sheetState: SheetState?
     @State private var showDeleteConfirmation = false
-    @State private var entryToDelete: FeedPlanEntry?
+    @State private var entryToDelete: PendingDeletion?
     @State private var showToast = false
     @State private var toastMessage = ""
 
@@ -89,11 +89,15 @@ struct HorseFeedPlanView: View {
             ConfirmationDialog(
                 isPresented: $showDeleteConfirmation,
                 title: "Remove Feed Item",
-                message: "Remove \"\(entryToDelete?.summary ?? "this item")\" from the feed plan?",
+                message: "Remove \"\(entryToDelete?.name ?? "this item")\" from the feed plan?",
                 confirmTitle: "Remove",
                 confirmRole: .destructive
             ) {
-                guard let entry = entryToDelete else { return }
+                guard let pending = entryToDelete,
+                      let entry: FeedPlanEntry = modelContext.existingModel(for: pending.id) else {
+                    entryToDelete = nil
+                    return
+                }
                 modelContext.deleteWithLogging(entry)
                 toastMessage = appLocalized("Feed item removed")
                 showToast = true
@@ -146,7 +150,7 @@ struct HorseFeedPlanView: View {
                     .buttonStyle(.plain)
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button("Delete", role: .destructive) {
-                            entryToDelete = entry
+                            entryToDelete = PendingDeletion(id: entry.persistentModelID, name: entry.summary)
                             showDeleteConfirmation = true
                         }
                     }
@@ -220,7 +224,7 @@ struct HorseFeedPlanView: View {
                             sheetState = .edit(entry.persistentModelID)
                         }
                         Button("Delete", role: .destructive) {
-                            entryToDelete = entry
+                            entryToDelete = PendingDeletion(id: entry.persistentModelID, name: entry.summary)
                             showDeleteConfirmation = true
                         }
                     }

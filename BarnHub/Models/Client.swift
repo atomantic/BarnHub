@@ -12,8 +12,9 @@ final class Client {
     var notes: String = ""
     var isActive: Bool = true
 
+    // Inverse of Horse.clients; no `= nil` default (see Horse.clients, #28).
     @Relationship(deleteRule: .nullify)
-    var horses: [Horse]? = nil
+    var horses: [Horse]?
 
     @Relationship(deleteRule: .cascade)
     var transactions: [Transaction]? = nil

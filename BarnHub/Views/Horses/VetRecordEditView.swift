@@ -21,6 +21,8 @@ struct VetRecordEditView: View {
 
     private var isNew: Bool { recordID == nil }
     private var existingRecord: VetRecord? { modelContext.existingModel(for: recordID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(recordID, as: VetRecord.self) }
 
     private var resolvedHorseID: PersistentIdentifier? {
         horseID ?? existingRecord?.horse?.persistentModelID ?? selectedHorseID
@@ -92,6 +94,7 @@ struct VetRecordEditView: View {
                 onConfirm: deleteRecord
             )
         }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -107,6 +110,11 @@ struct VetRecordEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         guard let horse else { return }
         let trimmedName = vetName.trimmingCharacters(in: .whitespaces)
         let record: VetRecord

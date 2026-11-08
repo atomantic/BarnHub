@@ -249,6 +249,19 @@ final class NotificationService {
         status == .authorized || status == .provisional
     }
 
+    /// Removes every pending and delivered BarnHub notification, after Delete All
+    /// Data. The save hook's sync would drop pending requests for deleted records
+    /// too, but only when authorized and attached; this also clears delivered
+    /// ones and the morning summary. Static so the Mac Settings window, which has
+    /// no NotificationService in its environment, can call it.
+    static func cancelAllNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
+        UserDefaults.standard.removeObject(forKey: lateIdentifiersKey)
+        BarnHubLogger.info("Cancelled all notifications")
+    }
+
     // MARK: Triggers
 
     /// Binds the service to the app's main context and starts following saves

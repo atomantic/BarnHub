@@ -34,7 +34,7 @@ struct DataManagementView: View {
             } header: {
                 Text("Export")
             } footer: {
-                Text("Export your barn data as CSV files for backup or use in spreadsheets.")
+                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
             }
 
             Section {
@@ -53,7 +53,7 @@ struct DataManagementView: View {
             Section {
                 HStack {
                     Button(role: .destructive) {
-                        deleteStep = .warning
+                        deleteStep = .chooseScope
                     } label: {
                         Label("Delete All Data", systemImage: "trash")
                     }
@@ -62,7 +62,7 @@ struct DataManagementView: View {
             } header: {
                 Text("Reset")
             } footer: {
-                Text("Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.")
+                Text("Permanently deletes all your BarnHub data from your iCloud account and from every device signed in to it.")
             }
         }
         .formStyle(.grouped)
@@ -71,7 +71,7 @@ struct DataManagementView: View {
     private var dataContent: some View {
         List {
             Section {
-                Text("Export your barn data as CSV files for backup or use in spreadsheets.")
+                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowBackground(Color.clear)
@@ -113,14 +113,14 @@ struct DataManagementView: View {
 
             Section {
                 Button(role: .destructive) {
-                    deleteStep = .warning
+                    deleteStep = .chooseScope
                 } label: {
                     Label("Delete All Data", systemImage: "trash")
                 }
             } header: {
                 Text("Reset")
             } footer: {
-                Text("Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.")
+                Text("Permanently deletes all your BarnHub data from your iCloud account and from every device signed in to it.")
                     .font(.caption)
             }
         }
@@ -164,19 +164,18 @@ struct DataManagementView: View {
             isPresented: Binding(get: { deleteStep != nil }, set: { if !$0 { deleteStep = nil } })
         ) {
             switch deleteStep {
-            case .warning:
-                Button("Export Data First") {
-                    deleteStep = nil
-                    exportData(.all)
-                }
+            case .chooseScope:
                 Button("Delete Everything", role: .destructive) {
-                    deleteStep = .finalConfirmation
+                    deleteStep = .finalConfirmation(keepDocuments: false)
+                }
+                Button("Keep Documents") {
+                    deleteStep = .finalConfirmation(keepDocuments: true)
                 }
                 Button("Cancel", role: .cancel) { deleteStep = nil }
-            case .finalConfirmation:
+            case .finalConfirmation(let keepDocuments):
                 Button("Delete All Data", role: .destructive) {
                     deleteStep = nil
-                    deleteAllData()
+                    deleteAllData(keepDocuments: keepDocuments)
                 }
                 Button("Cancel", role: .cancel) { deleteStep = nil }
             case nil:
@@ -324,17 +323,11 @@ struct DataManagementView: View {
 
     // MARK: - Delete All
 
-    private func deleteAllData() {
+    private func deleteAllData(keepDocuments: Bool) {
         do {
-            try modelContext.delete(model: VetRecord.self)
-            try modelContext.delete(model: FarrierVisit.self)
-            try modelContext.delete(model: Reminder.self)
-            try modelContext.delete(model: SupplyItem.self)
-            try modelContext.delete(model: Transaction.self)
-            try modelContext.delete(model: Client.self)
-            try modelContext.delete(model: Horse.self)
-            modelContext.saveWithLogging()
-            BarnHubLogger.success("Deleted all data")
+            try RecordRemoval.deleteAllData(in: modelContext, keepDocuments: keepDocuments)
+            NotificationService.cancelAllNotifications()
+            BarnHubLogger.success("Deleted all data keepDocuments=\(keepDocuments)")
             toast.show(appLocalized("All data deleted"))
         } catch {
             BarnHubLogger.error("Failed to delete all data error=\(error.localizedDescription)")
@@ -368,21 +361,24 @@ struct DataManagementView: View {
 // MARK: - Types
 
 private enum DeleteStep {
-    case warning, finalConfirmation
+    case chooseScope
+    case finalConfirmation(keepDocuments: Bool)
 
     var title: String {
         switch self {
-        case .warning: return appLocalized("Are You Sure?", comment: "Delete confirmation alert title")
+        case .chooseScope: return appLocalized("Delete All Data?", comment: "Delete All Data first alert title")
         case .finalConfirmation: return appLocalized("Final Confirmation", comment: "Final delete confirmation alert title")
         }
     }
 
     var message: String {
         switch self {
-        case .warning:
-            return appLocalized("This will permanently delete ALL data from BarnHub on this device. Consider exporting your data first so you have a backup.", comment: "Delete warning message")
-        case .finalConfirmation:
-            return appLocalized("This cannot be undone. All horses, clients, transactions, and records will be permanently deleted.", comment: "Final delete confirmation message")
+        case .chooseScope:
+            return appLocalized("BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to.", comment: "Delete All Data first alert message: where data lives and the documents choice")
+        case .finalConfirmation(keepDocuments: false):
+            return appLocalized("This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices.", comment: "Final delete confirmation message when documents are deleted too")
+        case .finalConfirmation(keepDocuments: true):
+            return appLocalized("This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices.", comment: "Final delete confirmation message when documents are kept")
         }
     }
 }
