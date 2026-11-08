@@ -300,6 +300,8 @@
 		968FF857EC73D34927BD79C9 /* DashboardWidgetPrimitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */; };
 		C717CFB4EC81F0E37690233C /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */; };
 		AEA5BCB2BDC4A6439D5CD43A /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */; };
+		4FE38312FD483F327A9D45C8 /* CareVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCBB85258536085901F4090 /* CareVisitEditView.swift */; };
+		770F8DBC0BBE545A4820FC68 /* CareVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCBB85258536085901F4090 /* CareVisitEditView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -489,6 +491,7 @@
 		E72EE5653D344048C615898F /* SwooshShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwooshShape.swift; sourceTree = "<group>"; };
 		F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWidgetPrimitives.swift; sourceTree = "<group>"; };
 		5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWidgets.swift; sourceTree = "<group>"; };
+		7FCBB85258536085901F4090 /* CareVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareVisitEditView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +553,7 @@
 				A268FF03731F4FD586AD2A31 /* HealthTimelineView.swift */,
 				D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */,
 				8E4059FB68D68631292465BD /* VetRecordEditView.swift */,
+				7FCBB85258536085901F4090 /* CareVisitEditView.swift */,
 			);
 			path = Horses;
 			sourceTree = "<group>";
@@ -1169,6 +1173,7 @@
 				830D091E2DE6BA903A0F7505 /* SwooshShape.swift in Sources */,
 				4286444FA44629E70F583CBC /* DashboardWidgetPrimitives.swift in Sources */,
 				C717CFB4EC81F0E37690233C /* HomeWidgets.swift in Sources */,
+				4FE38312FD483F327A9D45C8 /* CareVisitEditView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1310,6 +1315,7 @@
 				859E78811AB5A49809424E11 /* SwooshShape.swift in Sources */,
 				968FF857EC73D34927BD79C9 /* DashboardWidgetPrimitives.swift in Sources */,
 				AEA5BCB2BDC4A6439D5CD43A /* HomeWidgets.swift in Sources */,
+				770F8DBC0BBE545A4820FC68 /* CareVisitEditView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
