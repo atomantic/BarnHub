@@ -10,6 +10,8 @@ struct InvoiceGeneratorView: View {
     @State private var endDate = Date.now
     @State private var showShareSheet = false
     @State private var generatedPDFURL: URL?
+    /// A PDF is being drawn in the background; the button stays disabled until it's ready.
+    @State private var isGenerating = false
     @State private var toast = ToastState()
 
     private var client: Client? {
@@ -74,12 +76,16 @@ struct InvoiceGeneratorView: View {
                     } label: {
                         HStack {
                             Spacer()
+                            if isGenerating {
+                                ProgressView()
+                                    .padding(.trailing, 4)
+                            }
                             Label("Generate & Share Invoice", systemImage: "doc.text.fill")
                                 .font(.headline)
                             Spacer()
                         }
                     }
-                    .disabled(txns.isEmpty)
+                    .disabled(txns.isEmpty || isGenerating)
                 }
             }
             .navigationTitle("Generate Invoice")
@@ -102,41 +108,53 @@ struct InvoiceGeneratorView: View {
     }
 
     private func generateAndShare() {
-        guard let client else { return }
+        guard let client, !isGenerating else { return }
         let built = invoice
         let txnTotal = built.totalDue
-        let lineItems = built.lineItems
-
-        let pdfData = InvoicePDFService.generatePDF(
+        let lineItemCount = built.lineItems.count
+        let excludedCount = built.excludedCount
+        let start = startDate
+        let end = endDate
+        let document = InvoicePDFService.document(
             clientName: client.fullName,
-            startDate: startDate,
-            endDate: endDate,
-            lineItems: lineItems,
+            startDate: start,
+            endDate: end,
+            lineItems: built.lineItems,
             total: txnTotal
         )
+        let fileName = Invoice.fileName(clientName: client.fullName, startDate: start, endDate: end)
 
-        let invoice = Invoice(
-            startDate: startDate,
-            endDate: endDate,
-            totalAmount: txnTotal,
-            createdAt: .now,
-            pdfData: pdfData
-        )
-        invoice.client = client
-        modelContext.insert(invoice)
+        isGenerating = true
+        Task {
+            defer { isGenerating = false }
+            // Drawing the PDF and writing the share file can take a moment on a
+            // long invoice, so keep both off the main actor.
+            let result = await Task.detached(priority: .userInitiated) {
+                let pdfData = InvoicePDFService.render(document)
+                return (pdfData, Result { try ShareTempFiles.write(pdfData, fileName: fileName, fileExtension: "pdf") })
+            }.value
+            let (pdfData, written) = result
 
-        BarnHubLogger.success("Invoice generated transactions=\(lineItems.count) excluded=\(built.excludedCount)")
+            let invoice = Invoice(
+                startDate: start,
+                endDate: end,
+                totalAmount: txnTotal,
+                createdAt: .now,
+                pdfData: pdfData
+            )
+            invoice.client = client
+            modelContext.insert(invoice)
 
-        let fileName = Invoice.fileName(clientName: client.fullName, startDate: startDate, endDate: endDate)
-        let tempURL: URL
-        do {
-            tempURL = try ShareTempFiles.write(pdfData, fileName: fileName, fileExtension: "pdf")
-        } catch {
-            BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
-            toast.show(appLocalized("Failed to save invoice"), isError: true)
-            return
+            BarnHubLogger.success("Invoice generated transactions=\(lineItemCount) excluded=\(excludedCount)")
+
+            switch written {
+            case .success(let tempURL):
+                generatedPDFURL = tempURL
+                showShareSheet = true
+            case .failure(let error):
+                BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
+                toast.show(appLocalized("Failed to save invoice"), isError: true)
+            }
         }
-        generatedPDFURL = tempURL
-        showShareSheet = true
     }
 }
