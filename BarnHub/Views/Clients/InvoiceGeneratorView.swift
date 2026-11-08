@@ -91,7 +91,10 @@ struct InvoiceGeneratorView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .sheet(isPresented: $showShareSheet) {
+            .sheet(isPresented: $showShareSheet, onDismiss: {
+                ShareTempFiles.cleanUp(generatedPDFURL)
+                generatedPDFURL = nil
+            }) {
                 if let url = generatedPDFURL {
                     ShareSheet(items: [url])
                 }
@@ -135,9 +138,9 @@ struct InvoiceGeneratorView: View {
         BarnHubLogger.success("Invoice generated for client=\(client.fullName) transactions=\(txns.count) total=\(txnTotal)")
 
         let fileName = Invoice.fileName(clientName: client.fullName, startDate: startDate, endDate: endDate)
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        let tempURL: URL
         do {
-            try pdfData.write(to: tempURL)
+            tempURL = try ShareTempFiles.write(pdfData, fileName: fileName, fileExtension: "pdf")
         } catch {
             BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
             toast.show(appLocalized("Failed to save invoice"), isError: true)

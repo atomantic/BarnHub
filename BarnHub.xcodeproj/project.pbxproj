@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C9A9CDB06714CD9A21616EC /* ShareTempFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37BBC5921C047E3A922597C /* ShareTempFiles.swift */; };
+		70824BB483904BBE9F771C7C /* ShareTempFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37BBC5921C047E3A922597C /* ShareTempFiles.swift */; };
 		004CACE0D835B5B58CFD59A2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7850193B3E5ED0B66616F80 /* Logger.swift */; };
 		00A9BF7BD4BED475CE708A13 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
 		00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0005 /* PaywallView.swift */; };
@@ -277,6 +279,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D37BBC5921C047E3A922597C /* ShareTempFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTempFiles.swift; sourceTree = "<group>"; };
 		0474BEC50CFC86A2A52D0B02 /* HorseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseDetailView.swift; sourceTree = "<group>"; };
 		EFC6B216B07B79CD9ECB41BB /* FeedPlanEntryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPlanEntryEditView.swift; sourceTree = "<group>"; };
 		9B16A38B459ACB724C6039D2 /* HorseFeedPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseFeedPlanView.swift; sourceTree = "<group>"; };
@@ -571,6 +574,7 @@
 				BBCC001122334455DATA0001 /* DataExportService.swift */,
 				BBCC001122334455DATA0003 /* DataImportService.swift */,
 				AA11223344556677AABB0003 /* FeatureGate.swift */,
+				D37BBC5921C047E3A922597C /* ShareTempFiles.swift */,
 				F7850193B3E5ED0B66616F80 /* Logger.swift */,
 				C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */,
 				CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */,
@@ -919,6 +923,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70824BB483904BBE9F771C7C /* ShareTempFiles.swift in Sources */,
 				A90DBB40ABF1B1171A28B9CB /* HealthTimelineView.swift in Sources */,
 				96BA747D2A434D6C99902E4C /* WeightChartView.swift in Sources */,
 				B7D5CE80B216879EC5CD1351 /* WeightEntry.swift in Sources */,
@@ -1042,6 +1047,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C9A9CDB06714CD9A21616EC /* ShareTempFiles.swift in Sources */,
 				4C0A5318C3D046898F569244 /* HealthTimelineView.swift in Sources */,
 				B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */,
 				5030F8F0BF904618BBDFCD29 /* WeightEntry.swift in Sources */,
