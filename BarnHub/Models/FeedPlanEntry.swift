@@ -28,7 +28,7 @@ final class FeedPlanEntry {
     var summary: String {
         let qty = amount == Double(Int(amount)) ? "\(Int(amount))" : String(format: "%.1f", amount)
         let productName = product?.name ?? appLocalized("Unknown", comment: "Unknown feed product")
-        return "\(qty) \(unit.displayName) \(productName)"
+        return "\(qty) \(unit.displayName(for: amount)) \(productName)"
     }
 
     init(
