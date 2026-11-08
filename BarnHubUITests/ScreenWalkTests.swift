@@ -26,7 +26,8 @@ final class ScreenWalkTests: XCTestCase {
     // MARK: - Screens
 
     static let tabScreens: [Screen] = [
-        Screen(page: "home", expect: ["tile_horses", "tile_reports", "5 horses"]),
+        // iPhone and iPad show feature tiles; the Mac shows stat cards and lists.
+        Screen(page: "home", expect: [], anyOf: ["tile_horses", "Action Items"]),
         Screen(page: "horses", expect: ["Arrow", "Cleo"]),
         Screen(page: "clients", expect: ["Chen", "Rivera"]),
         // iPhone lists the schedule screens; iPad shows a calendar with them in a menu.
@@ -220,7 +221,9 @@ final class ScreenWalkTests: XCTestCase {
         tapText(title)
         #if os(macOS)
         // Quick Look opens as a panel titled with the file name.
-        let titled = NSPredicate(format: "title CONTAINS[c] %@", title)
+        // Titled with the temp file's name, where spaces become underscores.
+        let fileName = title.replacingOccurrences(of: " ", with: "_")
+        let titled = NSPredicate(format: "title CONTAINS[c] %@ OR title CONTAINS[c] %@", title, fileName)
         let panel = app.windows.matching(titled).firstMatch
         let dialog = app.dialogs.matching(titled).firstMatch
         XCTAssertTrue(panel.waitForExistence(timeout: 10) || dialog.exists, "\(title): no Quick Look panel opened")
@@ -316,6 +319,9 @@ final class ScreenWalkTests: XCTestCase {
             app.textViews.matching(byLabel),
             app.textFields.matching(byPlaceholder),
             app.textViews.matching(byPlaceholder),
+            // Pickers on the Mac: the selection is the pop-up button's value.
+            app.popUpButtons.matching(byLabel),
+            app.popUpButtons.matching(byValue),
         ]
         return queries.lazy.map(\.firstMatch).first { $0.exists }
     }
@@ -350,7 +356,17 @@ final class ScreenWalkTests: XCTestCase {
 
     private func scrollDown() {
         #if os(macOS)
-        app.windows.firstMatch.scroll(byDeltaX: 0, deltaY: -300)
+        // Scroll every list and scroll view, so a detail column beside a
+        // list scrolls too, not just whatever is under the window's center.
+        let areas = app.scrollViews.allElementsBoundByIndex
+            + app.tables.allElementsBoundByIndex
+            + app.outlines.allElementsBoundByIndex
+            + app.collectionViews.allElementsBoundByIndex
+        let visible = areas.filter { $0.exists && $0.isHittable }
+        if visible.isEmpty {
+            app.windows.firstMatch.scroll(byDeltaX: 0, deltaY: -300)
+        }
+        visible.forEach { $0.scroll(byDeltaX: 0, deltaY: -300) }
         #else
         app.swipeUp()
         #endif
