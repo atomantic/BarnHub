@@ -135,7 +135,7 @@ struct InvoiceGeneratorView: View {
         invoice.client = client
         modelContext.insert(invoice)
 
-        BarnHubLogger.success("Invoice generated for client=\(client.fullName) transactions=\(txns.count) total=\(txnTotal)")
+        BarnHubLogger.success("Invoice generated transactions=\(txns.count) total=\(txnTotal)")
 
         let fileName = Invoice.fileName(clientName: client.fullName, startDate: startDate, endDate: endDate)
         let tempURL: URL

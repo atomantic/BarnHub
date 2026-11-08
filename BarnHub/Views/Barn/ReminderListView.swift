@@ -90,7 +90,9 @@ struct ReminderListView: View {
             .contentShape(Rectangle())
             .accessibilityLabel(reminder.isCompleted ? "Mark incomplete" : "Mark complete")
 
-            NavigationLink(value: BarnRoute.reminderEdit(reminder.persistentModelID)) {
+            Button {
+                router.navigate(to: BarnRoute.reminderEdit(reminder.persistentModelID))
+            } label: {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(reminder.title)
                         .font(.headline)
@@ -114,7 +116,12 @@ struct ReminderListView: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
+            // Plain, like the completion button beside it: two default-style buttons
+            // in one List row would both fire on a tap anywhere in the row.
+            .buttonStyle(.plain)
         }
     }
 

@@ -170,7 +170,7 @@ struct FeedPlanEntryEditView: View {
             entry.feedTime = feedTime
             entry.assignedPerson = assignedPerson
             entry.notes = notes
-            BarnHubLogger.info("Updating feed entry horse=\(horse?.name ?? "?") product=\(product.name)")
+            BarnHubLogger.info("Updating feed entry")
         } else {
             let entry = FeedPlanEntry(
                 amount: amount,
@@ -182,7 +182,7 @@ struct FeedPlanEntryEditView: View {
             entry.horse = horse
             entry.product = product
             modelContext.insert(entry)
-            BarnHubLogger.info("Adding feed entry horse=\(horse?.name ?? "?") product=\(product.name)")
+            BarnHubLogger.info("Adding feed entry")
         }
 
         modelContext.saveWithLogging()

@@ -1,9 +1,11 @@
 import XCTest
 import SwiftData
+import ObjectiveC
+import CoreData
 @testable import BarnHub
 
-/// Verifies all 12 SwiftData model types can be inserted and persisted in an
-/// in-memory container without throwing.
+/// Verifies the shared schema lists every SwiftData model type, and that each
+/// type can be inserted and persisted in an in-memory container.
 final class ModelSchemaTests: XCTestCase {
 
     private var container: ModelContainer!
@@ -13,10 +15,7 @@ final class ModelSchemaTests: XCTestCase {
         try super.setUpWithError()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: config
         )
         context = ModelContext(container)
@@ -27,6 +26,39 @@ final class ModelSchemaTests: XCTestCase {
         container = nil
         super.tearDown()
     }
+
+    // MARK: - Shared model list
+
+    /// Every `@Model` class compiled into the app, found through the runtime so a
+    /// new model can't be left out of `BarnHubSchema.models` unnoticed.
+    private func modelTypesInApp() throws -> Set<String> {
+        let image = try XCTUnwrap(class_getImageName(Horse.self))
+        var count: UInt32 = 0
+        let names = try XCTUnwrap(objc_copyClassNamesForImage(image, &count))
+        defer { free(names) }
+        var found = Set<String>()
+        for index in 0..<Int(count) {
+            guard let cls = objc_getClass(names[index]) as? AnyClass,
+                  cls is any PersistentModel.Type else { continue }
+            found.insert(String(describing: cls))
+        }
+        return found
+    }
+
+    func test_sharedModelList_matchesEveryModelType() throws {
+        let inApp = try modelTypesInApp()
+        let listed = BarnHubSchema.models.map { String(describing: $0) }
+        XCTAssertTrue(inApp.contains("Horse"), "runtime lookup found no models: \(inApp)")
+        XCTAssertEqual(Set(listed), inApp, "BarnHubSchema.models must list every @Model type")
+        XCTAssertEqual(Set(listed).count, listed.count, "BarnHubSchema.models lists a type twice")
+    }
+
+    func test_container_hasAnEntityPerListedModel() {
+        let entities = Set(container.schema.entities.map(\.name))
+        XCTAssertEqual(entities, Set(BarnHubSchema.models.map { String(describing: $0) }))
+    }
+
+    // MARK: - Insert and fetch
 
     func test_Horse_canBeInsertedAndFetched() throws {
         let h = Horse(name: "Blaze")
@@ -138,6 +170,35 @@ final class ModelSchemaTests: XCTestCase {
         XCTAssertEqual(results.first?.lessonType, .group)
     }
 
+    func test_DentistVisit_canBeInsertedAndFetched() throws {
+        context.insert(DentistVisit(dentistName: "Dr. Float", serviceDescription: "Float"))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<DentistVisit>())
+        XCTAssertEqual(results.map(\.dentistName), ["Dr. Float"])
+    }
+
+    func test_HorseDocument_canBeInsertedAndFetched() throws {
+        context.insert(HorseDocument(title: "Coggins", documentType: .pdf))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<HorseDocument>())
+        XCTAssertEqual(results.map(\.title), ["Coggins"])
+    }
+
+    func test_FeedProduct_canBeInsertedAndFetched() throws {
+        context.insert(FeedProduct(name: "Senior Feed", defaultUnit: .scoops))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<FeedProduct>())
+        XCTAssertEqual(results.map(\.name), ["Senior Feed"])
+    }
+
+    func test_FeedPlanEntry_canBeInsertedAndFetched() throws {
+        context.insert(FeedPlanEntry(amount: 2, unit: .scoops, feedTime: .evening))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<FeedPlanEntry>())
+        XCTAssertEqual(results.map(\.amount), [2])
+        XCTAssertEqual(results.first?.feedTime, .evening)
+    }
+
     /// #28: onboarding inserts a horse, then links clients. With a `= nil` default on
     /// the many-to-many, early macOS 14 / iOS 17 asserted inside Horse.init.
     func test_Horse_insertThenLinkClient_saves() throws {
@@ -157,5 +218,89 @@ final class ModelSchemaTests: XCTestCase {
     func test_Horse_newInstance_hasNoClients() {
         XCTAssertNil(Horse(name: "Unlinked").clients)
         XCTAssertNil(Client(firstName: "Solo").horses)
+    }
+}
+
+/// Adding `BarnHubSchemaV1` and the migration plan must not change existing
+/// stores: one written by a build without versioning opens with the same data
+/// and the same entity version hashes (what Core Data and CloudKit compare).
+final class SchemaVersioningTests: XCTestCase {
+
+    private var storeDirectory: URL!
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        storeDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("SchemaVersioningTests-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: storeDirectory, withIntermediateDirectories: true)
+    }
+
+    override func tearDownWithError() throws {
+        try? FileManager.default.removeItem(at: storeDirectory)
+        storeDirectory = nil
+        try super.tearDownWithError()
+    }
+
+    private var storeURL: URL { storeDirectory.appendingPathComponent("BarnHub.store") }
+
+    private func storeVersionHashes() throws -> [String: Data] {
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(
+            type: .sqlite, at: storeURL
+        )
+        return try XCTUnwrap(metadata[NSStoreModelVersionHashesKey] as? [String: Data])
+    }
+
+    func test_versionedSchema_keepsEntityNamesAndAttributes() {
+        let unversioned = Schema(BarnHubSchema.models)
+        let versioned = BarnHubSchema.schema
+        XCTAssertEqual(versioned.version, Schema.Version(1, 0, 0))
+        func shape(_ schema: Schema) -> [String: [String]] {
+            Dictionary(uniqueKeysWithValues: schema.entities.map { entity in
+                (entity.name, (entity.attributes.map(\.name) + entity.relationships.map(\.name)).sorted())
+            })
+        }
+        XCTAssertEqual(shape(versioned), shape(unversioned))
+    }
+
+    func test_storeFromUnversionedBuild_opensUnchangedWithMigrationPlan() throws {
+        do {
+            let legacy = try ModelContainer(
+                for: Schema(BarnHubSchema.models),
+                configurations: ModelConfiguration(url: storeURL, cloudKitDatabase: .none)
+            )
+            let context = ModelContext(legacy)
+            let horse = Horse(name: "Legacy")
+            let client = Client(firstName: "Owner")
+            context.insert(horse)
+            context.insert(client)
+            horse.clients = [client]
+            context.insert(Transaction(amount: 42, memo: "Hay", category: .feed, type: .expense))
+            try context.save()
+        }
+        let hashesBefore = try storeVersionHashes()
+        XCTAssertEqual(hashesBefore.count, BarnHubSchema.models.count)
+
+        do {
+            let current = try ModelContainer(
+                for: BarnHubSchema.schema,
+                migrationPlan: BarnHubMigrationPlan.self,
+                configurations: ModelConfiguration(url: storeURL, cloudKitDatabase: .none)
+            )
+            let context = ModelContext(current)
+            let horses = try context.fetch(FetchDescriptor<Horse>())
+            XCTAssertEqual(horses.map(\.name), ["Legacy"])
+            XCTAssertEqual(horses.first?.clients?.map(\.firstName), ["Owner"])
+            XCTAssertEqual(try context.fetch(FetchDescriptor<Transaction>()).map(\.amount), [42])
+            context.insert(Horse(name: "Added after versioning"))
+            try context.save()
+        }
+        XCTAssertEqual(try storeVersionHashes(), hashesBefore, "Versioning must not change any entity hash")
+
+        // And an older (unversioned) build can still open the store afterwards.
+        let reopened = try ModelContainer(
+            for: Schema(BarnHubSchema.models),
+            configurations: ModelConfiguration(url: storeURL, cloudKitDatabase: .none)
+        )
+        XCTAssertEqual(try ModelContext(reopened).fetchCount(FetchDescriptor<Horse>()), 2)
     }
 }

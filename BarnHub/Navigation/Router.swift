@@ -105,31 +105,13 @@ final class Router {
     /// Add/edit screens: the routes that open as a sheet when `presentsFormsAsSheets`.
     static func isForm(_ route: any Hashable) -> Bool {
         switch route {
-        case let r as HorseRoute:
-            switch r {
-            case .edit, .addVetRecord, .addFarrierVisit, .addDentistVisit,
-                 .editVetRecord, .editFarrierVisit, .editDentistVisit:
-                // (.editFeedEntry already opens in its own sheet from the feed plan.)
-                return true
-            default:
-                return false
-            }
-        case let r as ClientRoute:
-            if case .edit = r { return true }
-            return false
-        case let r as AccountingRoute:
-            if case .edit = r { return true }
-            return false
-        case let r as BarnRoute:
-            switch r {
-            case .supplyEdit, .reminderEdit, .barnNoteEdit, .addVetRecord, .addFarrierVisit,
-                 .addDentistVisit, .lessonEdit, .feedProductEdit:
-                return true
-            default:
-                return false
-            }
-        default:
-            return false
+        case let r as HomeRoute: r.isForm
+        case let r as HorseRoute: r.isForm
+        case let r as ClientRoute: r.isForm
+        case let r as AccountingRoute: r.isForm
+        case let r as BarnRoute: r.isForm
+        case let r as SubscriptionRoute: r.isForm
+        default: false
         }
     }
 

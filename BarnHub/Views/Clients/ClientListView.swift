@@ -143,11 +143,11 @@ struct ClientListView: View {
         clientPendingRemoval = nil
         guard let client: Client = modelContext.existingModel(for: id) else { return }
         if delete {
-            BarnHubLogger.info("Deleting client name=\(client.fullName)")
+            BarnHubLogger.info("Deleting client")
             RecordRemoval.delete(client, in: modelContext)
             toast.show(appLocalized("Client deleted", comment: "Toast after deleting a client"))
         } else {
-            BarnHubLogger.info("Deactivating client name=\(client.fullName)")
+            BarnHubLogger.info("Deactivating client")
             RecordRemoval.deactivate(client, in: modelContext)
             toast.show(appLocalized("Client deactivated", comment: "Toast after deactivating a client"))
         }
