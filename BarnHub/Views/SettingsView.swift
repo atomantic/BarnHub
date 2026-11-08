@@ -242,36 +242,39 @@ struct SettingsView: View {
                 iCloudSyncSection
             }
             .formStyle(.grouped)
+            .frame(height: 400)
             .tabItem { Label("General", systemImage: "gearshape") }
             .tag("general")
 
             Form { subscriptionSection }
                 .formStyle(.grouped)
+                .frame(height: 200)
                 .tabItem { Label("Subscription", systemImage: "creditcard") }
                 .tag("subscription")
 
             DataManagementView()
+                .frame(height: 440)
                 .tabItem { Label("Data", systemImage: "arrow.up.arrow.down") }
                 .tag("data")
 
             Form {
                 feedbackSection
-                Section("Legal") {
+                Section {
                     externalLink("Privacy Policy", url: .privacyPolicy)
                     externalLink("Terms of Use", url: .termsOfUse)
-                }
-                Section {
+                } header: {
+                    Text("Legal")
+                } footer: {
                     Text("Version \(appVersion) (\(buildNumber))")
-                        .font(.footnote)
-                        .foregroundStyle(.tertiary)
-                        .frame(maxWidth: .infinity)
                 }
             }
             .formStyle(.grouped)
+            .frame(height: 340)
             .tabItem { Label("Feedback", systemImage: "envelope") }
             .tag("feedback")
         }
-        .frame(width: 520, height: 460)
+        // Each tab sets its own height, so the window resizes to fit it.
+        .frame(width: 520)
     }
 
     private var subscriptionSection: some View {
@@ -402,7 +405,12 @@ struct SettingsView: View {
 
     // MARK: - Helpers
 
+    @ViewBuilder
     private func settingsRow(_ title: LocalizedStringKey, icon: String) -> some View {
+        #if os(macOS)
+        // A plain push button or link, not a full-width iOS row.
+        Label(title, systemImage: icon)
+        #else
         HStack {
             Text(title)
             Spacer()
@@ -410,6 +418,7 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+        #endif
     }
 
     private func externalLink(_ title: LocalizedStringKey, url: URL) -> some View {
