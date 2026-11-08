@@ -27,5 +27,5 @@ Build, archive, and upload to TestFlight locally.
 
 5. **If deploy.sh doesn't exist or .env is missing**:
    - Create `.env` from `.env.example`
-   - The API key is at `~/path/to/AuthKey_XXXXXXXXXX.p8`
+   - Fill in the App Store Connect API key ID, issuer ID and the path to your `.p8` key file
    - See the `ios-app-store-connect-setup` skill for full setup details
