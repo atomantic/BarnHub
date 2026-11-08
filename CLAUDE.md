@@ -56,7 +56,7 @@ Local deploy via `./deploy.sh` (used when CI build credits are exhausted):
 
 Requires `.env` file with App Store Connect API credentials (see `.env.example`).
 
-CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` (the same suite as `deploy.sh`) on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It runs for release builds only, not on pull requests or `main` pushes, because macOS minutes on this private repo are billed: pushes to a `release/*` or `testflight` branch, `v*` tags, or by hand (Actions tab "Run workflow", or `gh workflow run ci.yml --ref <branch>`). So run `./scripts/test.sh` locally (at least `--unit`, see Build Commands) before merging. CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
+CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It is **manual-only** (`workflow_dispatch`), never automatic: the repo is private and GitHub's macOS minutes run out fast. Start it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`; it runs only `--unit` unless you pick `suite=full`. The real release gate is `./deploy.sh`, which runs the full `./scripts/test.sh` on Adam's Mac. Before merging, run `./scripts/test.sh` locally (at least `--unit`, see Build Commands). CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
 
 ## Key Patterns
 
