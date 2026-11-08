@@ -19,7 +19,7 @@ struct HorseDocumentsView: View {
     @State private var shareURL: URL?
 
     private var horse: Horse? {
-        modelContext.model(for: horseID) as? Horse
+        modelContext.existingModel(for: horseID)
     }
 
     private var documents: [HorseDocument] {

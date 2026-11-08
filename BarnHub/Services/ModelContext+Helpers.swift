@@ -21,8 +21,17 @@ extension ModelContext {
         }
     }
 
+    /// The live model for `id`, or nil once it has been deleted (or never existed).
+    /// Use this instead of `model(for:)`, which returns a placeholder for a deleted
+    /// ID: reading any property of it traps (`_InvalidFutureBackingData`), e.g. a
+    /// detail view re-rendering right after its horse was deleted.
     func existingModel<T: PersistentModel>(for id: PersistentIdentifier?) -> T? {
         guard let id else { return nil }
-        return model(for: id) as? T
+        if let registered: T = registeredModel(for: id) {
+            return registered.isDeleted ? nil : registered
+        }
+        var descriptor = FetchDescriptor<T>(predicate: #Predicate { $0.persistentModelID == id })
+        descriptor.fetchLimit = 1
+        return try? fetch(descriptor).first
     }
 }

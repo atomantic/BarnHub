@@ -85,7 +85,7 @@ struct ReminderEditView: View {
         reminder.isCompleted = isCompleted
 
         if let horseID = selectedHorseID {
-            reminder.horse = modelContext.model(for: horseID) as? Horse
+            reminder.horse = modelContext.existingModel(for: horseID)
         } else {
             reminder.horse = nil
         }

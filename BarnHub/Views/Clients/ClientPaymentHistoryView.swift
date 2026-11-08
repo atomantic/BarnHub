@@ -6,7 +6,7 @@ struct ClientPaymentHistoryView: View {
     @Environment(\.modelContext) private var modelContext
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     private var sortedTransactions: [Transaction] {
