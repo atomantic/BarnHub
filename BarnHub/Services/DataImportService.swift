@@ -36,6 +36,7 @@ struct CSVDateCodec {
     let calendar: Calendar
     let prefersDayFirst: Bool
     private let dayFormatter: DateFormatter
+    private let timeFormatter: DateFormatter
     private let timestampFormatter: ISO8601DateFormatter
     private let fractionalTimestampFormatter: ISO8601DateFormatter
 
@@ -52,6 +53,13 @@ struct CSVDateCodec {
         formatter.timeZone = options.timeZone
         formatter.dateFormat = "yyyy-MM-dd"
         dayFormatter = formatter
+
+        let time = DateFormatter()
+        time.locale = posix
+        time.calendar = calendar
+        time.timeZone = options.timeZone
+        time.dateFormat = "HH:mm"
+        timeFormatter = time
 
         let timestamp = ISO8601DateFormatter()
         timestamp.formatOptions = [.withInternetDateTime]
@@ -70,6 +78,11 @@ struct CSVDateCodec {
 
     func string(from date: Date) -> String {
         dayFormatter.string(from: date)
+    }
+
+    /// 24-hour `HH:mm`, for the time column next to a date-only value.
+    func timeString(from date: Date) -> String {
+        timeFormatter.string(from: date)
     }
 
     func date(from raw: String) -> Date? {

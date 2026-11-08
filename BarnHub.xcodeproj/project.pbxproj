@@ -270,6 +270,7 @@
 		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
 		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
+		EXPALL045000000000000002 /* AllDataExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EXPALL045000000000000001 /* AllDataExportTests.swift */; };
 		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
 		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
 		B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000004 /* RecurrenceTests.swift */; };
@@ -471,6 +472,7 @@
 		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
 		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSchemaTests.swift; sourceTree = "<group>"; };
 		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportServiceTests.swift; sourceTree = "<group>"; };
+		EXPALL045000000000000001 /* AllDataExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataExportTests.swift; sourceTree = "<group>"; };
 		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
 		B4A10001REMSVC0000000004 /* RecurrenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceTests.swift; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 				CC22334455667788AABB0005 /* DateFormattingTests.swift */,
 				TESTNEW0001000000000001 /* ModelSchemaTests.swift */,
 				TESTNEW0002000000000001 /* DataExportServiceTests.swift */,
+				EXPALL045000000000000001 /* AllDataExportTests.swift */,
 				TESTNEW0003000000000001 /* DataImportServiceTests.swift */,
 				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
 				B4A10001REMSVC0000000004 /* RecurrenceTests.swift */,
@@ -1338,6 +1341,7 @@
 				CC22334455667788AABB0006 /* DateFormattingTests.swift in Sources */,
 				TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */,
 				TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */,
+				EXPALL045000000000000002 /* AllDataExportTests.swift in Sources */,
 				TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */,
 				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
 				B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */,

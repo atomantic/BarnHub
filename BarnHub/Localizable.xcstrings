@@ -13578,55 +13578,55 @@
         }
       }
     },
-    "Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup." : {
+    "Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup." : {
       "comment" : "Explains what the CSV export covers",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportiere Pferde, Kunden und Transaktionen als CSV-Dateien für Tabellenkalkulationen. Gesundheitseinträge, Rechnungen, Dokumente und Fotos sind nicht enthalten, daher ist der Export keine vollständige Sicherung."
+            "value" : "Exportiere deine Einträge als CSV-Dateien für Tabellenkalkulationen. „Alle Daten“ speichert eine Datei pro Eintragsart und verknüpft Einträge über den Namen mit Pferden und Kunden. Fotos, Dokumentdateien und Rechnungs-PDFs sind nicht enthalten, daher ist der Export keine vollständige Sicherung."
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporta caballos, clientes y transacciones como archivos CSV para usarlos en hojas de cálculo. La exportación no incluye registros de salud, facturas, documentos ni fotos, así que no es una copia de seguridad completa."
+            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. «Todos los datos» guarda un archivo por cada tipo de registro y vincula los registros con caballos y clientes por su nombre. No incluye fotos, archivos de documentos ni PDF de facturas, así que no es una copia de seguridad completa."
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporta caballos, clientes y transacciones como archivos CSV para usarlos en hojas de cálculo. La exportación no incluye registros de salud, facturas, documentos ni fotos, así que no es un respaldo completo."
+            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. \"Todos los datos\" guarda un archivo por cada tipo de registro y vincula los registros con caballos y clientes por su nombre. No incluye fotos, archivos de documentos ni PDF de facturas, así que no es un respaldo completo."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportez les chevaux, clients et transactions en fichiers CSV pour les utiliser dans un tableur. L'export n'inclut pas les dossiers de santé, factures, documents ni photos : ce n'est pas une sauvegarde complète."
+            "value" : "Exportez vos données en fichiers CSV pour les utiliser dans un tableur. « Toutes les données » enregistre un fichier par type de donnée et relie chaque entrée à son cheval ou à son client par son nom. Les photos, fichiers de documents et PDF de factures ne sont pas inclus : ce n'est pas une sauvegarde complète."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporta cavalli, clienti e transazioni come file CSV da usare nei fogli di calcolo. L'esportazione non include record sanitari, fatture, documenti e foto, quindi non è un backup completo."
+            "value" : "Esporta i tuoi record come file CSV da usare nei fogli di calcolo. \"Tutti i dati\" salva un file per ogni tipo di record e collega i record a cavalli e clienti tramite il nome. Foto, file dei documenti e PDF delle fatture non sono inclusi, quindi non è un backup completo."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporteer paarden, klanten en transacties als CSV-bestanden voor gebruik in spreadsheets. De export bevat geen gezondheidsgegevens, facturen, documenten of foto's, dus het is geen volledige back-up."
+            "value" : "Exporteer je gegevens als CSV-bestanden voor gebruik in spreadsheets. 'Alle gegevens' bewaart één bestand per soort gegevens en koppelt ze op naam aan paarden en klanten. Foto's, documentbestanden en factuur-pdf's zijn niet inbegrepen, dus het is geen volledige back-up."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporte cavalos, clientes e transações como arquivos CSV para usar em planilhas. A exportação não inclui registros de saúde, faturas, documentos nem fotos, então não é um backup completo."
+            "value" : "Exporte seus registros como arquivos CSV para usar em planilhas. \"Todos os dados\" salva um arquivo para cada tipo de registro e liga os registros a cavalos e clientes pelo nome. Fotos, arquivos de documentos e PDFs de faturas não são incluídos, então não é um backup completo."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportera hästar, kunder och transaktioner som CSV-filer för kalkylark. Exporten innehåller inte hälsoposter, fakturor, dokument eller foton, så den är ingen fullständig säkerhetskopia."
+            "value" : "Exportera dina poster som CSV-filer för kalkylark. ”Alla data” sparar en fil per typ av post och kopplar posterna till hästar och kunder via namn. Foton, dokumentfiler och faktura-PDF:er ingår inte, så det är ingen fullständig säkerhetskopia."
           }
         }
       }

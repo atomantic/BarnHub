@@ -34,7 +34,7 @@ struct DataManagementView: View {
             } header: {
                 Text("Export")
             } footer: {
-                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
             }
 
             Section {
@@ -71,7 +71,7 @@ struct DataManagementView: View {
     private var dataContent: some View {
         List {
             Section {
-                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowBackground(Color.clear)
@@ -138,7 +138,10 @@ struct DataManagementView: View {
         #endif
         .inlineNavTitle()
         .toast(toast)
-        .sheet(isPresented: $showExportSheet) {
+        .sheet(isPresented: $showExportSheet, onDismiss: {
+            ShareTempFiles.cleanUp(exportURL)
+            exportURL = nil
+        }) {
             if let url = exportURL {
                 ShareSheet(items: [url])
             }
@@ -218,18 +221,22 @@ struct DataManagementView: View {
         modelContext.saveWithLogging()
         let container = modelContext.container
         let options = CSVOptions()
-        let tempDir = FileManager.default.temporaryDirectory
         let isFolder = type == .all
-        let directory = isFolder ? tempDir.appendingPathComponent("BarnHub Export", isDirectory: true) : tempDir
-
-        if isFolder {
-            do {
+        // Each export gets its own tmp/BarnHubShare/<UUID>/ folder, deleted when
+        // the share sheet closes (or at the next launch). "All Data" shares a
+        // "BarnHub Export" subfolder so the recipient sees a readable name.
+        let shareFolder: URL
+        let directory: URL
+        do {
+            shareFolder = try ShareTempFiles.makeShareFolder()
+            directory = isFolder ? shareFolder.appendingPathComponent("BarnHub Export", isDirectory: true) : shareFolder
+            if isFolder {
                 try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-            } catch {
-                BarnHubLogger.error("Failed to create export directory error=\(error.localizedDescription)")
-                toast.show(appLocalized("Export failed"), isError: true)
-                return
             }
+        } catch {
+            BarnHubLogger.error("Failed to create export directory error=\(error.localizedDescription)")
+            toast.show(appLocalized("Export failed"), isError: true)
+            return
         }
 
         csvJob.run(title: appLocalized("Exporting…", comment: "CSV export progress title")) { progress in
@@ -239,13 +246,16 @@ struct DataManagementView: View {
             return isFolder ? directory : urls.first
         } onSuccess: { url in
             guard let url else {
+                ShareTempFiles.discardShareFolder(shareFolder)
                 toast.show(appLocalized("Export failed"), isError: true)
                 return
             }
+            ShareTempFiles.cleanUp(exportURL)
             exportURL = url
             showExportSheet = true
-            BarnHubLogger.success("Exported \(type.label)")
+            BarnHubLogger.success("Exported \(type.label) files=\(type.kinds.count)")
         } onFailure: { error in
+            ShareTempFiles.discardShareFolder(shareFolder)
             if error is CancellationError {
                 toast.show(appLocalized("Export cancelled", comment: "Toast after the user cancels a CSV export"))
             } else {
