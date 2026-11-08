@@ -130,11 +130,11 @@ struct HorseListView: View {
         horsePendingRemoval = nil
         guard let horse: Horse = modelContext.existingModel(for: id) else { return }
         if delete {
-            BarnHubLogger.info("Deleting horse name=\(horse.name)")
+            BarnHubLogger.info("Deleting horse")
             RecordRemoval.delete(horse, in: modelContext)
             toast.show(appLocalized("Horse deleted", comment: "Toast after deleting a horse"))
         } else {
-            BarnHubLogger.info("Marking horse inactive name=\(horse.name)")
+            BarnHubLogger.info("Marking horse inactive")
             RecordRemoval.markInactive(horse, in: modelContext)
             toast.show(appLocalized("Horse marked inactive", comment: "Toast after marking a horse inactive"))
         }

@@ -120,12 +120,12 @@ struct VetRecordEditView: View {
         let record: VetRecord
         if let existing = existingRecord {
             record = existing
-            BarnHubLogger.info("Updating vet record horse=\(horse.name) vet=\(trimmedName)")
+            BarnHubLogger.info("Updating vet record")
         } else {
             record = VetRecord()
             record.horse = horse
             modelContext.insert(record)
-            BarnHubLogger.info("Adding vet record horse=\(horse.name) vet=\(trimmedName)")
+            BarnHubLogger.info("Adding vet record")
         }
         record.date = date
         record.vetName = trimmedName
@@ -140,7 +140,7 @@ struct VetRecordEditView: View {
 
     private func deleteRecord() {
         guard let record = existingRecord else { return }
-        BarnHubLogger.info("Deleting vet record vet=\(record.vetName)")
+        BarnHubLogger.info("Deleting vet record")
         modelContext.delete(record)
         modelContext.saveWithLogging()
         toast.showAndDismiss(appLocalized("Vet record deleted", comment: "Toast after deleting a vet record"), dismiss: dismiss)

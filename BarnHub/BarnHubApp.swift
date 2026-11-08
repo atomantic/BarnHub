@@ -1191,7 +1191,7 @@ struct FirstLaunchSheet: View {
             breed: horseBreed.trimmingCharacters(in: .whitespaces)
         )
         modelContext.insert(horse)
-        BarnHubLogger.success("First horse added during onboarding: \(trimmedName)")
+        BarnHubLogger.success("First horse added during onboarding")
     }
 
     @MainActor
