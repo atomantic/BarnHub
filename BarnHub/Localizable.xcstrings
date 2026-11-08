@@ -8990,6 +8990,59 @@
         }
       }
     },
+    "Restore All Data reads a BarnHub Export folder saved by All Data and adds its records, photos, documents and invoices." : {
+      "comment" : "Data management footer explaining Restore All Data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "„Alle Daten wiederherstellen“ liest einen BarnHub-Export-Ordner, den „Alle Daten“ gespeichert hat, und fügt seine Einträge, Fotos, Dokumente und Rechnungen hinzu."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Restaurar todos los datos» lee una carpeta BarnHub Export guardada con «Todos los datos» y añade sus registros, fotos, documentos y facturas."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Restaurar todos los datos» lee una carpeta BarnHub Export guardada con «Todos los datos» y agrega sus registros, fotos, documentos y facturas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« Restaurer toutes les données » lit un dossier BarnHub Export enregistré par « Toutes les données » et ajoute ses enregistrements, photos, documents et factures."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Ripristina tutti i dati” legge una cartella BarnHub Export salvata con “Tutti i dati” e ne aggiunge record, foto, documenti e fatture."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‘Alle gegevens herstellen’ leest een BarnHub Export-map die met ‘Alle gegevens’ is opgeslagen en voegt de records, foto's, documenten en facturen daarin toe."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“Restaurar todos os dados” lê uma pasta BarnHub Export salva por “Todos os dados” e adiciona seus registros, fotos, documentos e faturas."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "”Återställ all data” läser en BarnHub Export-mapp som sparats med ”Alla data” och lägger till dess poster, foton, dokument och fakturor."
+          }
+        }
+      }
+    },
     "cup" : {
       "comment" : "Feed unit, singular (amount of 1)",
       "localizations" : {
@@ -9894,6 +9947,165 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Radera all data"
+          }
+        }
+      }
+    },
+    "Restore All Data" : {
+      "comment" : "Data management action and dialog title: restore a BarnHub Export folder saved by All Data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Daten wiederherstellen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar todos los datos"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar todos los datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer toutes les données"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina tutti i dati"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle gegevens herstellen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar todos os dados"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställ all data"
+          }
+        }
+      }
+    },
+    "Restore" : {
+      "comment" : "Confirm button of the Restore All Data dialog",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstellen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställ"
+          }
+        }
+      }
+    },
+    "BarnHub adds the records, photos, documents and invoices in this folder. Nothing you already have is changed or removed, and records that are already in BarnHub are skipped, so restoring the same folder again doesn't add duplicates. To replace your data instead, use Delete All Data first." : {
+      "comment" : "Restore All Data confirmation message: what is added, how duplicates are handled, how to replace instead",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub fügt die Einträge, Fotos, Dokumente und Rechnungen aus diesem Ordner hinzu. Nichts, was du schon hast, wird geändert oder entfernt, und Einträge, die bereits in BarnHub sind, werden übersprungen. Wenn du denselben Ordner noch einmal wiederherstellst, entstehen also keine Duplikate. Um deine Daten stattdessen zu ersetzen, verwende zuerst „Alle Daten löschen“."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub añade los registros, fotos, documentos y facturas de esta carpeta. No se cambia ni se elimina nada de lo que ya tienes, y se omiten los registros que ya están en BarnHub, así que restaurar la misma carpeta otra vez no crea duplicados. Para reemplazar tus datos, usa primero «Eliminar todos los datos»."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub agrega los registros, fotos, documentos y facturas de esta carpeta. No se cambia ni se elimina nada de lo que ya tienes, y se omiten los registros que ya están en BarnHub, así que restaurar la misma carpeta otra vez no crea duplicados. Para reemplazar tus datos, usa primero «Eliminar todos los datos»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub ajoute les enregistrements, photos, documents et factures de ce dossier. Rien de ce que vous avez déjà n’est modifié ni supprimé, et les enregistrements déjà présents dans BarnHub sont ignorés : restaurer à nouveau le même dossier ne crée donc pas de doublons. Pour remplacer vos données, utilisez d’abord « Supprimer toutes les données »."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub aggiunge i record, le foto, i documenti e le fatture di questa cartella. Niente di ciò che hai già viene modificato o rimosso, e i record già presenti in BarnHub vengono saltati, quindi ripristinare di nuovo la stessa cartella non crea duplicati. Per sostituire i tuoi dati, usa prima “Elimina tutti i dati”."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub voegt de records, foto's, documenten en facturen uit deze map toe. Niets wat je al hebt wordt gewijzigd of verwijderd, en records die al in BarnHub staan worden overgeslagen, dus dezelfde map nog eens herstellen geeft geen dubbele records. Wil je je gegevens vervangen, gebruik dan eerst ‘Alle gegevens verwijderen’."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O BarnHub adiciona os registros, fotos, documentos e faturas desta pasta. Nada do que você já tem é alterado ou removido, e os registros que já estão no BarnHub são ignorados, então restaurar a mesma pasta de novo não cria duplicatas. Para substituir seus dados, use antes “Excluir todos os dados”."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub lägger till posterna, fotona, dokumenten och fakturorna i den här mappen. Inget du redan har ändras eller tas bort, och poster som redan finns i BarnHub hoppas över, så att återställa samma mapp igen ger inga dubbletter. Om du vill ersätta dina data i stället använder du först ”Radera all data”."
           }
         }
       }
@@ -13950,7 +14162,7 @@
       }
     },
     "Step %lld of %lld: %@" : {
-      "comment" : "Export progress: which file is being written, e.g. Step 3 of 17: transactions.csv",
+      "comment" : "Export or restore progress: which file is being written or read, e.g. Step 3 of 17: transactions.csv",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -18273,6 +18485,59 @@
         }
       }
     },
+    "Restore Complete" : {
+      "comment" : "Title of the alert after Restore All Data finishes",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung abgeschlossen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración completada"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración completada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauration terminée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino completato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstel voltooid"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauração concluída"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen är klar"
+          }
+        }
+      }
+    },
     "Import failed: %@" : {
       "comment" : "Import error",
       "localizations" : {
@@ -18533,6 +18798,165 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importen avbröts. Rader som sparades innan du avbröt har behållits."
+          }
+        }
+      }
+    },
+    "Restore cancelled. Nothing was added." : {
+      "comment" : "Toast after the user cancels Restore All Data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung abgebrochen. Es wurde nichts hinzugefügt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración cancelada. No se añadió nada."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración cancelada. No se agregó nada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauration annulée. Rien n’a été ajouté."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino annullato. Non è stato aggiunto nulla."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstel geannuleerd. Er is niets toegevoegd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauração cancelada. Nada foi adicionado."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen avbröts. Inget lades till."
+          }
+        }
+      }
+    },
+    "Restore failed. Nothing was added." : {
+      "comment" : "Toast when Restore All Data fails; everything it added was removed again",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung fehlgeschlagen. Es wurde nichts hinzugefügt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo restaurar. No se añadió nada."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo restaurar. No se agregó nada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la restauration. Rien n’a été ajouté."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino non riuscito. Non è stato aggiunto nulla."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstellen mislukt. Er is niets toegevoegd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha na restauração. Nada foi adicionado."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen misslyckades. Inget lades till."
+          }
+        }
+      }
+    },
+    "This folder isn't a BarnHub All Data export. Choose the BarnHub Export folder that All Data saved." : {
+      "comment" : "Restore All Data error: the picked folder has no All Data files",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Ordner ist kein BarnHub-Export von „Alle Daten“. Wähle den Ordner „BarnHub Export“, den „Alle Daten“ gespeichert hat."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta carpeta no es una exportación de «Todos los datos» de BarnHub. Elige la carpeta BarnHub Export que guardó «Todos los datos»."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta carpeta no es una exportación de «Todos los datos» de BarnHub. Elige la carpeta BarnHub Export que guardó «Todos los datos»."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce dossier n’est pas un export « Toutes les données » de BarnHub. Choisissez le dossier BarnHub Export enregistré par « Toutes les données »."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa cartella non è un’esportazione “Tutti i dati” di BarnHub. Scegli la cartella BarnHub Export salvata da “Tutti i dati”."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze map is geen export van ‘Alle gegevens’ uit BarnHub. Kies de map BarnHub Export die ‘Alle gegevens’ heeft opgeslagen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta pasta não é uma exportação de “Todos os dados” do BarnHub. Escolha a pasta BarnHub Export salva por “Todos os dados”."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den här mappen är ingen export av ”Alla data” från BarnHub. Välj mappen BarnHub Export som ”Alla data” sparade."
           }
         }
       }
@@ -18924,6 +19348,674 @@
         }
       }
     },
+    "%lld records restored" : {
+      "comment" : "Restore All Data result: records added",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Eintrag wiederhergestellt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Einträge wiederhergestellt"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record restored"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld records restored"
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros restaurados"
+                }
+              }
+            }
+          }
+        },
+        "es-MX" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros restaurados"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enregistrement restauré"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enregistrements restaurés"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record ripristinato"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record ripristinati"
+                }
+              }
+            }
+          }
+        },
+        "nl" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record hersteld"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld records hersteld"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros restaurados"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld post återställd"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld poster återställda"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld records already in BarnHub skipped" : {
+      "comment" : "Restore All Data result: rows that matched existing records",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Eintrag schon in BarnHub, übersprungen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Einträge schon in BarnHub, übersprungen"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record already in BarnHub skipped"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld records already in BarnHub skipped"
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro ya en BarnHub omitido"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros ya en BarnHub omitidos"
+                }
+              }
+            }
+          }
+        },
+        "es-MX" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro ya en BarnHub omitido"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros ya en BarnHub omitidos"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enregistrement déjà dans BarnHub ignoré"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld enregistrements déjà dans BarnHub ignorés"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record già in BarnHub saltato"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record già in BarnHub saltati"
+                }
+              }
+            }
+          }
+        },
+        "nl" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld record al in BarnHub overgeslagen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld records al in BarnHub overgeslagen"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registro já no BarnHub ignorado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld registros já no BarnHub ignorados"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld post som redan fanns i BarnHub hoppades över"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld poster som redan fanns i BarnHub hoppades över"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld photos and files restored" : {
+      "comment" : "Restore All Data result: photos, documents and invoice PDFs read from the folder",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Foto oder Datei wiederhergestellt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Fotos und Dateien wiederhergestellt"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photo or file restored"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photos and files restored"
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto o archivo restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fotos y archivos restaurados"
+                }
+              }
+            }
+          }
+        },
+        "es-MX" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto o archivo restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fotos y archivos restaurados"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photo ou fichier restauré"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photos et fichiers restaurés"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto o file ripristinato"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto e file ripristinati"
+                }
+              }
+            }
+          }
+        },
+        "nl" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto of bestand hersteld"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto's en bestanden hersteld"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto ou arquivo restaurado"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fotos e arquivos restaurados"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto eller fil återställd"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foton och filer återställda"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld files not found in the folder" : {
+      "comment" : "Restore All Data result: Photo or File paths missing from the folder",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Datei nicht im Ordner gefunden"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Dateien nicht im Ordner gefunden"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld file not found in the folder"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld files not found in the folder"
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld archivo no encontrado en la carpeta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld archivos no encontrados en la carpeta"
+                }
+              }
+            }
+          }
+        },
+        "es-MX" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld archivo no encontrado en la carpeta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld archivos no encontrados en la carpeta"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fichier introuvable dans le dossier"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fichiers introuvables dans le dossier"
+                }
+              }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld file non trovato nella cartella"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld file non trovati nella cartella"
+                }
+              }
+            }
+          }
+        },
+        "nl" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld bestand niet gevonden in de map"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld bestanden niet gevonden in de map"
+                }
+              }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld arquivo não encontrado na pasta"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld arquivos não encontrados na pasta"
+                }
+              }
+            }
+          }
+        },
+        "sv" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fil hittades inte i mappen"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld filer hittades inte i mappen"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld rows skipped" : {
       "comment" : "CSV import result: invalid rows, followed by one line per reason",
       "localizations" : {
@@ -19193,6 +20285,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importerar…"
+          }
+        }
+      }
+    },
+    "Restoring…" : {
+      "comment" : "Restore All Data progress title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen…"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurando…"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauration…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstellen…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurando…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställer…"
           }
         }
       }
@@ -22563,6 +23708,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Felaktig rad"
+          }
+        }
+      }
+    },
+    "Linked record not found" : {
+      "comment" : "All Data restore skip reason: a horse-client link names a horse or client that isn't in the folder",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verknüpfter Eintrag nicht gefunden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró el registro vinculado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró el registro vinculado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement lié introuvable"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Record collegato non trovato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekoppeld record niet gevonden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registro vinculado não encontrado"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den länkade posten hittades inte"
           }
         }
       }

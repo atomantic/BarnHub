@@ -358,8 +358,10 @@ final class CSVReader {
 
 struct DataImportService {
 
-    enum SkipReason: String, CaseIterable, Sendable {
+    enum SkipReason: String, CaseIterable, Sendable, Error {
         case missingName, missingFirstName, missingAmount, invalidAmount, invalidDate, malformedRow
+        /// All Data restore: a link row whose horse or client isn't in the folder.
+        case unknownLink
 
         var label: String {
             switch self {
@@ -369,6 +371,7 @@ struct DataImportService {
             case .invalidAmount: return appLocalized("Unrecognized amount", comment: "CSV import skip reason")
             case .invalidDate: return appLocalized("Unrecognized date", comment: "CSV import skip reason")
             case .malformedRow: return appLocalized("Malformed row", comment: "CSV import skip reason: unterminated quote or extra columns")
+            case .unknownLink: return appLocalized("Linked record not found", comment: "All Data restore skip reason: a horse-client link names a horse or client that isn't in the folder")
             }
         }
     }
@@ -404,7 +407,7 @@ struct DataImportService {
     }
 
     /// One CSV row with lookups by (lowercased) header name.
-    private struct Row {
+    struct Row {
         let fields: [String]
         let columns: [String: Int]
 
@@ -430,6 +433,22 @@ struct DataImportService {
         }
     }
 
+    /// Lowercased header name to column index; the first of repeated names wins.
+    static func columnIndex(_ header: [String]) -> [String: Int] {
+        var columns: [String: Int] = [:]
+        for (i, name) in header.enumerated() {
+            let key = name.lowercased().trimmingCharacters(in: .whitespaces)
+            if columns[key] == nil { columns[key] = i }
+        }
+        return columns
+    }
+
+    /// True when a row ended inside an unterminated quote or has values past the header.
+    static func isMalformed(_ fields: [String], header: [String], reader: CSVReader) -> Bool {
+        reader.lastRowUnterminated
+            || (fields.count > header.count && fields[header.count...].contains { !$0.trimmingCharacters(in: .whitespaces).isEmpty })
+    }
+
     // MARK: Engine
 
     /// Reads the header, then hands each row to `process`, saving every
@@ -444,11 +463,7 @@ struct DataImportService {
         guard let header = reader.nextRow() else {
             return ImportResult(errors: [appLocalized("Empty file", comment: "Import error")])
         }
-        var columns: [String: Int] = [:]
-        for (i, name) in header.enumerated() {
-            let key = name.lowercased().trimmingCharacters(in: .whitespaces)
-            if columns[key] == nil { columns[key] = i }
-        }
+        let columns = columnIndex(header)
 
         let process: (Row) -> RowOutcome
         do {
@@ -470,8 +485,7 @@ struct DataImportService {
             }
             rowNumber += 1
 
-            let extra = fields.count > header.count && fields[header.count...].contains { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
-            let outcome: RowOutcome = (reader.lastRowUnterminated || extra)
+            let outcome: RowOutcome = isMalformed(fields, header: header, reader: reader)
                 ? .skipped(.malformedRow)
                 : process(Row(fields: fields, columns: columns))
 
@@ -544,6 +558,60 @@ struct DataImportService {
         return lookup
     }
 
+    /// A horse row's values, parsed but not yet inserted.
+    struct HorseFields {
+        var name: String
+        var breed: String
+        var dateOfBirth: Date?
+        var weight: Double?
+        var purchasePrice: Double?
+        var colorMarkings: String
+        var stallNumber: String
+        var medicalNotes: String
+        var feedingSchedule: String
+        var isActive: Bool?
+        var gender: HorseGender?
+
+        func makeHorse() -> Horse {
+            let horse = Horse(name: name, breed: breed)
+            horse.colorMarkings = colorMarkings
+            horse.stallNumber = stallNumber
+            horse.medicalNotes = medicalNotes
+            horse.feedingSchedule = feedingSchedule
+            if let weight { horse.weight = weight }
+            if let purchasePrice { horse.purchasePrice = purchasePrice }
+            if let dateOfBirth { horse.dateOfBirth = dateOfBirth }
+            if let isActive { horse.isActive = isActive }
+            if let gender { horse.gender = gender }
+            return horse
+        }
+    }
+
+    static func parseHorse(_ row: Row, dates: CSVDateCodec, numbers: CSVAmountParser,
+                           genders: [String: HorseGender]) -> Result<HorseFields, SkipReason> {
+        guard let name = row.text("name") else { return .failure(.missingName) }
+        var dob: Date?
+        if let raw = row.text("date of birth", "dob") {
+            guard let parsed = dates.date(from: raw) else { return .failure(.invalidDate) }
+            dob = parsed
+        }
+        var weight: Double?
+        if let raw = row.text("weight", "weight (lbs)") {
+            guard let parsed = numbers.parse(raw) else { return .failure(.invalidAmount) }
+            weight = parsed
+        }
+        var price: Double?
+        if let raw = row.text("purchase price") {
+            guard let parsed = numbers.parse(raw) else { return .failure(.invalidAmount) }
+            price = parsed
+        }
+        return .success(HorseFields(
+            name: name, breed: row.text("breed") ?? "", dateOfBirth: dob, weight: weight, purchasePrice: price,
+            colorMarkings: row.text("color/markings", "color") ?? "", stallNumber: row.text("stall", "stall number") ?? "",
+            medicalNotes: row.text("medical notes") ?? "", feedingSchedule: row.text("feeding schedule") ?? "",
+            isActive: row.bool("active"), gender: row.text("gender", "sex").flatMap { genders[$0.lowercased()] }))
+    }
+
     static func importHorses(reader: CSVReader, context: ModelContext, options: CSVOptions = CSVOptions(), progress: CSVProgressHandler? = nil) throws -> ImportResult {
         let dates = CSVDateCodec(options: options)
         let numbers = CSVAmountParser(options: options)
@@ -561,40 +629,15 @@ struct DataImportService {
             let genders = horseGenderLookup()
 
             return { row in
-                guard let name = row.text("name") else { return .skipped(.missingName) }
-                let breed = row.text("breed") ?? ""
-
-                var dob: Date?
-                if let raw = row.text("date of birth", "dob") {
-                    guard let parsed = dates.date(from: raw) else { return .skipped(.invalidDate) }
-                    dob = parsed
+                let fields: HorseFields
+                switch parseHorse(row, dates: dates, numbers: numbers, genders: genders) {
+                case .success(let parsed): fields = parsed
+                case .failure(let reason): return .skipped(reason)
                 }
                 // Without a birth date in the file, name + breed is the best key we have.
-                let key = horseKey(name: name, breed: breed, day: dob.map(dates.string(from:)) ?? "")
-                if dob == nil ? nameBreedKeys.contains(key) : fullKeys.contains(key) { return .duplicate }
-
-                var weight: Double?
-                if let raw = row.text("weight", "weight (lbs)") {
-                    guard let parsed = numbers.parse(raw) else { return .skipped(.invalidAmount) }
-                    weight = parsed
-                }
-                var price: Double?
-                if let raw = row.text("purchase price") {
-                    guard let parsed = numbers.parse(raw) else { return .skipped(.invalidAmount) }
-                    price = parsed
-                }
-
-                let horse = Horse(name: name, breed: breed)
-                horse.colorMarkings = row.text("color/markings", "color") ?? ""
-                horse.stallNumber = row.text("stall", "stall number") ?? ""
-                horse.medicalNotes = row.text("medical notes") ?? ""
-                horse.feedingSchedule = row.text("feeding schedule") ?? ""
-                if let weight { horse.weight = weight }
-                if let price { horse.purchasePrice = price }
-                if let dob { horse.dateOfBirth = dob }
-                if let active = row.bool("active") { horse.isActive = active }
-                if let raw = row.text("gender", "sex"), let gender = genders[raw.lowercased()] { horse.gender = gender }
-                context.insert(horse)
+                let key = horseKey(name: fields.name, breed: fields.breed, day: fields.dateOfBirth.map(dates.string(from:)) ?? "")
+                if fields.dateOfBirth == nil ? nameBreedKeys.contains(key) : fullKeys.contains(key) { return .duplicate }
+                context.insert(fields.makeHorse())
                 return .inserted
             }
         }
@@ -603,6 +646,46 @@ struct DataImportService {
     }
 
     // MARK: Clients
+
+    /// A client row's values, parsed but not yet inserted.
+    struct ClientFields {
+        var firstName: String
+        var lastName: String
+        var email: String
+        var phone: String
+        var emergencyContact: String
+        var emergencyPhone: String
+        var notes: String
+        var isActive: Bool?
+
+        var key: String { clientKey(firstName: firstName, lastName: lastName, email: email) }
+
+        func makeClient() -> Client {
+            let client = Client(firstName: firstName, lastName: lastName, email: email, phone: phone,
+                                emergencyContact: emergencyContact, emergencyPhone: emergencyPhone, notes: notes)
+            if let isActive { client.isActive = isActive }
+            return client
+        }
+    }
+
+    /// Reads "First Name" / "Last Name", or splits a single "Name" column.
+    static func parseClient(_ row: Row, hasFirstNameColumn hasFirst: Bool) -> Result<ClientFields, SkipReason> {
+        var firstName = ""
+        var lastName = ""
+        if hasFirst {
+            firstName = row.text("first name") ?? ""
+            lastName = row.text("last name") ?? ""
+        } else if let full = row.text("name") {
+            let parts = full.split(separator: " ", maxSplits: 1)
+            firstName = String(parts.first ?? "")
+            lastName = parts.count > 1 ? String(parts[1]).trimmingCharacters(in: .whitespaces) : ""
+        }
+        guard !firstName.isEmpty else { return .failure(hasFirst ? .missingFirstName : .missingName) }
+        return .success(ClientFields(
+            firstName: firstName, lastName: lastName, email: row.text("email") ?? "", phone: row.text("phone") ?? "",
+            emergencyContact: row.text("emergency contact") ?? "", emergencyPhone: row.text("emergency phone") ?? "",
+            notes: row.text("notes") ?? "", isActive: row.bool("active")))
+    }
 
     static func importClients(reader: CSVReader, context: ModelContext, options: CSVOptions = CSVOptions(), progress: CSVProgressHandler? = nil) throws -> ImportResult {
         let result = try run(reader: reader, context: context, options: options, progress: progress) { columns in
@@ -614,31 +697,13 @@ struct DataImportService {
             let existingKeys = Set(existing.map { clientKey(firstName: $0.firstName, lastName: $0.lastName, email: $0.email) })
 
             return { row in
-                var firstName = ""
-                var lastName = ""
-                if hasFirst {
-                    firstName = row.text("first name") ?? ""
-                    lastName = row.text("last name") ?? ""
-                } else if let full = row.text("name") {
-                    let parts = full.split(separator: " ", maxSplits: 1)
-                    firstName = String(parts.first ?? "")
-                    lastName = parts.count > 1 ? String(parts[1]).trimmingCharacters(in: .whitespaces) : ""
+                let fields: ClientFields
+                switch parseClient(row, hasFirstNameColumn: hasFirst) {
+                case .success(let parsed): fields = parsed
+                case .failure(let reason): return .skipped(reason)
                 }
-                guard !firstName.isEmpty else { return .skipped(hasFirst ? .missingFirstName : .missingName) }
-
-                let email = row.text("email") ?? ""
-                if existingKeys.contains(clientKey(firstName: firstName, lastName: lastName, email: email)) {
-                    return .duplicate
-                }
-
-                let client = Client(firstName: firstName, lastName: lastName)
-                client.email = email
-                client.phone = row.text("phone") ?? ""
-                client.emergencyContact = row.text("emergency contact") ?? ""
-                client.emergencyPhone = row.text("emergency phone") ?? ""
-                client.notes = row.text("notes") ?? ""
-                if let active = row.bool("active") { client.isActive = active }
-                context.insert(client)
+                if existingKeys.contains(fields.key) { return .duplicate }
+                context.insert(fields.makeClient())
                 return .inserted
             }
         }
@@ -648,10 +713,48 @@ struct DataImportService {
 
     // MARK: Transactions
 
+    /// A transaction row's values, parsed but not yet inserted or linked.
+    struct TransactionFields {
+        var amount: Double
+        var date: Date
+        var memo: String
+        var category: TransactionCategory
+        var type: TransactionType
+        var isPaid: Bool
+        var clientName: String
+
+        func makeTransaction() -> Transaction {
+            Transaction(amount: amount, date: date, memo: memo, category: category, type: type, isPaid: isPaid)
+        }
+    }
+
     /// Amounts are stored positive with a type. A negative amount flips the
     /// row's type (a negative "income" is money out, a negative "expense" is a
     /// refund); a negative amount with no type is an expense. Rows with a zero
     /// or missing amount are skipped.
+    static func parseTransaction(_ row: Row, dates: CSVDateCodec, numbers: CSVAmountParser) -> Result<TransactionFields, SkipReason> {
+        guard let rawAmount = row.text("amount") else { return .failure(.missingAmount) }
+        guard let signed = numbers.parse(rawAmount) else { return .failure(.invalidAmount) }
+        guard signed != 0 else { return .failure(.missingAmount) }
+
+        var date = Date.now
+        if let raw = row.text("date") {
+            guard let parsed = dates.date(from: raw) else { return .failure(.invalidDate) }
+            date = parsed
+        }
+
+        let explicitType = row.text("type").flatMap { raw in TransactionType.allCases.first { $0.rawValue.lowercased() == raw.lowercased() } }
+        var type = explicitType ?? .expense
+        if signed < 0, explicitType != nil {
+            type = type == .income ? .expense : .income
+        }
+        return .success(TransactionFields(
+            amount: abs(signed), date: date, memo: row.text("memo", "description") ?? "",
+            // Case-insensitive, so the exported camelCase "vetBill" reads back as Vet Bill, not Other.
+            category: row.text("category").flatMap { raw in TransactionCategory.allCases.first { $0.rawValue.lowercased() == raw.lowercased() } } ?? .other,
+            type: type, isPaid: row.bool("paid") ?? false, clientName: row.text("client") ?? ""))
+    }
+
     static func importTransactions(reader: CSVReader, context: ModelContext, options: CSVOptions = CSVOptions(), progress: CSVProgressHandler? = nil) throws -> ImportResult {
         let dates = CSVDateCodec(options: options)
         let numbers = CSVAmountParser(options: options)
@@ -676,33 +779,18 @@ struct DataImportService {
             }
 
             return { row in
-                guard let rawAmount = row.text("amount") else { return .skipped(.missingAmount) }
-                guard let signed = numbers.parse(rawAmount) else { return .skipped(.invalidAmount) }
-                guard signed != 0 else { return .skipped(.missingAmount) }
-
-                var date = Date.now
-                if let raw = row.text("date") {
-                    guard let parsed = dates.date(from: raw) else { return .skipped(.invalidDate) }
-                    date = parsed
+                let fields: TransactionFields
+                switch parseTransaction(row, dates: dates, numbers: numbers) {
+                case .success(let parsed): fields = parsed
+                case .failure(let reason): return .skipped(reason)
                 }
+                let client = fields.clientName.isEmpty ? nil : clientsByName[fields.clientName.lowercased()]
 
-                let explicitType = row.text("type").flatMap { TransactionType(rawValue: $0.lowercased()) }
-                var type = explicitType ?? .expense
-                if signed < 0, explicitType != nil {
-                    type = type == .income ? .expense : .income
-                }
-                let amount = abs(signed)
-                let category = row.text("category").flatMap { TransactionCategory(rawValue: $0.lowercased()) } ?? .other
-                let memo = row.text("memo", "description") ?? ""
-                let clientName = row.text("client") ?? ""
-                let client = clientName.isEmpty ? nil : clientsByName[clientName.lowercased()]
-
-                let key = transactionKey(day: dates.string(from: date), type: type, category: category,
-                                         amount: amount, memo: memo, clientName: client?.fullName ?? "")
+                let key = transactionKey(day: dates.string(from: fields.date), type: fields.type, category: fields.category,
+                                         amount: fields.amount, memo: fields.memo, clientName: client?.fullName ?? "")
                 if existingKeys.contains(key) { return .duplicate }
 
-                let txn = Transaction(amount: amount, date: date, memo: memo, category: category, type: type,
-                                      isPaid: row.bool("paid") ?? false)
+                let txn = fields.makeTransaction()
                 context.insert(txn)
                 txn.client = client
                 return .inserted
