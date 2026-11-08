@@ -3,6 +3,10 @@ import SwiftData
 
 struct HorseDetailView: View {
     let horseID: PersistentIdentifier
+    /// True when shown as the detail pane beside the horse list.
+    var isEmbedded = false
+    /// Called after the horse is deleted, so an embedded pane can clear its selection.
+    var onDelete: (() -> Void)? = nil
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
@@ -355,7 +359,11 @@ struct HorseDetailView: View {
     @ViewBuilder
     private func horseContent(_ horse: Horse) -> some View {
         #if os(macOS)
-        macOSLayout(horse)
+        if isEmbedded {
+            macOSPaneLayout(horse)
+        } else {
+            macOSLayout(horse)
+        }
         #else
         iOSLayout(horse)
         #endif
@@ -367,6 +375,7 @@ struct HorseDetailView: View {
             if sizeClass == .regular {
                 // Same split as macOS: profile on the left, records on the right.
                 WideColumns {
+                    if isEmbedded { DetailPaneHeader(title: horse.name) }
                     photoSection(horse)
                     quickLinksSection()
                     infoSection(horse)
@@ -381,6 +390,7 @@ struct HorseDetailView: View {
                 }
             } else {
                 List {
+                    if isEmbedded { DetailPaneHeader(title: horse.name) }
                     photoSection(horse)
                     quickLinksSection()
                     infoSection(horse)
@@ -393,13 +403,31 @@ struct HorseDetailView: View {
                 }
             }
         }
-        .navigationTitle(horse.name)
-        .inlineNavTitle()
+        .detailNavigationTitle(horse.name, isEmbedded: isEmbedded)
         .toolbar { horseToolbar }
     }
     #endif
 
     #if os(macOS)
+    /// One column for the detail pane beside the horse list, which is too narrow
+    /// for the two-column window layout.
+    private func macOSPaneLayout(_ horse: Horse) -> some View {
+        Form {
+            DetailPaneHeader(title: horse.name)
+            photoSection(horse)
+            quickLinksSection()
+            infoSection(horse)
+            notesSection(horse)
+            vetSection()
+            farrierSection()
+            dentistSection()
+            documentsSection()
+            clientsSection()
+        }
+        .formStyle(.grouped)
+        .toolbar { horseToolbar }
+    }
+
     private func macOSLayout(_ horse: Horse) -> some View {
         ScrollView {
             HStack(alignment: .top, spacing: 24) {
@@ -442,8 +470,7 @@ struct HorseDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(horse.name)
-        .inlineNavTitle()
+        .detailNavigationTitle(horse.name, isEmbedded: isEmbedded)
         .toolbar { horseToolbar }
     }
     #endif
@@ -470,6 +497,10 @@ struct HorseDetailView: View {
         guard let horse else { return }
         BarnHubLogger.info("Deleting horse name=\(horse.name)")
         modelContext.deleteWithLogging(horse)
-        dismiss()
+        if let onDelete {
+            onDelete()
+        } else {
+            dismiss()
+        }
     }
 }
