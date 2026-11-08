@@ -9,7 +9,7 @@ struct VetScheduleView: View {
     var body: some View {
         ScheduleListView(
             records: scheduledRecords,
-            horseName: { $0.horse?.name ?? "Unknown Horse" },
+            horseName: { $0.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name") },
             horseID: { $0.horse?.persistentModelID },
             providerName: { $0.vetName },
             description: { $0.descriptionText },

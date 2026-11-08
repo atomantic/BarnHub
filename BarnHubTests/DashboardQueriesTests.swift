@@ -33,23 +33,26 @@ final class DashboardQueriesTests: XCTestCase {
 
     // MARK: - Transactions
 
-    func testListPredicateFiltersTypeCategoryAndInclusiveDates() throws {
-        let start = days(-10)
-        let end = days(-1)
+    func testListPredicateFiltersTypeCategoryAndPickedDays() throws {
+        // The pickers keep a time of day; the filter covers whole days.
+        let start = calendar.date(bySettingHour: 15, minute: 0, second: 0, of: days(-10))!
+        let end = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: days(-1))!
+        let range = calendar.dayRange(from: start, through: end)
         let income = Transaction(amount: 10, date: days(-5), category: .lesson, type: .income)
         let expense = Transaction(amount: 20, date: days(-5), category: .feed, type: .expense)
-        let onStart = Transaction(amount: 30, date: start, category: .feed, type: .expense)
-        let onEnd = Transaction(amount: 40, date: end, category: .feed, type: .expense)
-        let tooOld = Transaction(amount: 50, date: days(-11), category: .feed, type: .expense)
+        let earlyOnStartDay = Transaction(amount: 30, date: calendar.startOfDay(for: start), category: .feed, type: .expense)
+        let lateOnEndDay = Transaction(amount: 40, date: range.end.addingTimeInterval(-1), category: .feed, type: .expense)
+        let tooOld = Transaction(amount: 50, date: range.start.addingTimeInterval(-1), category: .feed, type: .expense)
+        let dayAfter = Transaction(amount: 70, date: range.end, category: .feed, type: .expense)
         // Unknown raw values read back as expense / other, and filter that way.
         let unknown = Transaction(amount: 60, date: days(-5))
         unknown.typeRaw = "refund"
         unknown.categoryRaw = "mystery"
-        for txn in [income, expense, onStart, onEnd, tooOld, unknown] { context.insert(txn) }
+        for txn in [income, expense, earlyOnStartDay, lateOnEndDay, tooOld, dayAfter, unknown] { context.insert(txn) }
         try context.save()
 
         func amounts(_ type: TransactionType?, _ category: TransactionCategory?) throws -> Set<Double> {
-            let descriptor = FetchDescriptor(predicate: Transaction.listPredicate(type: type, category: category, from: start, through: end))
+            let descriptor = FetchDescriptor(predicate: Transaction.listPredicate(type: type, category: category, in: range))
             return Set(try context.fetch(descriptor).map(\.amount))
         }
         XCTAssertEqual(try amounts(nil, nil), [10, 20, 30, 40, 60])
@@ -59,14 +62,14 @@ final class DashboardQueriesTests: XCTestCase {
         XCTAssertEqual(try amounts(nil, .other), [60])
         XCTAssertEqual(try amounts(.income, .feed), [])
 
-        // Same answers as the old in-Swift filter.
+        // Same answers as filtering in Swift.
         let all = try context.fetch(FetchDescriptor<Transaction>())
         for type in [nil] + TransactionType.allCases.map(Optional.some) {
             for category in [nil, .feed, .other, .lesson] as [TransactionCategory?] {
                 let expected = Set(all.filter { txn in
                     if let type, txn.type != type { return false }
                     if let category, txn.category != category { return false }
-                    return txn.date >= start && txn.date <= end
+                    return range.start <= txn.date && txn.date < range.end
                 }.map(\.amount))
                 XCTAssertEqual(try amounts(type, category), expected, "type \(String(describing: type)) category \(String(describing: category))")
             }
@@ -107,24 +110,27 @@ final class DashboardQueriesTests: XCTestCase {
     }
 
     func testReportDescriptorMatchesPeriods() throws {
-        let now = Date.now
+        // A fixed mid-month "now", so "later this month" can't spill into next month.
+        let now = calendar.date(from: DateComponents(year: 2026, month: 5, day: 14, hour: 10))!
         let month = calendar.monthInterval(containing: now)
         let lastMonthStart = calendar.date(byAdding: .month, value: -1, to: month.start)!
         let inThisMonth = Transaction(amount: 1, date: month.start)
-        let future = Transaction(amount: 2, date: days(1, from: now))
+        let laterThisMonth = Transaction(amount: 2, date: days(1, from: now))
         let lastMonth = Transaction(amount: 3, date: lastMonthStart.addingTimeInterval(3600))
         let lastYear = Transaction(amount: 4, date: calendar.date(byAdding: .year, value: -1, to: month.start)!)
-        for txn in [inThisMonth, future, lastMonth, lastYear] { context.insert(txn) }
+        let nextMonth = Transaction(amount: 5, date: month.end)
+        for txn in [inThisMonth, laterThisMonth, lastMonth, lastYear, nextMonth] { context.insert(txn) }
         try context.save()
 
         func amounts(_ period: ReportPeriod) throws -> Set<Double> {
-            Set(try context.fetch(ReportData.descriptor(for: period, now: now)).map(\.amount))
+            Set(try context.fetch(FinanceSummary.descriptor(for: period, now: now)).map(\.amount))
         }
-        XCTAssertEqual(try amounts(.thisMonth), [1])
+        // The current period is the whole calendar month, including later dates in it.
+        XCTAssertEqual(try amounts(.thisMonth), [1, 2])
         XCTAssertEqual(try amounts(.lastMonth), [3])
-        XCTAssertEqual(try amounts(.allTime), [1, 2, 3, 4])
-        XCTAssertTrue(try amounts(.thisYear).isSuperset(of: [1]))
-        XCTAssertFalse(try amounts(.thisYear).contains(4))
+        XCTAssertEqual(try amounts(.thisQuarter), [1, 2, 3, 5], "April–June")
+        XCTAssertEqual(try amounts(.thisYear), [1, 2, 3, 5])
+        XCTAssertEqual(try amounts(.allTime), [1, 2, 3, 4, 5])
     }
 
     // MARK: - Supplies and lessons

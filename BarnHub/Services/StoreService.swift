@@ -3,6 +3,8 @@ import StoreKit
 
 typealias SKTransaction = StoreKit.Transaction
 
+/// Observable purchase state, read by views, so it lives on the main actor.
+@MainActor
 @Observable
 final class StoreService {
     private(set) var products: [Product] = []
@@ -10,8 +12,9 @@ final class StoreService {
     private(set) var purchaseInProgress = false
     private(set) var productsLoadFailed = false
 
-    private var updateTask: Task<Void, Never>?
-    private var setupTask: Task<Void, Never>?
+    // Set once in init and cancelled in (nonisolated) deinit.
+    @ObservationIgnored nonisolated(unsafe) private var updateTask: Task<Void, Never>?
+    @ObservationIgnored nonisolated(unsafe) private var setupTask: Task<Void, Never>?
 
     static let monthlyID = "net.shadowpuppet.BarnBook.pro.monthly"
     static let annualID = "net.shadowpuppet.BarnBook.pro.annual"
@@ -36,8 +39,13 @@ final class StoreService {
             BarnHubLogger.info("ForceProMode enabled")
         }
         #endif
+        // Holds `self` only while handling one update, so the service can be
+        // released (and deinit can cancel the listener) between updates.
         updateTask = Task { [weak self] in
-            await self?.listenForUpdates()
+            for await result in SKTransaction.updates {
+                guard let self else { return }
+                await self.handleUpdate(result)
+            }
         }
         setupTask = Task { [weak self] in
             await self?.loadProducts()
@@ -67,7 +75,6 @@ final class StoreService {
         }
     }
 
-    @MainActor
     func purchase(_ product: Product) async -> Bool {
         purchaseInProgress = true
         defer { purchaseInProgress = false }
@@ -96,7 +103,6 @@ final class StoreService {
         }
     }
 
-    @MainActor
     func restorePurchases() async -> Bool {
         do {
             try await AppStore.sync()
@@ -128,22 +134,18 @@ final class StoreService {
             }
             return (lifetime || sub, lifetime)
         }()
-        await MainActor.run {
-            hasLifetime = foundLifetime
-            if isPro != foundPro { isPro = foundPro }
-        }
+        hasLifetime = foundLifetime
+        if isPro != foundPro { isPro = foundPro }
     }
 
-    private func listenForUpdates() async {
-        for await result in SKTransaction.updates {
-            guard let txn = try? checkVerified(result) else { continue }
-            await txn.finish()
-            await refreshEntitlements()
-            BarnHubLogger.info("Transaction update productID=\(txn.productID)")
-        }
+    private func handleUpdate(_ result: VerificationResult<SKTransaction>) async {
+        guard let txn = try? checkVerified(result) else { return }
+        await txn.finish()
+        await refreshEntitlements()
+        BarnHubLogger.info("Transaction update productID=\(txn.productID)")
     }
 
-    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+    private nonisolated func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified(_, let error): throw error
         case .verified(let value): return value

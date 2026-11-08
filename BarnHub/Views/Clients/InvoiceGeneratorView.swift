@@ -16,22 +16,14 @@ struct InvoiceGeneratorView: View {
         modelContext.existingModel(for: clientID)
     }
 
-    private var filteredTransactions: [Transaction] {
-        guard let client else { return [] }
-        return (client.transactions ?? [])
-            .filter { $0.date >= startDate && $0.date <= endDate }
-            .sorted { $0.date < $1.date }
-    }
-
-    private var total: Double {
-        filteredTransactions.reduce(0) { result, txn in
-            txn.type == .income ? result + txn.amount : result - txn.amount
-        }
+    /// Unpaid charges in the picked days, and Total Due (see `InvoiceBuilder`).
+    private var invoice: InvoiceBuilder {
+        InvoiceBuilder(transactions: client?.transactions ?? [], from: startDate, through: endDate)
     }
 
     var body: some View {
-        let txns = filteredTransactions
-        let txnTotal = total
+        let built = invoice
+        let txns = built.charges
         NavigationStack {
             Form {
                 Section("Date Range") {
@@ -39,9 +31,9 @@ struct InvoiceGeneratorView: View {
                     DatePicker("To", selection: $endDate, displayedComponents: .date)
                 }
 
-                Section("Preview (\(txns.count) transactions)") {
+                Section {
                     if txns.isEmpty {
-                        Text("No transactions in this period")
+                        Text("No unpaid charges in this period")
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(txns, id: \.persistentModelID) { txn in
@@ -56,17 +48,23 @@ struct InvoiceGeneratorView: View {
                                 Spacer()
                                 Text(txn.amount.asCurrency)
                                     .font(.subheadline)
-                                    .foregroundStyle(txn.type == .income ? .green : .red)
+                                    .monospacedDigit()
                             }
                         }
                         HStack {
-                            Text("Total")
+                            Text("Total Due")
                                 .font(.headline)
                             Spacer()
-                            Text(txnTotal.asCurrency)
+                            Text(built.totalDue.asCurrency)
                                 .font(.headline)
-                                .foregroundStyle(txnTotal >= 0 ? .green : .red)
+                                .monospacedDigit()
                         }
+                    }
+                } header: {
+                    Text(appLocalized("Preview (\(txns.count) transactions)", comment: "Invoice generator section header: number of unpaid charges on the invoice"))
+                } footer: {
+                    if built.excludedCount > 0 {
+                        Text(appLocalized("\(built.excludedCount) paid or expense transactions not included", comment: "Invoice generator footer: transactions in the date range left off the invoice because they are paid or are expenses"))
                     }
                 }
 
@@ -105,17 +103,9 @@ struct InvoiceGeneratorView: View {
 
     private func generateAndShare() {
         guard let client else { return }
-        let txns = filteredTransactions
-        let txnTotal = total
-
-        let lineItems = txns.map { txn in
-            InvoicePDFService.LineItem(
-                date: txn.date,
-                description: txn.memo.isEmpty ? txn.category.displayName : txn.memo,
-                category: txn.category.displayName,
-                amount: txn.type == .income ? txn.amount : -txn.amount
-            )
-        }
+        let built = invoice
+        let txnTotal = built.totalDue
+        let lineItems = built.lineItems
 
         let pdfData = InvoicePDFService.generatePDF(
             clientName: client.fullName,
@@ -135,7 +125,7 @@ struct InvoiceGeneratorView: View {
         invoice.client = client
         modelContext.insert(invoice)
 
-        BarnHubLogger.success("Invoice generated transactions=\(txns.count) total=\(txnTotal)")
+        BarnHubLogger.success("Invoice generated transactions=\(lineItems.count) excluded=\(built.excludedCount)")
 
         let fileName = Invoice.fileName(clientName: client.fullName, startDate: startDate, endDate: endDate)
         let tempURL: URL

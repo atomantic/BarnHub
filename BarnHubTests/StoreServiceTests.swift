@@ -1,6 +1,7 @@
 import XCTest
 @testable import BarnHub
 
+@MainActor
 final class StoreServiceTests: XCTestCase {
 
     // MARK: - Initial state

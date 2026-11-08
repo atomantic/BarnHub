@@ -326,7 +326,7 @@ private struct HomeDashboard: View {
             FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: snapshot.summary.nextScheduleItemToday, tag: "tile_schedule") {
                 router.switchTab(.schedule)
             }
-            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil, tag: "tile_supplies") {
+            FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? appLocalized("\(stockAlert) Low", comment: "Home Supplies tile badge: number of supplies at or below their reorder level") : nil, badgeColor: stockAlert > 0 ? .red : nil, tag: "tile_supplies") {
                 router.navigate(to: HomeRoute.supplies)
             }
             FeatureTile(icon: "dollarsign.circle.fill", title: "Accounting", color: .barnBrown, badge: balance.asCurrency, badgeColor: balance >= 0 ? .barnGreen : .red, badgeDetail: balancePeriod.displayName, tag: "tile_accounting") {
