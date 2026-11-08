@@ -23,6 +23,9 @@ final class Router {
     var presentsFormsAsSheets = false
     /// The form currently shown as a sheet, if any.
     var presentedForm: PresentedForm?
+    /// Screens pushed inside the form sheet's own navigation stack, such as the
+    /// paywall opened from a Pro lock in the form (#46). Cleared when a new form opens.
+    var formPath = NavigationPath()
 
     struct PresentedForm: Identifiable {
         let id = UUID()
@@ -66,7 +69,15 @@ final class Router {
     func navigate(to route: any Hashable, tab: AppTab? = nil) {
         if let tab { selectedTab = tab }
         if presentsFormsAsSheets, Self.isForm(route) {
+            formPath = NavigationPath()
             presentedForm = PresentedForm(route: AnyHashable(route))
+            return
+        }
+        // A form sheet covers the tab, so a screen opened from inside it (View
+        // Plans on a Pro lock) is pushed in the sheet, where the user can see it
+        // and go Back to the form. Navigation that names a tab still goes there.
+        if tab == nil, presentedForm != nil {
+            formPath.append(route)
             return
         }
         switch selectedTab {
