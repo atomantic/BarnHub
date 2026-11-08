@@ -167,7 +167,7 @@ struct ClientDocumentsView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .tint(.primary)
+        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
     }
 
     private func handlePDFImport(_ result: Result<[URL], Error>) {
