@@ -1,5 +1,6 @@
 import XCTest
 import SwiftData
+import UserNotifications
 @testable import BarnHub
 
 final class BarnHubTests: XCTestCase {
@@ -231,5 +232,14 @@ final class BarnHubTests: XCTestCase {
         XCTAssertEqual(1_000_000.0.asCurrency, "$1,000,000.00")
         XCTAssertEqual(0.01.asCurrency, "$0.01")
         XCTAssertEqual(9999.999.asCurrency, "$10,000.00")
+    }
+
+    /// #39: the test host starts a blank app, not BarnHubApp, so no CloudKit,
+    /// StoreKit or notification work runs (and can hang) before the tests.
+    @MainActor
+    func testUnitTestHostSkipsAppStartup() {
+        XCTAssertTrue(BarnHubMain.isUnitTestHost)
+        // BarnHubApp.init installs the notification delegate; it never ran.
+        XCTAssertNil(UNUserNotificationCenter.current().delegate)
     }
 }
