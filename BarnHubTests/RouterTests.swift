@@ -531,3 +531,30 @@ final class RouteFormTests: XCTestCase {
         }
     }
 }
+
+/// Save in a form sheet must close the sheet itself, not rely on the form's
+/// DismissAction (which left Mac sheets open after Save).
+@MainActor
+final class FormSheetCloseTests: XCTestCase {
+    func testShowAndDismiss_closesTheFormSheetWhenInOne() async throws {
+        let router = Router()
+        router.presentedForm = Router.PresentedForm(route: AnyHashable(HorseRoute.edit(nil)))
+        let toast = ToastState()
+        toast.closeFormSheet = { router.presentedForm = nil }
+
+        var usedFallback = false
+        toast.closeAfterToast { usedFallback = true }
+        XCTAssertNotNil(router.presentedForm, "stays up while the toast shows")
+        try await Task.sleep(for: .seconds(0.8))
+        XCTAssertNil(router.presentedForm)
+        XCTAssertFalse(usedFallback)
+    }
+
+    func testShowAndDismiss_usesDismissOutsideASheet() async throws {
+        let toast = ToastState()
+        var usedFallback = false
+        toast.closeAfterToast { usedFallback = true }
+        try await Task.sleep(for: .seconds(0.8))
+        XCTAssertTrue(usedFallback)
+    }
+}

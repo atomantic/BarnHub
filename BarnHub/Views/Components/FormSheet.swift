@@ -14,6 +14,9 @@ struct FormSheet: View {
         // stack hidden behind the sheet (#46).
         NavigationStack(path: $router.formPath) {
             content
+                // Only the form at the root closes the whole sheet; screens pushed
+                // inside it (declared below) still just pop.
+                .environment(\.closeFormSheet, { router.presentedForm = nil })
                 .withRouteDestinations()
                 .tint(.barnGreen)  // sheets don't inherit the root's tint
                 .toolbar {
@@ -38,6 +41,20 @@ struct FormSheet: View {
         } else if let route = form.route.base as? BarnRoute {
             route.destination
         }
+    }
+}
+
+// MARK: - Closing a form sheet
+
+private struct CloseFormSheetKey: EnvironmentKey {
+    static let defaultValue: (() -> Void)? = nil
+}
+
+extension EnvironmentValues {
+    /// Set on the root form of a `FormSheet`: closes the sheet after a save.
+    var closeFormSheet: (() -> Void)? {
+        get { self[CloseFormSheetKey.self] }
+        set { self[CloseFormSheetKey.self] = newValue }
     }
 }
 
