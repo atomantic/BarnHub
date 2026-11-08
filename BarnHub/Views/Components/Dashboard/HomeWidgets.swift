@@ -91,7 +91,7 @@ struct HomeActionItemsWidget: View {
                             icon: "bell.badge.fill",
                             iconColor: .red,
                             title: reminder.title.isEmpty ? appLocalized("Reminder", comment: "Reminder fallback title") : reminder.title,
-                            subtitle: "\(appLocalized("Overdue", comment: "Dashboard overdue label")) · \(reminder.dueDate.shortFormatted)"
+                            subtitle: appLocalized("Overdue · \(reminder.dueDate.shortFormatted)", comment: "Action Items subtitle for an overdue reminder: its due date")
                         ) {
                             router.navigate(to: BarnRoute.reminderEdit(reminder.persistentModelID), tab: .schedule)
                         }
@@ -102,7 +102,7 @@ struct HomeActionItemsWidget: View {
                             icon: "dollarsign.circle.fill",
                             iconColor: .orange,
                             title: appLocalized("Unpaid: \(name)", comment: "Unpaid lesson row title"),
-                            subtitle: "\(lesson.cost.asCurrency) · \(lesson.date.shortFormatted)"
+                            subtitle: appLocalized("\(lesson.cost.asCurrency) · \(lesson.date.shortFormatted)", comment: "Action Items subtitle for an unpaid lesson: the amount owed, then the lesson date")
                         ) {
                             router.navigate(to: BarnRoute.lessonEdit(lesson.persistentModelID), tab: .schedule)
                         }
@@ -137,13 +137,11 @@ struct HomeAlertsWidget: View {
             } else {
                 VStack(spacing: 2) {
                     ForEach(lowStock.prefix(3), id: \.persistentModelID) { item in
-                        let qty = item.quantity.formatted(.number.precision(.fractionLength(0...1)))
-                        let unit = item.unit.isEmpty ? "" : " \(item.unit)"
                         DashboardActionRow(
                             icon: "shippingbox.fill",
                             iconColor: .red,
                             title: appLocalized("\(item.name) low", comment: "Low stock alert title"),
-                            subtitle: "\(qty)\(unit) · \(appLocalized("reorder at", comment: "reorder threshold label")) \(item.reorderThreshold.formatted(.number.precision(.fractionLength(0...1))))"
+                            subtitle: item.lowStockDetail
                         ) {
                             router.navigate(to: HomeRoute.supplies)
                         }
@@ -212,5 +210,23 @@ struct HomeFinanceWidget: View {
                 IncomeExpenseBar(income: income, expenses: expenses)
             }
         }
+    }
+}
+
+extension SupplyItem {
+    /// The Alerts widget's low-stock subtitle, e.g. "3 bags · reorder at 5".
+    var lowStockDetail: String {
+        Self.lowStockDetail(quantity: quantity, unit: unit, reorderAt: reorderThreshold, locale: .app)
+    }
+
+    static func lowStockDetail(quantity: Double, unit: String, reorderAt threshold: Double, locale: Locale) -> String {
+        let style = FloatingPointFormatStyle<Double>.number.precision(.fractionLength(0...1)).locale(locale)
+        let qty = quantity.formatted(style)
+        let reorder = threshold.formatted(style)
+        let unit = unit.trimmingCharacters(in: .whitespaces)
+        if unit.isEmpty {
+            return appLocalized("\(qty) · reorder at \(reorder)", comment: "Low stock alert subtitle: quantity on hand, then the reorder level")
+        }
+        return appLocalized("\(qty) \(unit) · reorder at \(reorder)", comment: "Low stock alert subtitle: quantity on hand, its unit (typed by the user, e.g. 'bags'), then the reorder level")
     }
 }

@@ -34,7 +34,7 @@ struct BarnNoteListView: View {
             switch self {
             case .today: return appLocalized("Today")
             case .yesterday: return appLocalized("Yesterday")
-            case .date(let d): return d.formatted(.dateTime.month(.wide).day().year())
+            case .date(let d): return d.formatted(.dateTime.month(.wide).day().year().locale(.app))
             }
         }
     }

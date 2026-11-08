@@ -20,7 +20,7 @@ final class DateFormattingTests: XCTestCase {
         components.hour = 12
         let date = Calendar.current.date(from: components)!
 
-        XCTAssertEqual(date.shortFormatted, "01/15/2026")
+        XCTAssertEqual(date.shortFormatted(locale: Locale(identifier: "en_US")), "01/15/2026")
     }
 
     func testShortFormattedSingleDigitMonthAndDay() {
@@ -31,7 +31,7 @@ final class DateFormattingTests: XCTestCase {
         components.hour = 12
         let date = Calendar.current.date(from: components)!
 
-        XCTAssertEqual(date.shortFormatted, "03/05/2026")
+        XCTAssertEqual(date.shortFormatted(locale: Locale(identifier: "en_US")), "03/05/2026")
     }
 
     func testShortFormattedDecember31() {
@@ -42,7 +42,7 @@ final class DateFormattingTests: XCTestCase {
         components.hour = 12
         let date = Calendar.current.date(from: components)!
 
-        XCTAssertEqual(date.shortFormatted, "12/31/2025")
+        XCTAssertEqual(date.shortFormatted(locale: Locale(identifier: "en_US")), "12/31/2025")
     }
 
     func testIsOverdueForPastDate() {
