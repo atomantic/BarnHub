@@ -180,7 +180,10 @@ struct HomeView: View {
                 // Scale with the container instead of a fixed iPhone height, so the
                 // short, wide iPhone Duo outer display (and landscape) keeps room for content.
                 .containerRelativeFrame(.vertical) { height, _ in
-                    min(260, max(210, height * 0.32))
+                    // Shorter on iPad-sized screens, where the dashboard needs the room.
+                    sizeClass == .regular
+                        ? min(200, max(160, height * 0.2))
+                        : min(260, max(210, height * 0.32))
                 }
                 #endif
                 // Let the green run under the vertical tab bar / side toolbar.
@@ -339,10 +342,11 @@ struct HomeView: View {
     // MARK: - Dashboard
 
     private func macDashboard(balance: Double) -> some View {
+        // No tile grid on the Mac: every tile's destination is already in the
+        // sidebar, so the space goes to the dashboard widgets.
         VStack(spacing: 16) {
             statsStrip
             widgetGrid
-            iconGrid(balance: balance)
         }
         .padding(.bottom, 24)
     }
