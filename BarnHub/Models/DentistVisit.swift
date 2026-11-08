@@ -8,6 +8,8 @@ final class DentistVisit {
     var serviceDescription: String = ""
     var cost: Double = 0
     var nextDueDate: Date? = nil
+    /// Stable key for this record's local notification (see Reminder.notificationKey).
+    var notificationKey: UUID? = nil
 
     @Relationship(deleteRule: .nullify)
     var horse: Horse? = nil
@@ -24,5 +26,6 @@ final class DentistVisit {
         self.serviceDescription = serviceDescription
         self.cost = cost
         self.nextDueDate = nextDueDate
+        self.notificationKey = UUID()
     }
 }
