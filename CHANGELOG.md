@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.7.0
+
+### New Features
+- **Big screens and iPhone Duo** — two-column layouts on iPad, iPhone Duo and Mac with lists beside details, sortable Transactions and Supplies tables, and layouts that follow the iPhone Duo's fold (#13, #18–#27).
+- **A more native Mac app** — Settings window, File ▸ New, row menus, tooltips, and add/edit forms as sheets.
+- **Restore All Data** — restore an All Data export folder from Settings, adding what's missing or deleting everything first (#79, #84, #86, #87).
+- **Complete All Data export** — every record type plus photos, documents and invoice PDFs, linked by ID (#55, #72).
+- **Deep links** — the `barnhub` URL scheme opens the app from links and notification taps (#80).
+
+### Improvements
+- Finished translations for onboarding, paywall and photo strings, plus localized PDF labels, dates and currency (#12, #53, #60, #68).
+- Faster screens that fetch only what they show; smaller photos with cached thumbnails (#40, #48).
+- Notifications stay under iOS's limit and recurring reminders recur (#38).
+
+### Bug Fixes
+- Documents open in Quick Look instead of a blank sheet (#66).
+- Invoices open on the Mac (#82).
+- Correct invoice totals, date ranges, report periods and Unpaid amounts (#53, #60).
+- CSV import and export work across time zones and locales (#44).
+- Ask before deleting clients and all data; fixed Mac crashes and the macOS 14 onboarding crash (#27, #43).
+
 ## 1.6.2
 
 ### New Features
