@@ -44,9 +44,9 @@ struct InvoicePDFService {
         generatedAt: Date = .now
     ) -> Document {
         let info = [
-            "\(appLocalized("Client", comment: "Invoice PDF label")): \(clientName)",
-            "\(appLocalized("Period", comment: "Invoice PDF label")): \(startDate.shortFormatted) – \(endDate.shortFormatted)",
-            "\(appLocalized("Generated", comment: "Invoice PDF label")): \(generatedAt.shortFormatted)",
+            appLocalized("Client: \(clientName)", comment: "Invoice PDF line: the client's name"),
+            appLocalized("Period: \(startDate.shortFormatted) – \(endDate.shortFormatted)", comment: "Invoice PDF line: first and last day of the billed period"),
+            appLocalized("Generated: \(generatedAt.shortFormatted)", comment: "PDF header line: the date the invoice or contract was generated"),
         ].joined(separator: "\n")
         return Document(
             title: appLocalized("BarnHub Invoice", comment: "Invoice PDF title"),

@@ -64,12 +64,12 @@ struct ContractPDFService {
     ) -> Document {
         let na = appLocalized("N/A", comment: "Not available placeholder in contract PDF")
         let partyRows: [Document.PartyRow] = [
-            .init(label: "\(appLocalized("Client", comment: "Contract PDF label")):", value: clientName),
-            .init(label: "\(appLocalized("Phone", comment: "Contract PDF label")):", value: clientPhone.isEmpty ? na : clientPhone),
-            .init(label: "\(appLocalized("Email", comment: "Contract PDF label")):", value: clientEmail.isEmpty ? na : clientEmail),
-            .init(label: "\(appLocalized("Emergency Contact", comment: "Contract PDF label")):", value: emergencyContact.isEmpty ? na : "\(emergencyContact) \(emergencyPhone)"),
-            .init(label: "\(appLocalized("Horse", comment: "Contract PDF label")):", value: "\(horseName) (\(horseBreed.isEmpty ? appLocalized("Breed not specified", comment: "Fallback when horse breed is empty") : horseBreed))"),
-            .init(label: "\(appLocalized("Stall", comment: "Contract PDF label")):", value: stallNumber.isEmpty ? appLocalized("TBD", comment: "To be determined placeholder") : stallNumber),
+            .init(label: appLocalized("Client:", comment: "Contract PDF label, followed by the client's name"), value: clientName),
+            .init(label: appLocalized("Phone:", comment: "Contract PDF label, followed by the client's phone number"), value: clientPhone.isEmpty ? na : clientPhone),
+            .init(label: appLocalized("Email:", comment: "Contract PDF label, followed by the client's email address"), value: clientEmail.isEmpty ? na : clientEmail),
+            .init(label: appLocalized("Emergency Contact:", comment: "Contract PDF label, followed by the emergency contact's name and phone"), value: emergencyContact.isEmpty ? na : "\(emergencyContact) \(emergencyPhone)"),
+            .init(label: appLocalized("Horse:", comment: "Contract PDF label, followed by the horse's name and breed"), value: "\(horseName) (\(horseBreed.isEmpty ? appLocalized("Breed not specified", comment: "Fallback when horse breed is empty") : horseBreed))"),
+            .init(label: appLocalized("Stall:", comment: "Contract PDF label, followed by the stall number"), value: stallNumber.isEmpty ? appLocalized("TBD", comment: "To be determined placeholder") : stallNumber),
         ]
 
         let terms: [String]
@@ -84,13 +84,13 @@ struct ContractPDFService {
 
         return Document(
             title: "BarnHub \(type.displayName)",
-            generatedLine: "\(appLocalized("Generated", comment: "PDF contract header label")): \(generatedAt.shortFormatted)",
+            generatedLine: appLocalized("Generated: \(generatedAt.shortFormatted)", comment: "PDF header line: the date the invoice or contract was generated"),
             partyRows: partyRows,
             termsHeader: appLocalized("Terms and Conditions", comment: "Contract PDF section header"),
             terms: terms,
-            ownerSignatureLabel: "\(appLocalized("Owner / Client", comment: "Contract PDF signature label")): \(clientName)",
+            ownerSignatureLabel: appLocalized("Owner / Client: \(clientName)", comment: "Contract PDF signature label: the client's name"),
             managerSignatureLabel: appLocalized("Barn Manager", comment: "Contract PDF signature label"),
-            dateLine: "\(appLocalized("Date", comment: "Contract PDF date label")): _______________"
+            dateLine: appLocalized("Date: _______________", comment: "Contract PDF signature block: a blank line to write the signing date on")
         )
     }
 

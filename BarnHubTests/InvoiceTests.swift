@@ -162,6 +162,97 @@ final class InvoiceTests: XCTestCase {
         }
     }
 
+    // MARK: - Label lines in the app language (#58)
+
+    /// Sets the in-app language for the rest of the test, the way Settings →
+    /// Language does, and restores the previous choice afterwards.
+    private func useAppLanguage(_ id: String) {
+        let key = "net.shadowpuppet.BarnBook.appLocale"
+        let saved = UserDefaults.standard.string(forKey: key)
+        UserDefaults.standard.set(id, forKey: key)
+        Bundle.resetAppBundleCache()
+        addTeardownBlock {
+            if let saved { UserDefaults.standard.set(saved, forKey: key) } else { UserDefaults.standard.removeObject(forKey: key) }
+            Bundle.resetAppBundleCache()
+        }
+    }
+
+    private let start = Calendar.current.date(from: DateComponents(year: 2026, month: 1, day: 15))!
+    private let end = Calendar.current.date(from: DateComponents(year: 2026, month: 2, day: 14))!
+
+    @MainActor
+    func testFrenchInvoiceLabelsPutASpaceBeforeTheColon() {
+        useAppLanguage("fr")
+        let document = InvoicePDFService.document(
+            clientName: "Jeanne Dupont",
+            startDate: start,
+            endDate: end,
+            lineItems: [],
+            total: 0,
+            generatedAt: end
+        )
+
+        XCTAssertEqual(document.info.components(separatedBy: "\n"), [
+            "Client : Jeanne Dupont",
+            "Période : 15/01/2026 – 14/02/2026",
+            "Généré le : 14/02/2026",
+        ])
+        assertValidPDF(InvoicePDFService.render(document), containing: "Client : Jeanne Dupont")
+    }
+
+    @MainActor
+    func testFrenchContractLabelsPutASpaceBeforeTheColon() {
+        useAppLanguage("fr")
+        let document = ContractPDFService.document(
+            type: .boardingAgreement,
+            clientName: "Jeanne Dupont",
+            clientPhone: "",
+            clientEmail: "",
+            emergencyContact: "",
+            emergencyPhone: "",
+            horseName: "Biscuit",
+            horseBreed: "",
+            stallNumber: "",
+            startDate: start,
+            monthlyRate: 650,
+            generatedAt: end
+        )
+
+        XCTAssertEqual(document.partyRows.map(\.label), [
+            "Client :", "Téléphone :", "E-mail :", "Contact d'urgence :", "Cheval :", "Box :",
+        ])
+        XCTAssertEqual(document.generatedLine, "Généré le : 14/02/2026")
+        XCTAssertEqual(document.ownerSignatureLabel, "Propriétaire / Client : Jeanne Dupont")
+        XCTAssertEqual(document.dateLine, "Date : _______________")
+        assertValidPDF(ContractPDFService.render(document), containing: "Propriétaire / Client : Jeanne Dupont")
+    }
+
+    @MainActor
+    func testGermanInvoiceAndContractLabels() {
+        useAppLanguage("de")
+        let clientName = "Erika Muster"
+        XCTAssertEqual(appLocalized("Client: \(clientName)"), "Kunde: Erika Muster")
+        XCTAssertEqual(appLocalized("Period: \("01.02.2026") – \("28.02.2026")"), "Zeitraum: 01.02.2026 – 28.02.2026")
+
+        let contract = ContractPDFService.document(
+            type: .liabilityWaiver,
+            clientName: clientName,
+            clientPhone: "",
+            clientEmail: "",
+            emergencyContact: "",
+            emergencyPhone: "",
+            horseName: "Biscuit",
+            horseBreed: "",
+            stallNumber: "",
+            startDate: start,
+            monthlyRate: 0,
+            generatedAt: end
+        )
+        XCTAssertEqual(contract.generatedLine, "Erstellt: 14.02.2026")
+        XCTAssertEqual(contract.ownerSignatureLabel, "Eigentümer / Kunde: Erika Muster")
+        XCTAssertEqual(contract.partyRows.first?.label, "Kunde:")
+    }
+
     /// `appLocalized` resolves `Bundle.app` from whatever thread renders a PDF
     /// while the UI resolves it on main, and the language picker resets it.
     func testBundleAppIsSafeToCallConcurrently() {
