@@ -421,6 +421,59 @@ final class DataImportServiceTests: XCTestCase {
         XCTAssertEqual(imported.weight, 950.5)
     }
 
+    // MARK: - Gender
+
+    func test_exportImportHorses_roundTrip_keepsGender() throws {
+        for (name, gender) in [("Bella", HorseGender.mare), ("Duke", .stallion), ("Pepper", .gelding)] {
+            context.insert(Horse(name: name, gender: gender))
+        }
+        try context.save()
+
+        let csv = try DataExportService.exportHorsesCSV(from: context)
+        XCTAssertTrue(csv.hasPrefix("Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active,Gender\n"), csv)
+        let context2 = try makeContext()
+        XCTAssertEqual(DataImportService.importHorses(from: csv, context: context2).imported, 3)
+        let imported = Dictionary(uniqueKeysWithValues: try context2.fetch(FetchDescriptor<Horse>()).map { ($0.name, $0.gender) })
+        XCTAssertEqual(imported, ["Bella": .mare, "Duke": .stallion, "Pepper": .gelding])
+    }
+
+    func test_importHorses_olderFileWithoutGenderColumn_importsAsBefore() throws {
+        let csv = """
+        Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active
+        Thunder,Thoroughbred,2020-03-15,Bay,1100.0,5000.0,B2,None,Twice daily,false
+        """
+        let result = DataImportService.importHorses(from: csv, context: context)
+        XCTAssertEqual(result.imported, 1)
+        XCTAssertEqual(result.skipped, 0)
+        let horse = try XCTUnwrap(context.fetch(FetchDescriptor<Horse>()).first)
+        XCTAssertEqual(horse.gender, .mare)
+        XCTAssertEqual(horse.breed, "Thoroughbred")
+        XCTAssertEqual(horse.colorMarkings, "Bay")
+        XCTAssertEqual(horse.weight, 1100)
+        XCTAssertEqual(horse.purchasePrice, 5000)
+        XCTAssertEqual(horse.stallNumber, "B2")
+        XCTAssertEqual(horse.feedingSchedule, "Twice daily")
+        XCTAssertFalse(horse.isActive)
+    }
+
+    func test_importHorses_gender_acceptsRawValuesAndDisplayNames() throws {
+        let csv = """
+        Name,Gender
+        A,STALLION
+        B,Gelding
+        C,Wallach
+        D,Hongre
+        E,Caballo castrado
+        F,Hengst
+        G,
+        H,unicorn
+        """
+        XCTAssertEqual(DataImportService.importHorses(from: csv, context: context).imported, 8)
+        let genders = Dictionary(uniqueKeysWithValues: try context.fetch(FetchDescriptor<Horse>()).map { ($0.name, $0.gender) })
+        XCTAssertEqual(genders, ["A": .stallion, "B": .gelding, "C": .gelding, "D": .gelding, "E": .gelding,
+                                 "F": .stallion, "G": .mare, "H": .mare])
+    }
+
     // MARK: - Duplicates
 
     func test_reimport_skipsExactDuplicatesForEveryType() throws {

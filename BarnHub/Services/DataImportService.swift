@@ -519,6 +519,28 @@ struct DataImportService {
 
     // MARK: Horses
 
+    /// Lowercased gender text to gender: the stored raw value ("gelding") plus the
+    /// display name in the app language and in every bundled translation, so a
+    /// file edited by hand ("Wallach", "Hongre") still imports. Older files have
+    /// no Gender column, and blank or unknown values keep the model default (mare).
+    static func horseGenderLookup() -> [String: HorseGender] {
+        let bundles = Bundle.main.localizations.compactMap { language in
+            Bundle.main.path(forResource: language, ofType: "lproj").flatMap(Bundle.init(path:))
+        }
+        var lookup: [String: HorseGender] = [:]
+        for gender in HorseGender.allCases {
+            // The string catalog key is the English display name ("Mare").
+            let english = gender.rawValue.capitalized
+            var names = [gender.rawValue, gender.displayName, english]
+            names += bundles.map { $0.localizedString(forKey: english, value: nil, table: nil) }
+            for name in names {
+                let key = name.lowercased().trimmingCharacters(in: .whitespaces)
+                if !key.isEmpty, lookup[key] == nil { lookup[key] = gender }
+            }
+        }
+        return lookup
+    }
+
     static func importHorses(reader: CSVReader, context: ModelContext, options: CSVOptions = CSVOptions(), progress: CSVProgressHandler? = nil) throws -> ImportResult {
         let dates = CSVDateCodec(options: options)
         let numbers = CSVAmountParser(options: options)
@@ -533,6 +555,7 @@ struct DataImportService {
                 fullKeys.insert(horseKey(name: horse.name, breed: horse.breed, day: dates.string(from: horse.dateOfBirth)))
                 nameBreedKeys.insert(horseKey(name: horse.name, breed: horse.breed, day: ""))
             }
+            let genders = horseGenderLookup()
 
             return { row in
                 guard let name = row.text("name") else { return .skipped(.missingName) }
@@ -567,6 +590,7 @@ struct DataImportService {
                 if let price { horse.purchasePrice = price }
                 if let dob { horse.dateOfBirth = dob }
                 if let active = row.bool("active") { horse.isActive = active }
+                if let raw = row.text("gender", "sex"), let gender = genders[raw.lowercased()] { horse.gender = gender }
                 context.insert(horse)
                 return .inserted
             }
