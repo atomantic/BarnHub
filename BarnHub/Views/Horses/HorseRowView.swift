@@ -6,22 +6,22 @@ struct HorseRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            if let photoData = horse.photoData, let image = Image(photoData: photoData) {
+            CachedPhotoView(data: horse.thumbnailData) { image in
                 image
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
-                    .accessibilityHidden(true)
-            } else {
+            } placeholder: {
                 // Placeholder avatar, the same size as a photo.
                 Image(systemName: "figure.equestrian.sports")
                     .font(.subheadline)
                     .foregroundStyle(horse.isActive ? Color.barnGreen : Color.gray)
                     .frame(width: 40, height: 40)
                     .background(Circle().fill((horse.isActive ? Color.barnGreen : Color.gray).opacity(0.15)))
-                    .accessibilityHidden(true)
             }
+            .accessibilityHidden(true)
+            .backfillsThumbnail(for: horse)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(horse.name)

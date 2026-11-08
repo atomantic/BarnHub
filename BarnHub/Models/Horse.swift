@@ -23,6 +23,11 @@ final class Horse {
     @Attribute(.externalStorage)
     var photoData: Data? = nil
 
+    /// ~256 px JPEG of `photoData` for rows and avatars. Kept inline (a few KB)
+    /// so lists never load the full photo; nil until generated, and backfilled
+    /// lazily for records saved before it existed.
+    var thumbnailData: Data? = nil
+
     @Relationship(deleteRule: .nullify, inverse: \Client.horses)
     var clients: [Client]? = nil
 

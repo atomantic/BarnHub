@@ -197,19 +197,20 @@ struct SidebarView: View {
 
     private func horseRow(_ horse: Horse) -> some View {
         HStack(spacing: 8) {
-            if let data = horse.photoData, let image = Image(photoData: data) {
+            CachedPhotoView(data: horse.thumbnailData) { image in
                 image
                     .resizable()
                     .scaledToFill()
                     .frame(width: 22, height: 22)
                     .clipShape(Circle())
-            } else {
+            } placeholder: {
                 Image(systemName: "figure.equestrian.sports")
                     .font(.caption)
                     .frame(width: 22, height: 22)
                     .foregroundStyle(.barnGreen)
                     .background(Circle().fill(Color.barnGreen.opacity(0.15)))
             }
+            .backfillsThumbnail(for: horse)
             Text(horse.name)
                 .lineLimit(1)
         }

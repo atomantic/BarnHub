@@ -13104,6 +13104,59 @@
         }
       }
     },
+    "Failed to share document" : {
+      "comment" : "Error toast when a document can't be written out for the share sheet",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokument konnte nicht geteilt werden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al compartir el documento"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al compartir el documento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec du partage du document"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile condividere il documento"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document delen mislukt"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha ao compartilhar documento"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Misslyckades med att dela dokument"
+          }
+        }
+      }
+    },
     "Farrier" : {
       "comment" : "Schedule event type\nTransaction category",
       "localizations" : {
@@ -30149,6 +30202,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Denna klient kan ha tagits bort."
+          }
+        }
+      }
+    },
+    "This file is %@. Files up to %@ can be imported." : {
+      "comment" : "Document import error: the picked file is over the size limit. First value is the file size, second the limit, e.g. 30 MB / 25 MB",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Datei ist %1$@ groß. Es können Dateien bis %2$@ importiert werden."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo ocupa %1$@. Se pueden importar archivos de hasta %2$@."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este archivo ocupa %1$@. Se pueden importar archivos de hasta %2$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier fait %1$@. Vous pouvez importer des fichiers jusqu’à %2$@."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo file è di %1$@. È possibile importare file fino a %2$@."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit bestand is %1$@. Bestanden tot %2$@ kunnen worden geïmporteerd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este arquivo tem %1$@. É possível importar arquivos de até %2$@."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filen är %1$@. Filer på upp till %2$@ kan importeras."
           }
         }
       }

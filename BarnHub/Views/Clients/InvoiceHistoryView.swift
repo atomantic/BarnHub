@@ -57,7 +57,10 @@ struct InvoiceHistoryView: View {
         .navigationTitle("Invoice History")
         .inlineNavTitle()
         .toast(toast)
-        .sheet(isPresented: $showShareSheet) {
+        .sheet(isPresented: $showShareSheet, onDismiss: {
+            ShareTempFiles.cleanUp(selectedPDFURL)
+            selectedPDFURL = nil
+        }) {
             if let url = selectedPDFURL {
                 ShareSheet(items: [url])
             }
@@ -67,9 +70,9 @@ struct InvoiceHistoryView: View {
     private func reshareInvoice(_ invoice: Invoice) {
         guard let data = invoice.pdfData else { return }
         let fileName = Invoice.fileName(clientName: client?.fullName ?? "Client", startDate: invoice.startDate, endDate: invoice.endDate)
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        let tempURL: URL
         do {
-            try data.write(to: tempURL)
+            tempURL = try ShareTempFiles.write(data, fileName: fileName, fileExtension: "pdf")
         } catch {
             BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
             toast.show(appLocalized("Failed to load invoice"), isError: true)
