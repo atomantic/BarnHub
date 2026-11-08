@@ -370,8 +370,9 @@ struct HorseDetailView: View {
                     photoSection(horse)
                     quickLinksSection()
                     infoSection(horse)
-                    notesSection(horse)
                 } trailing: {
+                    // Notes and feeding go right so the two columns are similar lengths.
+                    notesSection(horse)
                     vetSection()
                     farrierSection()
                     dentistSection()
