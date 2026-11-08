@@ -118,20 +118,27 @@ run() {
     fi
 }
 
+# Boot a simulator and wait until it's ready: a cold one can fail the first
+# launch of the test host ("SpringBoard probably crashed").
+boot() { xcrun simctl bootstatus "$1" -b > /dev/null 2>&1 || true; }
+
 ui_filter() { echo "$1/ScreenWalkTests${ONLY:+/$ONLY}"; }
 
 for step in "${STEPS[@]}"; do
     case "$step" in
         unit)
             [[ -z "$IPHONE" ]] && { FAILED=1; RESULTS+=("❌ unit: no iPhone simulator"); continue; }
+            boot "$(udid "$IPHONE")"
             run unit BarnHubTests -scheme BarnHub \
                 -destination "platform=iOS Simulator,id=$(udid "$IPHONE")" CODE_SIGNING_ALLOWED=NO ;;
         iphone)
             [[ -z "$IPHONE" ]] && { FAILED=1; RESULTS+=("❌ iphone: no iPhone simulator"); continue; }
+            boot "$(udid "$IPHONE")"
             run iphone "$(ui_filter BarnHubUITests)" -scheme BarnHub \
                 -destination "platform=iOS Simulator,id=$(udid "$IPHONE")" CODE_SIGNING_ALLOWED=NO ;;
         ipad)
             [[ -z "$IPAD" ]] && { FAILED=1; RESULTS+=("❌ ipad: no iPad simulator"); continue; }
+            boot "$(udid "$IPAD")"
             run ipad "$(ui_filter BarnHubUITests)" -scheme BarnHub \
                 -destination "platform=iOS Simulator,id=$(udid "$IPAD")" CODE_SIGNING_ALLOWED=NO ;;
         mac)
