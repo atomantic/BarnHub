@@ -128,7 +128,11 @@ struct DataManagementView: View {
 
     var body: some View {
         dataContent
+        #if os(macOS)
+        .navigationTitle("Data")  // matches its Settings tab
+        #else
         .navigationTitle("Import / Export")
+        #endif
         .inlineNavTitle()
         .toast(toast)
         .sheet(isPresented: $showExportSheet) {
