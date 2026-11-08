@@ -8,6 +8,7 @@ struct HorseEditView: View {
     #endif
     let horseID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
+    @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
@@ -251,6 +252,10 @@ struct HorseEditView: View {
             )
             modelContext.insert(horse)
             BarnHubLogger.info("Creating horse name=\(trimmedName)")
+            // Show the new horse beside the list when the split is up.
+            if router.horsesShowSplit {
+                router.selectedHorseID = horse.persistentModelID
+            }
         }
 
         modelContext.saveWithLogging()
