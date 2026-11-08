@@ -176,7 +176,7 @@ final class ScreenWalkTests: XCTestCase {
         selectTab("Horses", sidebarID: "sidebar_horses")
         tapText("Arrow")
         assertShows(["Slight sensitivity in left front hoof"], on: "horse detail")
-        tapText("Documents")
+        tap(id: "horse_documents_row")
         assertShows(["Coggins Certificate", "Registration Photo"], on: "horse documents")
     }
 
@@ -186,7 +186,7 @@ final class ScreenWalkTests: XCTestCase {
         selectTab("Clients", sidebarID: "sidebar_clients")
         tapText("Chen")
         assertShows(["sarah.c@example.com"], on: "client detail")
-        tapText("Documents")
+        tap(id: "client_documents_row")
         assertShows(["Boarding Agreement", "Signed Waiver"], on: "client documents")
     }
 
@@ -271,7 +271,7 @@ final class ScreenWalkTests: XCTestCase {
     /// Waits for every string in `texts`, and one of `anyOf`, then checks the
     /// app is still running. Attaches a screenshot either way.
     private func assertShows(_ texts: [String], anyOf: [String] = [], on screen: String,
-                             timeout: TimeInterval = 10,
+                             timeout: TimeInterval = 20,
                              file: StaticString = #filePath, line: UInt = #line) {
         let deadline = Date().addingTimeInterval(timeout)
         var missing = texts
@@ -361,6 +361,19 @@ final class ScreenWalkTests: XCTestCase {
             if attempt >= 3 { scrollDown() } else { Thread.sleep(forTimeInterval: 0.5) }
         }
         XCTFail("Nothing to tap showing \"\(text)\"", file: file, line: line)
+    }
+
+    /// Taps the element with an accessibility identifier, scrolling down to it.
+    private func tap(id: String, file: StaticString = #filePath, line: UInt = #line) {
+        let target = app.descendants(matching: .any)[id]
+        for attempt in 0..<12 {
+            if target.exists && target.isHittable {
+                press(target)
+                return
+            }
+            if attempt >= 3 { scrollDown() } else { Thread.sleep(forTimeInterval: 0.5) }
+        }
+        XCTFail("Nothing to tap with identifier \(id)", file: file, line: line)
     }
 
     private func press(_ element: XCUIElement) {

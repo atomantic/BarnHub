@@ -340,6 +340,7 @@ struct HorseDetailView: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("horse_documents_row")  // ScreenWalkTests
             }
         }
     }

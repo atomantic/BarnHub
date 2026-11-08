@@ -218,6 +218,7 @@ struct ClientDetailView: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("client_documents_row")  // ScreenWalkTests
             }
         }
     }
