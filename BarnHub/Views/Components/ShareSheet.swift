@@ -63,6 +63,18 @@ extension View {
             ShareSheet(items: [file.url])
         }
         .onChange(of: file.wrappedValue?.url) { old, _ in ShareTempFiles.cleanUp(old) }
+        #if DEBUG
+        // iPad shows the system share sheet out of process, where UI tests
+        // can't see it; this marks that one is up (ScreenWalkTests).
+        .background {
+            if file.wrappedValue != nil {
+                Color.clear
+                    .frame(width: 1, height: 1)
+                    .accessibilityElement()
+                    .accessibilityIdentifier("share_sheet_presented")
+            }
+        }
+        #endif
     }
 
     /// Quick Look for tapping a stored document (photo or PDF) and a share
@@ -71,6 +83,18 @@ extension View {
     func documentPresentation(preview: Binding<URL?>, share: Binding<SharedFile?>) -> some View {
         quickLookPreview(preview)
             .onChange(of: preview.wrappedValue) { old, _ in ShareTempFiles.cleanUp(old) }
+            #if DEBUG
+            // The Mac's Quick Look panel runs out of process, where UI tests
+            // can't see it; this marks that a preview is up (ScreenWalkTests).
+            .background {
+                if preview.wrappedValue != nil {
+                    Color.clear
+                        .frame(width: 1, height: 1)
+                        .accessibilityElement()
+                        .accessibilityIdentifier("quick_look_presented")
+                }
+            }
+            #endif
             .shareSheet(share)
     }
 }

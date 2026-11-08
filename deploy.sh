@@ -119,49 +119,12 @@ rollback_build_bump() {
 trap rollback_build_bump EXIT
 
 if ! $SKIP_TESTS; then
-    echo "🧪 Running tests..."
-    DESTINATION=$(
-        SIMINFO=$(xcrun simctl list devices available -j | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-preferred = ['iPhone 17 Pro', 'iPhone 17', 'iPhone 16 Pro', 'iPhone 16', 'iPhone 15']
-# Prefer latest iOS runtime, then fall back.
-def runtime_key(rt):
-    parts = rt.replace('com.apple.CoreSimulator.SimRuntime.iOS-', '').split('-')
-    try: return tuple(int(p) for p in parts)
-    except: return (0,)
-runtimes = sorted(
-    (rt for rt in data.get('devices', {}) if 'iOS' in rt),
-    key=runtime_key, reverse=True
-)
-for name in preferred:
-    for rt in runtimes:
-        for d in data['devices'][rt]:
-            if d.get('isAvailable') and d.get('name') == name:
-                print(f\"{d['name']},{d['udid']}\"); sys.exit(0)
-for rt in runtimes:
-    for d in data['devices'][rt]:
-        if d.get('isAvailable') and 'iPhone' in d.get('name', ''):
-            print(f\"{d['name']},{d['udid']}\"); sys.exit(0)
-" 2>/dev/null)
-        SIM_NAME="${SIMINFO%%,*}"
-        SIM_UDID="${SIMINFO##*,}"
-        if [ -n "$SIM_UDID" ]; then
-            echo "📱 Test device: $SIM_NAME ($SIM_UDID)" >&2
-            echo "platform=iOS Simulator,id=$SIM_UDID"
-        else
-            echo "platform=iOS Simulator,name=iPhone 17"
-        fi
-    )
-    echo "📱 Test destination: $DESTINATION"
-    xcodebuild test \
-        -project "$PROJECT" \
-        -scheme "$SCHEME_TEST" \
-        -only-testing:"$TEST_BUNDLE" \
-        -destination "$DESTINATION" \
-        -configuration Debug \
-        CODE_SIGNING_ALLOWED=NO \
-        -quiet
+    # Unit tests, as in CI. The UI screen walk is a rare audit (./scripts/test.sh --all).
+    echo "🧪 Running tests (./scripts/test.sh)..."
+    if ! ./scripts/test.sh; then
+        echo "❌ Tests failed; not deploying. Results are in .build/test-results/."
+        exit 1
+    fi
     echo "✅ Tests passed"
 fi
 

@@ -1,11 +1,20 @@
 name: CI
 
-# Build and unit tests only. TestFlight uploads stay local (./deploy.sh).
-# Manual only: macOS minutes on this private repo are billed, so automatic runs
-# on pull requests / pushes wait on Adam's decision. Start it from the Actions
-# tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`.
+# scripts/test.sh: the unit tests by default (as deploy.sh runs them), or with
+# suite=full the UI screen walk on iPhone, iPad and Mac too. TestFlight uploads
+# stay local (./deploy.sh).
+# Manual only, never automatic: this is a private repo and GitHub's macOS
+# minutes run out fast (Adam, 2026-11-08). The release gate is deploy.sh running
+# ./scripts/test.sh on Adam's Mac. Start a run from the Actions tab ("Run
+# workflow") or with `gh workflow run ci.yml --ref <branch> -f suite=full`.
 on:
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "unit: BarnHubTests only (cheap). full: plus the UI screen walk on iPhone, iPad and Mac (long)."
+        type: choice
+        options: [unit, full]
+        default: unit
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -17,7 +26,7 @@ jobs:
     # The app uses the iOS 27 SDK, which GitHub only ships on the xcode-27 image
     # (a preview as of 2026-11; macos-latest / macos-26 top out at Xcode 26.6).
     runs-on: xcode-27
-    timeout-minutes: 45
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -33,19 +42,14 @@ jobs:
           xcodebuild -version
           xcrun simctl list devices available | grep -E 'iPhone|-- iOS'
 
-      - name: Run unit tests
+      - name: Run tests
         run: |
-          set -o pipefail
-          xcodebuild test \
-            -project BarnHub.xcodeproj \
-            -scheme BarnHub \
-            -only-testing:BarnHubTests \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -destination-timeout 120 \
-            -configuration Debug \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            -skipPackagePluginValidation \
-            -skipMacroValidation \
-            | xcbeautify
+          if [ "${{ inputs.suite }}" = "full" ]; then ./scripts/test.sh --all; else ./scripts/test.sh; fi
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: .build/test-results
+          retention-days: 7
