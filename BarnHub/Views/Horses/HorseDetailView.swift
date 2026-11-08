@@ -10,6 +10,9 @@ struct HorseDetailView: View {
 
     @State private var showDeleteConfirmation = false
     @State private var toast = ToastState()
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
 
     private var horse: Horse? {
         modelContext.model(for: horseID) as? Horse
@@ -360,16 +363,34 @@ struct HorseDetailView: View {
 
     #if os(iOS)
     private func iOSLayout(_ horse: Horse) -> some View {
-        List {
-            photoSection(horse)
-            quickLinksSection()
-            infoSection(horse)
-            notesSection(horse)
-            vetSection()
-            farrierSection()
-            dentistSection()
-            documentsSection()
-            clientsSection()
+        Group {
+            if sizeClass == .regular {
+                // Same split as macOS: profile on the left, records on the right.
+                WideColumns {
+                    photoSection(horse)
+                    quickLinksSection()
+                    infoSection(horse)
+                    notesSection(horse)
+                } trailing: {
+                    vetSection()
+                    farrierSection()
+                    dentistSection()
+                    documentsSection()
+                    clientsSection()
+                }
+            } else {
+                List {
+                    photoSection(horse)
+                    quickLinksSection()
+                    infoSection(horse)
+                    notesSection(horse)
+                    vetSection()
+                    farrierSection()
+                    dentistSection()
+                    documentsSection()
+                    clientsSection()
+                }
+            }
         }
         .navigationTitle(horse.name)
         .inlineNavTitle()

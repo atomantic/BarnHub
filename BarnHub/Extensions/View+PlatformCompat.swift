@@ -144,3 +144,30 @@ extension View {
         }
     }
 }
+
+#if os(iOS)
+// MARK: - Wide layouts
+
+/// Two independently scrolling grouped lists side by side, for wide iOS layouts
+/// (iPad, iPhone Duo inner display). Equal columns split cleanly at the Duo's fold.
+/// The iOS counterpart of the two-`Form` column layouts the macOS views use.
+struct WideColumns<Leading: View, Trailing: View>: View {
+    private let leading: Leading
+    private let trailing: Trailing
+
+    init(@ViewBuilder leading: () -> Leading, @ViewBuilder trailing: () -> Trailing) {
+        self.leading = leading()
+        self.trailing = trailing()
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            List { leading }
+                .frame(maxWidth: .infinity)
+            List { trailing }
+                .frame(maxWidth: .infinity)
+        }
+        .listStyle(.insetGrouped)
+    }
+}
+#endif
