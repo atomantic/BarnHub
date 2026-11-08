@@ -8,8 +8,7 @@ struct InvoiceGeneratorView: View {
 
     @State private var startDate = Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
     @State private var endDate = Date.now
-    @State private var showShareSheet = false
-    @State private var generatedPDFURL: URL?
+    @State private var sharedPDF: SharedFile?
     /// A PDF is being drawn in the background; the button stays disabled until it's ready.
     @State private var isGenerating = false
     @State private var toast = ToastState()
@@ -95,14 +94,7 @@ struct InvoiceGeneratorView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .sheet(isPresented: $showShareSheet, onDismiss: {
-                ShareTempFiles.cleanUp(generatedPDFURL)
-                generatedPDFURL = nil
-            }) {
-                if let url = generatedPDFURL {
-                    ShareSheet(items: [url])
-                }
-            }
+            .shareSheet($sharedPDF)
             .toast(toast)
         }
     }
@@ -149,8 +141,7 @@ struct InvoiceGeneratorView: View {
 
             switch written {
             case .success(let tempURL):
-                generatedPDFURL = tempURL
-                showShareSheet = true
+                sharedPDF = SharedFile(url: tempURL)
             case .failure(let error):
                 BarnHubLogger.error("Failed to write invoice PDF error=\(error.localizedDescription)")
                 toast.show(appLocalized("Failed to save invoice"), isError: true)

@@ -56,15 +56,21 @@ struct SharedFile: Identifiable {
 }
 
 extension View {
+    /// Shows the share sheet for `file` and removes its temp file once the
+    /// sheet closes.
+    func shareSheet(_ file: Binding<SharedFile?>) -> some View {
+        sheet(item: file) { file in
+            ShareSheet(items: [file.url])
+        }
+        .onChange(of: file.wrappedValue?.url) { old, _ in ShareTempFiles.cleanUp(old) }
+    }
+
     /// Quick Look for tapping a stored document (photo or PDF) and a share
     /// sheet for its Share action. Both take temp files from `ShareTempFiles`,
     /// and each file is removed once its preview or sheet closes.
     func documentPresentation(preview: Binding<URL?>, share: Binding<SharedFile?>) -> some View {
         quickLookPreview(preview)
             .onChange(of: preview.wrappedValue) { old, _ in ShareTempFiles.cleanUp(old) }
-            .sheet(item: share) { file in
-                ShareSheet(items: [file.url])
-            }
-            .onChange(of: share.wrappedValue?.url) { old, _ in ShareTempFiles.cleanUp(old) }
+            .shareSheet(share)
     }
 }

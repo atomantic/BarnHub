@@ -10,8 +10,7 @@ struct ContractGeneratorView: View {
     @State private var selectedHorseID: PersistentIdentifier?
     @State private var startDate = Date.now
     @State private var monthlyRate: Double = 0
-    @State private var showShareSheet = false
-    @State private var generatedPDFURL: URL?
+    @State private var sharedPDF: SharedFile?
     /// A PDF is being drawn in the background; the button stays disabled until it's ready.
     @State private var isGenerating = false
     @State private var toast = ToastState()
@@ -86,14 +85,7 @@ struct ContractGeneratorView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .sheet(isPresented: $showShareSheet, onDismiss: {
-                ShareTempFiles.cleanUp(generatedPDFURL)
-                generatedPDFURL = nil
-            }) {
-                if let url = generatedPDFURL {
-                    ShareSheet(items: [url])
-                }
-            }
+            .shareSheet($sharedPDF)
             .toast(toast)
             .task {
                 if selectedHorseID == nil, let first = assignedHorses.first {
@@ -131,8 +123,7 @@ struct ContractGeneratorView: View {
 
             switch written {
             case .success(let tempURL):
-                generatedPDFURL = tempURL
-                showShareSheet = true
+                sharedPDF = SharedFile(url: tempURL)
                 BarnHubLogger.success("Contract generated type=\(type.rawValue)")
             case .failure(let error):
                 BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
