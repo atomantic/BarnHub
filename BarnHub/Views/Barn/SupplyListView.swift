@@ -46,9 +46,12 @@ struct SupplyListView: View {
             } else {
                 List {
                     ForEach(filteredItems) { item in
-                        NavigationLink(value: BarnRoute.supplyEdit(item.persistentModelID)) {
+                        Button {
+                            router.navigate(to: BarnRoute.supplyEdit(item.persistentModelID))
+                        } label: {
                             supplyRow(item)
                         }
+                        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button("Delete", role: .destructive) {
                                 itemToDelete = PendingDeletion(id: item.persistentModelID, name: item.name)

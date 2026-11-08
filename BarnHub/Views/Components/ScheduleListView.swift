@@ -48,7 +48,9 @@ struct ScheduleListView<Record: Identifiable>: View {
         .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                NavigationLink(value: addRoute) {
+                Button {
+                    router.navigate(to: addRoute)
+                } label: {
                     Label(addLabel, systemImage: "plus")
                 }
             }

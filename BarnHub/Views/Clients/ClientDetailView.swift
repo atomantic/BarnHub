@@ -365,14 +365,14 @@ struct ClientDetailView: View {
 
     private func deactivateClient() {
         guard let client else { return }
-        BarnHubLogger.info("Deactivating client name=\(client.fullName)")
+        BarnHubLogger.info("Deactivating client")
         RecordRemoval.deactivate(client, in: modelContext)
         toast.show(appLocalized("Client deactivated", comment: "Toast after deactivating a client"))
     }
 
     private func deleteClient() {
         guard let client else { return }
-        BarnHubLogger.info("Deleting client name=\(client.fullName)")
+        BarnHubLogger.info("Deleting client")
         RecordRemoval.delete(client, in: modelContext)
         if let onDelete {
             onDelete()

@@ -68,9 +68,12 @@ struct BarnNoteListView: View {
                 ForEach(groupedNotes, id: \.key) { group in
                     Section(group.key.title) {
                         ForEach(group.notes, id: \.persistentModelID) { note in
-                            NavigationLink(value: BarnRoute.barnNoteEdit(note.persistentModelID)) {
+                            Button {
+                                router.navigate(to: BarnRoute.barnNoteEdit(note.persistentModelID))
+                            } label: {
                                 noteRow(note)
                             }
+                            .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                         }
                         .onDelete { offsets in
                             deleteNotes(from: group.notes, at: offsets)

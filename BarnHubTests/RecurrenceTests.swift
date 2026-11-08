@@ -18,10 +18,7 @@ final class RecurrenceTests: XCTestCase {
 
     private func makeContext() throws -> ModelContext {
         let container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         return ModelContext(container)
