@@ -221,7 +221,7 @@ final class AllDataRestoreTests: XCTestCase {
     }
 
     private func wipe() throws {
-        try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
         XCTAssertTrue(try snapshot().values.allSatisfy(\.isEmpty), "store is empty before the restore")
     }
 
@@ -324,7 +324,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// restore adds. Both used to slow down with every row.
     func test_cancel_withTwentyThousandRowsForOneHorse_restoresAndRollsBackQuickly() async throws {
         for horseExists in [true, false] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let folder = try await exportAllData()
             if !horseExists { try wipe() }
@@ -361,7 +361,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// export, with nothing left from before.
     func test_deleteAllDataThenRestore_leavesExactlyTheExport() async throws {
         for keepDocuments in [false, true] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let exported = try snapshot()
             let folder = try await exportAllData()
@@ -374,20 +374,12 @@ final class AllDataRestoreTests: XCTestCase {
             try context.save()
             XCTAssertNotEqual(try snapshot(), exported)
 
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: keepDocuments)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: keepDocuments)
             _ = try await restore(folder)
 
-            let restored = try snapshot()
-            if keepDocuments {
-                // Kept documents keep their owners, which the restore matches. Full
-                // equality waits on #81 (two same-key clients can be matched crosswise).
-                XCTAssertEqual(restored["horses"]?.count, exported["horses"]?.count)
-                XCTAssertEqual(restored["horseDocs"]?.count, exported["horseDocs"]?.count, "kept documents aren't added twice")
-                XCTAssertFalse(restored["horses"]!.contains { $0.hasPrefix("Leftover|") })
-                XCTAssertFalse(restored["clients"]!.contains { $0.contains("555-9999") })
-            } else {
-                XCTAssertEqual(restored, exported)
-            }
+            // With Keep Documents, the kept twin horses and Jane B are matched to
+            // their own rows, not to the twin listed first (#81).
+            XCTAssertEqual(try snapshot(), exported, "keepDocuments=\(keepDocuments)")
         }
     }
 
