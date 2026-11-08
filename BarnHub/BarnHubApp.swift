@@ -254,7 +254,7 @@ struct ContentView: View {
         case "horses", "horseDetail", "addHorse": tab = .horses
         case "clients", "clientDetail": tab = .clients
         case "schedule", "feedProducts", "dentistSchedule", "reminders": tab = .schedule
-        case "accounting": tab = .accounting
+        case "accounting", "transactions": tab = .accounting
         default: return
         }
         router.selectedTab = tab
@@ -284,6 +284,8 @@ struct ContentView: View {
                 #else
                 router.navigate(to: HomeRoute.settings, tab: .home)
                 #endif
+            case "transactions":
+                router.navigate(to: AccountingRoute.list, tab: .accounting)
             case "addHorse":
                 router.navigate(to: HorseRoute.edit(nil), tab: .horses)
             case "feedProducts":

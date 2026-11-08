@@ -93,7 +93,6 @@ struct SupplyListView: View {
             TableColumn("Quantity", value: \.quantity) { item in
                 Text(item.quantity, format: .number.precision(.fractionLength(0...1)))
                     .monospacedDigit()
-                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 60, ideal: 80)
             TableColumn("Unit", value: \.unit)
@@ -101,12 +100,14 @@ struct SupplyListView: View {
             TableColumn("Reorder Threshold", value: \.reorderThreshold) { item in
                 Text(item.reorderThreshold, format: .number.precision(.fractionLength(0...1)))
                     .monospacedDigit()
-                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 80, ideal: 120)
             TableColumn("Last Ordered") { item in
                 if let date = item.lastOrderedDate {
                     Text(date, format: .dateTime.year().month(.abbreviated).day())
+                } else {
+                    Text(verbatim: "—")
+                        .foregroundStyle(.secondary)
                 }
             }
             .width(min: 90, ideal: 110)
