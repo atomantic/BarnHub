@@ -3,10 +3,17 @@ name: CI
 # The full suite from scripts/test.sh (unit tests plus the UI screen walk on
 # iPhone, iPad and Mac), the same one deploy.sh runs. TestFlight uploads stay
 # local (./deploy.sh).
-# Manual only: macOS minutes on this private repo are billed, so automatic runs
-# on pull requests / pushes wait on Adam's decision. Start it from the Actions
-# tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`.
+# Runs for release builds only (Adam, 2026-11-08), not on every PR, because
+# macOS minutes on this private repo are billed: pushes to a release/* or
+# testflight branch, version tags (v*), or by hand from the Actions tab
+# ("Run workflow") / `gh workflow run ci.yml --ref <branch>`.
 on:
+  push:
+    branches:
+      - 'release/**'
+      - testflight
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 concurrency:
