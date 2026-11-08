@@ -319,6 +319,44 @@ final class AllDataRestoreTests: XCTestCase {
         XCTAssertLessThan(Date().timeIntervalSince(start), 60, "restore and rollback stay fast")
     }
 
+    /// #77: 20,000 weigh-ins for one horse, restored and then rolled back,
+    /// once for a horse that's already in the store and once for one the
+    /// restore adds. Both used to slow down with every row.
+    func test_cancel_withTwentyThousandRowsForOneHorse_restoresAndRollsBackQuickly() async throws {
+        for horseExists in [true, false] {
+            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try seed()
+            let folder = try await exportAllData()
+            if !horseExists { try wipe() }
+            let before = try snapshot()
+            let url = folder.appendingPathComponent("weight_entries.csv")
+            var csv = try String(contentsOf: url, encoding: .utf8)
+            for i in 0..<20_000 { csv += "extra-\(i),2020-01-01,Storm,\(900 + Double(i) / 100),horse-1\n" }
+            try csv.write(to: url, atomically: true, encoding: .utf8)
+
+            let start = Date()
+            var cancelledAt: Date?
+            do {
+                _ = try await restore(folder) { index, _, _ in
+                    // Step 17, the last file, runs after every weigh-in was saved.
+                    if index == 17 {
+                        cancelledAt = Date()
+                        withUnsafeCurrentTask { $0?.cancel() }
+                    }
+                }
+                XCTFail("expected cancellation")
+            } catch is CancellationError {
+            }
+            let end = Date()
+
+            let cancelled = try XCTUnwrap(cancelledAt)
+            print("#77 timing horseExists=\(horseExists): restore \(cancelled.timeIntervalSince(start)) s, rollback \(end.timeIntervalSince(cancelled)) s")
+            XCTAssertEqual(try snapshot(), before, "horseExists=\(horseExists)")
+            // Generous ceiling (well under 10 s on an M-series simulator) so a slow runner doesn't flake.
+            XCTAssertLessThan(end.timeIntervalSince(start), 30, "restore and rollback stay fast, horseExists=\(horseExists)")
+        }
+    }
+
     func test_roundTrip_keepsSameNamedHorsesAndClientsDistinct() async throws {
         try seed()
         let folder = try await exportAllData()
