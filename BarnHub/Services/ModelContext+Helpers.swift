@@ -44,3 +44,54 @@ struct PendingDeletion {
     let id: PersistentIdentifier
     let name: String
 }
+
+// MARK: - Schema
+
+enum BarnHubSchema {
+    /// Every SwiftData model type in the app, in one place, so the container and
+    /// Delete All Data can't drift apart when a model is added.
+    static let models: [any PersistentModel.Type] = [
+        Horse.self, Client.self, Transaction.self,
+        VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
+        Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self,
+        FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
+    ]
+
+    static var schema: Schema { Schema(models) }
+}
+
+// MARK: - Removing records
+
+/// Removes records the way the user chose (#30), deleting each model explicitly
+/// instead of relying on delete rules.
+enum RecordRemoval {
+    /// Deletes every record of every model type, one by one (not a batch delete),
+    /// so each delete syncs to iCloud. With `keepDocuments`, horse and client
+    /// documents survive along with the horses and clients they belong to, since
+    /// a document is only visible through its owner.
+    static func deleteAllData(in context: ModelContext, keepDocuments: Bool) throws {
+        var keep = Set<PersistentIdentifier>()
+        if keepDocuments {
+            for document in try context.fetch(FetchDescriptor<HorseDocument>()) {
+                keep.insert(document.persistentModelID)
+                if let horse = document.horse { keep.insert(horse.persistentModelID) }
+            }
+            for document in try context.fetch(FetchDescriptor<ClientDocument>()) {
+                keep.insert(document.persistentModelID)
+                if let client = document.client { keep.insert(client.persistentModelID) }
+            }
+        }
+        for type in BarnHubSchema.models {
+            try deleteEach(type, keeping: keep, in: context)
+        }
+        try context.save()
+    }
+
+    private static func deleteEach<T: PersistentModel>(
+        _: T.Type, keeping keep: Set<PersistentIdentifier>, in context: ModelContext
+    ) throws {
+        for model in try context.fetch(FetchDescriptor<T>()) where !keep.contains(model.persistentModelID) {
+            context.delete(model)
+        }
+    }
+}

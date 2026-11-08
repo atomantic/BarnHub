@@ -201,6 +201,15 @@ final class NotificationService {
         }
     }
 
+    /// Removes every pending and delivered BarnHub notification, after Delete All
+    /// Data. Static so the Mac Settings window can call it without the instance.
+    static func cancelAllNotifications() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
+        BarnHubLogger.info("Cancelled all notifications")
+    }
+
     private func cancelNotification(identifier: String) {
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
     }
