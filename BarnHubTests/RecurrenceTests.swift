@@ -105,4 +105,39 @@ final class RecurrenceTests: XCTestCase {
         let mar = ReminderFrequency.monthly.advance(jan31, by: 2, calendar: calendar)!
         XCTAssertEqual(calendar.component(.day, from: mar), 31)
     }
+
+    // MARK: - Lessons
+
+    func test_weeklyLesson_appearsOnFutureCalendarDates() {
+        let lesson = Lesson(date: day(-14, hour: 16), frequency: .weekly)
+        let dates = lesson.occurrences(from: day(0), to: day(22), calendar: calendar)
+        XCTAssertEqual(dates, [day(0, hour: 16), day(7, hour: 16), day(14, hour: 16), day(21, hour: 16)])
+    }
+
+    func test_recurringLesson_usesNextDateAsAnchor() {
+        let lesson = Lesson(date: day(-30, hour: 9), frequency: .weekly, nextDate: day(2, hour: 11))
+        XCTAssertEqual(lesson.occurrences(from: day(-10), to: day(10), calendar: calendar),
+                       [day(2, hour: 11), day(9, hour: 11)],
+                       "Nothing before the anchor")
+        XCTAssertEqual(lesson.scheduledDate(onOrAfter: now, calendar: calendar), day(2, hour: 11))
+    }
+
+    func test_recurringLesson_scheduledDateAdvancesPastToday() {
+        let lesson = Lesson(date: day(-15, hour: 18), frequency: .weekly)
+        XCTAssertEqual(lesson.scheduledDate(onOrAfter: now, calendar: calendar), day(6, hour: 18))
+    }
+
+    func test_oneOffLesson_onlyShowsItsNextDate() {
+        let lesson = Lesson(date: day(-1), frequency: .once, nextDate: day(3))
+        XCTAssertEqual(lesson.occurrences(from: day(0), to: day(30), calendar: calendar), [day(3)])
+        XCTAssertEqual(lesson.scheduledDate(onOrAfter: now, calendar: calendar), day(3))
+        XCTAssertEqual(Lesson(date: day(1), frequency: .once).occurrences(from: day(0), to: day(30), calendar: calendar), [])
+    }
+
+    func test_lessonHomeDates_coverOneOffAndRecurring() {
+        let oneOff = Lesson(date: day(1, hour: 9), frequency: .once)
+        let daily = Lesson(date: day(-3, hour: 12), frequency: .daily)
+        XCTAssertEqual(oneOff.homeDates(from: now, before: day(2), calendar: calendar), [day(1, hour: 9)])
+        XCTAssertEqual(daily.homeDates(from: now, before: day(2), calendar: calendar), [day(0, hour: 12), day(1, hour: 12)])
+    }
 }
