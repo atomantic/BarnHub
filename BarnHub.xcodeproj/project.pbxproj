@@ -16,6 +16,7 @@
 		081908AE0AEFB9CFC5DD75ED /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */; };
 		0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
 		0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		0B326F92553B0A8255FB605C /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
 		0E615B3AFBEE7BFC126BF1B6 /* URL+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B807BC939932440E8214FD /* URL+App.swift */; };
@@ -99,6 +100,7 @@
 		716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
 		BAF339757A773E0B89048E24 /* HorseDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B633B5D058042761A458610 /* HorseDocument.swift */; };
 		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
 		77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
 		79CEBC2D5217C4F19E415478 /* HorseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38356F6D87FBDFB2290568 /* HorseEditView.swift */; };
@@ -251,6 +253,7 @@
 		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
 		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
 		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
+		B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000004 /* RecurrenceTests.swift */; };
 		TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0005000000000001 /* StoreServiceTests.swift */; };
 		TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0006000000000001 /* SyncMonitorTests.swift */; };
 		BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F003 /* BugReportServiceTests.swift */; };
@@ -377,6 +380,7 @@
 		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicePDFService.swift; sourceTree = "<group>"; };
 		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		B4A10001REMSVC0000000001 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0003 /* DeepLinkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandlerTests.swift; sourceTree = "<group>"; };
@@ -415,6 +419,7 @@
 		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
+		B4A10001REMSVC0000000004 /* RecurrenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0005000000000001 /* StoreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0006000000000001 /* SyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitorTests.swift; sourceTree = "<group>"; };
 		BUGRPT00000000000000F003 /* BugReportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportServiceTests.swift; sourceTree = "<group>"; };
@@ -576,6 +581,7 @@
 				CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
+				B4A10001REMSVC0000000001 /* ReminderService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
 				BUGRPT00000000000000F001 /* BugReportService.swift */,
@@ -692,6 +698,7 @@
 				TESTNEW0002000000000001 /* DataExportServiceTests.swift */,
 				TESTNEW0003000000000001 /* DataImportServiceTests.swift */,
 				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
+				B4A10001REMSVC0000000004 /* RecurrenceTests.swift */,
 				TESTNEW0005000000000001 /* StoreServiceTests.swift */,
 				TESTNEW0006000000000001 /* SyncMonitorTests.swift */,
 				BUGRPT00000000000000F003 /* BugReportServiceTests.swift */,
@@ -1005,6 +1012,7 @@
 				DAEBFA20B41C7ED9CC192419 /* ModelContext+Helpers.swift in Sources */,
 				14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */,
 				0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */,
+				B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */,
 				A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */,
 				00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */,
 				EF64D5B5EDE7FB95341045B0 /* ProBadgeView.swift in Sources */,
@@ -1128,6 +1136,7 @@
 				3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */,
 				AA11223344556677AABB0002 /* StoreService.swift in Sources */,
 				72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */,
+				B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */,
 				AA11223344556677AABB0004 /* FeatureGate.swift in Sources */,
 				AA11223344556677AABB0006 /* PaywallView.swift in Sources */,
 				AA11223344556677AABB0008 /* ProBadgeView.swift in Sources */,
@@ -1168,6 +1177,7 @@
 				TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */,
 				TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */,
 				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
+				B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */,
 				TESTNEW0005000000000002 /* StoreServiceTests.swift in Sources */,
 				TESTNEW0006000000000002 /* SyncMonitorTests.swift in Sources */,
 				BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */,

@@ -119,8 +119,7 @@ struct ReminderListView: View {
     }
 
     private func toggleCompletion(_ reminder: Reminder) {
-        reminder.isCompleted.toggle()
-        modelContext.saveWithLogging()
+        ReminderService.setCompleted(reminder, !reminder.isCompleted, in: modelContext)
         toast.show(reminder.isCompleted ? "Marked complete" : "Marked incomplete")
     }
 }
