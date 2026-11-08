@@ -229,7 +229,7 @@ struct HorseDocumentsView: View {
         modelContext.insert(doc)
         modelContext.saveWithLogging()
         toast.show(appLocalized("Document added"))
-        BarnHubLogger.success("Document added horse=\(horse.name) title=\(title) type=\(type.rawValue)")
+        BarnHubLogger.success("Horse document added type=\(type.rawValue) documents=\(horse.documents?.count ?? 0)")
     }
 
     private func shareDocument(_ doc: HorseDocument) {

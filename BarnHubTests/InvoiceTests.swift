@@ -10,9 +10,7 @@ final class InvoiceTests: XCTestCase {
         super.setUp()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try! ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self,
+            for: BarnHubSchema.schema,
             configurations: config
         )
         context = ModelContext(container)

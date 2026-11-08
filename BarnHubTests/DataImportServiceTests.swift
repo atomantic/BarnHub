@@ -11,10 +11,7 @@ final class DataImportServiceTests: XCTestCase {
         try super.setUpWithError()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: config
         )
         context = ModelContext(container)
@@ -194,10 +191,7 @@ final class DataImportServiceTests: XCTestCase {
         // Import into fresh context
         let config2 = ModelConfiguration(isStoredInMemoryOnly: true)
         let container2 = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: config2
         )
         let context2 = ModelContext(container2)
@@ -215,10 +209,7 @@ final class DataImportServiceTests: XCTestCase {
 
     private func makeContext() throws -> ModelContext {
         let container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         retainedContainers.append(container)

@@ -51,14 +51,29 @@ struct BarnHubApp: App {
         UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
     }
 
+    /// `-SeedSampleData` (Debug builds only): an in-memory store filled with sample
+    /// data. A release build must never trade the user's iCloud store for an
+    /// in-memory one because of a launch argument.
+    private static var isSeedModeRequested: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
+        #else
+        false
+        #endif
+    }
+
     private var modelContainer: ModelContainer = {
-        let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
+        let isSeedMode = Self.isSeedModeRequested
         let config = isSeedMode
             ? ModelConfiguration(isStoredInMemoryOnly: true)
             : ModelConfiguration(cloudKitDatabase: .automatic)
         StorageMode.current = isSeedMode ? .inMemorySeed : .cloudKit
         do {
-            let container = try ModelContainer(for: BarnHubSchema.schema, configurations: config)
+            let container = try ModelContainer(
+                for: BarnHubSchema.schema,
+                migrationPlan: BarnHubMigrationPlan.self,
+                configurations: config
+            )
             #if DEBUG
             if isSeedMode {
                 PreviewSampleData.populate(container: container)
@@ -178,8 +193,8 @@ struct ContentView: View {
     @Environment(StoreService.self) private var storeService
     @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(\.modelContext) private var modelContext
-    #if os(macOS)
-    @Environment(\.openSettings) private var openSettings
+    #if os(macOS) && DEBUG
+    @Environment(\.openSettings) private var openSettings  // screenshot routes only
     #endif
     @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
     @State private var showFirstLaunchSheet = false
@@ -217,7 +232,9 @@ struct ContentView: View {
             }
             notificationService.attach(to: modelContext)
             notificationService.requestSync(delay: .zero)
+            #if DEBUG
             handleScreenshotRouteFromLaunchArgs()
+            #endif
             routeNotificationTap()
         }
         .onChange(of: scenePhase) {
@@ -291,12 +308,14 @@ struct ContentView: View {
     }
 
     private func handleIncomingURL(_ url: URL) {
+        #if DEBUG
         if url.scheme == "barnhub", url.host() == "screenshot" {
             let page = url.pathComponents.filter { $0 != "/" }.first ?? ""
             navigateToScreenshotPage(page)
-        } else {
-            DeepLinkHandler.handle(url: url, router: router)
+            return
         }
+        #endif
+        DeepLinkHandler.handle(url: url, router: router)
     }
 
     private func routeNotificationTap() {
@@ -304,6 +323,11 @@ struct ContentView: View {
         DeepLinkHandler.handle(url: url, router: router)
     }
 
+    // MARK: Screenshot routes (debug builds only)
+
+    // Drive navigation for the screenshot UI tests and scripts. Release builds
+    // leave these out so no other app or web page can steer navigation.
+    #if DEBUG
     private func handleScreenshotRouteFromLaunchArgs() {
         let args = ProcessInfo.processInfo.arguments
         guard let idx = args.firstIndex(of: "-screenshotRoute"),
@@ -365,6 +389,7 @@ struct ContentView: View {
             }
         }
     }
+    #endif
 
     @ViewBuilder
     private var sidebarLayout: some View {
@@ -592,104 +617,122 @@ private extension View {
 // MARK: - Route destinations
 
 extension HomeRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .horses: HorseListView()
-        case .clients: ClientListView()
-        case .schedule: BarnDashboardView()
-        case .supplies: SupplyListView()
-        case .accounting: AccountingDashboardView()
-        case .reports: ReportsView()
-        case .barnNotes: BarnNoteListView()
-        case .settings: SettingsView()
-        case .dataManagement: DataManagementView()
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .horses: HorseListView()
+            case .clients: ClientListView()
+            case .schedule: BarnDashboardView()
+            case .supplies: SupplyListView()
+            case .accounting: AccountingDashboardView()
+            case .reports: ReportsView()
+            case .barnNotes: BarnNoteListView()
+            case .settings: SettingsView()
+            case .dataManagement: DataManagementView()
+            }
         }
     }
 }
 
 extension HorseRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .list: HorseListView()
-        case .detail(let id): HorseDetailView(horseID: id)
-        case .edit(let id): HorseEditView(horseID: id)
-        case .addVetRecord(let id): VetRecordEditView(horseID: id)
-        case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
-        case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
-        case .editVetRecord(let id): VetRecordEditView(horseID: nil, recordID: id)
-        case .editFarrierVisit(let id): FarrierVisitEditView(horseID: nil, visitID: id)
-        case .editDentistVisit(let id): DentistVisitEditView(horseID: nil, visitID: id)
-        case .healthTimeline(let id): HealthTimelineView(horseID: id)
-        case .weightChart(let id): WeightChartView(horseID: id)
-        case .documents(let id): HorseDocumentsView(horseID: id)
-        case .feedPlan(let id): HorseFeedPlanView(horseID: id)
-        case .editFeedEntry(let horseID, let entryID): FeedPlanEntryEditView(horseID: horseID, entryID: entryID)
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .list: HorseListView()
+            case .detail(let id): HorseDetailView(horseID: id)
+            case .edit(let id): HorseEditView(horseID: id)
+            case .addVetRecord(let id): VetRecordEditView(horseID: id)
+            case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
+            case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
+            case .editVetRecord(let id): VetRecordEditView(horseID: nil, recordID: id)
+            case .editFarrierVisit(let id): FarrierVisitEditView(horseID: nil, visitID: id)
+            case .editDentistVisit(let id): DentistVisitEditView(horseID: nil, visitID: id)
+            case .healthTimeline(let id): HealthTimelineView(horseID: id)
+            case .weightChart(let id): WeightChartView(horseID: id)
+            case .documents(let id): HorseDocumentsView(horseID: id)
+            case .feedPlan(let id): HorseFeedPlanView(horseID: id)
+            case .editFeedEntry(let horseID, let entryID): FeedPlanEntryEditView(horseID: horseID, entryID: entryID)
+            }
         }
     }
 }
 
 extension ClientRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .list: ClientListView()
-        case .detail(let id): ClientDetailView(clientID: id)
-        case .edit(let id): ClientEditView(clientID: id)
-        case .manageHorses(let id): ClientHorsesView(clientID: id)
-        case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
-        case .paymentHistory(let id): ClientPaymentHistoryView(clientID: id)
-        case .documents(let id): ClientDocumentsView(clientID: id)
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .list: ClientListView()
+            case .detail(let id): ClientDetailView(clientID: id)
+            case .edit(let id): ClientEditView(clientID: id)
+            case .manageHorses(let id): ClientHorsesView(clientID: id)
+            case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
+            case .paymentHistory(let id): ClientPaymentHistoryView(clientID: id)
+            case .documents(let id): ClientDocumentsView(clientID: id)
+            }
         }
     }
 }
 
 extension AccountingRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .list: TransactionListView()
-        case .edit(let id): TransactionEditView(transactionID: id)
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .list: TransactionListView()
+            case .edit(let id): TransactionEditView(transactionID: id)
+            }
         }
     }
 }
 
 extension BarnRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .supplies: SupplyListView()
-        case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
-        case .reminders: ReminderListView()
-        case .reminderEdit(let id): ReminderEditView(reminderID: id)
-        case .barnNotes: BarnNoteListView()
-        case .barnNoteEdit(let id): BarnNoteEditView(noteID: id)
-        case .vetSchedule: VetScheduleView()
-        case .addVetRecord: VetRecordEditView(horseID: nil)
-        case .farrierSchedule: FarrierScheduleView()
-        case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
-        case .dentistSchedule: DentistScheduleView()
-        case .addDentistVisit: DentistVisitEditView(horseID: nil)
-        case .lessons: LessonListView()
-        case .lessonEdit(let id): LessonEditView(lessonID: id)
-        case .feedProducts: FeedProductListView()
-        case .feedProductEdit(let id): FeedProductEditView(productID: id)
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .supplies: SupplyListView()
+            case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
+            case .reminders: ReminderListView()
+            case .reminderEdit(let id): ReminderEditView(reminderID: id)
+            case .barnNotes: BarnNoteListView()
+            case .barnNoteEdit(let id): BarnNoteEditView(noteID: id)
+            case .vetSchedule: VetScheduleView()
+            case .addVetRecord: VetRecordEditView(horseID: nil)
+            case .farrierSchedule: FarrierScheduleView()
+            case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
+            case .dentistSchedule: DentistScheduleView()
+            case .addDentistVisit: DentistVisitEditView(horseID: nil)
+            case .lessons: LessonListView()
+            case .lessonEdit(let id): LessonEditView(lessonID: id)
+            case .feedProducts: FeedProductListView()
+            case .feedProductEdit(let id): FeedProductEditView(productID: id)
+            }
         }
     }
 }
 
 extension SubscriptionRoute {
-    /// The screen this route shows, whether pushed or presented as a form sheet.
+    /// The screen this route shows, whether pushed or presented as a form sheet,
+    /// behind the upgrade view when it needs Pro.
     @MainActor @ViewBuilder
     var destination: some View {
-        switch self {
-        case .paywall: PaywallView()
+        ProGated(feature: requiredProFeature) {
+            switch self {
+            case .paywall: PaywallView()
+            }
         }
     }
 }
@@ -1148,7 +1191,7 @@ struct FirstLaunchSheet: View {
             breed: horseBreed.trimmingCharacters(in: .whitespaces)
         )
         modelContext.insert(horse)
-        BarnHubLogger.success("First horse added during onboarding: \(trimmedName)")
+        BarnHubLogger.success("First horse added during onboarding")
     }
 
     @MainActor

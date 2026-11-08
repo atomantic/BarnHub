@@ -510,14 +510,14 @@ struct HorseDetailView: View {
 
     private func markHorseInactive() {
         guard let horse else { return }
-        BarnHubLogger.info("Marking horse inactive name=\(horse.name)")
+        BarnHubLogger.info("Marking horse inactive")
         RecordRemoval.markInactive(horse, in: modelContext)
         toast.show(appLocalized("Horse marked inactive", comment: "Toast after marking a horse inactive"))
     }
 
     private func deleteHorse() {
         guard let horse else { return }
-        BarnHubLogger.info("Deleting horse name=\(horse.name)")
+        BarnHubLogger.info("Deleting horse")
         RecordRemoval.delete(horse, in: modelContext)
         if let onDelete {
             onDelete()

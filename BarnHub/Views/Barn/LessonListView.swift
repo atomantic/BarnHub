@@ -31,9 +31,12 @@ struct LessonListView: View {
             } else {
                 List {
                     ForEach(displayedLessons) { lesson in
-                        NavigationLink(value: BarnRoute.lessonEdit(lesson.persistentModelID)) {
+                        Button {
+                            router.navigate(to: BarnRoute.lessonEdit(lesson.persistentModelID))
+                        } label: {
                             lessonRow(lesson)
                         }
+                        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                     }
                     .onDelete(perform: deleteLessons)
                 }
@@ -43,7 +46,9 @@ struct LessonListView: View {
         .inlineNavTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                NavigationLink(value: BarnRoute.lessonEdit(nil)) {
+                Button {
+                    router.navigate(to: BarnRoute.lessonEdit(nil))
+                } label: {
                     Label("Add Lesson", systemImage: "plus")
                 }
             }
