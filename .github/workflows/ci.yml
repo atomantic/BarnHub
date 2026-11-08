@@ -3,10 +3,9 @@ name: CI
 # scripts/test.sh: the unit tests by default (as deploy.sh runs them), or with
 # suite=full the UI screen walk on iPhone, iPad and Mac too. TestFlight uploads
 # stay local (./deploy.sh).
-# Manual only, never automatic: this is a private repo and GitHub's macOS
-# minutes run out fast (Adam, 2026-11-08). The release gate is deploy.sh running
-# ./scripts/test.sh on Adam's Mac. Start a run from the Actions tab ("Run
-# workflow") or with `gh workflow run ci.yml --ref <branch> -f suite=full`.
+# Manual only, never automatic: a maintainer starts each run. The release gate
+# is deploy.sh running ./scripts/test.sh on the maintainer's Mac. Start a run
+# from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch> -f suite=full`.
 on:
   workflow_dispatch:
     inputs:

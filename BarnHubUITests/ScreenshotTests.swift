@@ -3,7 +3,12 @@ import XCTest
 final class ScreenshotTests: XCTestCase {
     var app: XCUIApplication!
 
-    private static let projectDir = "/Users/antic/github.com/atomantic/BarnHub"
+    /// The repo root on the Mac that built the tests (this file lives in
+    /// <root>/BarnHubUITests). The simulator can read the host's file system.
+    private static let projectDir = URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent()
+        .deletingLastPathComponent()
+        .path
 
     /// Read config from project dir or /tmp (written by take_screenshots.sh)
     private var config: [String: String] {
