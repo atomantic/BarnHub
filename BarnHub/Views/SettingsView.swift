@@ -137,7 +137,7 @@ struct SettingsView: View {
         #if os(iOS)
         iOSSettingsList
         #else
-        macOSColumnsSettings
+        macOSSettingsTabs
         #endif
     }
 
@@ -227,114 +227,100 @@ struct SettingsView: View {
     }
     #endif
 
-    // MARK: - macOS: Responsive Columns
-    // >= 860pt -> 3 columns | >= 540pt -> 2 columns | < 540pt -> 1 column
+    // MARK: - macOS: Settings window
+    // A tabbed preferences window, opened from BarnHub ▸ Settings… (⌘,) and the
+    // sidebar's gear, instead of a page pushed into the main window.
 
     #if os(macOS)
-    private var macOSColumnsSettings: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            ScrollView {
-                Group {
-                    if w >= 860 {
-                        HStack(alignment: .top, spacing: 16) {
-                            col1.frame(maxWidth: .infinity)
-                            col2.frame(maxWidth: .infinity)
-                            col3.frame(maxWidth: .infinity)
-                        }
-                    } else if w >= 540 {
-                        HStack(alignment: .top, spacing: 16) {
-                            VStack(spacing: 16) { col1; col3 }.frame(maxWidth: .infinity)
-                            col2.frame(maxWidth: .infinity)
-                        }
-                    } else {
-                        VStack(spacing: 16) { col1; col2; col3 }
-                    }
-                }
-                .padding()
+    private var macOSSettingsTabs: some View {
+        TabView {
+            Form {
+                appearanceSection
+                homeScreenSection
+                iCloudSyncSection
             }
+            .formStyle(.grouped)
+            .tabItem { Label("General", systemImage: "gearshape") }
+
+            Form { subscriptionSection }
+                .formStyle(.grouped)
+                .tabItem { Label("Subscription", systemImage: "creditcard") }
+
+            DataManagementView()
+                .tabItem { Label("Data", systemImage: "arrow.up.arrow.down") }
+
+            Form {
+                feedbackSection
+                Section("Legal") {
+                    externalLink("Privacy Policy", url: .privacyPolicy)
+                    externalLink("Terms of Use", url: .termsOfUse)
+                }
+                Section {
+                    Text("Version \(appVersion) (\(buildNumber))")
+                        .font(.footnote)
+                        .foregroundStyle(.tertiary)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .formStyle(.grouped)
+            .tabItem { Label("Feedback", systemImage: "envelope") }
         }
+        .frame(width: 520, height: 460)
     }
 
-    private var col1: some View {
-        Form {
-            appearanceSection
-            homeScreenSection
-            Section("Subscription") {
-                if storeService.isPro {
+    private var subscriptionSection: some View {
+        Section("Subscription") {
+            if storeService.isPro {
+                HStack {
+                    Text("Plan")
+                    Spacer()
+                    HStack(spacing: 4) {
+                        Text(storeService.hasLifetime ? "Lifetime" : "BarnHub")
+                        ProBadgeView()
+                    }
+                }
+                Button {
+                    showManageSubscription = true
+                } label: {
+                    settingsRow("Manage Subscription", icon: "creditcard")
+                }
+            } else {
+                Button {
+                    showPaywall = true
+                } label: {
                     HStack {
-                        Text("Plan")
+                        Text("Upgrade to Pro")
                         Spacer()
-                        HStack(spacing: 4) {
-                            Text(storeService.hasLifetime ? "Lifetime" : "BarnHub")
-                            ProBadgeView()
-                        }
-                    }
-                    Button {
-                        showManageSubscription = true
-                    } label: {
-                        settingsRow("Manage Subscription", icon: "creditcard")
-                    }
-                } else {
-                    Button {
-                        showPaywall = true
-                    } label: {
-                        HStack {
-                            Text("Upgrade to Pro")
-                            Spacer()
-                            ProBadgeView()
-                        }
-                    }
-                    if let url = URL(string: "macappstore://apps.apple.com/redeem?ctx=offercodes") {
-                        Link(destination: url) {
-                            settingsRow("Redeem Code", icon: "gift")
-                        }
+                        ProBadgeView()
                     }
                 }
-            }
-        }
-        .formStyle(.grouped)
-    }
-
-    private var col2: some View {
-        Form {
-            iCloudSyncSection
-            dataSection
-            Section("Feedback") {
-                if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
+                if let url = URL(string: "macappstore://apps.apple.com/redeem?ctx=offercodes") {
                     Link(destination: url) {
-                        settingsRow("Send Feedback", icon: "envelope")
+                        settingsRow("Redeem Code", icon: "gift")
                     }
                 }
-                Button {
-                    showBugReport = true
-                } label: {
-                    settingsRow("Report a Bug", icon: "ladybug")
-                }
-                Button {
-                    showWelcomeSheet = true
-                } label: {
-                    settingsRow("Show Welcome Screen", icon: "sparkles")
-                }
             }
         }
-        .formStyle(.grouped)
     }
 
-    private var col3: some View {
-        Form {
-            Section("Legal") {
-                externalLink("Privacy Policy", url: .privacyPolicy)
-                externalLink("Terms of Use", url: .termsOfUse)
+    private var feedbackSection: some View {
+        Section("Feedback") {
+            if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
+                Link(destination: url) {
+                    settingsRow("Send Feedback", icon: "envelope")
+                }
             }
-            Section {
-                Text("Version \(appVersion) (\(buildNumber))")
-                    .font(.footnote)
-                    .foregroundStyle(.tertiary)
-                    .frame(maxWidth: .infinity)
+            Button {
+                showBugReport = true
+            } label: {
+                settingsRow("Report a Bug", icon: "ladybug")
+            }
+            Button {
+                showWelcomeSheet = true
+            } label: {
+                settingsRow("Show Welcome Screen", icon: "sparkles")
             }
         }
-        .formStyle(.grouped)
     }
     #endif
 

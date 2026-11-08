@@ -9,6 +9,7 @@ struct HorseListView: View {
     @State private var searchText = ""
     @State private var showInactive = false
     @State private var width: CGFloat = 0
+    @State private var horsePendingDelete: Horse?
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -44,6 +45,7 @@ struct HorseListView: View {
                 ListDetailSplit(width: width) {
                     List(filteredHorses, id: \.persistentModelID, selection: $router.selectedHorseID) { horse in
                         HorseRowView(horse: horse)
+                            .contextMenu { rowActions(horse) }
                     }
                 } detail: {
                     if let id = router.selectedHorseID {
@@ -58,6 +60,7 @@ struct HorseListView: View {
                     NavigationLink(value: HorseRoute.detail(horse.persistentModelID)) {
                         HorseRowView(horse: horse)
                     }
+                    .contextMenu { rowActions(horse) }
                 }
             }
         }
@@ -68,6 +71,19 @@ struct HorseListView: View {
         .onChange(of: showsSplit, initial: true) { _, split in
             router.horsesShowSplit = split
         }
+        .overlay {
+            ConfirmationDialog(
+                isPresented: Binding(
+                    get: { horsePendingDelete != nil },
+                    set: { if !$0 { horsePendingDelete = nil } }
+                ),
+                title: "Delete Horse",
+                message: "Are you sure you want to delete this horse? All associated vet records, farrier visits, and dentist visits will also be removed.",
+                confirmTitle: "Delete",
+                confirmRole: .destructive,
+                onConfirm: deletePendingHorse
+            )
+        }
         .navigationTitle("Horses")
         .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search horses")
@@ -77,6 +93,7 @@ struct HorseListView: View {
             } label: {
                 Label("Add Horse", systemImage: "plus")
             }
+            .help(Text("Add Horse"))
         }
         .toolbar {
             ToolbarItem(placement: .leadingBar) {
@@ -85,8 +102,31 @@ struct HorseListView: View {
                 }
                 .toggleStyle(.button)
                 .tint(showInactive ? .primary : .secondary)
+                .help(Text("Show Inactive"))
             }
         }
+    }
+
+    /// Right-click (Mac) or long-press actions on a horse row.
+    @ViewBuilder
+    private func rowActions(_ horse: Horse) -> some View {
+        Button {
+            router.navigate(to: HorseRoute.edit(horse.persistentModelID))
+        } label: {
+            Label("Edit Horse", systemImage: "pencil")
+        }
+        Button(role: .destructive) {
+            horsePendingDelete = horse
+        } label: {
+            Label("Delete Horse", systemImage: "trash")
+        }
+    }
+
+    private func deletePendingHorse() {
+        guard let horse = horsePendingDelete else { return }
+        horsePendingDelete = nil
+        BarnHubLogger.info("Deleting horse name=\(horse.name)")
+        modelContext.deleteWithLogging(horse)
     }
 
     /// Keeps the split's selection on a horse that's still listed, so the detail
