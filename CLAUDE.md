@@ -63,6 +63,7 @@ CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
 - **Logging**: Use `BarnHubLogger.info/success/warning/error`. Never log names, emails, or other personal data; log counts, types, or flags instead
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument (Debug builds only, like `-screenshotRoute` and `barnhub://screenshot/…`; Release ignores them)
+- **Deep links**: The `barnhub` URL scheme is registered in `BarnHub/Info.plist` (iOS/Catalyst) and `BarnHub/Info-macOS.plist` (native macOS); `DeepLinkHandler` handles `barnhub://home|horses|clients|accounting|schedule[/reminders|vet|farrier|…]|supplies|reports|subscription` in all builds. Drive a simulator with `xcrun simctl openurl <udid> barnhub://horses`; iOS asks "Open in BarnHub?" the first time, so tap Open once
 
 ## Localization
 
