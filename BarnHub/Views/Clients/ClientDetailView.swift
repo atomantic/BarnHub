@@ -210,6 +210,14 @@ struct ClientDetailView: View {
         }
     }
 
+    private func paneHeader(_ client: Client) -> some View {
+        DetailPaneHeader(
+            title: client.fullName,
+            onEdit: { router.navigate(to: ClientRoute.edit(clientID)) },
+            onDelete: { showDeleteConfirmation = true }
+        )
+    }
+
     @ToolbarContentBuilder
     private var clientToolbar: some ToolbarContent {
         // Standalone items (instead of a custom "…" menu) so iPhone Duo can lay
@@ -246,10 +254,10 @@ struct ClientDetailView: View {
     #if os(iOS)
     private func iOSClientLayout(_ client: Client) -> some View {
         Group {
-            if sizeClass == .regular {
+            // The embedded pane beside the list is too narrow for two columns.
+            if sizeClass == .regular && !isEmbedded {
                 // Same split as macOS: contact + horses left, money + documents right.
                 WideColumns {
-                    if isEmbedded { DetailPaneHeader(title: client.fullName) }
                     contactSection(client)
                     emergencySection(client)
                     notesSection(client)
@@ -260,7 +268,7 @@ struct ClientDetailView: View {
                 }
             } else {
                 List {
-                    if isEmbedded { DetailPaneHeader(title: client.fullName) }
+                    if isEmbedded { paneHeader(client) }
                     contactSection(client)
                     emergencySection(client)
                     notesSection(client)
@@ -277,7 +285,7 @@ struct ClientDetailView: View {
         .sheet(isPresented: $showContractGenerator) {
             ContractGeneratorView(clientID: clientID)
         }
-        .toolbar { clientToolbar }
+        .toolbar { if !isEmbedded { clientToolbar } }
     }
     #endif
 
@@ -286,7 +294,7 @@ struct ClientDetailView: View {
     /// for the two-column window layout.
     private func macOSClientPaneLayout(_ client: Client) -> some View {
         Form {
-            DetailPaneHeader(title: client.fullName)
+            paneHeader(client)
             contactSection(client)
             emergencySection(client)
             notesSection(client)
@@ -301,7 +309,6 @@ struct ClientDetailView: View {
         .sheet(isPresented: $showContractGenerator) {
             ContractGeneratorView(clientID: clientID)
         }
-        .toolbar { clientToolbar }
     }
 
     private func macOSClientLayout(_ client: Client) -> some View {

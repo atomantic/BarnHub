@@ -204,11 +204,6 @@ struct ListDetailSplit<ListColumn: View, Detail: View>: View {
             Divider()
             detail
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                #if os(iOS)
-                // The detail views pick one or two columns from the size class;
-                // base that on the pane, not the whole screen.
-                .environment(\.horizontalSizeClass, width - listWidth >= 640 ? .regular : .compact)
-                #endif
         }
     }
 }
@@ -226,18 +221,43 @@ extension View {
     }
 }
 
-/// The item's name at the top of an embedded detail pane, standing in for the
-/// navigation title the pane doesn't set.
+/// The top of an embedded detail pane: the item's name, standing in for the
+/// navigation title the pane doesn't set, and the actions on that item. Keeping
+/// Edit and Delete here, rather than in the bar beside the list's own actions,
+/// makes it clear what they act on.
 struct DetailPaneHeader: View {
     let title: String
+    var subtitle: String = ""
+    let onEdit: () -> Void
+    let onDelete: () -> Void
 
     var body: some View {
         Section {
-            Text(title)
-                .font(.title2.bold())
-                .foregroundStyle(.primary)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+                    if !subtitle.isEmpty {
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer(minLength: 0)
+                Button(action: onEdit) {
+                    Label("Edit", systemImage: "pencil")
+                }
+                .buttonStyle(.bordered)
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete", systemImage: "trash")
+                        .labelStyle(.iconOnly)
+                }
+                .buttonStyle(.bordered)
+            }
+            .tint(.barnGreen)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
         }
     }
 }
