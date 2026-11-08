@@ -130,7 +130,6 @@ struct TransactionListView: View {
                 Text(txn.amount.asCurrency)
                     .monospacedDigit()
                     .foregroundStyle(txn.type == .income ? .green : .red)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 80, ideal: 100)
             TableColumn("Paid") { txn in
