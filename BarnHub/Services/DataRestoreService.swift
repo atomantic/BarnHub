@@ -636,19 +636,32 @@ enum DataRestoreService {
             for horse in try scratch.fetch(FetchDescriptor<Horse>()) {
                 for client in horse.clients ?? [] { existing[key(horseKey(horse), clientKey(client)), default: 0] += 1 }
             }
+            func linked(_ horse: Horse, _ client: Client) -> Bool {
+                (horse.clients ?? []).contains { $0.persistentModelID == client.persistentModelID }
+            }
+            // Rows whose horse and client are already linked use up their key
+            // first, so an earlier row for a twin can't take it and leave its
+            // own link out (#81).
+            for row in try rowSignatures(.horseClients, { row in
+                let horseID = row.text("horse id"), clientID = row.text("client id")
+                guard let horse = owner(horseID, as: Horse.self), let client = owner(clientID, as: Client.self),
+                      linked(horse, client) else { return nil }
+                return (key(ownerKey(horseID), ownerKey(clientID)), "")
+            }) {
+                existing[row.key] = max(0, (existing[row.key] ?? 0) - 1)
+            }
             try each(.horseClients, progress: progress) { row in
                 let horseExportID = row.text("horse id")
                 let clientExportID = row.text("client id")
                 guard let horse = owner(horseExportID, as: Horse.self),
                       let client = owner(clientExportID, as: Client.self) else { return .skipped(.unknownLink) }
+                if linked(horse, client) { return .duplicate }
                 let linkKey = key(ownerKey(horseExportID), ownerKey(clientExportID))
                 if let count = existing[linkKey], count > 0 {
                     existing[linkKey] = count - 1
                     return .duplicate
                 }
-                let clients = horse.clients ?? []
-                guard !clients.contains(where: { $0.persistentModelID == client.persistentModelID }) else { return .duplicate }
-                horse.clients = clients + [client]
+                horse.clients = (horse.clients ?? []) + [client]
                 if !insertedSet.contains(horse.persistentModelID), !insertedSet.contains(client.persistentModelID) {
                     addedLinks.append((horse.persistentModelID, client.persistentModelID))
                 }
