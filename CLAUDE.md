@@ -42,19 +42,20 @@ Local deploy via `./deploy.sh` (used when CI build credits are exhausted):
 
 Requires `.env` file with App Store Connect API credentials (see `.env.example`).
 
-CI/CD via GitHub Actions (`.github/workflows/ci.yml`) deploys automatically on push to `main`, `testflight`, or `release/*` branches.
+CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests` on every pull request and on push to `main`, on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
 
 ## Key Patterns
 
 - **Router**: 5-tab navigation (Home, Horses, Clients, Schedule, Accounting) with `NavigationPath` per tab
-- **Models**: SwiftData `@Model` classes with enum-backed raw string properties (see `Enums.swift`)
+- **Models**: SwiftData `@Model` classes with enum-backed raw string properties (see `Enums.swift`). Every model is listed once in `BarnHubSchema.models` (`ModelContext+Helpers.swift`; `ModelSchemaTests` fails if one is missing) and the container uses `BarnHubSchemaV1` + `BarnHubMigrationPlan`. Before changing a model, freeze V1 and add V2 with a lightweight stage (CloudKit allows only additive changes)
+- **Forms and Pro screens**: open add/edit forms with `router.navigate(to:)`, not `NavigationLink(value:)`, so they become sheets on Mac/iPad. Each route enum's exhaustive `isForm` and `requiredProFeature` (`Routes.swift`) decide sheet presentation and Pro gating at the destination
 - **Brand colors**: Use `Color.barnGreen` and other brand colors from `Color+Brand.swift`
 - **Currency formatting**: Use `Double.asCurrency` extension
 - **Date formatting**: Use extensions in `Date+Formatting.swift`
 - **Toasts**: Use `.toast()` modifier from `View+Toast.swift` — never `window.alert`
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
-- **Logging**: Use `BarnHubLogger.info/success/warning/error`
-- **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument
+- **Logging**: Use `BarnHubLogger.info/success/warning/error`. Never log names, emails, or other personal data; log counts, types, or flags instead
+- **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument (Debug builds only, like `-screenshotRoute` and `barnhub://screenshot/…`; Release ignores them)
 
 ## Localization
 
