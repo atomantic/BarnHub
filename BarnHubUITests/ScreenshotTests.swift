@@ -207,7 +207,7 @@ final class ScreenshotTests: XCTestCase {
             ("03_horse_detail", "horseDetail"),
             ("04_clients", "clients"),
             ("05_client_detail", "clientDetail"),
-            ("06_schedule", "schedule"),
+            ("06_schedule", "scheduleMonth"),
             ("07_accounting", "accounting"),
         ]
         for (index, screen) in screens.enumerated() {
@@ -230,7 +230,14 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func relaunch(route: String? = nil) {
-        app.launchArguments = launchArgs + (route.map { ["-screenshotRoute", $0] } ?? [])
+        var args = launchArgs
+        if route == "scheduleMonth" {
+            // Same tab as "schedule", but open the calendar in Month view.
+            args += ["-net.shadowpuppet.BarnBook.schedule.viewMode", "month", "-screenshotRoute", "schedule"]
+        } else if let route {
+            args += ["-screenshotRoute", route]
+        }
+        app.launchArguments = args
         app.launch()
         sleep(2)
         dismissSystemAlerts()

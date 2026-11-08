@@ -900,7 +900,7 @@ struct DashboardEventRow: View {
                     Text(event.title)
                         .font(.subheadline)
                         .foregroundStyle(.primary)
-                        .lineLimit(1)
+                        .lineLimit(2)
                     if let subtitle = event.subtitle, !subtitle.isEmpty {
                         Text(subtitle)
                             .font(.caption2)
