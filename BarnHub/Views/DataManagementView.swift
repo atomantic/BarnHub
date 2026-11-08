@@ -13,13 +13,14 @@ struct DataManagementView: View {
     @State private var pendingImportURL: URL?
     @State private var importResult: DataImportService.ImportResult?
     @State private var showImportResult = false
-    @State private var deleteStep: DeleteStep?
+    /// The Delete All Data / Restore All Data dialog on screen, if any (#76).
+    @State private var resetStep: DataResetStep?
     /// The picker is choosing an All Data folder to restore, not a CSV file.
     @State private var pickingFolder = false
-    @State private var showRestoreConfirmation = false
-    @State private var pendingRestoreURL: URL?
     @State private var restoreResult: DataRestoreService.Result?
     @State private var showRestoreResult = false
+    /// Why a restore that followed Delete All Data didn't finish.
+    @State private var restoreNotice: String?
     @State private var csvJob = CSVJob()
 
     #if os(macOS)
@@ -65,7 +66,7 @@ struct DataManagementView: View {
             Section {
                 HStack {
                     Button(role: .destructive) {
-                        deleteStep = .chooseScope
+                        resetStep = .chooseScope(.delete)
                     } label: {
                         Label("Delete All Data", systemImage: "trash")
                     }
@@ -131,7 +132,7 @@ struct DataManagementView: View {
 
             Section {
                 Button(role: .destructive) {
-                    deleteStep = .chooseScope
+                    resetStep = .chooseScope(.delete)
                 } label: {
                     Label("Delete All Data", systemImage: "trash")
                 }
@@ -188,40 +189,7 @@ struct DataManagementView: View {
                 onConfirm: performImport
             )
         }
-        .overlay {
-            ConfirmationDialog(
-                isPresented: $showRestoreConfirmation,
-                title: "Restore All Data",
-                message: "BarnHub adds the records, photos, documents and invoices in this folder. Nothing you already have is changed or removed, and records that are already in BarnHub are skipped, so restoring the same folder again doesn't add duplicates. To replace your data instead, use Delete All Data first.",
-                confirmTitle: "Restore",
-                onConfirm: performRestore
-            )
-        }
-        .alert(
-            deleteStep?.title ?? "",
-            isPresented: Binding(get: { deleteStep != nil }, set: { if !$0 { deleteStep = nil } })
-        ) {
-            switch deleteStep {
-            case .chooseScope:
-                Button("Delete Everything", role: .destructive) {
-                    deleteStep = .finalConfirmation(keepDocuments: false)
-                }
-                Button("Keep Documents") {
-                    deleteStep = .finalConfirmation(keepDocuments: true)
-                }
-                Button("Cancel", role: .cancel) { deleteStep = nil }
-            case .finalConfirmation(let keepDocuments):
-                Button("Delete All Data", role: .destructive) {
-                    deleteStep = nil
-                    deleteAllData(keepDocuments: keepDocuments)
-                }
-                Button("Cancel", role: .cancel) { deleteStep = nil }
-            case nil:
-                EmptyView()
-            }
-        } message: {
-            Text(deleteStep?.message ?? "")
-        }
+        .overlay { resetDialog }
         .alert(importResult?.cancelled == true ? Text("Import Cancelled") : Text("Import Complete"), isPresented: $showImportResult) {
             Button("OK") {}
         } message: {
@@ -235,6 +203,60 @@ struct DataManagementView: View {
             if let r = restoreResult {
                 Text(restoreSummary(r))
             }
+        }
+        .alert("Restore Didn't Finish", isPresented: Binding(get: { restoreNotice != nil }, set: { if !$0 { restoreNotice = nil } })) {
+            Button("OK") {}
+        } message: {
+            Text(restoreNotice ?? "")
+        }
+    }
+
+    // MARK: - Delete / Restore Dialogs
+
+    /// One custom dialog per step instead of chained system alerts: a system
+    /// alert presented from another alert's button is dropped on iPad (#76).
+    /// The binding is tied to the step it was made for, so closing that
+    /// dialog after a button moved on to the next step doesn't clear it.
+    @ViewBuilder
+    private var resetDialog: some View {
+        if let step = resetStep {
+            ChoiceDialog(
+                isPresented: Binding(get: { resetStep == step }, set: { if !$0, resetStep == step { resetStep = nil } }),
+                title: step.title,
+                message: step.message,
+                choices: step.choices.map { choice in
+                    .init(title: choice.title, role: choice.isDestructive ? .destructive : nil, isDefault: choice.isDefault) {
+                        handle(step.action(for: choice))
+                    }
+                }
+            )
+            .id(step)
+        }
+    }
+
+    private func handle(_ action: DataResetAction) {
+        switch action {
+        case .next(let step):
+            resetStep = step
+        case .restore(let url):
+            resetStep = nil
+            performRestore(url, afterDelete: false)
+        case .delete(let keepDocuments):
+            resetStep = nil
+            deleteAllData(keepDocuments: keepDocuments)
+        case .deleteThenRestore(let url, let keepDocuments):
+            resetStep = nil
+            // Check the folder first, so a wrong pick doesn't cost the user their data.
+            let scoped = url.startAccessingSecurityScopedResource()
+            defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+            do {
+                _ = try DataRestoreService.exportRoot(for: url)
+            } catch {
+                toast.show(error.localizedDescription, isError: true)
+                return
+            }
+            guard deleteAllData(keepDocuments: keepDocuments) else { return }
+            performRestore(url, afterDelete: true)
         }
     }
 
@@ -400,16 +422,15 @@ struct DataManagementView: View {
         switch result {
         case .success(let urls):
             guard let url = urls.first else { return }
-            pendingRestoreURL = url
-            showRestoreConfirmation = true
+            resetStep = .restoreChoice(url)
         case .failure(let error):
             toast.show(appLocalized("Could not open file: \(error.localizedDescription)", comment: "File open error"), isError: true)
         }
     }
 
-    private func performRestore() {
-        guard let url = pendingRestoreURL else { return }
-        pendingRestoreURL = nil
+    /// Restores the folder at `url`. `afterDelete`: Delete All Data just ran,
+    /// so a failure has to say the old data is gone.
+    private func performRestore(_ url: URL, afterDelete: Bool) {
         // The restore reads through background contexts, so flush pending edits first.
         modelContext.saveWithLogging()
         let container = modelContext.container
@@ -427,13 +448,14 @@ struct DataManagementView: View {
             // Same hook as a save on the main context, so reminders get scheduled.
             NotificationCenter.default.post(name: .barnHubModelContextDidSave, object: modelContext)
         } onFailure: { error in
-            if error is CancellationError {
-                toast.show(appLocalized("Restore cancelled. Nothing was added.", comment: "Toast after the user cancels Restore All Data"))
-            } else if let error = error as? DataRestoreService.RestoreError {
-                toast.show(error.localizedDescription, isError: true)
+            if !(error is CancellationError) {
+                BarnHubLogger.error("Restore failed afterDelete=\(afterDelete) error=\(error.localizedDescription)")
+            }
+            let failure = DataResetStep.restoreFailure(error, afterDelete: afterDelete)
+            if afterDelete {
+                restoreNotice = failure.message
             } else {
-                BarnHubLogger.error("Restore failed error=\(error.localizedDescription)")
-                toast.show(appLocalized("Restore failed. Nothing was added.", comment: "Toast when Restore All Data fails; everything it added was removed again"), isError: true)
+                toast.show(failure.message, isError: failure.isError)
             }
         }
     }
@@ -462,15 +484,19 @@ struct DataManagementView: View {
 
     // MARK: - Delete All
 
-    private func deleteAllData(keepDocuments: Bool) {
+    /// Returns whether everything was deleted.
+    @discardableResult
+    private func deleteAllData(keepDocuments: Bool) -> Bool {
         do {
             try RecordRemoval.deleteAllData(in: modelContext, keepDocuments: keepDocuments)
             NotificationService.cancelAllNotifications()
             BarnHubLogger.success("Deleted all data keepDocuments=\(keepDocuments)")
             toast.show(appLocalized("All data deleted"))
+            return true
         } catch {
             BarnHubLogger.error("Failed to delete all data error=\(error.localizedDescription)")
             toast.show(appLocalized("Failed to delete data"), isError: true)
+            return false
         }
     }
 
@@ -498,29 +524,6 @@ struct DataManagementView: View {
 }
 
 // MARK: - Types
-
-private enum DeleteStep {
-    case chooseScope
-    case finalConfirmation(keepDocuments: Bool)
-
-    var title: String {
-        switch self {
-        case .chooseScope: return appLocalized("Delete All Data?", comment: "Delete All Data first alert title")
-        case .finalConfirmation: return appLocalized("Final Confirmation", comment: "Final delete confirmation alert title")
-        }
-    }
-
-    var message: String {
-        switch self {
-        case .chooseScope:
-            return appLocalized("BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to.", comment: "Delete All Data first alert message: where data lives and the documents choice")
-        case .finalConfirmation(keepDocuments: false):
-            return appLocalized("This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices.", comment: "Final delete confirmation message when documents are deleted too")
-        case .finalConfirmation(keepDocuments: true):
-            return appLocalized("This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices.", comment: "Final delete confirmation message when documents are kept")
-        }
-    }
-}
 
 private enum ExportDataType {
     case horses, clients, transactions, all
@@ -621,4 +624,120 @@ private final class CSVJob {
         isCancelling = true
         task.cancel()
     }
+}
+
+// MARK: - Delete / Restore Steps
+
+/// What the Delete All Data dialogs are deleting for (#76).
+enum DataResetIntent: Hashable {
+    /// Delete All Data on its own.
+    case delete
+    /// Restore All Data's "Delete All Data, Then Restore": the folder to restore afterwards.
+    case replace(URL)
+}
+
+/// The dialogs for Delete All Data and for Restore All Data's choice, one at a
+/// time. A button either moves to the next step or ends with an action.
+enum DataResetStep: Hashable {
+    /// A folder was picked: restore into the current data, or delete first.
+    case restoreChoice(URL)
+    /// Where the data lives, and whether to keep documents.
+    case chooseScope(DataResetIntent)
+    case finalConfirmation(DataResetIntent, keepDocuments: Bool)
+
+    enum Choice: Hashable {
+        case restoreAndKeep, deleteThenRestore, deleteEverything, keepDocuments, confirm
+    }
+
+    /// The step's buttons, Cancel aside.
+    var choices: [Choice] {
+        switch self {
+        case .restoreChoice: return [.restoreAndKeep, .deleteThenRestore]
+        case .chooseScope: return [.deleteEverything, .keepDocuments]
+        case .finalConfirmation(.delete, _): return [.confirm]
+        case .finalConfirmation(.replace, _): return [.deleteThenRestore]
+        }
+    }
+
+    /// What tapping `choice` does here.
+    func action(for choice: Choice) -> DataResetAction {
+        switch (self, choice) {
+        case (.restoreChoice(let url), .deleteThenRestore): return .next(.chooseScope(.replace(url)))
+        case (.restoreChoice(let url), _): return .restore(url)
+        case (.chooseScope(let intent), .keepDocuments): return .next(.finalConfirmation(intent, keepDocuments: true))
+        case (.chooseScope(let intent), _): return .next(.finalConfirmation(intent, keepDocuments: false))
+        case (.finalConfirmation(.delete, let keep), _): return .delete(keepDocuments: keep)
+        case (.finalConfirmation(.replace(let url), let keep), _): return .deleteThenRestore(url, keepDocuments: keep)
+        }
+    }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .restoreChoice: return "Restore All Data"
+        case .chooseScope(.delete): return "Delete All Data?"
+        case .chooseScope(.replace): return "Delete All Data, Then Restore?"
+        case .finalConfirmation: return "Final Confirmation"
+        }
+    }
+
+    var message: LocalizedStringKey {
+        switch self {
+        case .restoreChoice:
+            return "Restore only adds what's missing. Records, photos, documents and invoices in this folder that aren't in BarnHub yet are added. Records you already have are kept unchanged, even where the folder's copy differs: for example, it won't add a photo to a horse you already have. Nothing is deleted.\n\nTo replace your data with this folder instead, choose Delete All Data, Then Restore."
+        case .chooseScope(.delete):
+            return "BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to."
+        case .chooseScope(.replace):
+            return "BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one. Then the folder is restored.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to, and the restore skips the ones that are also in the folder."
+        case .finalConfirmation(.delete, keepDocuments: false):
+            return "This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices."
+        case .finalConfirmation(.delete, keepDocuments: true):
+            return "This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices."
+        case .finalConfirmation(.replace, keepDocuments: false):
+            return "This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices, then the folder is restored."
+        case .finalConfirmation(.replace, keepDocuments: true):
+            return "This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices, then the folder is restored."
+        }
+    }
+
+    /// How a restore that ended with `error` is reported. After Delete All
+    /// Data the message says the old data is already gone.
+    static func restoreFailure(_ error: Error, afterDelete: Bool) -> (message: String, isError: Bool) {
+        let cancelled = error is CancellationError
+        switch (cancelled, afterDelete) {
+        case (true, false):
+            return (appLocalized("Restore cancelled. Nothing was added.", comment: "Toast after the user cancels Restore All Data"), false)
+        case (true, true):
+            return (appLocalized("Restore cancelled. Your data was already deleted, and nothing from the folder was added.",
+                                 comment: "Alert after cancelling the restore that follows Delete All Data"), true)
+        case (false, true):
+            return (appLocalized("Restore failed. Your data was already deleted, and nothing from the folder was added.",
+                                 comment: "Alert when the restore that follows Delete All Data fails"), true)
+        case (false, false):
+            if let error = error as? DataRestoreService.RestoreError { return (error.localizedDescription, true) }
+            return (appLocalized("Restore failed. Nothing was added.", comment: "Toast when Restore All Data fails; everything it added was removed again"), true)
+        }
+    }
+}
+
+extension DataResetStep.Choice {
+    var title: LocalizedStringKey {
+        switch self {
+        case .restoreAndKeep: return "Restore and Keep My Data"
+        case .deleteThenRestore: return "Delete All Data, Then Restore"
+        case .deleteEverything: return "Delete Everything"
+        case .keepDocuments: return "Keep Documents"
+        case .confirm: return "Delete All Data"
+        }
+    }
+
+    var isDestructive: Bool { self != .restoreAndKeep && self != .keepDocuments }
+    var isDefault: Bool { self == .restoreAndKeep }
+}
+
+enum DataResetAction: Equatable {
+    case next(DataResetStep)
+    /// Restore into the current data.
+    case restore(URL)
+    case delete(keepDocuments: Bool)
+    case deleteThenRestore(URL, keepDocuments: Bool)
 }
