@@ -211,7 +211,7 @@ struct SettingsView: View {
                 }
             }
 
-            Section {
+            Section("Legal") {
                 externalLink("Privacy Policy", url: .privacyPolicy)
                 externalLink("Terms of Use", url: .termsOfUse)
             }
