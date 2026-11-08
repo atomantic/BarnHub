@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# test.sh — The full BarnHub test suite, as one command. deploy.sh and CI
-# (.github/workflows/ci.yml) both run this, so a pass here means the same as a
-# pass there.
+# test.sh — BarnHub's tests, as one command. By default it runs the unit tests
+# (about a minute), which is what deploy.sh and CI run. The UI screen walk is a
+# rare audit, not a per-release step: it takes 30+ minutes across devices, so
+# run it with --ui or --all when you want a full pass over every screen.
 #
 #   unit    BarnHubTests (unit tests) on an iPhone simulator
 #   iphone  ScreenWalkTests on iPhone: opens every screen with sample data and
@@ -13,8 +14,9 @@
 #           would quit a BarnHub you have open, so it never runs by default.
 #
 # Usage:
-#   ./scripts/test.sh                      # unit, iphone, ipad
-#   ./scripts/test.sh --all                # those plus mac
+#   ./scripts/test.sh                      # unit tests only (deploy.sh, CI)
+#   ./scripts/test.sh --ui                 # screen walk on iPhone and iPad
+#   ./scripts/test.sh --all                # unit + iPhone + iPad + Mac
 #   ./scripts/test.sh --unit               # pick steps (flags combine)
 #   ./scripts/test.sh --iphone --ipad --mac   # just the UI screen walk
 #   ./scripts/test.sh --iphone --only testHorseScreens   # one UI test method
@@ -45,13 +47,14 @@ while [[ $# -gt 0 ]]; do
         --iphone) STEPS+=(iphone); shift ;;
         --ipad)   STEPS+=(ipad); shift ;;
         --mac)    STEPS+=(mac); shift ;;
+        --ui)     STEPS+=(iphone ipad); shift ;;
         --all)    STEPS+=(unit iphone ipad mac); shift ;;
         --only)   ONLY="${2:?--only needs a test method name}"; shift 2 ;;
         -h|--help) sed -n '3,31p' "$0"; exit 0 ;;
         *) echo "Unknown option: $1 (see --help)"; exit 2 ;;
     esac
 done
-[[ ${#STEPS[@]} -eq 0 ]] && STEPS=(unit iphone ipad)
+[[ ${#STEPS[@]} -eq 0 ]] && STEPS=(unit)
 
 # Prints "<name>|<udid>|<os>" for the best available simulator: an exact name
 # match on the newest runtime (or SIM_OS), else the first device of that family.

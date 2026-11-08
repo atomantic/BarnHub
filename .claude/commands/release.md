@@ -5,7 +5,7 @@ Build, archive, and upload to TestFlight locally.
 ## Instructions
 
 1. **Pre-flight checks**:
-   - `./deploy.sh` runs the full `./scripts/test.sh` (unit tests plus every screen on iPhone and iPad) and stops if it fails. For the Mac app, also run `./scripts/test.sh --mac` with BarnHub quit
+   - `./deploy.sh` runs the unit tests (`./scripts/test.sh`) and stops if they fail. The UI screen walk (`./scripts/test.sh --all`) is a rare audit, not part of each release
    - Run `git status` to ensure working tree is clean (no uncommitted changes)
    - If there are uncommitted changes, ask the user to commit first
 

@@ -1,8 +1,8 @@
 name: CI
 
-# The full suite from scripts/test.sh (unit tests plus the UI screen walk on
-# iPhone, iPad and Mac), the same one deploy.sh runs. TestFlight uploads stay
-# local (./deploy.sh).
+# scripts/test.sh: the unit tests by default (as deploy.sh runs them), or with
+# suite=full the UI screen walk on iPhone, iPad and Mac too. TestFlight uploads
+# stay local (./deploy.sh).
 # Manual only, never automatic: this is a private repo and GitHub's macOS
 # minutes run out fast (Adam, 2026-11-08). The release gate is deploy.sh running
 # ./scripts/test.sh on Adam's Mac. Start a run from the Actions tab ("Run
@@ -44,7 +44,7 @@ jobs:
 
       - name: Run tests
         run: |
-          if [ "${{ inputs.suite }}" = "full" ]; then ./scripts/test.sh --all; else ./scripts/test.sh --unit; fi
+          if [ "${{ inputs.suite }}" = "full" ]; then ./scripts/test.sh --all; else ./scripts/test.sh; fi
 
       - name: Upload test results
         if: failure()
