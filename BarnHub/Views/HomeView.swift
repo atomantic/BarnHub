@@ -180,10 +180,7 @@ struct HomeView: View {
                 // Scale with the container instead of a fixed iPhone height, so the
                 // short, wide iPhone Duo outer display (and landscape) keeps room for content.
                 .containerRelativeFrame(.vertical) { height, _ in
-                    // Shorter on iPad-sized screens, where the dashboard needs the room.
-                    sizeClass == .regular
-                        ? min(200, max(160, height * 0.2))
-                        : min(260, max(210, height * 0.32))
+                    min(260, max(210, height * 0.32))
                 }
                 #endif
                 // Let the green run under the vertical tab bar / side toolbar.
