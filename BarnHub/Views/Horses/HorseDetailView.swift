@@ -136,6 +136,7 @@ struct HorseDetailView: View {
                 Text(horse.medicalNotes)
             }
         }
+        let sortedFeedEntries = self.sortedFeedEntries  // sorted once per render
         if !sortedFeedEntries.isEmpty {
             Section("Feeding Schedule") {
                 ForEach(sortedFeedEntries, id: \.persistentModelID) { entry in
@@ -162,7 +163,8 @@ struct HorseDetailView: View {
     }
 
     private func vetSection() -> some View {
-        Section {
+        let sortedVetRecords = self.sortedVetRecords  // sorted once per render
+        return Section {
             if sortedVetRecords.isEmpty {
                 Text("No vet records")
                     .foregroundStyle(.secondary)
@@ -215,7 +217,8 @@ struct HorseDetailView: View {
     }
 
     private func farrierSection() -> some View {
-        Section {
+        let sortedFarrierVisits = self.sortedFarrierVisits  // sorted once per render
+        return Section {
             if sortedFarrierVisits.isEmpty {
                 Text("No farrier visits")
                     .foregroundStyle(.secondary)
@@ -268,7 +271,8 @@ struct HorseDetailView: View {
     }
 
     private func dentistSection() -> some View {
-        Section {
+        let sortedDentistVisits = self.sortedDentistVisits  // sorted once per render
+        return Section {
             if sortedDentistVisits.isEmpty {
                 Text("No dentist visits")
                     .foregroundStyle(.secondary)
@@ -341,7 +345,8 @@ struct HorseDetailView: View {
     }
 
     private func clientsSection() -> some View {
-        Section("Clients") {
+        let sortedHorseClients = self.sortedHorseClients  // sorted once per render
+        return Section("Clients") {
             if sortedHorseClients.isEmpty {
                 Text("No assigned clients")
                     .foregroundStyle(.secondary)

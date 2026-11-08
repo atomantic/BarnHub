@@ -6,8 +6,6 @@ struct WeightChartView: View {
     let horseID: PersistentIdentifier
     @Environment(\.modelContext) private var modelContext
 
-    @State private var selectedEntry: WeightEntry?
-
     private var horse: Horse? {
         modelContext.existingModel(for: horseID)
     }
@@ -103,6 +101,75 @@ struct WeightChartView: View {
     // MARK: - Chart
 
     private func chartSection(sortedEntries: [WeightEntry], minWeight: Double, maxWeight: Double) -> some View {
+        WeightTrendChart(sortedEntries: sortedEntries, minWeight: minWeight, maxWeight: maxWeight)
+    }
+
+    // MARK: - History
+
+    private func historySection(sortedEntries: [WeightEntry]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("History")
+                .font(.headline)
+
+            // Each entry's change from the one before, in one pass.
+            let rows = sortedEntries.indices.reversed().map { index in
+                HistoryRow(entry: sortedEntries[index], previous: index > 0 ? sortedEntries[index - 1] : nil)
+            }
+            ForEach(rows) { row in
+                let entry = row.entry
+                HStack {
+                    Image(systemName: "scalemass.fill")
+                        .font(.caption)
+                        .foregroundStyle(.barnGreen)
+                        .frame(width: 24)
+                    Text("\(Int(entry.weight)) lbs")
+                        .font(.subheadline.weight(.medium))
+                    Spacer()
+                    Text(entry.date.shortFormatted)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    if let change = row.change {
+                        Text("\(change >= 0 ? "+" : "")\(Int(change))")
+                            .font(.caption)
+                            .foregroundStyle(change >= 0 ? .barnGreen : .red)
+                            .frame(width: 50, alignment: .trailing)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.barnCardBackground)
+                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
+        )
+    }
+}
+
+private struct HistoryRow: Identifiable {
+    let entry: WeightEntry
+    let change: Double?
+
+    init(entry: WeightEntry, previous: WeightEntry?) {
+        self.entry = entry
+        self.change = previous.map { entry.weight - $0.weight }
+    }
+
+    var id: PersistentIdentifier { entry.persistentModelID }
+}
+
+/// The weight chart. Holds the drag selection itself, so scrubbing redraws only
+/// the chart, not the summary and history (#32).
+private struct WeightTrendChart: View {
+    let sortedEntries: [WeightEntry]
+    let minWeight: Double
+    let maxWeight: Double
+
+    @State private var selectedEntryID: PersistentIdentifier?
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Weight Over Time")
                 .font(.headline)
@@ -126,8 +193,7 @@ struct WeightChartView: View {
                 .foregroundStyle(Color.barnGreen.opacity(0.1))
                 .interpolationMethod(.catmullRom)
 
-                if let selected = selectedEntry,
-                   selected.persistentModelID == entry.persistentModelID {
+                if selectedEntryID == entry.persistentModelID {
                     PointMark(
                         x: .value("Date", entry.date, unit: .day),
                         y: .value("Weight", entry.weight)
@@ -179,7 +245,7 @@ struct WeightChartView: View {
                                     selectEntry(at: value.location, proxy: proxy, geometry: geometry, entries: sortedEntries)
                                 }
                                 .onEnded { _ in
-                                    selectedEntry = nil
+                                    selectedEntryID = nil
                                 }
                         )
                 }
@@ -198,54 +264,27 @@ struct WeightChartView: View {
         guard let frame = proxy.plotFrame else { return }
         let plotFrame = geometry[frame]
         let xPosition = location.x - plotFrame.origin.x
-        guard let date: Date = proxy.value(atX: xPosition) else { return }
-
-        selectedEntry = entries.min(by: {
-            abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date))
-        })
+        guard let date: Date = proxy.value(atX: xPosition),
+              let nearest = Self.nearestIndex(to: date, in: entries) else { return }
+        let id = entries[nearest].persistentModelID
+        // Only a change of entry invalidates the view, not every drag event.
+        if id != selectedEntryID { selectedEntryID = id }
     }
 
-    // MARK: - History
-
-    private func historySection(sortedEntries: [WeightEntry]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("History")
-                .font(.headline)
-
-            ForEach(sortedEntries.reversed(), id: \.persistentModelID) { entry in
-                HStack {
-                    Image(systemName: "scalemass.fill")
-                        .font(.caption)
-                        .foregroundStyle(.barnGreen)
-                        .frame(width: 24)
-                    Text("\(Int(entry.weight)) lbs")
-                        .font(.subheadline.weight(.medium))
-                    Spacer()
-                    Text(entry.date.shortFormatted)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    if let change = changeFrom(entry, in: sortedEntries) {
-                        Text("\(change >= 0 ? "+" : "")\(Int(change))")
-                            .font(.caption)
-                            .foregroundStyle(change >= 0 ? .barnGreen : .red)
-                            .frame(width: 50, alignment: .trailing)
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-            }
+    /// The index of the entry closest to `date` in date-sorted `entries`, by
+    /// binary search.
+    static func nearestIndex(to date: Date, in entries: [WeightEntry]) -> Int? {
+        guard !entries.isEmpty else { return nil }
+        var low = 0
+        var high = entries.count
+        while low < high {
+            let mid = (low + high) / 2
+            if entries[mid].date < date { low = mid + 1 } else { high = mid }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.barnCardBackground)
-                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
-        )
-    }
-
-    private func changeFrom(_ entry: WeightEntry, in entries: [WeightEntry]) -> Double? {
-        guard let index = entries.firstIndex(where: { $0.persistentModelID == entry.persistentModelID }),
-              index > 0 else { return nil }
-        return entry.weight - entries[index - 1].weight
+        if low == 0 { return 0 }
+        if low == entries.count { return entries.count - 1 }
+        let before = date.timeIntervalSince(entries[low - 1].date)
+        let after = entries[low].date.timeIntervalSince(date)
+        return before <= after ? low - 1 : low
     }
 }

@@ -11,15 +11,18 @@ struct LessonListView: View {
 
     private var displayedLessons: [Lesson] {
         if showUpcomingOnly {
+            // Each lesson's next date is worked out once, not on every comparison.
             return allLessons
-                .filter { $0.scheduledDate() != nil }
-                .sorted { ($0.scheduledDate() ?? .distantFuture) < ($1.scheduledDate() ?? .distantFuture) }
+                .compactMap { lesson in lesson.scheduledDate().map { (lesson, $0) } }
+                .sorted { $0.1 < $1.1 }
+                .map(\.0)
         }
         return allLessons
     }
 
     var body: some View {
-        Group {
+        let displayedLessons = self.displayedLessons  // once per render
+        return Group {
             if displayedLessons.isEmpty {
                 EmptyStateView(
                     icon: "book.fill",
