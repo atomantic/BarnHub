@@ -71,19 +71,20 @@ struct CalendarMonthView: View {
     var showEventsList: Bool = true
 
     @Environment(\.locale) private var locale
-    private let cal = Calendar.current
+    /// Weeks start on the locale's first weekday (Monday in most of Europe).
+    private var cal: Calendar { .weeks(startingAsIn: locale) }
 
     private var dayLabels: [String] {
         var c = Calendar(identifier: .gregorian)
         c.locale = locale
-        return c.shortWeekdaySymbols
+        return cal.weekdaySymbolsStartingOnFirstWeekday(c.shortWeekdaySymbols)
     }
 
     private var monthWeeks: [[Date?]] {
+        let cal = cal
         guard let range = cal.range(of: .day, in: .month, for: monthStart) else { return [] }
-        let firstWeekday = cal.component(.weekday, from: monthStart)
         var weeks: [[Date?]] = []
-        var week: [Date?] = Array(repeating: nil, count: firstWeekday - 1)
+        var week: [Date?] = Array(repeating: nil, count: cal.leadingBlankDays(forMonthStartingOn: monthStart))
         for day in range {
             guard let date = cal.date(byAdding: .day, value: day - 1, to: monthStart) else { continue }
             week.append(date)
