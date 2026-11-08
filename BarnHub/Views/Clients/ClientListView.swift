@@ -9,6 +9,10 @@ struct ClientListView: View {
 
     @State private var searchText = ""
     @State private var showInactive = false
+    @State private var width: CGFloat = 0
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
 
     private var filteredClients: [Client] {
         clients.filter { client in
@@ -22,8 +26,17 @@ struct ClientListView: View {
 
     private var isPro: Bool { FeatureGate.canAccessClients(storeService.isPro) }
 
+    /// List beside detail when there's room; a pushed detail otherwise.
+    private var showsSplit: Bool {
+        #if os(iOS)
+        guard sizeClass == .regular else { return false }
+        #endif
+        return width >= ListDetailSplit<EmptyView, EmptyView>.minimumWidth
+    }
+
     var body: some View {
-        Group {
+        @Bindable var router = router
+        return Group {
             if !isPro {
                 ClientsUpgradeView()
             } else if filteredClients.isEmpty {
@@ -32,6 +45,19 @@ struct ClientListView: View {
                     title: "No Clients",
                     subtitle: "Tap + to add your first client."
                 )
+            } else if showsSplit {
+                ListDetailSplit(width: width) {
+                    List(filteredClients, id: \.persistentModelID, selection: $router.selectedClientID) { client in
+                        ClientRowView(client: client)
+                    }
+                } detail: {
+                    if let id = router.selectedClientID {
+                        ClientDetailView(clientID: id, isEmbedded: true) {
+                            router.selectedClientID = nil
+                        }
+                        .id(id)
+                    }
+                }
             } else {
                 List(filteredClients, id: \.persistentModelID) { client in
                     NavigationLink(value: ClientRoute.detail(client.persistentModelID)) {
@@ -39,6 +65,13 @@ struct ClientListView: View {
                     }
                 }
             }
+        }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+        .onChange(of: filteredClients.map(\.persistentModelID), initial: true) { _, ids in
+            keepSelection(in: ids)
+        }
+        .onChange(of: showsSplit, initial: true) { _, split in
+            router.clientsShowSplit = split
         }
         .navigationTitle("Clients")
         .inlineNavTitle()
@@ -61,5 +94,12 @@ struct ClientListView: View {
                 }
             }
         }
+    }
+
+    /// Keeps the split's selection on a client that's still listed, so the detail
+    /// pane is never blank while there are clients to show.
+    private func keepSelection(in ids: [PersistentIdentifier]) {
+        if let id = router.selectedClientID, ids.contains(id) { return }
+        router.selectedClientID = ids.first
     }
 }

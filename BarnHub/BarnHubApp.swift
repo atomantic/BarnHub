@@ -243,12 +243,12 @@ struct ContentView: View {
             case "horseDetail":
                 let d = FetchDescriptor<Horse>(predicate: #Predicate { $0.isActive }, sortBy: [SortDescriptor(\.name)])
                 if let h = try? modelContext.fetch(d).first {
-                    router.navigate(to: HorseRoute.detail(h.persistentModelID), tab: .horses)
+                    router.showHorse(h.persistentModelID)
                 }
             case "clientDetail":
                 let d = FetchDescriptor<Client>(predicate: #Predicate { $0.isActive }, sortBy: [SortDescriptor(\.lastName)])
                 if let c = try? modelContext.fetch(d).first {
-                    router.navigate(to: ClientRoute.detail(c.persistentModelID), tab: .clients)
+                    router.showClient(c.persistentModelID)
                 }
             case "feedProducts":
                 router.navigate(to: BarnRoute.feedProducts, tab: .schedule)
