@@ -99,6 +99,7 @@ struct BarnHubApp: App {
                 .environment(notificationService)
                 .environment(syncMonitor)
                 .task {
+                    ShareTempFiles.purgeLeftoversAtLaunch()
                     // Refresh status only — never request cold. The actual permission
                     // request happens after the user opts in via FirstLaunchSheet.
                     await notificationService.refreshAuthorizationStatus()

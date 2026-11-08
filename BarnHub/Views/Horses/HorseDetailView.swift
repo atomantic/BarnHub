@@ -67,15 +67,19 @@ struct HorseDetailView: View {
 
     @ViewBuilder
     private func photoSection(_ horse: Horse) -> some View {
-        if let photoData = horse.photoData, let image = Image(photoData: photoData) {
+        if let photoData = horse.photoData {
             Section {
                 HStack {
                     Spacer()
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 160, height: 160)
-                        .clipShape(Circle())
+                    CachedPhotoView(data: photoData, maxPixelSize: 480) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        Color.secondary.opacity(0.15)
+                    }
+                    .frame(width: 160, height: 160)
+                    .clipShape(Circle())
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
@@ -433,15 +437,19 @@ struct HorseDetailView: View {
                 // Left column: photo + info + notes
                 VStack(spacing: 0) {
                     Form {
-                        if let photoData = horse.photoData, let image = Image(photoData: photoData) {
+                        if let photoData = horse.photoData {
                             Section {
                                 HStack {
                                     Spacer()
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 200, height: 200)
-                                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    CachedPhotoView(data: photoData, maxPixelSize: 600) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                    } placeholder: {
+                                        Color.secondary.opacity(0.15)
+                                    }
+                                    .frame(width: 200, height: 200)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
                                     Spacer()
                                 }
                             }

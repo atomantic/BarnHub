@@ -80,7 +80,10 @@ struct ContractGeneratorView: View {
                     Button("Cancel") { dismiss() }
                 }
             }
-            .sheet(isPresented: $showShareSheet) {
+            .sheet(isPresented: $showShareSheet, onDismiss: {
+                ShareTempFiles.cleanUp(generatedPDFURL)
+                generatedPDFURL = nil
+            }) {
                 if let url = generatedPDFURL {
                     ShareSheet(items: [url])
                 }
@@ -112,9 +115,9 @@ struct ContractGeneratorView: View {
         )
 
         let fileName = ContractPDFService.fileName(type: contractType, clientName: client.fullName)
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        let tempURL: URL
         do {
-            try pdfData.write(to: tempURL)
+            tempURL = try ShareTempFiles.write(pdfData, fileName: fileName, fileExtension: "pdf")
         } catch {
             BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
             toast.show(appLocalized("Failed to save contract"), isError: true)
