@@ -16,8 +16,8 @@ struct HorseDocumentsView: View {
     @State private var showDeleteConfirmation = false
     @State private var documentToDelete: PendingDeletion?
     @State private var toast = ToastState()
-    @State private var showShareSheet = false
-    @State private var shareURL: URL?
+    @State private var previewURL: URL?
+    @State private var shareFile: SharedFile?
 
     private var horse: Horse? {
         modelContext.existingModel(for: horseID)
@@ -157,19 +157,12 @@ struct HorseDocumentsView: View {
             photoLoadTask?.cancel()
             fileImportTask?.cancel()
         }
-        .sheet(isPresented: $showShareSheet, onDismiss: {
-            ShareTempFiles.cleanUp(shareURL)
-            shareURL = nil
-        }) {
-            if let url = shareURL {
-                ShareSheet(items: [url])
-            }
-        }
+        .documentPresentation(preview: $previewURL, share: $shareFile)
     }
 
     private func documentRow(_ doc: HorseDocument) -> some View {
         Button {
-            shareDocument(doc)
+            previewDocument(doc)
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: doc.documentType.icon)
@@ -232,15 +225,30 @@ struct HorseDocumentsView: View {
         BarnHubLogger.success("Horse document added type=\(type.rawValue) documents=\(horse.documents?.count ?? 0)")
     }
 
+    /// Opens the document in Quick Look, so a photo or PDF can be read in place.
+    private func previewDocument(_ doc: HorseDocument) {
+        guard let url = writeTempFile(for: doc) else { return }
+        previewURL = url
+    }
+
     private func shareDocument(_ doc: HorseDocument) {
-        guard let data = doc.fileData else { return }
+        guard let url = writeTempFile(for: doc) else { return }
+        shareFile = SharedFile(url: url)
+    }
+
+    private func writeTempFile(for doc: HorseDocument) -> URL? {
+        guard let data = doc.fileData else {
+            // A document synced from another device can arrive before its file does.
+            BarnHubLogger.warning("Document has no file data yet type=\(doc.typeRaw)")
+            toast.show(appLocalized("This file is still downloading from iCloud. Try again in a moment.", comment: "Toast when a synced document's file hasn't arrived yet"), isError: true)
+            return nil
+        }
         do {
-            ShareTempFiles.cleanUp(shareURL)
-            shareURL = try ShareTempFiles.write(data, fileName: doc.title, fileExtension: doc.fileExtension)
-            showShareSheet = true
+            return try ShareTempFiles.write(data, fileName: doc.title, fileExtension: doc.fileExtension)
         } catch {
-            BarnHubLogger.error("Failed to write document for sharing error=\(error.localizedDescription)")
-            toast.show(appLocalized("Failed to share document"), isError: true)
+            BarnHubLogger.error("Failed to write document temp file error=\(error.localizedDescription)")
+            toast.show(appLocalized("Failed to open document", comment: "Error toast when a stored document can't be written out to preview or share"), isError: true)
+            return nil
         }
     }
 }
