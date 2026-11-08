@@ -13,8 +13,8 @@
 <p align="center">
   <img src="screenshots/01_home.png" width="200">
   <img src="screenshots/02_horses.png" width="200">
-  <img src="screenshots/04_schedule.png" width="200">
-  <img src="screenshots/05_accounting.png" width="200">
+  <img src="screenshots/06_schedule.png" width="200">
+  <img src="screenshots/07_accounting.png" width="200">
 </p>
 
 ## Privacy by Design
