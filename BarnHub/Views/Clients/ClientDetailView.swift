@@ -149,7 +149,7 @@ struct ClientDetailView: View {
                         }
                         Spacer()
                         VStack(alignment: .trailing, spacing: 2) {
-                            Text(transaction.amount.asCurrency)
+                            Text(transaction.signedAmount.asCurrency)
                                 .font(.subheadline)
                                 .foregroundStyle(transaction.type == .income ? .green : .primary)
                             if transaction.isPaid {
