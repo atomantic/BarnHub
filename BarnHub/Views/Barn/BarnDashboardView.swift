@@ -258,12 +258,15 @@ struct BarnDashboardView: View {
         if showsDayPanel, #available(iOS 27.1, *) {
             // ArrangementView places the split on the hinge (and accounts for the
             // vertical tab bar), which a plain HStack of equal halves can't do.
+            // Allow both axes: side by side when wide, calendar above the day
+            // panel when tall (inner display in portrait). Limiting it to the
+            // horizontal axis hid the day panel in portrait (#19).
             ArrangementView {
                 calendarColumn
             } secondary: {
                 dayDetailPanel
             }
-            .arrangementViewStyle(.split.axes(.horizontal))
+            .arrangementViewStyle(.split)
             .background(Color.barnOffWhite)
         } else {
             HStack(spacing: 0) {
