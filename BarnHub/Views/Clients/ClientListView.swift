@@ -9,7 +9,9 @@ struct ClientListView: View {
 
     @State private var searchText = ""
     @State private var showInactive = false
-    @State private var width: CGFloat = 0
+    /// Whether the window is wide enough for the split. A Bool, not the width,
+    /// so resizing doesn't redraw the list on every point (#32).
+    @State private var fitsSplit = false
     /// Held by ID, not model: the client may be deleted on another device before
     /// the user answers, and reading a deleted model traps.
     @State private var clientPendingRemoval: PersistentIdentifier?
@@ -35,11 +37,13 @@ struct ClientListView: View {
         #if os(iOS)
         guard sizeClass == .regular else { return false }
         #endif
-        return width >= ListDetailSplit<EmptyView, EmptyView>.minimumWidth
+        return fitsSplit
     }
 
     var body: some View {
         @Bindable var router = router
+        // Filtered once per render.
+        let filteredClients = self.filteredClients
         return Group {
             if !isPro {
                 ClientsUpgradeView()
@@ -50,7 +54,7 @@ struct ClientListView: View {
                     subtitle: "Tap + to add your first client."
                 )
             } else if showsSplit {
-                ListDetailSplit(width: width) {
+                ListDetailSplit {
                     List(filteredClients, id: \.persistentModelID, selection: $router.selectedClientID) { client in
                         ClientRowView(client: client)
                             .contextMenu { rowActions(client) }
@@ -75,7 +79,9 @@ struct ClientListView: View {
                 }
             }
         }
-        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+        .onGeometryChange(for: Bool.self) {
+            $0.size.width >= ListDetailSplit<EmptyView, EmptyView>.minimumWidth
+        } action: { fitsSplit = $0 }
         .onChange(of: filteredClients.map(\.persistentModelID), initial: true) { _, ids in
             keepSelection(in: ids)
         }

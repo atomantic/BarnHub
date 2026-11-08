@@ -56,8 +56,6 @@ struct HealthTimelineView: View {
         modelContext.existingModel(for: horseID)
     }
 
-    private var events: [TimelineEvent] { computeEvents() }
-
     private func computeEvents() -> [TimelineEvent] {
         guard let horse else { return [] }
         var result: [TimelineEvent] = []
@@ -122,7 +120,9 @@ struct HealthTimelineView: View {
     }
 
     var body: some View {
-        List {
+        // Built once per render (it was built twice).
+        let events = computeEvents()
+        return List {
             Section {
                 filterBar
                     .listRowInsets(EdgeInsets())

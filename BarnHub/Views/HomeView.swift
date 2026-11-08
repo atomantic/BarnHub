@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 enum BalancePeriod: Int, CaseIterable, Identifiable {
     case thisMonth = 0
@@ -15,7 +16,34 @@ enum BalancePeriod: Int, CaseIterable, Identifiable {
     }
 }
 
+/// Home. Holds the moment Home's queries are anchored to and moves it forward
+/// when Home reappears, the app returns to the foreground or the date changes,
+/// so "today", "this month" and the upcoming windows never go stale.
 struct HomeView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var anchor = Date.now
+
+    var body: some View {
+        HomeDashboard(window: HomeSummary.Window(anchor: anchor))
+            .onAppear { reanchor() }
+            .onChange(of: scenePhase) {
+                if scenePhase == .active { reanchor() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged).receive(on: RunLoop.main)) { _ in
+                reanchor()
+            }
+    }
+
+    /// Re-anchoring rebuilds the queries, so skip it within a minute of the last time.
+    private func reanchor() {
+        let now = Date.now
+        if now.timeIntervalSince(anchor) > 60 || !Calendar.current.isDate(anchor, inSameDayAs: now) {
+            anchor = now
+        }
+    }
+}
+
+private struct HomeDashboard: View {
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
     @Environment(NotificationService.self) private var notificationService
@@ -30,16 +58,33 @@ struct HomeView: View {
         BalancePeriod(rawValue: balancePeriodRaw) ?? .thisMonth
     }
 
-    @Query(filter: #Predicate<Horse> { $0.isActive }) private var activeHorses: [Horse]
-    @Query(filter: #Predicate<Client> { $0.isActive }) private var activeClients: [Client]
-    @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
-    private var incompleteReminders: [Reminder]
-    @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
-    @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
-    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
-    @Query(sort: \Transaction.date, order: .reverse) private var transactions: [Transaction]
-    @Query(sort: \Lesson.date) private var lessons: [Lesson]
-    @Query private var supplyItems: [SupplyItem]
+    // Each query fetches only what Home shows (see HomeSummary.Window).
+    @Query private var monthTransactions: [Transaction]
+    @Query private var reminders: [Reminder]
+    @Query private var lessons: [Lesson]
+    @Query private var unpaidLessons: [Lesson]
+    @Query private var vetRecords: [VetRecord]
+    @Query private var farrierVisits: [FarrierVisit]
+    @Query private var dentistVisits: [DentistVisit]
+    @Query private var lowStockSupplies: [SupplyItem]
+
+    /// Bumped on every save (any context) and CloudKit import, so the counts, the
+    /// all-time balance and the newest care records, which aren't backed by a
+    /// `@Query`, refresh too.
+    @State private var dataVersion = 0
+    @State private var allTimeBalance = AllTimeBalanceCache()
+    @State private var newestCare = NewestCareRecordsCache()
+
+    init(window: HomeSummary.Window) {
+        _monthTransactions = Query(DashboardQueries.transactions(in: window.month))
+        _reminders = Query(DashboardQueries.reminders(before: window.soonEnd))
+        _lessons = Query(DashboardQueries.homeLessons(from: window.today, before: window.soonEnd))
+        _unpaidLessons = Query(DashboardQueries.unpaidLessons(through: window.anchor, limit: HomeSummary.unpaidLimit))
+        _vetRecords = Query(DashboardQueries.vetDue(from: window.today, through: window.dueEnd))
+        _farrierVisits = Query(DashboardQueries.farrierDue(from: window.today, through: window.dueEnd))
+        _dentistVisits = Query(DashboardQueries.dentistDue(from: window.today, through: window.dueEnd))
+        _lowStockSupplies = Query(DashboardQueries.lowStockSupplies)
+    }
 
     #if os(macOS)
     private let columns = [
@@ -67,83 +112,37 @@ struct HomeView: View {
     }
     #endif
 
-    private var monthlyBalance: Double {
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: .now)
-        guard let monthStart = calendar.date(from: components),
-              let monthEnd = calendar.date(byAdding: .month, value: 1, to: monthStart)
-        else { return 0 }
-        return transactions.reduce(0) { result, txn in
-            guard txn.date >= monthStart && txn.date < monthEnd else { return result }
-            return txn.type == .income ? result + txn.amount : result - txn.amount
-        }
+    /// What one render shows, computed once.
+    private struct Snapshot {
+        let summary: HomeSummary
+        let horseCount: Int
+        let clientCount: Int
+        let displayBalance: Double
     }
 
-    private var allTimeBalance: Double {
-        transactions.reduce(0) { result, txn in
-            txn.type == .income ? result + txn.amount : result - txn.amount
-        }
-    }
-
-    private var displayBalance: Double {
-        balancePeriod == .thisMonth ? monthlyBalance : allTimeBalance
-    }
-
-
-    private var nextScheduleItemToday: String? {
-        let calendar = Calendar.current
-        let now = Date.now
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "h:mma"
-        timeFormatter.amSymbol = "am"
-        timeFormatter.pmSymbol = "pm"
-
-        struct ScheduleItem: Comparable {
-            let date: Date
-            let label: String
-            static func < (lhs: ScheduleItem, rhs: ScheduleItem) -> Bool { lhs.date < rhs.date }
-        }
-
-        var items: [ScheduleItem] = []
-
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)) ?? now
-        for lesson in lessons {
-            for date in lesson.homeDates(from: now, before: tomorrow) {
-                items.append(ScheduleItem(date: date, label: "\(timeFormatter.string(from: date)) Lesson"))
-            }
-        }
-        for record in vetRecords {
-            guard let due = record.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
-            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Vet"))
-        }
-        for visit in farrierVisits {
-            guard let due = visit.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
-            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Farrier"))
-        }
-        for visit in dentistVisits {
-            guard let due = visit.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
-            items.append(ScheduleItem(date: due, label: "\(timeFormatter.string(from: due)) Dentist"))
-        }
-
-        return items.sorted().first?.label
-    }
-
-    private var lowStockCount: Int {
-        supplyItems.filter { $0.isLowStock }.count
-    }
-
-    private var todayReminders: [Reminder] {
-        let calendar = Calendar.current
-        return Array(
-            incompleteReminders
-                .filter { !$0.dueDate.isOverdue && (calendar.isDateInToday($0.dueDate) || calendar.isDateInTomorrow($0.dueDate)) }
-                .prefix(3)
-        )
+    private func makeSnapshot() -> Snapshot {
+        let version = dataVersion
+        let summary = HomeSummary(HomeSummary.Inputs(
+            monthTransactions: monthTransactions,
+            reminders: reminders,
+            lessons: lessons,
+            unpaidLessons: unpaidLessons,
+            vetRecords: vetRecords,
+            farrierVisits: farrierVisits,
+            dentistVisits: dentistVisits,
+            lowStock: lowStockSupplies,
+            newest: newestCare.value(version: version, context: modelContext)
+        ))
+        let horseCount = (try? modelContext.fetchCount(FetchDescriptor<Horse>(predicate: #Predicate { $0.isActive }))) ?? 0
+        let clientCount = (try? modelContext.fetchCount(FetchDescriptor<Client>(predicate: #Predicate { $0.isActive }))) ?? 0
+        let balance = balancePeriod == .thisMonth
+            ? summary.month.balance
+            : allTimeBalance.balance(version: version, context: modelContext)
+        return Snapshot(summary: summary, horseCount: horseCount, clientCount: clientCount, displayBalance: balance)
     }
 
     var body: some View {
-        let balance = displayBalance
-        let todayRems = todayReminders
+        let snapshot = makeSnapshot()
         return ScrollView {
             VStack(spacing: 0) {
                 headerSection
@@ -157,21 +156,25 @@ struct HomeView: View {
                     upgradeBar
                 }
                 #if os(macOS)
-                macDashboard(balance: balance)
+                macDashboard(snapshot)
                 #else
                 if sizeClass == .regular {
-                    iPadDashboard(balance: balance)
+                    iPadDashboard(snapshot)
                 } else {
-                    if !todayRems.isEmpty {
-                        todaySection(reminders: todayRems)
+                    if !snapshot.summary.todayReminders.isEmpty {
+                        todaySection(reminders: snapshot.summary.todayReminders)
                     }
-                    iconGrid(balance: balance)
+                    iconGrid(snapshot)
                 }
                 #endif
             }
         }
         .background(Color.barnOffWhite)
         .ignoresSafeArea(edges: .top)
+        .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave).receive(on: RunLoop.main)) { _ in
+            dataVersion &+= 1
+        }
+        .onChange(of: syncMonitor.lastSuccessfulSync) { dataVersion &+= 1 }
     }
 
     private var headerSection: some View {
@@ -302,10 +305,11 @@ struct HomeView: View {
         .padding(.bottom, 16)
     }
 
-    private func iconGrid(balance: Double) -> some View {
-        let horseCount = activeHorses.count
-        let clientCount = activeClients.count
-        let stockAlert = lowStockCount
+    private func iconGrid(_ snapshot: Snapshot) -> some View {
+        let horseCount = snapshot.horseCount
+        let clientCount = snapshot.clientCount
+        let stockAlert = snapshot.summary.lowStock.count
+        let balance = snapshot.displayBalance
 
         #if os(macOS)
         let vSpacing: CGFloat = 12
@@ -319,7 +323,7 @@ struct HomeView: View {
             FeatureTile(icon: "person.2.fill", title: "Clients", color: .barnBrown, badge: appLocalized("^[\(clientCount) client](inflect: true)", comment: "Client count badge"), tag: "tile_clients") {
                 router.switchTab(.clients)
             }
-            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: nextScheduleItemToday, tag: "tile_schedule") {
+            FeatureTile(icon: "calendar", title: "Schedule", color: .barnBrown, badge: snapshot.summary.nextScheduleItemToday, tag: "tile_schedule") {
                 router.switchTab(.schedule)
             }
             FeatureTile(icon: "shippingbox.fill", title: "Supplies", color: .barnBrown, badge: stockAlert > 0 ? "\(stockAlert) Low" : nil, badgeColor: stockAlert > 0 ? .red : nil, tag: "tile_supplies") {
@@ -341,39 +345,41 @@ struct HomeView: View {
 
     // MARK: - Dashboard
 
-    private func macDashboard(balance: Double) -> some View {
+    private func macDashboard(_ snapshot: Snapshot) -> some View {
         // No tile grid on the Mac: every tile's destination is already in the
         // sidebar, so the space goes to the dashboard widgets.
         VStack(spacing: 16) {
-            statsStrip
-            widgetGrid
+            statsStrip(snapshot)
+            widgetGrid(snapshot.summary)
         }
         .padding(.bottom, 24)
     }
 
     #if !os(macOS)
-    private func iPadDashboard(balance: Double) -> some View {
+    private func iPadDashboard(_ snapshot: Snapshot) -> some View {
         VStack(spacing: 20) {
-            statsStrip
-            widgetGrid
-            iconGrid(balance: balance)
+            statsStrip(snapshot)
+            widgetGrid(snapshot.summary)
+            iconGrid(snapshot)
         }
         .padding(.bottom, 32)
     }
     #endif
 
-    private var statsStrip: some View {
-        HStack(spacing: 12) {
+    private func statsStrip(_ snapshot: Snapshot) -> some View {
+        let monthlyBalance = snapshot.summary.month.balance
+        let lowStockCount = snapshot.summary.lowStock.count
+        return HStack(spacing: 12) {
             DashboardStatCard(
                 icon: "figure.equestrian.sports",
                 title: appLocalized("Horses", comment: "Dashboard stat"),
-                value: "\(activeHorses.count)",
+                value: "\(snapshot.horseCount)",
                 accent: .barnBrown
             ) { router.switchTab(.horses) }
             DashboardStatCard(
                 icon: "person.2.fill",
                 title: appLocalized("Clients", comment: "Dashboard stat"),
-                value: "\(activeClients.count)",
+                value: "\(snapshot.clientCount)",
                 accent: .barnBrown
             ) { router.switchTab(.clients) }
             DashboardStatCard(
@@ -392,7 +398,7 @@ struct HomeView: View {
         .padding(.horizontal, 24)
     }
 
-    private var widgetGrid: some View {
+    private func widgetGrid(_ summary: HomeSummary) -> some View {
         LazyVGrid(
             columns: [
                 GridItem(.flexible(), spacing: 12),
@@ -401,94 +407,50 @@ struct HomeView: View {
             alignment: .leading,
             spacing: 12
         ) {
-            todayWidget
-            actionItemsWidget
-            alertsWidget
-            financeWidget
+            todayWidget(summary)
+            actionItemsWidget(summary)
+            alertsWidget(summary)
+            financeWidget(summary)
         }
         .padding(.horizontal, 24)
     }
 
     // MARK: Today Widget
 
-    private var upcomingEvents: [DashboardEvent] {
-        let cal = Calendar.current
-        let now = Date.now
-        guard let cutoff = cal.date(byAdding: .day, value: 2, to: cal.startOfDay(for: now)) else { return [] }
+    private func dashboardEvents(_ summary: HomeSummary) -> [DashboardEvent] {
         let routerRef = router
-        var events: [DashboardEvent] = []
-
-        for lesson in lessons {
-            let subtitle = [lesson.client?.fullName, lesson.horse?.name]
-                .compactMap { $0 }.joined(separator: " • ")
-            let lessonID = lesson.persistentModelID
-            for date in lesson.homeDates(from: now, before: cutoff) {
-                events.append(DashboardEvent(
-                    id: "lesson-\(lessonID.hashValue)-\(Int(date.timeIntervalSince1970))",
-                    date: date,
-                    icon: "book.fill",
-                    iconColor: .blue,
-                    title: appLocalized("Lesson", comment: "Dashboard event type"),
-                    subtitle: subtitle.isEmpty ? nil : subtitle,
-                    action: {
-                        routerRef.navigate(to: BarnRoute.lessonEdit(lessonID), tab: .schedule)
-                    }
-                ))
+        return summary.upcoming.prefix(6).map { item in
+            let modelID = item.id.modelID
+            let icon: String
+            let color: Color
+            let action: () -> Void
+            switch item.kind {
+            case .lesson:
+                icon = "book.fill"
+                color = .blue
+                action = { routerRef.navigate(to: BarnRoute.lessonEdit(modelID), tab: .schedule) }
+            case .vet:
+                icon = "cross.case.fill"
+                color = .red
+                action = { routerRef.navigate(to: BarnRoute.vetSchedule, tab: .schedule) }
+            case .farrier:
+                icon = "hammer.fill"
+                color = .orange
+                action = { routerRef.navigate(to: BarnRoute.farrierSchedule, tab: .schedule) }
+            case .reminder:
+                icon = "bell.fill"
+                color = .barnGreen
+                action = { routerRef.navigate(to: BarnRoute.reminderEdit(modelID), tab: .schedule) }
             }
+            return DashboardEvent(
+                id: item.id, date: item.date, icon: icon, iconColor: color,
+                title: item.title, subtitle: item.subtitle, action: action
+            )
         }
-
-        for record in vetRecords {
-            guard let due = record.nextDueDate, due >= now, due < cutoff else { continue }
-            let recordHash = record.persistentModelID.hashValue
-            events.append(DashboardEvent(
-                id: "vet-\(recordHash)",
-                date: due,
-                icon: "cross.case.fill",
-                iconColor: .red,
-                title: appLocalized("Vet", comment: "Dashboard event type"),
-                subtitle: record.horse?.name,
-                action: {
-                    routerRef.navigate(to: BarnRoute.vetSchedule, tab: .schedule)
-                }
-            ))
-        }
-
-        for visit in farrierVisits {
-            guard let due = visit.nextDueDate, due >= now, due < cutoff else { continue }
-            let visitHash = visit.persistentModelID.hashValue
-            events.append(DashboardEvent(
-                id: "far-\(visitHash)",
-                date: due,
-                icon: "hammer.fill",
-                iconColor: .orange,
-                title: appLocalized("Farrier", comment: "Dashboard event type"),
-                subtitle: visit.horse?.name,
-                action: {
-                    routerRef.navigate(to: BarnRoute.farrierSchedule, tab: .schedule)
-                }
-            ))
-        }
-
-        for reminder in incompleteReminders where reminder.dueDate >= now && reminder.dueDate < cutoff {
-            let reminderID = reminder.persistentModelID
-            events.append(DashboardEvent(
-                id: "rem-\(reminderID.hashValue)",
-                date: reminder.dueDate,
-                icon: "bell.fill",
-                iconColor: .barnGreen,
-                title: reminder.title.isEmpty ? appLocalized("Reminder", comment: "Dashboard event type") : reminder.title,
-                subtitle: reminder.horse?.name,
-                action: {
-                    routerRef.navigate(to: BarnRoute.reminderEdit(reminderID), tab: .schedule)
-                }
-            ))
-        }
-
-        return events.sorted { $0.date < $1.date }
     }
 
-    private var todayWidget: some View {
-        let events = upcomingEvents
+    private func todayWidget(_ summary: HomeSummary) -> some View {
+        let events = dashboardEvents(summary)
         return DashboardWidget(
             title: "Today & Tomorrow",
             icon: "calendar",
@@ -502,7 +464,7 @@ struct HomeView: View {
                 )
             } else {
                 VStack(spacing: 2) {
-                    ForEach(events.prefix(6)) { event in
+                    ForEach(events) { event in
                         DashboardEventRow(event: event)
                     }
                 }
@@ -512,18 +474,9 @@ struct HomeView: View {
 
     // MARK: Action Items Widget
 
-    private var overdueReminders: [Reminder] {
-        incompleteReminders.filter { $0.dueDate.isOverdue }
-    }
-
-    private var unpaidLessons: [Lesson] {
-        lessons.filter { !$0.isPaid && $0.date <= .now && $0.cost > 0 }
-            .sorted { $0.date > $1.date }
-    }
-
-    private var actionItemsWidget: some View {
-        let reminders = overdueReminders
-        let unpaid = unpaidLessons
+    private func actionItemsWidget(_ summary: HomeSummary) -> some View {
+        let reminders = summary.overdueReminders
+        let unpaid = summary.unpaidLessons
         let hasItems = !reminders.isEmpty || !unpaid.isEmpty
         return DashboardWidget(
             title: "Action Items",
@@ -566,32 +519,10 @@ struct HomeView: View {
 
     // MARK: Alerts Widget
 
-    private var lowStockSupplies: [SupplyItem] {
-        supplyItems.filter { $0.isLowStock }
-    }
-
-    private var upcomingVet: [VetRecord] {
-        let cal = Calendar.current
-        let now = Date.now
-        guard let cutoff = cal.date(byAdding: .day, value: 7, to: now) else { return [] }
-        return vetRecords
-            .filter { $0.nextDueDate.map { $0 >= now && $0 <= cutoff } ?? false }
-            .sorted { ($0.nextDueDate ?? .now) < ($1.nextDueDate ?? .now) }
-    }
-
-    private var upcomingFarrier: [FarrierVisit] {
-        let cal = Calendar.current
-        let now = Date.now
-        guard let cutoff = cal.date(byAdding: .day, value: 7, to: now) else { return [] }
-        return farrierVisits
-            .filter { $0.nextDueDate.map { $0 >= now && $0 <= cutoff } ?? false }
-            .sorted { ($0.nextDueDate ?? .now) < ($1.nextDueDate ?? .now) }
-    }
-
-    private var alertsWidget: some View {
-        let lowStock = lowStockSupplies
-        let vet = upcomingVet
-        let farrier = upcomingFarrier
+    private func alertsWidget(_ summary: HomeSummary) -> some View {
+        let lowStock = summary.lowStock
+        let vet = summary.upcomingVet
+        let farrier = summary.upcomingFarrier
         let hasAlerts = !lowStock.isEmpty || !vet.isEmpty || !farrier.isEmpty
         return DashboardWidget(
             title: "Alerts",
@@ -647,29 +578,9 @@ struct HomeView: View {
 
     // MARK: Finance Widget
 
-    private var monthlyIncome: Double {
-        let cal = Calendar.current
-        let comps = cal.dateComponents([.year, .month], from: .now)
-        guard let start = cal.date(from: comps),
-              let end = cal.date(byAdding: .month, value: 1, to: start) else { return 0 }
-        return transactions
-            .filter { $0.date >= start && $0.date < end && $0.type == .income }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private var monthlyExpenses: Double {
-        let cal = Calendar.current
-        let comps = cal.dateComponents([.year, .month], from: .now)
-        guard let start = cal.date(from: comps),
-              let end = cal.date(byAdding: .month, value: 1, to: start) else { return 0 }
-        return transactions
-            .filter { $0.date >= start && $0.date < end && $0.type == .expense }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private var financeWidget: some View {
-        let income = monthlyIncome
-        let expenses = monthlyExpenses
+    private func financeWidget(_ summary: HomeSummary) -> some View {
+        let income = summary.month.income
+        let expenses = summary.month.expenses
         let balance = income - expenses
         return DashboardWidget(
             title: "Finance · This Month",
@@ -700,6 +611,7 @@ struct HomeView: View {
         }
     }
 }
+
 
 // MARK: - Feature Tile (iOS + macOS quick nav)
 
@@ -797,7 +709,7 @@ struct SwooshShape: Shape {
 // MARK: - Dashboard Widget Primitives
 
 struct DashboardEvent: Identifiable {
-    let id: String
+    let id: ScheduleEventID
     let date: Date
     let icon: String
     let iconColor: Color
