@@ -6,6 +6,7 @@ extension ModelContext {
         do {
             try save()
             BarnHubLogger.success("ModelContext saved")
+            NotificationCenter.default.post(name: .barnHubModelContextDidSave, object: self)
         } catch {
             BarnHubLogger.error("ModelContext save failed error=\(error.localizedDescription)")
         }
@@ -16,6 +17,7 @@ extension ModelContext {
         do {
             try save()
             BarnHubLogger.success("ModelContext deleted and saved")
+            NotificationCenter.default.post(name: .barnHubModelContextDidSave, object: self)
         } catch {
             BarnHubLogger.error("ModelContext delete+save failed error=\(error.localizedDescription)")
         }

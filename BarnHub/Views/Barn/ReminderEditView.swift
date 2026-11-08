@@ -4,7 +4,6 @@ import SwiftData
 struct ReminderEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(NotificationService.self) private var notificationService
 
     let reminderID: PersistentIdentifier?
 
@@ -91,7 +90,6 @@ struct ReminderEditView: View {
         }
 
         modelContext.saveWithLogging()
-        notificationService.scheduleReminder(reminder)
         toast.showAndDismiss(isNew ? appLocalized("Reminder added") : appLocalized("Reminder updated"), dismiss: dismiss)
     }
 }

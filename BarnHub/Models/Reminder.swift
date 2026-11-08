@@ -8,6 +8,10 @@ final class Reminder {
     var dueDate: Date = Date.now
     var isCompleted: Bool = false
     var frequencyRaw: String = ReminderFrequency.once.rawValue
+    /// Stable key for this reminder's local notification. Optional so existing
+    /// rows and CloudKit records migrate without a default; NotificationService
+    /// fills it in the first time it schedules the reminder.
+    var notificationKey: UUID? = nil
 
     @Relationship(deleteRule: .nullify)
     var horse: Horse? = nil
@@ -49,5 +53,6 @@ final class Reminder {
         self.dueDate = dueDate
         self.isCompleted = isCompleted
         self.frequencyRaw = frequency.rawValue
+        self.notificationKey = UUID()
     }
 }

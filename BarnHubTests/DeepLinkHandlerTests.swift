@@ -91,6 +91,26 @@ final class DeepLinkHandlerTests: XCTestCase {
         XCTAssertEqual(router.schedulePath.count, 1)
     }
 
+    func testHomeDeepLinkPopsHomeAndSelectsIt() {
+        let router = Router()
+        router.switchTab(.horses)
+        router.navigate(to: HomeRoute.reports, tab: .home)
+        DeepLinkHandler.handle(url: URL(string: "barnhub://home")!, router: router)
+
+        XCTAssertEqual(router.selectedTab, .home)
+        XCTAssertTrue(router.homePath.isEmpty)
+    }
+
+    func testScheduleRecordTypePathComponents() {
+        for type in ["vet", "farrier", "dentist"] {
+            let router = Router()
+            DeepLinkHandler.handle(url: URL(string: "barnhub://schedule/\(type)")!, router: router)
+
+            XCTAssertEqual(router.selectedTab, .schedule, type)
+            XCTAssertEqual(router.schedulePath.count, 1, type)
+        }
+    }
+
     func testInvalidHostDoesNotChangeTab() {
         let router = Router()
         let originalTab = router.selectedTab
