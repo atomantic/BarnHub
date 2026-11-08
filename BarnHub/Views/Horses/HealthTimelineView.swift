@@ -6,10 +6,10 @@ enum TimelineEventType: String, CaseIterable {
 
     var label: String {
         switch self {
-        case .vet: return "Vet"
-        case .farrier: return "Farrier"
-        case .dentist: return "Dentist"
-        case .weight: return "Weight"
+        case .vet: return appLocalized("Vet", comment: "Schedule event type")
+        case .farrier: return appLocalized("Farrier", comment: "Schedule event type")
+        case .dentist: return appLocalized("Dentist", comment: "Schedule event type")
+        case .weight: return appLocalized("Weight", comment: "Health timeline filter: weight entries")
         }
     }
 
@@ -66,9 +66,9 @@ struct HealthTimelineView: View {
                     id: "vet-\(record.persistentModelID)",
                     date: record.date,
                     type: .vet,
-                    title: record.descriptionText.isEmpty ? "Vet Visit" : record.descriptionText,
+                    title: record.descriptionText.isEmpty ? appLocalized("Vet Visit", comment: "Health timeline title for a vet record without a description") : record.descriptionText,
                     subtitle: record.vetName,
-                    detail: record.nextDueDate.map { "Next due: \($0.shortFormatted)" },
+                    detail: record.nextDueDate.map { appLocalized("Next due: \($0.shortFormatted)", comment: "When the next visit is due") },
                     cost: record.cost > 0 ? record.cost : nil
                 ))
             }
@@ -80,9 +80,9 @@ struct HealthTimelineView: View {
                     id: "farrier-\(visit.persistentModelID)",
                     date: visit.date,
                     type: .farrier,
-                    title: visit.serviceDescription.isEmpty ? "Farrier Visit" : visit.serviceDescription,
+                    title: visit.serviceDescription.isEmpty ? appLocalized("Farrier Visit", comment: "Health timeline title for a farrier visit without a description") : visit.serviceDescription,
                     subtitle: visit.farrierName,
-                    detail: visit.nextDueDate.map { "Next due: \($0.shortFormatted)" },
+                    detail: visit.nextDueDate.map { appLocalized("Next due: \($0.shortFormatted)", comment: "When the next visit is due") },
                     cost: visit.cost > 0 ? visit.cost : nil
                 ))
             }
@@ -94,9 +94,9 @@ struct HealthTimelineView: View {
                     id: "dentist-\(visit.persistentModelID)",
                     date: visit.date,
                     type: .dentist,
-                    title: visit.serviceDescription.isEmpty ? "Dentist Visit" : visit.serviceDescription,
+                    title: visit.serviceDescription.isEmpty ? appLocalized("Dentist Visit", comment: "Health timeline title for a dentist visit without a description") : visit.serviceDescription,
                     subtitle: visit.dentistName,
-                    detail: visit.nextDueDate.map { "Next due: \($0.shortFormatted)" },
+                    detail: visit.nextDueDate.map { appLocalized("Next due: \($0.shortFormatted)", comment: "When the next visit is due") },
                     cost: visit.cost > 0 ? visit.cost : nil
                 ))
             }
@@ -108,8 +108,8 @@ struct HealthTimelineView: View {
                     id: "weight-\(entry.persistentModelID)",
                     date: entry.date,
                     type: .weight,
-                    title: "\(Int(entry.weight)) lbs",
-                    subtitle: "Weight recorded",
+                    title: appLocalized("\(Int(entry.weight)) lbs", comment: "Health timeline title for a weight entry: the weight in pounds"),
+                    subtitle: appLocalized("Weight recorded", comment: "Health timeline subtitle for a weight entry"),
                     detail: nil,
                     cost: nil
                 ))
