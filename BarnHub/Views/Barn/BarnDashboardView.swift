@@ -69,6 +69,7 @@ struct ScheduleEvent: Identifiable {
 struct BarnDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
+    @Environment(\.locale) private var locale
 
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -104,10 +105,9 @@ struct BarnDashboardView: View {
         return cal.date(from: cal.dateComponents([.year, .month], from: selectedDate)) ?? selectedDate
     }
 
+    /// Start of the selected week, on the locale's first weekday.
     private var weekStart: Date {
-        let cal = Calendar.current
-        let weekday = cal.component(.weekday, from: selectedDate)
-        return cal.date(byAdding: .day, value: -(weekday - 1), to: cal.startOfDay(for: selectedDate)) ?? selectedDate
+        Calendar.weeks(startingAsIn: locale).startOfWeek(containing: selectedDate)
     }
 
     @ViewBuilder

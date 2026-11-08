@@ -1,7 +1,7 @@
 import XCTest
 @testable import BarnHub
 
-/// #35: amounts typed without a symbol.
+/// #35: amounts typed without a symbol, and week starts.
 final class LocaleFormattingTests: XCTestCase {
 
     private let us = Locale(identifier: "en_US")
@@ -38,5 +38,36 @@ final class LocaleFormattingTests: XCTestCase {
             XCTAssertEqual(CurrencyField.parse(CurrencyField.editingText(value, locale: german), locale: german), value)
             XCTAssertEqual(CurrencyField.parse(CurrencyField.editingText(value, locale: us), locale: us), value)
         }
+    }
+
+    // MARK: - Week start
+
+    func testWeeksStartOnTheLocalesFirstWeekday() {
+        XCTAssertEqual(us.firstWeekdayNumber, 1)
+        XCTAssertEqual(german.firstWeekdayNumber, 2)
+        var monday = Calendar(identifier: .gregorian)
+        monday.timeZone = TimeZone(identifier: "Europe/Berlin")!
+        monday.firstWeekday = german.firstWeekdayNumber
+        var sunday = monday
+        sunday.firstWeekday = us.firstWeekdayNumber
+
+        // Wednesday 2026-07-01.
+        let wednesday = monday.date(from: DateComponents(year: 2026, month: 7, day: 1, hour: 14))!
+        XCTAssertEqual(monday.startOfWeek(containing: wednesday), monday.date(from: DateComponents(year: 2026, month: 6, day: 29)))
+        XCTAssertEqual(sunday.startOfWeek(containing: wednesday), sunday.date(from: DateComponents(year: 2026, month: 6, day: 28)))
+        // A Sunday belongs to the week before in a Monday-first locale.
+        let sundayDate = monday.date(from: DateComponents(year: 2026, month: 7, day: 5, hour: 9))!
+        XCTAssertEqual(monday.startOfWeek(containing: sundayDate), monday.date(from: DateComponents(year: 2026, month: 6, day: 29)))
+        XCTAssertEqual(sunday.startOfWeek(containing: sundayDate), sunday.date(from: DateComponents(year: 2026, month: 7, day: 5)))
+
+        // July 2026 starts on a Wednesday: 2 blanks Monday-first, 3 Sunday-first.
+        let july = monday.date(from: DateComponents(year: 2026, month: 7, day: 1))!
+        XCTAssertEqual(monday.leadingBlankDays(forMonthStartingOn: july), 2)
+        XCTAssertEqual(sunday.leadingBlankDays(forMonthStartingOn: july), 3)
+
+        let symbols = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        XCTAssertEqual(monday.weekdaySymbolsStartingOnFirstWeekday(symbols).first, "Mon")
+        XCTAssertEqual(monday.weekdaySymbolsStartingOnFirstWeekday(symbols).last, "Sun")
+        XCTAssertEqual(sunday.weekdaySymbolsStartingOnFirstWeekday(symbols), symbols)
     }
 }
