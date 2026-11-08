@@ -273,6 +273,53 @@ final class RouterTests: XCTestCase {
         XCTAssertNil(router.presentedForm)
     }
 
+    func testNavigate_nonFormRouteWhileFormSheetIsOpen_pushesInsideTheSheet() {
+        let router = Router()
+        router.presentsFormsAsSheets = true
+        router.navigate(to: ClientRoute.edit(nil), tab: .clients)
+
+        // View Plans on the Pro lock shown inside the form sheet.
+        router.navigate(to: SubscriptionRoute.paywall)
+
+        XCTAssertEqual(router.formPath.count, 1, "The paywall pushes in the sheet, in front of the user")
+        XCTAssertTrue(router.clientsPath.isEmpty, "Nothing is pushed onto the tab hidden behind the sheet")
+        XCTAssertEqual(router.presentedForm?.route, AnyHashable(ClientRoute.edit(nil)), "The form stays open to go Back to")
+    }
+
+    func testNavigate_withTabWhileFormSheetIsOpen_stillPushesOntoThatTab() {
+        let router = Router()
+        router.presentsFormsAsSheets = true
+        router.navigate(to: ClientRoute.edit(nil), tab: .clients)
+
+        router.navigate(to: BarnRoute.supplies, tab: .schedule)
+
+        XCTAssertEqual(router.schedulePath.count, 1)
+        XCTAssertTrue(router.formPath.isEmpty)
+    }
+
+    func testNavigate_openingAFormClearsTheLastSheetsPushedScreens() {
+        let router = Router()
+        router.presentsFormsAsSheets = true
+        router.navigate(to: ClientRoute.edit(nil), tab: .clients)
+        router.navigate(to: SubscriptionRoute.paywall)
+        router.presentedForm = nil  // sheet dismissed
+
+        router.navigate(to: HorseRoute.edit(nil), tab: .horses)
+
+        XCTAssertTrue(router.formPath.isEmpty)
+        XCTAssertEqual(router.presentedForm?.route, AnyHashable(HorseRoute.edit(nil)))
+    }
+
+    func testNavigate_nonFormRouteWithoutFormSheet_pushesOntoTab() {
+        let router = Router()
+        router.selectedTab = .clients
+
+        router.navigate(to: SubscriptionRoute.paywall)
+
+        XCTAssertEqual(router.clientsPath.count, 1, "Pushed screens (iPhone) behave as before")
+        XCTAssertTrue(router.formPath.isEmpty)
+    }
+
     func testIsForm_coversAddAndEditRoutesOnly() {
         XCTAssertTrue(Router.isForm(HorseRoute.edit(nil)))
         XCTAssertTrue(Router.isForm(ClientRoute.edit(nil)))
