@@ -341,13 +341,21 @@ private extension View {
     ///
     /// Must be applied inside the tab's `NavigationStack` (to the root view), or the
     /// navigation bar never picks the items up. `onBrandHeader` draws them white for
-    /// Home, whose green header sits behind the bar; every other screen uses the
-    /// default tint so the button stays visible on a light bar.
+    /// Home before iOS 26, where the bar is transparent over the green header. From
+    /// iOS 26 the items sit in a Liquid Glass capsule that turns light in light mode,
+    /// where white all but vanishes, so they keep the system colors like every other
+    /// screen.
     func withNavControls(router: Router, onBrandHeader: Bool = false) -> some View {
+        let whiteOnHeader: Bool
+        if #available(iOS 26.0, *) {
+            whiteOnHeader = false
+        } else {
+            whiteOnHeader = onBrandHeader
+        }
         // The sync badge is informational, so it's the first thing to fold into the
         // overflow menu on a narrow bar; the Settings button stays visible.
-        prioritizedToolbarItem(.low, placement: .topBarTrailing) {
-            SyncIndicatorView(onBrandHeader: onBrandHeader)
+        return prioritizedToolbarItem(.low, placement: .topBarTrailing) {
+            SyncIndicatorView(onBrandHeader: whiteOnHeader)
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -355,7 +363,7 @@ private extension View {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
                     Label("Settings", systemImage: "gearshape")
-                        .foregroundStyle(onBrandHeader ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
+                        .foregroundStyle(whiteOnHeader ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                 }
             }
         }
