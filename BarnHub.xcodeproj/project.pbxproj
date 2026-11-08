@@ -23,6 +23,7 @@
 		081908AE0AEFB9CFC5DD75ED /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8AAAAA5C2182ACCF51C9C2 /* PreviewSampleData.swift */; };
 		0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
 		0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		B5A679D08E7AE281DD4089FC /* DashboardQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */; };
 		B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		0B326F92553B0A8255FB605C /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
@@ -64,6 +65,7 @@
 		3FE40BA4C276A613491FE525 /* View+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE768E67ED8208EC1BC695B8 /* View+Toast.swift */; };
 		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
+		5C580F86CEAE8F45A6ED9DDA /* DashboardQueriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */; };
 		44932DED4DDB38C1486D4CA4 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
 		462C72CBD666EC1A27EA58DD /* View+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */; };
 		476E83C7E956AB45BF4C59A3 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
@@ -107,6 +109,7 @@
 		716573F758EAE2A00E101EC4 /* ClientDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EED6C703CC7A27FF0D19AC1 /* ClientDocument.swift */; };
 		BAF339757A773E0B89048E24 /* HorseDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B633B5D058042761A458610 /* HorseDocument.swift */; };
 		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
+		CF460BAF38FD3C489F166D21 /* DashboardQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */; };
 		B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
 		77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
@@ -177,6 +180,7 @@
 		A9BD98DB23C4FAD1C2FE2E94 /* FeedPlanEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D07C62E43221D107F38191 /* FeedPlanEntry.swift */; };
 		170B306BFCE3A42B5FAD40DF /* FeedProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */; };
 		B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
+		31BADD80D798B96838CECC8B /* QueryContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C675A164DEE82F7E8A6BD917 /* QueryContent.swift */; };
 		B5D01AEB5B1048CA46F63996 /* FeatureLockedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11223344556677AABB0009 /* FeatureLockedOverlay.swift */; };
 		B70E0586CA22B751AE95AF59 /* ClientHorsesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AC42F7382827CF67C5539E /* ClientHorsesView.swift */; };
 		B7C3D41E8A9F5B02E1D76A33 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E8F52A3B1C6D90A7F24E88 /* WeightChartView.swift */; };
@@ -255,6 +259,7 @@
 		FDC377623190E1FD82411E00 /* ClientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32105EF55A7597B8990A4F42 /* ClientDetailView.swift */; };
 		FF0E902A35BA84ED658C2B60 /* ClientRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE726A3D35D655991C025 /* ClientRowView.swift */; };
 		SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */; };
+		5D51D32D273E90B05357C464 /* QueryContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C675A164DEE82F7E8A6BD917 /* QueryContent.swift */; };
 		SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = SUMMCARD00112233AABB0001 /* SummaryCard.swift */; };
 		TESTNEW0001000000000002 /* ModelSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0001000000000001 /* ModelSchemaTests.swift */; };
 		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
@@ -392,6 +397,7 @@
 		C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicePDFService.swift; sourceTree = "<group>"; };
 		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQueries.swift; sourceTree = "<group>"; };
 		B4A10001REMSVC0000000001 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
@@ -414,6 +420,7 @@
 		BUGRPT00000000000000F001 /* BugReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportService.swift; sourceTree = "<group>"; };
 		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncIndicatorView.swift; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEventTests.swift; sourceTree = "<group>"; };
+		5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQueriesTests.swift; sourceTree = "<group>"; };
 		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRecordRow.swift; sourceTree = "<group>"; };
 		ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubApp.swift; sourceTree = "<group>"; };
 		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierScheduleView.swift; sourceTree = "<group>"; };
@@ -426,6 +433,7 @@
 		FEA99F03E1B72A946035663D /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
 		FF8A6A12276BB472310E25E6 /* VetRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VetRecord.swift; sourceTree = "<group>"; };
 		SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
+		C675A164DEE82F7E8A6BD917 /* QueryContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryContent.swift; sourceTree = "<group>"; };
 		SUMMCARD00112233AABB0001 /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
 		TESTNEW0001000000000001 /* ModelSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSchemaTests.swift; sourceTree = "<group>"; };
 		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportServiceTests.swift; sourceTree = "<group>"; };
@@ -596,6 +604,7 @@
 				CD2C59B075EDA3A27237ABE5 /* ContractPDFService.swift */,
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
+				C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */,
 				B4A10001REMSVC0000000001 /* ReminderService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
@@ -634,6 +643,7 @@
 				E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */,
 				CALVIEWS00112233AABB0001 /* CalendarViews.swift */,
 				SCHEDLIST00112233AABB0001 /* ScheduleListView.swift */,
+				C675A164DEE82F7E8A6BD917 /* QueryContent.swift */,
 				SUMMCARD00112233AABB0001 /* SummaryCard.swift */,
 				DD11223344556677SYNC0003 /* SyncIndicatorView.swift */,
 				97DCBE13300D070AF058637A /* ToastView.swift */,
@@ -704,6 +714,7 @@
 			children = (
 				8400E9C51028A856C60639AB /* BarnHubTests.swift */,
 				E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */,
+				5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */,
 				2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */,
 				AB694A490656430DBDBC7C9C /* InvoiceTests.swift */,
 				AA11223344556677AABB000F /* FeatureGateTests.swift */,
@@ -1004,6 +1015,7 @@
 				955EE1B9866BB5DDF2A04263 /* ScheduleRecordRow.swift in Sources */,
 				CALVIEWS00112233AABB0002 /* CalendarViews.swift in Sources */,
 				B5A2675F52E22650FABFCDB1 /* ScheduleListView.swift in Sources */,
+				31BADD80D798B96838CECC8B /* QueryContent.swift in Sources */,
 				3331BBFC3EB11A5BA9B24A41 /* SummaryCard.swift in Sources */,
 				1581E1D41A8DAE4CC6F9D24D /* ToastView.swift in Sources */,
 				69722C03D67EF2DFE38E9988 /* BarnDashboardView.swift in Sources */,
@@ -1033,6 +1045,7 @@
 				DAEBFA20B41C7ED9CC192419 /* ModelContext+Helpers.swift in Sources */,
 				14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */,
 				0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */,
+				B5A679D08E7AE281DD4089FC /* DashboardQueries.swift in Sources */,
 				B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */,
 				A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */,
 				00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */,
@@ -1131,6 +1144,7 @@
 				B05A2F7D181017A4D4CB22B7 /* ScheduleRecordRow.swift in Sources */,
 				CALVIEWS00112233AABB0003 /* CalendarViews.swift in Sources */,
 				SCHEDLIST00112233AABB0002 /* ScheduleListView.swift in Sources */,
+				5D51D32D273E90B05357C464 /* QueryContent.swift in Sources */,
 				SUMMCARD00112233AABB0002 /* SummaryCard.swift in Sources */,
 				692A9AE37595F3DD59005684 /* ToastView.swift in Sources */,
 				BE67050BC614AB436BCEE32A /* BarnDashboardView.swift in Sources */,
@@ -1160,6 +1174,7 @@
 				3AE9EB9B39696F8F83552D6E /* ModelContext+Helpers.swift in Sources */,
 				AA11223344556677AABB0002 /* StoreService.swift in Sources */,
 				72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */,
+				CF460BAF38FD3C489F166D21 /* DashboardQueries.swift in Sources */,
 				B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */,
 				AA11223344556677AABB0004 /* FeatureGate.swift in Sources */,
 				AA11223344556677AABB0006 /* PaywallView.swift in Sources */,
@@ -1193,6 +1208,7 @@
 				966A13AE1271F2AE67F45A67 /* BarnHubTests.swift in Sources */,
 				AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */,
 				41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */,
+				5C580F86CEAE8F45A6ED9DDA /* DashboardQueriesTests.swift in Sources */,
 				495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */,
 				22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */,
 				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,
