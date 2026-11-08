@@ -138,3 +138,76 @@ extension BarnRoute {
         }
     }
 }
+
+// MARK: - Pro features
+
+// Checked where each route's screen is built (see `ProGated`). Exhaustive, like
+// `isForm`, so a new route has to say whether it needs Pro.
+
+extension HomeRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .clients:
+            .clients
+        case .horses, .schedule, .supplies, .accounting, .barnNotes, .settings, .dataManagement:
+            nil
+        case .reports:
+            // Free users get the basic reports; ReportsView locks the rest itself.
+            nil
+        }
+    }
+}
+
+extension HorseRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .documents:
+            .documents
+        case .list, .detail, .edit, .addVetRecord, .addFarrierVisit, .addDentistVisit,
+             .editVetRecord, .editFarrierVisit, .editDentistVisit, .healthTimeline,
+             .weightChart, .feedPlan, .editFeedEntry:
+            nil
+        }
+    }
+}
+
+extension ClientRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .list, .detail, .edit, .manageHorses, .paymentHistory:
+            .clients
+        case .invoiceHistory:
+            .invoices
+        case .documents:
+            .documents
+        }
+    }
+}
+
+extension AccountingRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .list, .edit: nil
+        }
+    }
+}
+
+extension SubscriptionRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .paywall: nil
+        }
+    }
+}
+
+extension BarnRoute {
+    var requiredProFeature: ProFeature? {
+        switch self {
+        case .supplies, .supplyEdit, .reminders, .reminderEdit, .barnNotes, .barnNoteEdit,
+             .vetSchedule, .addVetRecord, .farrierSchedule, .addFarrierVisit,
+             .dentistSchedule, .addDentistVisit, .lessons, .lessonEdit,
+             .feedProducts, .feedProductEdit:
+            nil
+        }
+    }
+}
