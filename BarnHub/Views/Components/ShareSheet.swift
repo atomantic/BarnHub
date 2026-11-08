@@ -83,6 +83,18 @@ extension View {
     func documentPresentation(preview: Binding<URL?>, share: Binding<SharedFile?>) -> some View {
         quickLookPreview(preview)
             .onChange(of: preview.wrappedValue) { old, _ in ShareTempFiles.cleanUp(old) }
+            #if DEBUG
+            // The Mac's Quick Look panel runs out of process, where UI tests
+            // can't see it; this marks that a preview is up (ScreenWalkTests).
+            .background {
+                if preview.wrappedValue != nil {
+                    Color.clear
+                        .frame(width: 1, height: 1)
+                        .accessibilityElement()
+                        .accessibilityIdentifier("quick_look_presented")
+                }
+            }
+            #endif
             .shareSheet(share)
     }
 }

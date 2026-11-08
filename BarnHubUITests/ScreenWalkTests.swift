@@ -226,7 +226,11 @@ final class ScreenWalkTests: XCTestCase {
         let titled = NSPredicate(format: "title CONTAINS[c] %@ OR title CONTAINS[c] %@", title, fileName)
         let panel = app.windows.matching(titled).firstMatch
         let dialog = app.dialogs.matching(titled).firstMatch
-        XCTAssertTrue(panel.waitForExistence(timeout: 10) || dialog.exists, "\(title): no Quick Look panel opened")
+        // The panel is often hosted out of process; then rely on the app's
+        // debug marker that a preview is presented.
+        let marker = app.descendants(matching: .any)["quick_look_presented"]
+        XCTAssertTrue(marker.waitForExistence(timeout: 10) || panel.exists || dialog.exists,
+                      "\(title): no Quick Look panel opened")
         #else
         // Quick Look's own bar: a close (Done) button over the file, titled with
         // the file's name (spaces become underscores in the temp file name).
