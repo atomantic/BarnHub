@@ -148,7 +148,8 @@ struct PreviewSampleData {
 
     static func createWeightEntries(horse: Horse) -> [WeightEntry] {
         let calendar = Calendar.current
-        let weights: [Double] = [1135, 1142, 1150, 1148, 1156, 1162]
+        // Six monthly weigh-ins that end at the horse's current weight.
+        let weights = [-27.0, -20, -12, -14, -6, 0].map { horse.weight + $0 }
         return weights.enumerated().map { index, weight in
             let monthsAgo = weights.count - 1 - index
             let entry = WeightEntry(
