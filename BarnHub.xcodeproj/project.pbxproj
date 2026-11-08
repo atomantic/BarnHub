@@ -280,6 +280,18 @@
 		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
 		B30DE1E7E000000000000A02 /* RecordRemovalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30DE1E7E000000000000A01 /* RecordRemovalTests.swift */; };
 		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
+		F5BC24498C828EC6ACF8A4E8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964D96C5951617FDB5F15890 /* ContentView.swift */; };
+		E3E485CACF60A3FF89FDF900 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964D96C5951617FDB5F15890 /* ContentView.swift */; };
+		2EA42658150D2C3AA0F765F7 /* BarnHubMacAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7C588340F26D5D26996AF6 /* BarnHubMacAppDelegate.swift */; };
+		248A5CD8B7B7D1C79EF6FD30 /* BarnHubMacAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7C588340F26D5D26996AF6 /* BarnHubMacAppDelegate.swift */; };
+		7D5F63EE054D4ED68649238C /* RouteDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A24B3A0BCC533EC19331FB /* RouteDestinations.swift */; };
+		E8D6F2075ED58E6370D4D156 /* RouteDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A24B3A0BCC533EC19331FB /* RouteDestinations.swift */; };
+		C26EC43D598670EA99350BBC /* FirstLaunchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942259A89B70A6D91883C694 /* FirstLaunchSheet.swift */; };
+		7DB1D62A2AD0D20CB5108555 /* FirstLaunchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942259A89B70A6D91883C694 /* FirstLaunchSheet.swift */; };
+		78B1A5E25D28AE60C5BEF268 /* ScreenshotRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */; };
+		2B4B4ED006705DFF736FD022 /* ScreenshotRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */; };
+		64D42B70EC39E1D39C74B7CA /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */; };
+		D89115FE7CE4F2B78E792CD6 /* FormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -459,6 +471,12 @@
 		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsTests.swift; sourceTree = "<group>"; };
 		B30DE1E7E000000000000A01 /* RecordRemovalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRemovalTests.swift; sourceTree = "<group>"; };
 		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
+		964D96C5951617FDB5F15890 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AD7C588340F26D5D26996AF6 /* BarnHubMacAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubMacAppDelegate.swift; sourceTree = "<group>"; };
+		96A24B3A0BCC533EC19331FB /* RouteDestinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDestinations.swift; sourceTree = "<group>"; };
+		942259A89B70A6D91883C694 /* FirstLaunchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchSheet.swift; sourceTree = "<group>"; };
+		97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotRouter.swift; sourceTree = "<group>"; };
+		1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -547,6 +565,9 @@
 				564EAF51B7DD4639ADD9B985 /* Services */,
 				C454586A1F4E28C340BDC1AD /* Views */,
 				17FD7B53BC587AAC85435CCD /* BarnHub-macOS.entitlements */,
+				6FA0B5FF7EB5A5710B689E6A /* App */,
+				445E32280E5EAC01C49EB9BF /* Onboarding */,
+				C532971C96BB92A707B4966A /* Debug */,
 			);
 			path = BarnHub;
 			sourceTree = "<group>";
@@ -664,6 +685,7 @@
 				E67DD6DFB1434458916E6672 /* CachedPhotoView.swift */,
 				AF28B6C85DEC5B148DD1959C /* ShareSheet.swift */,
 				B748DC85E941B06F934124AA /* ShareSheet.swift */,
+				1495C8CD02AFD6F5DABCD9FA /* FormSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -807,8 +829,34 @@
 				9626486725CB190EBD898F44 /* DeepLinkHandler.swift */,
 				CD0269846B3293A3B59F5C78 /* Router.swift */,
 				92C3E00B82BEDE322C7C8474 /* Routes.swift */,
+				96A24B3A0BCC533EC19331FB /* RouteDestinations.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		6FA0B5FF7EB5A5710B689E6A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				964D96C5951617FDB5F15890 /* ContentView.swift */,
+				AD7C588340F26D5D26996AF6 /* BarnHubMacAppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		445E32280E5EAC01C49EB9BF /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				942259A89B70A6D91883C694 /* FirstLaunchSheet.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		C532971C96BB92A707B4966A /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				97079A067CA52ADC1DDD58CA /* ScreenshotRouter.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1087,6 +1135,12 @@
 				E9B63DC21E1DFF87076413D6 /* View+PlatformCompat.swift in Sources */,
 				F7286659E2BAB2064A0004E2 /* Image+PlatformCompat.swift in Sources */,
 				B14FF81A91D05E1752D0D62F /* ShareSheet.swift in Sources */,
+				F5BC24498C828EC6ACF8A4E8 /* ContentView.swift in Sources */,
+				2EA42658150D2C3AA0F765F7 /* BarnHubMacAppDelegate.swift in Sources */,
+				7D5F63EE054D4ED68649238C /* RouteDestinations.swift in Sources */,
+				C26EC43D598670EA99350BBC /* FirstLaunchSheet.swift in Sources */,
+				78B1A5E25D28AE60C5BEF268 /* ScreenshotRouter.swift in Sources */,
+				64D42B70EC39E1D39C74B7CA /* FormSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1218,6 +1272,12 @@
 				462C72CBD666EC1A27EA58DD /* View+PlatformCompat.swift in Sources */,
 				0FECD3DF15FF7D5B7C41F291 /* Image+PlatformCompat.swift in Sources */,
 				49C18E219EA2DB73B789268F /* ShareSheet.swift in Sources */,
+				E3E485CACF60A3FF89FDF900 /* ContentView.swift in Sources */,
+				248A5CD8B7B7D1C79EF6FD30 /* BarnHubMacAppDelegate.swift in Sources */,
+				E8D6F2075ED58E6370D4D156 /* RouteDestinations.swift in Sources */,
+				7DB1D62A2AD0D20CB5108555 /* FirstLaunchSheet.swift in Sources */,
+				2B4B4ED006705DFF736FD022 /* ScreenshotRouter.swift in Sources */,
+				D89115FE7CE4F2B78E792CD6 /* FormSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
