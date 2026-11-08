@@ -35,3 +35,12 @@ extension ModelContext {
         return try? fetch(descriptor).first
     }
 }
+
+/// A record waiting on a delete confirmation, held by ID (plus the name the dialog
+/// shows) rather than by model: it may be deleted on another device before the
+/// user answers, and reading a deleted model traps. Resolve the ID with
+/// `existingModel(for:)` on confirm.
+struct PendingDeletion {
+    let id: PersistentIdentifier
+    let name: String
+}
