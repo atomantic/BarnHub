@@ -221,7 +221,7 @@ final class AllDataRestoreTests: XCTestCase {
     }
 
     private func wipe() throws {
-        try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
         XCTAssertTrue(try snapshot().values.allSatisfy(\.isEmpty), "store is empty before the restore")
     }
 
@@ -324,7 +324,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// restore adds. Both used to slow down with every row.
     func test_cancel_withTwentyThousandRowsForOneHorse_restoresAndRollsBackQuickly() async throws {
         for horseExists in [true, false] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let folder = try await exportAllData()
             if !horseExists { try wipe() }
@@ -361,7 +361,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// export, with nothing left from before.
     func test_deleteAllDataThenRestore_leavesExactlyTheExport() async throws {
         for keepDocuments in [false, true] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let exported = try snapshot()
             let folder = try await exportAllData()
@@ -374,7 +374,7 @@ final class AllDataRestoreTests: XCTestCase {
             try context.save()
             XCTAssertNotEqual(try snapshot(), exported)
 
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: keepDocuments)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: keepDocuments)
             _ = try await restore(folder)
 
             // With Keep Documents, the kept twin horses and Jane B are matched to
