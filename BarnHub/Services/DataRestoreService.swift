@@ -23,9 +23,9 @@ import SwiftData
 /// of files) through a fresh `ModelContext` per batch, so photos and PDFs
 /// don't pile up in memory. Every record the restore inserts, and every
 /// horse/client link it adds between existing records, is remembered; on
-/// cancel or any error those are deleted (restored owners first, so their
-/// history goes with them by cascade) and the links removed, so the store is
-/// back to where it started.
+/// cancel or any error those are taken out of their owners' lists in bulk,
+/// deleted (restored owners last) and the links removed, so the store is back
+/// to where it started.
 enum DataRestoreService {
     struct Result: Sendable, Equatable {
         /// Records (and horse-client links) added.
@@ -113,6 +113,15 @@ enum DataRestoreService {
         /// Saved records this restore inserted, in insert order.
         private var inserted: [Inserted] = []
         private var insertedSet: Set<PersistentIdentifier> = []
+        /// Children inserted into `context` but not saved yet, with the owner
+        /// list each one goes into.
+        private var unsavedLinks: [(key: LinkKey, child: any PersistentModel)] = []
+        /// Saved children not in their owner's list yet. They're added in one
+        /// go per owner once their file is read (see `link`).
+        private var unlinked: [LinkKey: LinkGroup] = [:]
+        /// Saved children this restore added to owners' lists, so the undo can
+        /// take them out in one go per owner.
+        private var linked: [LinkKey: LinkGroup] = [:]
         /// Horse/client links added between records that existed before.
         private var addedLinks: [(horse: PersistentIdentifier, client: PersistentIdentifier)] = []
         /// Export ID ("horse-3") to the record it was restored as or matched to.
@@ -196,6 +205,7 @@ enum DataRestoreService {
                 if rowNumber % 50 == 0 { progress(reader.fractionRead) }
             }
             try save()
+            try linkSaved()
             progress(1)
         }
 
@@ -212,6 +222,59 @@ enum DataRestoreService {
             pendingBytes += bytes
         }
 
+        /// Which owner, and which of its lists, a child goes into.
+        private struct LinkKey: Hashable {
+            let owner: PersistentIdentifier
+            let list: AnyKeyPath
+        }
+
+        /// Saved children of one owner's list, and how to add them to it or
+        /// take them out of it in a given context.
+        private struct LinkGroup {
+            var children: [PersistentIdentifier] = []
+            let attach: (ModelContext, [PersistentIdentifier]) -> Void
+            let detach: (ModelContext, Set<PersistentIdentifier>) -> Void
+        }
+
+        /// Links `child` to `owner` through the owner's `list` once the
+        /// child's file has been read. Setting the child's to-one side makes
+        /// SwiftData update the owner's whole list on every row, and so does
+        /// appending each batch, so thousands of rows for one horse got slower
+        /// with every row (#77). One append per owner and file doesn't.
+        private func link<Owner: PersistentModel, Child: PersistentModel>(
+            _ child: Child, to owner: Owner?, _ list: ReferenceWritableKeyPath<Owner, [Child]?>
+        ) {
+            guard let owner else { return }
+            // Owners come from earlier files, so their IDs are permanent.
+            let ownerID = owner.persistentModelID
+            let key = LinkKey(owner: ownerID, list: list)
+            if unlinked[key] == nil {
+                unlinked[key] = LinkGroup(
+                    attach: { context, ids in
+                        guard let owner: Owner = context.existingModel(for: ownerID) else { return }
+                        owner[keyPath: list] = (owner[keyPath: list] ?? []) + ids.compactMap { context.model(for: $0) as? Child }
+                    },
+                    detach: { context, ids in
+                        guard let owner: Owner = context.existingModel(for: ownerID) else { return }
+                        owner[keyPath: list] = (owner[keyPath: list] ?? []).filter { !ids.contains($0.persistentModelID) }
+                    }
+                )
+            }
+            unsavedLinks.append((key, child))
+        }
+
+        /// Adds the file's saved children to their owners' lists, one owner
+        /// (and save) at a time.
+        private func linkSaved() throws {
+            for (key, group) in unlinked where !group.children.isEmpty {
+                let linking = Self.makeContext(container)
+                group.attach(linking, group.children)
+                try linking.save()
+                linked[key, default: LinkGroup(attach: group.attach, detach: group.detach)].children += group.children
+            }
+            unlinked.removeAll()
+        }
+
         /// Saves the batch, records the inserted records' permanent IDs, and
         /// starts a fresh context so saved photos and PDFs can be released.
         private func save() throws {
@@ -223,28 +286,37 @@ enum DataRestoreService {
                 insertedSet.insert(record.id)
             }
             for (exportID, model) in unsavedOwners { owners[exportID] = model.persistentModelID }
+            for (key, child) in unsavedLinks { unlinked[key]?.children.append(child.persistentModelID) }
             unsaved.removeAll()
             unsavedOwners.removeAll()
+            unsavedLinks.removeAll()
             pendingBytes = 0
             context = Self.makeContext(container)
         }
 
         /// Deletes what this restore saved and removes the links it added.
-        /// The restored horses, clients and feed products go first, so their
-        /// history goes with them by cascade instead of one record at a time
-        /// (deleting a child while its owner lives rewrites the owner's list,
-        /// which gets slow with thousands of rows). Records that hang off
-        /// existing owners, or none, are deleted after that.
+        /// Deleting a child while its owner still lists it makes SwiftData
+        /// rewrite the owner's whole list for each row, and a cascade from an
+        /// owner with tens of thousands of children is just as slow (#77).
+        /// So every record this restore linked is first taken out of its
+        /// owner's list in one go per owner, then the records are deleted
+        /// with no owner left to update, and the restored horses, clients and
+        /// feed products, now without history, go last.
         private func undo() {
             context.rollback()
+            unsavedLinks.removeAll()
+            unlinked.removeAll()
             var cleanup = Self.makeContext(container)
             do {
                 for link in addedLinks {
                     guard let horse: Horse = cleanup.existingModel(for: link.horse) else { continue }
                     horse.clients?.removeAll { $0.persistentModelID == link.client }
                 }
-                for record in inserted where record.isOwner { record.delete(cleanup) }
-                try cleanup.save()
+                for group in linked.values {
+                    group.detach(cleanup, Set(group.children))
+                    try cleanup.save()
+                    cleanup = Self.makeContext(container)
+                }
                 for (i, record) in inserted.reversed().filter({ !$0.isOwner }).enumerated() {
                     record.delete(cleanup)
                     if i % rowsPerSave == rowsPerSave - 1 {
@@ -252,6 +324,7 @@ enum DataRestoreService {
                         cleanup = Self.makeContext(container)
                     }
                 }
+                for record in inserted where record.isOwner { record.delete(cleanup) }
                 try cleanup.save()
                 BarnHubLogger.info("Restore rolled back records=\(inserted.count) links=\(addedLinks.count)")
             } catch {
@@ -259,6 +332,7 @@ enum DataRestoreService {
             }
             inserted.removeAll()
             addedLinks.removeAll()
+            linked.removeAll()
         }
 
         // MARK: Lookups
@@ -534,7 +608,7 @@ enum DataRestoreService {
                 if claim(key, in: &existing) != nil { return .duplicate }
                 let txn = fields.makeTransaction()
                 insert(txn)
-                txn.client = owner(clientID, as: Client.self)
+                link(txn, to: owner(clientID, as: Client.self), \.transactions)
                 return .inserted
             }
         }
@@ -552,7 +626,7 @@ enum DataRestoreService {
                                            cost: try double(row, "cost") ?? 0, nextDueDate: try parseDate(row, "next due"))
                     if let repeats = row.text("repeats") { record.reminderFrequencyRaw = repeats }
                     insert(record)
-                    record.horse = owner(horseID, as: Horse.self)
+                    link(record, to: owner(horseID, as: Horse.self), \.vetRecords)
                     return .inserted
                 }
             }
@@ -570,7 +644,7 @@ enum DataRestoreService {
                     let visit = FarrierVisit(date: date, farrierName: farrier, serviceDescription: service,
                                              cost: try double(row, "cost") ?? 0, nextDueDate: try parseDate(row, "next due"))
                     insert(visit)
-                    visit.horse = owner(horseID, as: Horse.self)
+                    link(visit, to: owner(horseID, as: Horse.self), \.farrierVisits)
                     return .inserted
                 }
             }
@@ -588,7 +662,7 @@ enum DataRestoreService {
                     let visit = DentistVisit(date: date, dentistName: dentist, serviceDescription: service,
                                              cost: try double(row, "cost") ?? 0, nextDueDate: try parseDate(row, "next due"))
                     insert(visit)
-                    visit.horse = owner(horseID, as: Horse.self)
+                    link(visit, to: owner(horseID, as: Horse.self), \.dentistVisits)
                     return .inserted
                 }
             }
@@ -604,7 +678,7 @@ enum DataRestoreService {
                     if claim(key(day(date), ownerKey(horseID), number(weight)), in: &existing) != nil { return .duplicate }
                     let entry = WeightEntry(date: date, weight: weight)
                     insert(entry)
-                    entry.horse = owner(horseID, as: Horse.self)
+                    link(entry, to: owner(horseID, as: Horse.self), \.weightEntries)
                     return .inserted
                 }
             }
@@ -626,8 +700,8 @@ enum DataRestoreService {
                     entry.feedTimeRaw = feedTime
                     if let unit = row.text("unit") { entry.unitRaw = unit }
                     insert(entry)
-                    entry.horse = owner(horseID, as: Horse.self)
-                    entry.product = owner(productID, as: FeedProduct.self)
+                    link(entry, to: owner(horseID, as: Horse.self), \.feedPlanEntries)
+                    link(entry, to: owner(productID, as: FeedProduct.self), \.planEntries)
                     return .inserted
                 }
             }
@@ -647,7 +721,7 @@ enum DataRestoreService {
                                             isCompleted: row.bool("completed") ?? false)
                     if let repeats = row.text("repeats") { reminder.frequencyRaw = repeats }
                     insert(reminder)
-                    reminder.horse = owner(horseID, as: Horse.self)
+                    link(reminder, to: owner(horseID, as: Horse.self), \.reminders)
                     return .inserted
                 }
             }
@@ -671,8 +745,8 @@ enum DataRestoreService {
                     lesson.lessonTypeRaw = type
                     if let repeats = row.text("repeats") { lesson.frequencyRaw = repeats }
                     insert(lesson)
-                    lesson.client = owner(clientID, as: Client.self)
-                    lesson.horse = owner(horseID, as: Horse.self)
+                    link(lesson, to: owner(clientID, as: Client.self), \.lessons)
+                    link(lesson, to: owner(horseID, as: Horse.self), \.lessons)
                     return .inserted
                 }
             }
@@ -690,7 +764,7 @@ enum DataRestoreService {
                     let note = BarnNote(content: content, date: date)
                     note.categoryRaw = category
                     insert(note)
-                    note.horse = owner(horseID, as: Horse.self)
+                    link(note, to: owner(horseID, as: Horse.self), \.barnNotes)
                     return .inserted
                 }
             }
@@ -728,7 +802,7 @@ enum DataRestoreService {
                     let invoice = Invoice(startDate: start, endDate: end, totalAmount: try double(row, "total") ?? 0,
                                           createdAt: created, pdfData: pdf)
                     insert(invoice, bytes: pdf?.count ?? 0)
-                    invoice.client = owner(clientID, as: Client.self)
+                    link(invoice, to: owner(clientID, as: Client.self), \.invoices)
                     return .inserted
                 }
             }
@@ -748,7 +822,7 @@ enum DataRestoreService {
                     document.typeRaw = type
                     document.createdAt = created
                     insert(document, bytes: data?.count ?? 0)
-                    document.horse = owner(horseID, as: Horse.self)
+                    link(document, to: owner(horseID, as: Horse.self), \.documents)
                     return .inserted
                 }
             }
@@ -768,7 +842,7 @@ enum DataRestoreService {
                     document.typeRaw = type
                     document.createdAt = created
                     insert(document, bytes: data?.count ?? 0)
-                    document.client = owner(clientID, as: Client.self)
+                    link(document, to: owner(clientID, as: Client.self), \.documents)
                     return .inserted
                 }
             }
