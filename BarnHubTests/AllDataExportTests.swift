@@ -154,7 +154,7 @@ final class AllDataExportTests: XCTestCase {
 
     func test_existingHeaders_areUnchangedForReimport() {
         XCTAssertEqual(DataExportService.horsesHeader.joined(separator: ","),
-                       "Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active")
+                       "Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active,Gender")
         XCTAssertEqual(DataExportService.clientsHeader.joined(separator: ","),
                        "First Name,Last Name,Email,Phone,Emergency Contact,Emergency Phone,Notes,Active")
         XCTAssertEqual(DataExportService.transactionsHeader.joined(separator: ","), "Date,Type,Category,Amount,Memo,Client,Paid")
