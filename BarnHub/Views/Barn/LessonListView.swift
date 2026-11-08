@@ -75,7 +75,7 @@ struct LessonListView: View {
     private func lessonRow(_ lesson: Lesson) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(lesson.client?.fullName ?? "No Client")
+                Text(lesson.client?.fullName ?? appLocalized("No Client", comment: "Lesson row title when the lesson has no client"))
                     .font(.headline)
                 HStack(spacing: 8) {
                     Text(lesson.lessonType.displayName)

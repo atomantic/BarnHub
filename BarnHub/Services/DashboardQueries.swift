@@ -374,12 +374,10 @@ struct HomeSummary {
         upcomingVet = vet.filter { $0.nextDueDate.map { $0 >= now && $0 <= weekOut } ?? false }
         upcomingFarrier = farrier.filter { $0.nextDueDate.map { $0 >= now && $0 <= weekOut } ?? false }
 
-        // Schedule tile: the next thing still to come today. Created once per
-        // summary, not per item; not cached statically (see CLAUDE.md).
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "h:mma"
-        timeFormatter.amSymbol = "am"
-        timeFormatter.pmSymbol = "pm"
+        // Schedule tile: the next thing still to come today, e.g. "3:30 PM Lesson",
+        // with the time in the app language's style (not cached; see CLAUDE.md).
+        let timeStyle = Date.FormatStyle(date: .omitted, time: .shortened, locale: .app, calendar: calendar, timeZone: calendar.timeZone)
+        func time(_ date: Date) -> String { date.formatted(timeStyle) }
         let startOfToday = calendar.startOfDay(for: now)
         let tomorrow = calendar.date(byAdding: .day, value: 1, to: startOfToday) ?? now
         var next: (date: Date, label: String)?
@@ -388,16 +386,22 @@ struct HomeSummary {
         }
         for lesson in inputs.lessons {
             for date in lesson.homeDates(from: now, before: tomorrow, calendar: calendar) {
-                consider(date, "\(timeFormatter.string(from: date)) Lesson")
+                consider(date, appLocalized("\(time(date)) Lesson", comment: "Home Schedule tile: time of the next lesson today"))
             }
         }
-        func considerDue(_ due: Date?, _ label: String) {
+        func considerDue(_ due: Date?, _ label: (String) -> String) {
             guard let due, calendar.isDateInToday(due), due >= now else { return }
-            consider(due, "\(timeFormatter.string(from: due)) \(label)")
+            consider(due, label(time(due)))
         }
-        for record in vet { considerDue(record.nextDueDate, "Vet") }
-        for visit in farrier { considerDue(visit.nextDueDate, "Farrier") }
-        for visit in dentist { considerDue(visit.nextDueDate, "Dentist") }
+        for record in vet {
+            considerDue(record.nextDueDate) { appLocalized("\($0) Vet", comment: "Home Schedule tile: time of the next vet visit due today") }
+        }
+        for visit in farrier {
+            considerDue(visit.nextDueDate) { appLocalized("\($0) Farrier", comment: "Home Schedule tile: time of the next farrier visit due today") }
+        }
+        for visit in dentist {
+            considerDue(visit.nextDueDate) { appLocalized("\($0) Dentist", comment: "Home Schedule tile: time of the next dentist visit due today") }
+        }
         nextScheduleItemToday = next?.label
 
         // Today & Tomorrow widget.
@@ -515,6 +519,7 @@ struct ScheduleEventIndex {
         }
 
         let unknownHorse = appLocalized("Unknown Horse", comment: "Fallback horse name")
+        let noClient = appLocalized("No Client", comment: "Calendar lesson title when the lesson has no client")
         func appendCare<R: HorseCareRecord>(
             _ records: [R], newest: [PersistentIdentifier: SupersedeKey], type: ScheduleEventType, provider: (R) -> String
         ) {
@@ -538,9 +543,10 @@ struct ScheduleEventIndex {
         for lesson in inputs.lessons {
             let occurrences = lesson.occurrences(from: window.start, to: window.end, calendar: calendar)
             guard !occurrences.isEmpty else { continue }
-            let subtitle = [lesson.lessonType.displayName, lesson.horse.map { "on \($0.name)" }]
-                .compactMap { $0 }.joined(separator: " ")
-            let title = lesson.client?.fullName ?? "No Client"
+            let subtitle = lesson.horse.map {
+                appLocalized("\(lesson.lessonType.displayName) on \($0.name)", comment: "Calendar lesson subtitle: lesson type, then the horse ridden (e.g. 'Private on Star')")
+            } ?? lesson.lessonType.displayName
+            let title = lesson.client?.fullName ?? noClient
             for occurrence in occurrences {
                 events.append(ScheduleEvent(
                     id: ScheduleEventID(lesson.persistentModelID, occurrence: occurrence),
