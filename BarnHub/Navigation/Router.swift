@@ -66,7 +66,19 @@ final class Router {
         }
     }
 
-    func navigate(to route: any Hashable, tab: AppTab? = nil) {
+    /// The last route pushed and when, so a doubled tap on View Plans doesn't
+    /// push the paywall twice (#65).
+    @ObservationIgnored private var lastPush: (route: AnyHashable, at: Date)?
+    /// How long a repeat of the paywall route is treated as a doubled tap.
+    static let repeatPushInterval: TimeInterval = 0.5
+
+    func navigate(to route: any Hashable, tab: AppTab? = nil, now: Date = .now) {
+        let key = AnyHashable(route)
+        if key == AnyHashable(SubscriptionRoute.paywall), let lastPush, lastPush.route == key,
+           now.timeIntervalSince(lastPush.at) < Self.repeatPushInterval {
+            return
+        }
+        lastPush = (key, now)
         if let tab { selectedTab = tab }
         if presentsFormsAsSheets, Self.isForm(route) {
             formPath = NavigationPath()
