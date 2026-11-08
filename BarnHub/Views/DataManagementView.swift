@@ -15,7 +15,59 @@ struct DataManagementView: View {
     @State private var showImportResult = false
     @State private var deleteStep: DeleteStep?
 
-    var body: some View {
+    #if os(macOS)
+    /// The Settings window's Data tab: a native grouped form with compact
+    /// button rows instead of a stack of full-width iOS rows.
+    private var dataContent: some View {
+        Form {
+            Section {
+                HStack {
+                    Button("Horses") { exportData(.horses) }
+                    Button("Clients") { exportData(.clients) }
+                    Button("Transactions") { exportData(.transactions) }
+                    Spacer()
+                    Button("All Data") { exportData(.all) }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.barnGreen)
+                }
+            } header: {
+                Text("Export")
+            } footer: {
+                Text("Export your barn data as CSV files for backup or use in spreadsheets.")
+            }
+
+            Section {
+                HStack {
+                    Button("Horses") { startImport(.horses) }
+                    Button("Clients") { startImport(.clients) }
+                    Button("Transactions") { startImport(.transactions) }
+                    Spacer()
+                }
+            } header: {
+                Text("Import")
+            } footer: {
+                Text("CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).")
+            }
+
+            Section {
+                HStack {
+                    Button(role: .destructive) {
+                        deleteStep = .warning
+                    } label: {
+                        Label("Delete All Data", systemImage: "trash")
+                    }
+                    Spacer()
+                }
+            } header: {
+                Text("Reset")
+            } footer: {
+                Text("Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device.")
+            }
+        }
+        .formStyle(.grouped)
+    }
+    #else
+    private var dataContent: some View {
         List {
             Section {
                 Text("Export your barn data as CSV files for backup or use in spreadsheets.")
@@ -71,7 +123,16 @@ struct DataManagementView: View {
                     .font(.caption)
             }
         }
+    }
+    #endif
+
+    var body: some View {
+        dataContent
+        #if os(macOS)
+        .navigationTitle("Data")  // matches its Settings tab
+        #else
         .navigationTitle("Import / Export")
+        #endif
         .inlineNavTitle()
         .toast(toast)
         .sheet(isPresented: $showExportSheet) {

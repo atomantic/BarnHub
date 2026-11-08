@@ -228,11 +228,13 @@ struct ClientDetailView: View {
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
+            .help(Text("Edit"))
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
                 Label("Delete", systemImage: "trash")
             }
+            .help(Text("Delete"))
         }
     }
 

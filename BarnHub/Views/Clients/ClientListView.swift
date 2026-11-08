@@ -10,6 +10,7 @@ struct ClientListView: View {
     @State private var searchText = ""
     @State private var showInactive = false
     @State private var width: CGFloat = 0
+    @State private var clientPendingDelete: Client?
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -49,6 +50,7 @@ struct ClientListView: View {
                 ListDetailSplit(width: width) {
                     List(filteredClients, id: \.persistentModelID, selection: $router.selectedClientID) { client in
                         ClientRowView(client: client)
+                            .contextMenu { rowActions(client) }
                     }
                 } detail: {
                     if let id = router.selectedClientID {
@@ -63,6 +65,7 @@ struct ClientListView: View {
                     NavigationLink(value: ClientRoute.detail(client.persistentModelID)) {
                         ClientRowView(client: client)
                     }
+                    .contextMenu { rowActions(client) }
                 }
             }
         }
@@ -73,6 +76,19 @@ struct ClientListView: View {
         .onChange(of: showsSplit, initial: true) { _, split in
             router.clientsShowSplit = split
         }
+        .overlay {
+            ConfirmationDialog(
+                isPresented: Binding(
+                    get: { clientPendingDelete != nil },
+                    set: { if !$0 { clientPendingDelete = nil } }
+                ),
+                title: "Delete Client",
+                message: "Are you sure you want to delete this client? All associated transactions will also be removed.",
+                confirmTitle: "Delete",
+                confirmRole: .destructive,
+                onConfirm: deletePendingClient
+            )
+        }
         .navigationTitle("Clients")
         .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search clients")
@@ -82,6 +98,7 @@ struct ClientListView: View {
             } label: {
                 Label("Add Client", systemImage: "plus")
             }
+            .help(Text("Add Client"))
         }
         .toolbar {
             if isPro {
@@ -91,9 +108,32 @@ struct ClientListView: View {
                     }
                     .toggleStyle(.button)
                     .tint(showInactive ? .primary : .secondary)
+                    .help(Text("Show Inactive"))
                 }
             }
         }
+    }
+
+    /// Right-click (Mac) or long-press actions on a client row.
+    @ViewBuilder
+    private func rowActions(_ client: Client) -> some View {
+        Button {
+            router.navigate(to: ClientRoute.edit(client.persistentModelID))
+        } label: {
+            Label("Edit Client", systemImage: "pencil")
+        }
+        Button(role: .destructive) {
+            clientPendingDelete = client
+        } label: {
+            Label("Delete Client", systemImage: "trash")
+        }
+    }
+
+    private func deletePendingClient() {
+        guard let client = clientPendingDelete else { return }
+        clientPendingDelete = nil
+        BarnHubLogger.info("Deleting client name=\(client.fullName)")
+        modelContext.deleteWithLogging(client)
     }
 
     /// Keeps the split's selection on a client that's still listed, so the detail
