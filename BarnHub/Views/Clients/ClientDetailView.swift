@@ -293,12 +293,7 @@ struct ClientDetailView: View {
             }
         }
         .detailNavigationTitle(client.fullName, isEmbedded: isEmbedded)
-        .sheet(isPresented: $showInvoiceGenerator) {
-            InvoiceGeneratorView(clientID: clientID)
-        }
-        .sheet(isPresented: $showContractGenerator) {
-            ContractGeneratorView(clientID: clientID)
-        }
+        .generatorSheets(clientID: clientID, showInvoice: $showInvoiceGenerator, showContract: $showContractGenerator)
         .toolbar { if !isEmbedded { clientToolbar } }
     }
     #endif
@@ -317,12 +312,7 @@ struct ClientDetailView: View {
             proSections()
         }
         .formStyle(.grouped)
-        .sheet(isPresented: $showInvoiceGenerator) {
-            InvoiceGeneratorView(clientID: clientID)
-        }
-        .sheet(isPresented: $showContractGenerator) {
-            ContractGeneratorView(clientID: clientID)
-        }
+        .generatorSheets(clientID: clientID, showInvoice: $showInvoiceGenerator, showContract: $showContractGenerator)
     }
 
     private func macOSClientLayout(_ client: Client) -> some View {
@@ -353,12 +343,7 @@ struct ClientDetailView: View {
             .padding()
         }
         .detailNavigationTitle(client.fullName, isEmbedded: isEmbedded)
-        .sheet(isPresented: $showInvoiceGenerator) {
-            InvoiceGeneratorView(clientID: clientID)
-        }
-        .sheet(isPresented: $showContractGenerator) {
-            ContractGeneratorView(clientID: clientID)
-        }
+        .generatorSheets(clientID: clientID, showInvoice: $showInvoiceGenerator, showContract: $showContractGenerator)
         .toolbar { clientToolbar }
     }
     #endif
@@ -379,5 +364,18 @@ struct ClientDetailView: View {
         } else {
             dismiss()
         }
+    }
+}
+
+private extension View {
+    /// The invoice and contract generators, attached to whichever layout is showing.
+    func generatorSheets(clientID: PersistentIdentifier, showInvoice: Binding<Bool>, showContract: Binding<Bool>) -> some View {
+        self
+            .sheet(isPresented: showInvoice) {
+                InvoiceGeneratorView(clientID: clientID)
+            }
+            .sheet(isPresented: showContract) {
+                ContractGeneratorView(clientID: clientID)
+            }
     }
 }
