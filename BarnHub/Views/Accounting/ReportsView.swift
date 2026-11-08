@@ -5,23 +5,26 @@ import Charts
 struct ReportsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(StoreService.self) private var storeService
-    @Query private var transactions: [Transaction]
 
     @State private var selectedPeriod: ReportPeriod = .thisMonth
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
 
-    private var reportData: ReportData {
-        ReportData(transactions: transactions, period: selectedPeriod)
-    }
-
     private var showFullReports: Bool {
         FeatureGate.canAccessFullReports(storeService.isPro)
     }
 
     var body: some View {
-        let data = reportData
+        // Only the selected period's transactions are fetched (#32).
+        QueryContent(ReportData.descriptor(for: selectedPeriod)) { transactions in
+            report(ReportData(transactions: transactions))
+        }
+        .navigationTitle("Reports")
+        .inlineNavTitle()
+    }
+
+    private func report(_ data: ReportData) -> some View {
         ScrollView {
             VStack(spacing: 20) {
                 periodPicker
@@ -55,8 +58,6 @@ struct ReportsView: View {
             .frame(maxWidth: .infinity)
         }
         .background(Color.barnOffWhite)
-        .navigationTitle("Reports")
-        .inlineNavTitle()
     }
 
     /// macOS always; iOS at regular width (iPad, iPhone Duo inner display).
@@ -393,8 +394,8 @@ struct ReportData {
     let incomeByCategory: [(category: TransactionCategory, amount: Double)]
     let monthlyTotals: [MonthlyTotal]
 
-    init(transactions: [Transaction], period: ReportPeriod) {
-        let filtered = Self.filterByPeriod(transactions, period: period)
+    /// Totals for `filtered`, the transactions of one period (see `descriptor(for:)`).
+    init(transactions filtered: [Transaction]) {
         self.filteredTransactions = filtered
 
         var income: Double = 0
@@ -427,37 +428,34 @@ struct ReportData {
         self.monthlyTotals = monthGroups.map { MonthlyTotal(month: $0.key, income: $0.value.income, expenses: $0.value.expenses) }.sorted { $0.month < $1.month }
     }
 
-    private static func filterByPeriod(_ transactions: [Transaction], period: ReportPeriod) -> [Transaction] {
-        let calendar = Calendar.current
-        let now = Date.now
+    /// Fetches the transactions in `period` as of `now`. "This" periods run from
+    /// their start up to now; Last Month is the whole previous month.
+    static func descriptor(for period: ReportPeriod, now: Date = .now, calendar: Calendar = .current) -> FetchDescriptor<Transaction> {
+        let thisMonthStart = calendar.monthInterval(containing: now).start
+        let start: Date
         switch period {
         case .thisMonth:
-            let components = calendar.dateComponents([.year, .month], from: now)
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
+            start = thisMonthStart
         case .lastMonth:
-            let components = calendar.dateComponents([.year, .month], from: now)
-            guard let thisMonthStart = calendar.date(from: components),
-                  let start = calendar.date(byAdding: .month, value: -1, to: thisMonthStart)
-            else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date < thisMonthStart }
+            guard let lastMonthStart = calendar.date(byAdding: .month, value: -1, to: thisMonthStart) else { return FetchDescriptor() }
+            return FetchDescriptor(predicate: Transaction.dated(from: lastMonthStart, before: thisMonthStart))
         case .thisQuarter:
             let month = calendar.component(.month, from: now)
-            let quarterStartMonth = ((month - 1) / 3) * 3 + 1
             var components = calendar.dateComponents([.year], from: now)
-            components.month = quarterStartMonth
+            components.month = ((month - 1) / 3) * 3 + 1
             components.day = 1
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
+            guard let quarterStart = calendar.date(from: components) else { return FetchDescriptor() }
+            start = quarterStart
         case .thisYear:
             var components = calendar.dateComponents([.year], from: now)
             components.month = 1
             components.day = 1
-            guard let start = calendar.date(from: components) else { return transactions }
-            return transactions.filter { $0.date >= start && $0.date <= now }
+            guard let yearStart = calendar.date(from: components) else { return FetchDescriptor() }
+            start = yearStart
         case .allTime:
-            return transactions
+            return FetchDescriptor()
         }
+        return FetchDescriptor(predicate: #Predicate<Transaction> { $0.date >= start && $0.date <= now })
     }
 }
 

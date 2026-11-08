@@ -5,45 +5,32 @@ struct AccountingDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
 
-    @Query(sort: \Transaction.date, order: .reverse) private var transactions: [Transaction]
-
-    private var currentMonthTransactions: [Transaction] {
-        let calendar = Calendar.current
-        let now = Date.now
-        let components = calendar.dateComponents([.year, .month], from: now)
-        guard let monthStart = calendar.date(from: components),
-              let monthEnd = calendar.date(byAdding: .month, value: 1, to: monthStart)
-        else { return [] }
-        return transactions.filter { $0.date >= monthStart && $0.date < monthEnd }
-    }
-
-    private var monthlyIncome: Double {
-        currentMonthTransactions
-            .filter { $0.type == .income }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private var monthlyExpenses: Double {
-        currentMonthTransactions
-            .filter { $0.type == .expense }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private var balance: Double {
-        monthlyIncome - monthlyExpenses
-    }
-
-    private var recentTransactions: [Transaction] {
-        Array(transactions.prefix(10))
-    }
-
     var body: some View {
+        // This month's transactions for the totals and the ten newest for the
+        // list, rather than the whole table (#32).
+        QueryContent(DashboardQueries.transactions(in: Calendar.current.monthInterval(containing: .now))) { monthTransactions in
+            QueryContent(DashboardQueries.recentTransactions(limit: 10)) { recentTransactions in
+                dashboard(month: TransactionTotals(monthTransactions), recentTransactions: recentTransactions)
+            }
+        }
+        .navigationTitle("Accounting")
+        .inlineNavTitle()
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: AccountingRoute.edit(nil))
+            } label: {
+                Label("New Transaction", systemImage: "plus")
+            }
+        }
+    }
+
+    private func dashboard(month: TransactionTotals, recentTransactions: [Transaction]) -> some View {
         List {
             Section("This Month") {
                 HStack(spacing: 12) {
-                    SummaryCard(title: "Income", amount: monthlyIncome, color: .green)
-                    SummaryCard(title: "Expenses", amount: monthlyExpenses, color: .red)
-                    SummaryCard(title: "Balance", amount: balance, color: balance >= 0 ? .blue : .orange)
+                    SummaryCard(title: "Income", amount: month.income, color: .green)
+                    SummaryCard(title: "Expenses", amount: month.expenses, color: .red)
+                    SummaryCard(title: "Balance", amount: month.balance, color: month.balance >= 0 ? .blue : .orange)
                 }
                 .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                 .listRowBackground(Color.clear)
@@ -72,15 +59,6 @@ struct AccountingDashboardView: View {
                         .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                     }
                 }
-            }
-        }
-        .navigationTitle("Accounting")
-        .inlineNavTitle()
-        .prioritizedToolbarItem(.high, placement: .primaryAction) {
-            Button {
-                router.navigate(to: AccountingRoute.edit(nil))
-            } label: {
-                Label("New Transaction", systemImage: "plus")
             }
         }
     }

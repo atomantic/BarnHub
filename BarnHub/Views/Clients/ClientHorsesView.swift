@@ -16,10 +16,10 @@ struct ClientHorsesView: View {
     var body: some View {
         Group {
             if let client {
+                // A set, so each row's check is O(1) instead of a scan of the client's horses.
+                let assignedIDs = Set((client.horses ?? []).map(\.persistentModelID))
                 List(allHorses, id: \.persistentModelID) { horse in
-                    let isAssigned = (client.horses ?? []).contains(where: {
-                        $0.persistentModelID == horse.persistentModelID
-                    })
+                    let isAssigned = assignedIDs.contains(horse.persistentModelID)
                     Button {
                         toggleHorse(horse, for: client, currentlyAssigned: isAssigned)
                     } label: {

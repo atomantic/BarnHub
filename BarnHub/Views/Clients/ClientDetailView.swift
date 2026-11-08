@@ -24,8 +24,15 @@ struct ClientDetailView: View {
         modelContext.existingModel(for: clientID)
     }
 
-    private var sortedRecentTransactions: [Transaction] {
-        Array((client?.transactions ?? []).sorted { $0.date > $1.date }.prefix(5))
+    /// The client's five newest transactions, fetched with a limit instead of
+    /// loading and sorting all of them (#32).
+    private var recentTransactionsDescriptor: FetchDescriptor<Transaction> {
+        var descriptor = FetchDescriptor<Transaction>(
+            predicate: Transaction.forClient(clientID),
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = 5
+        return descriptor
     }
 
     var body: some View {
@@ -116,9 +123,17 @@ struct ClientDetailView: View {
     }
 
     private func transactionsSection(_ client: Client) -> some View {
-        let recentTransactions = sortedRecentTransactions
-        let allTransactionsCount = client.transactions?.count ?? 0
-        return Section {
+        QueryContent(recentTransactionsDescriptor) { recentTransactions in
+            transactionsSection(
+                recentTransactions: recentTransactions,
+                // Re-counted whenever the query refreshes after a save or sync.
+                allTransactionsCount: (try? modelContext.fetchCount(FetchDescriptor(predicate: Transaction.forClient(clientID)))) ?? 0
+            )
+        }
+    }
+
+    private func transactionsSection(recentTransactions: [Transaction], allTransactionsCount: Int) -> some View {
+        Section {
             if recentTransactions.isEmpty {
                 Text("No transactions")
                     .foregroundStyle(.secondary)

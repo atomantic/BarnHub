@@ -54,10 +54,11 @@ struct BarnNoteListView: View {
     }
 
     var body: some View {
-        List {
+        let groupedNotes = self.groupedNotes  // filtered and grouped once per render
+        return List {
             categoryFilter
 
-            if filteredNotes.isEmpty {
+            if groupedNotes.isEmpty {
                 EmptyStateView(
                     icon: "note.text",
                     title: "No Barn Notes",

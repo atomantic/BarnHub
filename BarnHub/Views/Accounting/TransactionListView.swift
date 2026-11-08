@@ -5,8 +5,6 @@ struct TransactionListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
 
-    @Query(sort: \Transaction.date, order: .reverse) private var transactions: [Transaction]
-
     @State private var selectedType: TransactionType?
     @State private var selectedCategory: TransactionCategory?
     @State private var startDate: Date = Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .now
@@ -27,21 +25,20 @@ struct TransactionListView: View {
         #endif
     }
 
-    private var filteredTransactions: [Transaction] {
-        transactions.filter { txn in
-            if let type = selectedType, txn.type != type { return false }
-            if let category = selectedCategory, txn.category != category { return false }
-            if txn.date < startDate || txn.date > endDate { return false }
-            return true
-        }
+    /// Only the transactions matching the filters are fetched (#32).
+    private var filteredDescriptor: FetchDescriptor<Transaction> {
+        FetchDescriptor(
+            predicate: Transaction.listPredicate(type: selectedType, category: selectedCategory, from: startDate, through: endDate),
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
     }
 
     var body: some View {
-        Group {
+        QueryContent(filteredDescriptor) { filteredTransactions in
             if usesTable {
-                tableLayout
+                tableLayout(filteredTransactions)
             } else {
-                listLayout
+                listLayout(filteredTransactions)
             }
         }
         .navigationTitle("Transactions")
@@ -60,7 +57,7 @@ struct TransactionListView: View {
 
     // MARK: - Wide: filter bar + table
 
-    private var tableLayout: some View {
+    private func tableLayout(_ filteredTransactions: [Transaction]) -> some View {
         VStack(spacing: 0) {
             filterBar
                 .padding(.horizontal)
@@ -74,7 +71,7 @@ struct TransactionListView: View {
                 )
                 .frame(maxHeight: .infinity)
             } else {
-                transactionTable
+                transactionTable(filteredTransactions.sorted(using: sortOrder))
             }
         }
     }
@@ -113,11 +110,7 @@ struct TransactionListView: View {
         .pickerStyle(.menu)
     }
 
-    private var sortedTransactions: [Transaction] {
-        filteredTransactions.sorted(using: sortOrder)
-    }
-
-    private var transactionTable: some View {
+    private func transactionTable(_ sortedTransactions: [Transaction]) -> some View {
         Table(sortedTransactions, selection: $selection, sortOrder: $sortOrder) {
             TableColumn("Date", value: \.date) { txn in
                 Text(txn.date, format: .dateTime.year().month(.abbreviated).day())
@@ -173,7 +166,7 @@ struct TransactionListView: View {
 
     // MARK: - Compact: list of rows
 
-    private var listLayout: some View {
+    private func listLayout(_ filteredTransactions: [Transaction]) -> some View {
         List {
             DisclosureGroup("Filters", isExpanded: $showFilters) {
                 Picker("Type", selection: $selectedType) {

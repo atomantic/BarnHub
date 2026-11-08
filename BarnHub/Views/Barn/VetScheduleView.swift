@@ -2,13 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct VetScheduleView: View {
-    @Query(sort: \VetRecord.date, order: .reverse) private var allVetRecords: [VetRecord]
-
-    private var scheduledRecords: [VetRecord] {
-        allVetRecords
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
-    }
+    // Only records with a next due date, sorted by it in the store (#32).
+    @Query(filter: #Predicate<VetRecord> { $0.nextDueDate != nil }, sort: \VetRecord.nextDueDate)
+    private var scheduledRecords: [VetRecord]
 
     var body: some View {
         ScheduleListView(
