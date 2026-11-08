@@ -473,7 +473,8 @@ private final class CSVJob {
         let step: CSVStepHandler = { [weak self] index, count, kind in
             Task { @MainActor in
                 guard self?.title != nil else { return }
-                self?.detail = appLocalized("Step \(index) of \(count): \(kind.rawValue).csv",
+                // The file name is one value, so the key matches the catalog's "Step %lld of %lld: %@".
+                self?.detail = appLocalized("Step \(index) of \(count): \(kind.rawValue + ".csv")",
                                             comment: "Export progress: which file is being written, e.g. Step 3 of 17: transactions.csv")
             }
         }
