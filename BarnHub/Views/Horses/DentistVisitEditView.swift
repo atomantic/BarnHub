@@ -113,12 +113,12 @@ struct DentistVisitEditView: View {
         let visit: DentistVisit
         if let existing = existingVisit {
             visit = existing
-            BarnHubLogger.info("Updating dentist visit horse=\(horse.name) dentist=\(trimmedName)")
+            BarnHubLogger.info("Updating dentist visit")
         } else {
             visit = DentistVisit()
             visit.horse = horse
             modelContext.insert(visit)
-            BarnHubLogger.info("Adding dentist visit horse=\(horse.name) dentist=\(trimmedName)")
+            BarnHubLogger.info("Adding dentist visit")
         }
         visit.date = date
         visit.dentistName = trimmedName
@@ -132,7 +132,7 @@ struct DentistVisitEditView: View {
 
     private func deleteVisit() {
         guard let visit = existingVisit else { return }
-        BarnHubLogger.info("Deleting dentist visit dentist=\(visit.dentistName)")
+        BarnHubLogger.info("Deleting dentist visit")
         modelContext.delete(visit)
         modelContext.saveWithLogging()
         toast.showAndDismiss(appLocalized("Dentist visit deleted", comment: "Toast after deleting a dentist visit"), dismiss: dismiss)

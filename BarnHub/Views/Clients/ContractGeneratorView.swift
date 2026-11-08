@@ -126,6 +126,6 @@ struct ContractGeneratorView: View {
         generatedPDFURL = tempURL
         showShareSheet = true
 
-        BarnHubLogger.success("Contract generated type=\(contractType.displayName) client=\(client.fullName) horse=\(horse.name)")
+        BarnHubLogger.success("Contract generated type=\(contractType.rawValue)")
     }
 }

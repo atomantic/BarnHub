@@ -254,7 +254,7 @@ struct HorseEditView: View {
             horse.isActive = isActive
             horse.photoData = photoData
             horse.thumbnailData = thumbnailData
-            BarnHubLogger.info("Updating horse name=\(trimmedName)")
+            BarnHubLogger.info("Updating horse")
         } else {
             let horse = Horse(
                 name: trimmedName,
@@ -272,7 +272,7 @@ struct HorseEditView: View {
             )
             horse.thumbnailData = thumbnailData
             modelContext.insert(horse)
-            BarnHubLogger.info("Creating horse name=\(trimmedName)")
+            BarnHubLogger.info("Creating horse")
             newHorse = horse
         }
 

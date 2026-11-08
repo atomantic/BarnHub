@@ -113,12 +113,12 @@ struct FarrierVisitEditView: View {
         let visit: FarrierVisit
         if let existing = existingVisit {
             visit = existing
-            BarnHubLogger.info("Updating farrier visit horse=\(horse.name) farrier=\(trimmedName)")
+            BarnHubLogger.info("Updating farrier visit")
         } else {
             visit = FarrierVisit()
             visit.horse = horse
             modelContext.insert(visit)
-            BarnHubLogger.info("Adding farrier visit horse=\(horse.name) farrier=\(trimmedName)")
+            BarnHubLogger.info("Adding farrier visit")
         }
         visit.date = date
         visit.farrierName = trimmedName
@@ -132,7 +132,7 @@ struct FarrierVisitEditView: View {
 
     private func deleteVisit() {
         guard let visit = existingVisit else { return }
-        BarnHubLogger.info("Deleting farrier visit farrier=\(visit.farrierName)")
+        BarnHubLogger.info("Deleting farrier visit")
         modelContext.delete(visit)
         modelContext.saveWithLogging()
         toast.showAndDismiss(appLocalized("Farrier visit deleted", comment: "Toast after deleting a farrier visit"), dismiss: dismiss)
