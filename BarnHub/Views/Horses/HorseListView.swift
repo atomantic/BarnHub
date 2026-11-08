@@ -8,7 +8,9 @@ struct HorseListView: View {
 
     @State private var searchText = ""
     @State private var showInactive = false
-    @State private var width: CGFloat = 0
+    /// Whether the window is wide enough for the split. A Bool, not the width,
+    /// so resizing doesn't redraw the list on every point (#32).
+    @State private var fitsSplit = false
     /// Held by ID, not model: the horse may be deleted on another device before
     /// the user answers, and reading a deleted model traps.
     @State private var horsePendingRemoval: PersistentIdentifier?
@@ -32,11 +34,13 @@ struct HorseListView: View {
         #if os(iOS)
         guard sizeClass == .regular else { return false }
         #endif
-        return width >= ListDetailSplit<EmptyView, EmptyView>.minimumWidth
+        return fitsSplit
     }
 
     var body: some View {
         @Bindable var router = router
+        // Filtered once per render.
+        let filteredHorses = self.filteredHorses
         return Group {
             if filteredHorses.isEmpty {
                 EmptyStateView(
@@ -45,7 +49,7 @@ struct HorseListView: View {
                     subtitle: "Tap + to add your first horse."
                 )
             } else if showsSplit {
-                ListDetailSplit(width: width) {
+                ListDetailSplit {
                     List(filteredHorses, id: \.persistentModelID, selection: $router.selectedHorseID) { horse in
                         HorseRowView(horse: horse)
                             .contextMenu { rowActions(horse) }
@@ -70,7 +74,9 @@ struct HorseListView: View {
                 }
             }
         }
-        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+        .onGeometryChange(for: Bool.self) {
+            $0.size.width >= ListDetailSplit<EmptyView, EmptyView>.minimumWidth
+        } action: { fitsSplit = $0 }
         .onChange(of: filteredHorses.map(\.persistentModelID), initial: true) { _, ids in
             keepSelection(in: ids)
         }
