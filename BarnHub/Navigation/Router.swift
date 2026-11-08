@@ -18,6 +18,17 @@ final class Router {
     var horsesShowSplit = false
     var clientsShowSplit = false
 
+    /// Add/edit forms open as sheets instead of pushing (Mac, and iPad-sized
+    /// windows). Set by the root view from the platform and size class.
+    var presentsFormsAsSheets = false
+    /// The form currently shown as a sheet, if any.
+    var presentedForm: PresentedForm?
+
+    struct PresentedForm: Identifiable {
+        let id = UUID()
+        let route: AnyHashable
+    }
+
     enum AppTab: String, CaseIterable {
         case home, horses, clients, schedule, accounting
 
@@ -54,6 +65,10 @@ final class Router {
 
     func navigate(to route: any Hashable, tab: AppTab? = nil) {
         if let tab { selectedTab = tab }
+        if presentsFormsAsSheets, Self.isForm(route) {
+            presentedForm = PresentedForm(route: AnyHashable(route))
+            return
+        }
         switch selectedTab {
         case .home: homePath.append(route)
         case .horses: horsesPath.append(route)
@@ -84,6 +99,37 @@ final class Router {
             selectedClientID = id
         } else {
             clientsPath.append(ClientRoute.detail(id))
+        }
+    }
+
+    /// Add/edit screens: the routes that open as a sheet when `presentsFormsAsSheets`.
+    static func isForm(_ route: any Hashable) -> Bool {
+        switch route {
+        case let r as HorseRoute:
+            switch r {
+            case .edit, .addVetRecord, .addFarrierVisit, .addDentistVisit,
+                 .editVetRecord, .editFarrierVisit, .editDentistVisit:
+                // (.editFeedEntry already opens in its own sheet from the feed plan.)
+                return true
+            default:
+                return false
+            }
+        case let r as ClientRoute:
+            if case .edit = r { return true }
+            return false
+        case let r as AccountingRoute:
+            if case .edit = r { return true }
+            return false
+        case let r as BarnRoute:
+            switch r {
+            case .supplyEdit, .reminderEdit, .barnNoteEdit, .addVetRecord, .addFarrierVisit,
+                 .addDentistVisit, .lessonEdit, .feedProductEdit:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
         }
     }
 

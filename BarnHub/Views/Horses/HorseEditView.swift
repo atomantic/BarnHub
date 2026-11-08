@@ -8,6 +8,7 @@ struct HorseEditView: View {
     #endif
     let horseID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
+    @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
@@ -32,7 +33,6 @@ struct HorseEditView: View {
     private var existingHorse: Horse? { modelContext.existingModel(for: horseID) }
 
     private var addPhotoLabel: LocalizedStringKey { photoData == nil ? "Add Photo" : "Change Photo" }
-    private var saveButtonLabel: LocalizedStringKey { isNew ? "Add Horse" : "Save Changes" }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Horse" : "Edit Horse" }
 
     // MARK: - Shared Form Sections
@@ -126,20 +126,18 @@ struct HorseEditView: View {
         }
     }
 
-    private var saveSection: some View {
-        Section {
-            Button(saveButtonLabel) {
-                save()
-            }
-            .frame(maxWidth: .infinity)
-            .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-        }
-    }
-
     // MARK: - Body
 
     var body: some View {
         formContent
+            .toolbar {
+                // In the bar rather than floating at the end of the form, so it's
+                // always reachable and sits next to Cancel when shown as a sheet.
+                ToolbarItem(placement: .pinnedConfirmation) {
+                    Button(isNew ? "Add" : "Save") { save() }
+                        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
             .toast(toast)
             .task { loadExisting() }
             .onChange(of: selectedPhoto) { _, newItem in
@@ -167,26 +165,15 @@ struct HorseEditView: View {
     @ViewBuilder
     private var formContent: some View {
         #if os(macOS)
-        ScrollView {
-            HStack(alignment: .top, spacing: 16) {
-                Form {
-                    photoSection
-                    basicInfoSection
-                    detailsSection
-                }
-                .formStyle(.grouped)
-                .frame(maxWidth: .infinity)
-
-                Form {
-                    medicalNotesSection
-                    feedingScheduleSection
-                    saveSection
-                }
-                .formStyle(.grouped)
-                .frame(maxWidth: .infinity)
-            }
-            .padding()
+        // One column: the form opens as a sheet, too narrow for two.
+        Form {
+            photoSection
+            basicInfoSection
+            detailsSection
+            medicalNotesSection
+            feedingScheduleSection
         }
+        .formStyle(.grouped)
         .navigationTitle(navigationTitleKey)
         #else
         Group {
@@ -198,7 +185,6 @@ struct HorseEditView: View {
                 } trailing: {
                     medicalNotesSection
                     feedingScheduleSection
-                    saveSection
                 }
             } else {
                 Form {
@@ -207,7 +193,6 @@ struct HorseEditView: View {
                     detailsSection
                     medicalNotesSection
                     feedingScheduleSection
-                    saveSection
                 }
             }
         }
@@ -235,6 +220,7 @@ struct HorseEditView: View {
     private func save() {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
+        var newHorse: Horse?
 
         if let horse = existingHorse {
             horse.name = trimmedName
@@ -267,9 +253,16 @@ struct HorseEditView: View {
             )
             modelContext.insert(horse)
             BarnHubLogger.info("Creating horse name=\(trimmedName)")
+            newHorse = horse
         }
 
         modelContext.saveWithLogging()
+        // Show the new horse beside the list when the split is up. Read the ID only
+        // after saving: before that it's temporary, and a view that resolves a
+        // temporary ID traps once SwiftData swaps in the permanent one.
+        if let newHorse, router.horsesShowSplit {
+            router.selectedHorseID = newHorse.persistentModelID
+        }
         toast.showAndDismiss(isNew ? appLocalized("Horse added") : appLocalized("Horse updated"), dismiss: dismiss)
     }
 

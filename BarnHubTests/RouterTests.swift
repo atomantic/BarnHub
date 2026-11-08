@@ -240,4 +240,46 @@ final class RouterTests: XCTestCase {
         XCTAssertEqual(router.horsesPath.count, 1, "Highlighting the row must not pop the stack")
         XCTAssertNil(sync.syncItem(.horse(id), current: .horse(id)))
     }
+
+    // MARK: - Form sheets
+
+    func testNavigate_formRoute_presentsSheetWhenEnabled() {
+        let router = Router()
+        router.presentsFormsAsSheets = true
+
+        router.navigate(to: HorseRoute.edit(nil), tab: .horses)
+
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertTrue(router.horsesPath.isEmpty, "A form opens as a sheet instead of pushing")
+        XCTAssertEqual(router.presentedForm?.route, AnyHashable(HorseRoute.edit(nil)))
+    }
+
+    func testNavigate_formRoute_pushesWhenSheetsDisabled() {
+        let router = Router()
+
+        router.navigate(to: AccountingRoute.edit(nil), tab: .accounting)
+
+        XCTAssertEqual(router.accountingPath.count, 1)
+        XCTAssertNil(router.presentedForm)
+    }
+
+    func testNavigate_nonFormRoute_stillPushesWhenSheetsEnabled() {
+        let router = Router()
+        router.presentsFormsAsSheets = true
+
+        router.navigate(to: BarnRoute.supplies, tab: .schedule)
+
+        XCTAssertEqual(router.schedulePath.count, 1)
+        XCTAssertNil(router.presentedForm)
+    }
+
+    func testIsForm_coversAddAndEditRoutesOnly() {
+        XCTAssertTrue(Router.isForm(HorseRoute.edit(nil)))
+        XCTAssertTrue(Router.isForm(ClientRoute.edit(nil)))
+        XCTAssertTrue(Router.isForm(BarnRoute.supplyEdit(nil)))
+        XCTAssertTrue(Router.isForm(BarnRoute.addVetRecord))
+        XCTAssertFalse(Router.isForm(HorseRoute.list))
+        XCTAssertFalse(Router.isForm(ClientRoute.list))
+        XCTAssertFalse(Router.isForm(HomeRoute.settings))
+    }
 }
