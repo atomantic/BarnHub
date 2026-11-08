@@ -19,6 +19,12 @@ xcodebuild build -project BarnHub.xcodeproj -scheme BarnHub \
 xcodebuild test -project BarnHub.xcodeproj -scheme BarnHub \
   -only-testing:BarnHubTests \
   -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
+
+# Unit tests (~1 min), what deploy.sh and CI run
+./scripts/test.sh
+# UI screen walk: a rare audit (30+ min), not a per-release step
+./scripts/test.sh --ui       # iPhone + iPad; --all adds unit + Mac; or --iphone / --ipad / --mac
+./scripts/test.sh --iphone --only testHorseScreens   # one UI test method
 ```
 
 When more than one iOS runtime is installed, `name=iPhone 17` matches several
@@ -28,28 +34,30 @@ on both the oldest iOS you have (26.x) and the newest. SwiftData behaves
 differently across them; for example, batched fetches lose relationships before
 iOS 27 (#69).
 
+`scripts/test.sh` runs `BarnHubTests`; with `--ui`/`--all` it runs `ScreenWalkTests` (in `BarnHubUITests` for iPhone and iPad, and `BarnHubMacUITests` for the native Mac app). The screen walk opens every screen with `-SeedSampleData` and fails when a screen crashes or doesn't show its sample content, including the document viewers and the invoice share sheet. It picks the newest runtime's iPhone 17 and iPad Pro 13-inch (M5); set `SIM_OS=26.5` to run on an older runtime, or `IPHONE_SIM` / `IPAD_SIM` for other devices. Results and failure screenshots land in `.build/test-results/<step>.xcresult`. The Mac step (`--mac`, or `--all`) is opt-in: it drives real windows, and the test app shares BarnHub's bundle ID, so XCUITest would quit a BarnHub that's open. It refuses to start while BarnHub is running; never start it while Adam is using the Mac without asking first.
+
 ## Git Workflow
 
 After every feature or bug fix:
 
-1. **Build and test** — verify `xcodebuild build` and `xcodebuild test` pass
+1. **Build and test** — verify `xcodebuild build` and the unit tests pass (`./scripts/test.sh`). After a big UI change, walk just the screens you touched (e.g. `./scripts/test.sh --iphone --only testHorseScreens`); the full walk is a rare audit
 2. **`/simplify`** — run code review for reuse, quality, and efficiency; fix issues found
 3. **`/do:review`** — deep code review against best practices
 4. **`/do:push`** — commit and push to GitHub
-5. **`/release`** — when ready for TestFlight, run the local deploy (see below)
+5. **`/release`** — when ready for TestFlight, run the local deploy (see below); it runs the unit tests first
 
 ## TestFlight Deployment
 
 Local deploy via `./deploy.sh` (used when CI build credits are exhausted):
 
 ```bash
-./deploy.sh              # full: tests + archive + upload
+./deploy.sh              # full: unit tests + archive + upload
 ./deploy.sh --skip-tests # skip tests for faster iteration
 ```
 
 Requires `.env` file with App Store Connect API credentials (see `.env.example`).
 
-CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`), but it is **manual-only** (`workflow_dispatch`): run it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`. It doesn't run automatically on pull requests or pushes because macOS minutes on this private repo are billed; automatic runs wait on Adam's decision. So a local `xcodebuild build` and `BarnHubTests` run (see Build Commands) are still required before merging. CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
+CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It is **manual-only** (`workflow_dispatch`), never automatic: the repo is private and GitHub's macOS minutes run out fast. Start it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`; it runs only the unit tests unless you pick `suite=full` (`--all`). The release gate is `./deploy.sh`, which runs the unit tests on Adam's Mac. Before merging, run `./scripts/test.sh` locally (see Build Commands). CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
 
 ## Key Patterns
 
@@ -63,6 +71,7 @@ CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
 - **Logging**: Use `BarnHubLogger.info/success/warning/error`. Never log names, emails, or other personal data; log counts, types, or flags instead
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument (Debug builds only, like `-screenshotRoute` and `barnhub://screenshot/…`; Release ignores them)
+- **New screens need a UI check entry**: when adding a route or screen, add a page for it in `ScreenshotRouter` (Debug) and a `Screen` with the sample text it must show in `ScreenWalkTests`, so `scripts/test.sh` covers it. If the screen shows data, make sure `PreviewSampleData` has some
 - **Deep links**: The `barnhub` URL scheme is registered in `BarnHub/Info.plist` (iOS/Catalyst) and `BarnHub/Info-macOS.plist` (native macOS); `DeepLinkHandler` handles `barnhub://home|horses|clients|accounting|schedule[/reminders|vet|farrier|…]|supplies|reports|subscription` in all builds. Drive a simulator with `xcrun simctl openurl <udid> barnhub://horses`; iOS asks "Open in BarnHub?" the first time, so tap Open once
 
 ## Localization

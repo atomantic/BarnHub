@@ -47,7 +47,9 @@ struct InvoiceHistoryView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .buttonStyle(.plain)
+                    // Not .buttonStyle(.plain): in a Mac list a plain button's click
+                    // only selects the row, so the invoice never opened there.
+                    .foregroundStyle(.primary)
                 }
                 .onDelete(perform: deleteInvoices)
                 }
