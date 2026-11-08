@@ -377,17 +377,9 @@ final class AllDataRestoreTests: XCTestCase {
             try RecordRemoval.deleteAllData(in: context, keepDocuments: keepDocuments)
             _ = try await restore(folder)
 
-            let restored = try snapshot()
-            if keepDocuments {
-                // Kept documents keep their owners, which the restore matches. Full
-                // equality waits on #81 (two same-key clients can be matched crosswise).
-                XCTAssertEqual(restored["horses"]?.count, exported["horses"]?.count)
-                XCTAssertEqual(restored["horseDocs"]?.count, exported["horseDocs"]?.count, "kept documents aren't added twice")
-                XCTAssertFalse(restored["horses"]!.contains { $0.hasPrefix("Leftover|") })
-                XCTAssertFalse(restored["clients"]!.contains { $0.contains("555-9999") })
-            } else {
-                XCTAssertEqual(restored, exported)
-            }
+            // With Keep Documents, the kept twin horses and Jane B are matched to
+            // their own rows, not to the twin listed first (#81).
+            XCTAssertEqual(try snapshot(), exported, "keepDocuments=\(keepDocuments)")
         }
     }
 
