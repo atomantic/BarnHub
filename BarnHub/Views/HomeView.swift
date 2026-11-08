@@ -339,10 +339,11 @@ struct HomeView: View {
     // MARK: - Dashboard
 
     private func macDashboard(balance: Double) -> some View {
+        // No tile grid on the Mac: every tile's destination is already in the
+        // sidebar, so the space goes to the dashboard widgets.
         VStack(spacing: 16) {
             statsStrip
             widgetGrid
-            iconGrid(balance: balance)
         }
         .padding(.bottom, 24)
     }

@@ -87,6 +87,20 @@ enum FeedUnit: String, Codable, CaseIterable, Identifiable {
         case .other:  return appLocalized("units",   comment: "Feed unit")
         }
     }
+
+    /// The unit for a given amount: singular for exactly 1 ("1 scoop"), plural otherwise.
+    func displayName(for amount: Double) -> String {
+        guard amount == 1 else { return displayName }
+        switch self {
+        case .scoops: return appLocalized("scoop", comment: "Feed unit, singular (amount of 1)")
+        case .flakes: return appLocalized("flake", comment: "Feed unit, singular (amount of 1)")
+        case .lbs:    return appLocalized("lb",    comment: "Feed unit, singular (amount of 1)")
+        case .cups:   return appLocalized("cup",   comment: "Feed unit, singular (amount of 1)")
+        case .oz:     return displayName
+        case .quarts: return appLocalized("quart", comment: "Feed unit, singular (amount of 1)")
+        case .other:  return appLocalized("unit",  comment: "Feed unit, singular (amount of 1)")
+        }
+    }
 }
 
 enum FeedTime: String, Codable, CaseIterable, Identifiable, Comparable {
