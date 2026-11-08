@@ -176,6 +176,9 @@ struct ContentView: View {
     #endif
     @Environment(NotificationService.self) private var notificationService
     @Environment(\.modelContext) private var modelContext
+    #if os(macOS)
+    @Environment(\.openSettings) private var openSettings
+    #endif
     @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
     @State private var showFirstLaunchSheet = false
 
@@ -247,8 +250,8 @@ struct ContentView: View {
         // layout (tab bar or sidebar) has rendered its first frame.
         let tab: Router.AppTab
         switch page {
-        case "home": tab = .home
-        case "horses", "horseDetail": tab = .horses
+        case "home", "reports", "supplies", "settings": tab = .home
+        case "horses", "horseDetail", "addHorse": tab = .horses
         case "clients", "clientDetail": tab = .clients
         case "schedule", "feedProducts", "dentistSchedule", "reminders": tab = .schedule
         case "accounting": tab = .accounting
@@ -269,6 +272,20 @@ struct ContentView: View {
                 if let c = try? modelContext.fetch(d).first {
                     router.showClient(c.persistentModelID)
                 }
+            case "reports":
+                router.navigate(to: HomeRoute.reports, tab: .home)
+            case "supplies":
+                router.navigate(to: HomeRoute.supplies, tab: .home)
+            case "settings":
+                // The Mac has a Settings window; pick its tab with
+                // -net.shadowpuppet.BarnBook.settings.tab general|subscription|data|feedback
+                #if os(macOS)
+                openSettings()
+                #else
+                router.navigate(to: HomeRoute.settings, tab: .home)
+                #endif
+            case "addHorse":
+                router.navigate(to: HorseRoute.edit(nil), tab: .horses)
             case "feedProducts":
                 router.navigate(to: BarnRoute.feedProducts, tab: .schedule)
             case "dentistSchedule":

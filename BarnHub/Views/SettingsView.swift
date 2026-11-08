@@ -19,6 +19,8 @@ struct SettingsView: View {
     @State private var showBugReport = false
     #if os(macOS)
     @State private var showPaywall = false
+    /// The Settings window reopens on the tab used last, like other Mac apps.
+    @AppStorage("net.shadowpuppet.BarnBook.settings.tab") private var settingsTab = "general"
     #endif
 
     @AppStorage("net.shadowpuppet.BarnBook.balancePeriod") private var balancePeriodRaw: Int = BalancePeriod.thisMonth.rawValue
@@ -233,7 +235,7 @@ struct SettingsView: View {
 
     #if os(macOS)
     private var macOSSettingsTabs: some View {
-        TabView {
+        TabView(selection: $settingsTab) {
             Form {
                 appearanceSection
                 homeScreenSection
@@ -241,13 +243,16 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .tabItem { Label("General", systemImage: "gearshape") }
+            .tag("general")
 
             Form { subscriptionSection }
                 .formStyle(.grouped)
                 .tabItem { Label("Subscription", systemImage: "creditcard") }
+                .tag("subscription")
 
             DataManagementView()
                 .tabItem { Label("Data", systemImage: "arrow.up.arrow.down") }
+                .tag("data")
 
             Form {
                 feedbackSection
@@ -264,6 +269,7 @@ struct SettingsView: View {
             }
             .formStyle(.grouped)
             .tabItem { Label("Feedback", systemImage: "envelope") }
+            .tag("feedback")
         }
         .frame(width: 520, height: 460)
     }
