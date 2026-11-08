@@ -16,6 +16,8 @@ struct BarnNoteEditView: View {
 
     private var isNew: Bool { noteID == nil }
     private var existingNote: BarnNote? { modelContext.existingModel(for: noteID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(noteID, as: BarnNote.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Note" : "Edit Note" }
 
     var body: some View {
@@ -53,6 +55,7 @@ struct BarnNoteEditView: View {
             }
         }
         .task { loadExisting() }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -65,6 +68,11 @@ struct BarnNoteEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let note: BarnNote
         if let existing = existingNote {
             note = existing

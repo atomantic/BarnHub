@@ -20,6 +20,8 @@ struct ClientEditView: View {
 
     private var isNew: Bool { clientID == nil }
     private var existingClient: Client? { modelContext.existingModel(for: clientID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(clientID, as: Client.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Client" : "Edit Client" }
 
     var body: some View {
@@ -73,6 +75,7 @@ struct ClientEditView: View {
         .frame(maxWidth: 600)
         .frame(maxWidth: .infinity)
         #endif
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
         .task { loadExisting() }
     }
@@ -90,6 +93,11 @@ struct ClientEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let trimmedFirst = firstName.trimmingCharacters(in: .whitespaces)
         let trimmedLast = lastName.trimmingCharacters(in: .whitespaces)
         guard !trimmedFirst.isEmpty || !trimmedLast.isEmpty else { return }

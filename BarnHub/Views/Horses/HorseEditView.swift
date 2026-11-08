@@ -31,6 +31,8 @@ struct HorseEditView: View {
 
     private var isNew: Bool { horseID == nil }
     private var existingHorse: Horse? { modelContext.existingModel(for: horseID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(horseID, as: Horse.self) }
 
     private var addPhotoLabel: LocalizedStringKey { photoData == nil ? "Add Photo" : "Change Photo" }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Horse" : "Edit Horse" }
@@ -138,6 +140,7 @@ struct HorseEditView: View {
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
+            .deletedRecordNotice(wasDeletedElsewhere)
             .toast(toast)
             .task { loadExisting() }
             .onChange(of: selectedPhoto) { _, newItem in
@@ -218,6 +221,11 @@ struct HorseEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
         var newHorse: Horse?

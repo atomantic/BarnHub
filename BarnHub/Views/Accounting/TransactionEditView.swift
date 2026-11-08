@@ -22,6 +22,8 @@ struct TransactionEditView: View {
 
     private var isNew: Bool { transactionID == nil }
     private var existingTransaction: Transaction? { modelContext.existingModel(for: transactionID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(transactionID, as: Transaction.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Transaction" : "Edit Transaction" }
 
     var body: some View {
@@ -74,6 +76,7 @@ struct TransactionEditView: View {
             }
         }
         .task { loadExisting() }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -89,6 +92,11 @@ struct TransactionEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let txn: Transaction
         if let existing = existingTransaction {
             txn = existing

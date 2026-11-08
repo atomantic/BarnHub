@@ -135,3 +135,15 @@ extension RecordRemoval {
         context.deleteWithLogging(horse)
     }
 }
+
+extension ModelContext {
+    /// True when `id` names a record that no longer exists: it was deleted on this
+    /// device or another one while a form was editing it. Edit forms check this
+    /// before saving so they never insert a replacement for a deleted record.
+    /// A nil `id` (a new record) is never "deleted".
+    func isDeletedRecord<T: PersistentModel>(_ id: PersistentIdentifier?, as _: T.Type) -> Bool {
+        guard let id else { return false }
+        let model: T? = existingModel(for: id)
+        return model == nil
+    }
+}

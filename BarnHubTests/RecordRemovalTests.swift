@@ -205,4 +205,59 @@ final class RecordRemovalTests: XCTestCase {
         XCTAssertEqual(lessons.count, 1, "Lessons carry client billing")
         XCTAssertNil(lessons.first?.horse)
     }
+
+    // MARK: - Editing a deleted record
+
+    func test_isDeletedRecord_newRecordIsNeverDeleted() {
+        XCTAssertFalse(context.isDeletedRecord(nil, as: Horse.self))
+    }
+
+    func test_isDeletedRecord_liveRecordIsNotDeleted() throws {
+        let horse = Horse(name: "Blaze")
+        context.insert(horse)
+        try context.save()
+        XCTAssertFalse(context.isDeletedRecord(horse.persistentModelID, as: Horse.self))
+    }
+
+    /// Mirrors an edit form's save: guard on `isDeletedRecord`, then update the
+    /// existing record or insert a new one.
+    func test_savingEditOfDeletedRecord_doesNotInsert() throws {
+        let client = Client(firstName: "Gone")
+        context.insert(client)
+        try context.save()
+        let editedID = client.persistentModelID
+        context.delete(client)
+        try context.save()
+
+        XCTAssertTrue(context.isDeletedRecord(editedID, as: Client.self))
+        func save() {
+            guard !context.isDeletedRecord(editedID, as: Client.self) else { return }
+            if let existing: Client = context.existingModel(for: editedID) {
+                existing.firstName = "Edited"
+            } else {
+                context.insert(Client(firstName: "Edited"))
+            }
+            try? context.save()
+        }
+        save()
+
+        XCTAssertEqual(try count(Client.self), 0)
+    }
+
+    /// The same, for a record deleted by another context (as when iCloud sync
+    /// applies a delete made on another device).
+    func test_isDeletedRecord_detectsDeleteFromAnotherContext() throws {
+        let note = BarnNote(content: "Fence")
+        context.insert(note)
+        try context.save()
+        let id = note.persistentModelID
+
+        let otherContext = ModelContext(container)
+        let otherNote: BarnNote? = otherContext.existingModel(for: id)
+        otherContext.delete(try XCTUnwrap(otherNote))
+        try otherContext.save()
+
+        let freshContext = ModelContext(container)
+        XCTAssertTrue(freshContext.isDeletedRecord(id, as: BarnNote.self))
+    }
 }

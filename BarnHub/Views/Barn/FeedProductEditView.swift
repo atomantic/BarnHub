@@ -19,6 +19,8 @@ struct FeedProductEditView: View {
 
     private var isNew: Bool { productID == nil }
     private var existingProduct: FeedProduct? { modelContext.existingModel(for: productID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(productID, as: FeedProduct.self) }
 
     var body: some View {
         Form {
@@ -99,6 +101,7 @@ struct FeedProductEditView: View {
             }
         }
         .inlineNavTitle()
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
         .task { loadExisting() }
         .onChange(of: selectedPhoto) { _, newItem in
@@ -141,6 +144,11 @@ struct FeedProductEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
 

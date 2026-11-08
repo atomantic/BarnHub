@@ -23,6 +23,8 @@ struct LessonEditView: View {
 
     private var isNew: Bool { lessonID == nil }
     private var existingLesson: Lesson? { modelContext.existingModel(for: lessonID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(lessonID, as: Lesson.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Lesson" : "Edit Lesson" }
 
     private static let durations = [30, 45, 60, 90, 120]
@@ -86,6 +88,7 @@ struct LessonEditView: View {
             }
         }
         .task { loadExisting() }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -105,6 +108,11 @@ struct LessonEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let lesson: Lesson
         if let existing = existingLesson {
             lesson = existing
