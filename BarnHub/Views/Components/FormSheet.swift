@@ -5,9 +5,14 @@ import SwiftUI
 struct FormSheet: View {
     let form: Router.PresentedForm
     @Environment(\.dismiss) private var dismiss
+    @Environment(Router.self) private var router
 
     var body: some View {
-        NavigationStack {
+        @Bindable var router = router
+        // Its own path, so screens opened from inside the form (the paywall from a
+        // Pro lock) push here, in front of the user, instead of onto the tab
+        // stack hidden behind the sheet (#46).
+        NavigationStack(path: $router.formPath) {
             content
                 .withRouteDestinations()
                 .tint(.barnGreen)  // sheets don't inherit the root's tint

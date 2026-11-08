@@ -12,6 +12,8 @@ struct ContractGeneratorView: View {
     @State private var monthlyRate: Double = 0
     @State private var showShareSheet = false
     @State private var generatedPDFURL: URL?
+    /// A PDF is being drawn in the background; the button stays disabled until it's ready.
+    @State private var isGenerating = false
     @State private var toast = ToastState()
 
     private var client: Client? {
@@ -65,12 +67,16 @@ struct ContractGeneratorView: View {
                     } label: {
                         HStack {
                             Spacer()
+                            if isGenerating {
+                                ProgressView()
+                                    .padding(.trailing, 4)
+                            }
                             Label("Generate & Share", systemImage: "doc.text.fill")
                                 .font(.headline)
                             Spacer()
                         }
                     }
-                    .disabled(selectedHorseID == nil)
+                    .disabled(selectedHorseID == nil || isGenerating)
                 }
             }
             .navigationTitle("Generate Contract")
@@ -98,10 +104,10 @@ struct ContractGeneratorView: View {
     }
 
     private func generateAndShare() {
-        guard let client, let horse = selectedHorse else { return }
-
-        let pdfData = ContractPDFService.generatePDF(
-            type: contractType,
+        guard let client, let horse = selectedHorse, !isGenerating else { return }
+        let type = contractType
+        let document = ContractPDFService.document(
+            type: type,
             clientName: client.fullName,
             clientPhone: client.phone,
             clientEmail: client.email,
@@ -113,19 +119,25 @@ struct ContractGeneratorView: View {
             startDate: startDate,
             monthlyRate: monthlyRate
         )
+        let fileName = ContractPDFService.fileName(type: type, clientName: client.fullName)
 
-        let fileName = ContractPDFService.fileName(type: contractType, clientName: client.fullName)
-        let tempURL: URL
-        do {
-            tempURL = try ShareTempFiles.write(pdfData, fileName: fileName, fileExtension: "pdf")
-        } catch {
-            BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
-            toast.show(appLocalized("Failed to save contract"), isError: true)
-            return
+        isGenerating = true
+        Task {
+            defer { isGenerating = false }
+            // Drawing the PDF and writing the share file stay off the main actor.
+            let written = await Task.detached(priority: .userInitiated) {
+                Result { try ShareTempFiles.write(ContractPDFService.render(document), fileName: fileName, fileExtension: "pdf") }
+            }.value
+
+            switch written {
+            case .success(let tempURL):
+                generatedPDFURL = tempURL
+                showShareSheet = true
+                BarnHubLogger.success("Contract generated type=\(type.rawValue)")
+            case .failure(let error):
+                BarnHubLogger.error("Failed to write contract PDF error=\(error.localizedDescription)")
+                toast.show(appLocalized("Failed to save contract"), isError: true)
+            }
         }
-        generatedPDFURL = tempURL
-        showShareSheet = true
-
-        BarnHubLogger.success("Contract generated type=\(contractType.rawValue)")
     }
 }
