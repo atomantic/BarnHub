@@ -14,6 +14,12 @@ struct DataManagementView: View {
     @State private var importResult: DataImportService.ImportResult?
     @State private var showImportResult = false
     @State private var deleteStep: DeleteStep?
+    /// The picker is choosing an All Data folder to restore, not a CSV file.
+    @State private var pickingFolder = false
+    @State private var showRestoreConfirmation = false
+    @State private var pendingRestoreURL: URL?
+    @State private var restoreResult: DataRestoreService.Result?
+    @State private var showRestoreResult = false
     @State private var csvJob = CSVJob()
 
     #if os(macOS)
@@ -43,11 +49,17 @@ struct DataManagementView: View {
                     Button("Clients") { startImport(.clients) }
                     Button("Transactions") { startImport(.transactions) }
                     Spacer()
+                    Button("Restore All Data") { startRestore() }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.barnGreen)
                 }
             } header: {
                 Text("Import")
             } footer: {
-                Text("CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).")
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).")
+                    Text(restoreFooter)
+                }
             }
 
             Section {
@@ -102,13 +114,19 @@ struct DataManagementView: View {
                 Button { startImport(.transactions) } label: {
                     importRow("Transactions", icon: "dollarsign.circle")
                 }
+                Button { startRestore() } label: {
+                    importRow("Restore All Data", icon: "folder")
+                }
             }
 
             Section {
-                Text("CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .listRowBackground(Color.clear)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("CSV files should include a header row. Column names are matched flexibly (e.g. \"First Name\" or \"Name\" for clients).")
+                    Text(restoreFooter)
+                }
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .listRowBackground(Color.clear)
             }
 
             Section {
@@ -126,6 +144,10 @@ struct DataManagementView: View {
         }
     }
     #endif
+
+    private var restoreFooter: LocalizedStringKey {
+        "Restore All Data reads a BarnHub Export folder saved by All Data and adds its records, photos, documents and invoices."
+    }
 
     var body: some View {
         dataContent
@@ -148,10 +170,14 @@ struct DataManagementView: View {
         }
         .fileImporter(
             isPresented: $showImportPicker,
-            allowedContentTypes: [.commaSeparatedText, .plainText],
+            allowedContentTypes: pickingFolder ? [.folder] : [.commaSeparatedText, .plainText],
             allowsMultipleSelection: false
         ) { result in
-            handleFileSelection(result)
+            if pickingFolder {
+                handleFolderSelection(result)
+            } else {
+                handleFileSelection(result)
+            }
         }
         .overlay {
             ConfirmationDialog(
@@ -160,6 +186,15 @@ struct DataManagementView: View {
                 message: "This will add new records from the CSV file. Existing data will not be modified or removed.",
                 confirmTitle: "Import",
                 onConfirm: performImport
+            )
+        }
+        .overlay {
+            ConfirmationDialog(
+                isPresented: $showRestoreConfirmation,
+                title: "Restore All Data",
+                message: "BarnHub adds the records, photos, documents and invoices in this folder. Nothing you already have is changed or removed, and records that are already in BarnHub are skipped, so restoring the same folder again doesn't add duplicates. To replace your data instead, use Delete All Data first.",
+                confirmTitle: "Restore",
+                onConfirm: performRestore
             )
         }
         .alert(
@@ -192,6 +227,13 @@ struct DataManagementView: View {
         } message: {
             if let r = importResult {
                 Text(importSummary(r))
+            }
+        }
+        .alert("Restore Complete", isPresented: $showRestoreResult) {
+            Button("OK") {}
+        } message: {
+            if let r = restoreResult {
+                Text(restoreSummary(r))
             }
         }
     }
@@ -283,6 +325,7 @@ struct DataManagementView: View {
 
     private func startImport(_ type: ImportDataType) {
         importType = type
+        pickingFolder = false
         showImportPicker = true
     }
 
@@ -333,6 +376,77 @@ struct DataManagementView: View {
         lines.append(appLocalized("\(r.imported) rows imported", comment: "CSV import result: number of rows added"))
         if r.duplicates > 0 {
             lines.append(appLocalized("\(r.duplicates) duplicate rows skipped", comment: "CSV import result: rows that matched existing records"))
+        }
+        if r.skipped > 0 {
+            lines.append(appLocalized("\(r.skipped) rows skipped", comment: "CSV import result: invalid rows, followed by one line per reason"))
+            for reason in DataImportService.SkipReason.allCases {
+                if let count = r.skipReasons[reason] {
+                    lines.append(appLocalized("\(reason.label): \(count)", comment: "CSV import result: why rows were skipped, then how many"))
+                }
+            }
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    // MARK: - Restore All Data
+
+    private func startRestore() {
+        pickingFolder = true
+        showImportPicker = true
+    }
+
+    private func handleFolderSelection(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            guard let url = urls.first else { return }
+            pendingRestoreURL = url
+            showRestoreConfirmation = true
+        case .failure(let error):
+            toast.show(appLocalized("Could not open file: \(error.localizedDescription)", comment: "File open error"), isError: true)
+        }
+    }
+
+    private func performRestore() {
+        guard let url = pendingRestoreURL else { return }
+        pendingRestoreURL = nil
+        // The restore reads through background contexts, so flush pending edits first.
+        modelContext.saveWithLogging()
+        let container = modelContext.container
+        let options = CSVOptions()
+        csvJob.run(title: appLocalized("Restoring…", comment: "Restore All Data progress title")) { progress, step in
+            // A picked folder is security scoped on iOS and in the Mac sandbox;
+            // otherwise reading still works or reports a real error.
+            let scoped = url.startAccessingSecurityScopedResource()
+            defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+            let actor = CSVDataActor(modelContainer: container)
+            return try await actor.restoreAllData(from: url, options: options, progress: progress, step: step)
+        } onSuccess: { result in
+            restoreResult = result
+            showRestoreResult = true
+            // Same hook as a save on the main context, so reminders get scheduled.
+            NotificationCenter.default.post(name: .barnHubModelContextDidSave, object: modelContext)
+        } onFailure: { error in
+            if error is CancellationError {
+                toast.show(appLocalized("Restore cancelled. Nothing was added.", comment: "Toast after the user cancels Restore All Data"))
+            } else if let error = error as? DataRestoreService.RestoreError {
+                toast.show(error.localizedDescription, isError: true)
+            } else {
+                BarnHubLogger.error("Restore failed error=\(error.localizedDescription)")
+                toast.show(appLocalized("Restore failed. Nothing was added.", comment: "Toast when Restore All Data fails; everything it added was removed again"), isError: true)
+            }
+        }
+    }
+
+    private func restoreSummary(_ r: DataRestoreService.Result) -> String {
+        var lines = [appLocalized("\(r.imported) records restored", comment: "Restore All Data result: records added")]
+        if r.duplicates > 0 {
+            lines.append(appLocalized("\(r.duplicates) records already in BarnHub skipped", comment: "Restore All Data result: rows that matched existing records"))
+        }
+        if r.filesRestored > 0 {
+            lines.append(appLocalized("\(r.filesRestored) photos and files restored", comment: "Restore All Data result: photos, documents and invoice PDFs read from the folder"))
+        }
+        if r.filesMissing > 0 {
+            lines.append(appLocalized("\(r.filesMissing) files not found in the folder", comment: "Restore All Data result: Photo or File paths missing from the folder"))
         }
         if r.skipped > 0 {
             lines.append(appLocalized("\(r.skipped) rows skipped", comment: "CSV import result: invalid rows, followed by one line per reason"))
@@ -473,8 +587,9 @@ private final class CSVJob {
         let step: CSVStepHandler = { [weak self] index, count, kind in
             Task { @MainActor in
                 guard self?.title != nil else { return }
-                self?.detail = appLocalized("Step \(index) of \(count): \(kind.rawValue).csv",
-                                            comment: "Export progress: which file is being written, e.g. Step 3 of 17: transactions.csv")
+                // The file name is one value, so the key matches the catalog's "Step %lld of %lld: %@".
+                self?.detail = appLocalized("Step \(index) of \(count): \(kind.rawValue + ".csv")",
+                                            comment: "Export or restore progress: which file is being written or read, e.g. Step 3 of 17: transactions.csv")
             }
         }
         task = Task {
