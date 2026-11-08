@@ -32,7 +32,7 @@ IPAD_DEVICE="iPad Pro 13-inch (M4)|18.6|ipad_13|testCaptureIPadScreenshots"
 # iPhone Duo (Xcode 27.1+). Set the pose in Xcode's Device Hub before running:
 # closed for --duo-outer (1398x2034 px), fully open for --duo-inner (2007x2853 px).
 DUO_NAME="${DUO_SIMULATOR_NAME:-iPhone Duo}"
-DUO_OS="${DUO_SIMULATOR_OS:-27.1}"
+DUO_OS="${DUO_SIMULATOR_OS:-27.2}"
 DUO_OUTER_DEVICE="$DUO_NAME|$DUO_OS|duo_outer|testCaptureDuoScreenshots"
 DUO_INNER_DEVICE="$DUO_NAME|$DUO_OS|duo_inner|testCaptureDuoScreenshots"
 

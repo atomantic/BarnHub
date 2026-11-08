@@ -15,23 +15,30 @@ struct ClientRowView: View {
                 Text(client.fullName)
                     .font(.headline)
 
-                HStack(spacing: 12) {
-                    if !client.phone.isEmpty {
-                        Label(client.phone, systemImage: "phone")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    if !client.email.isEmpty {
-                        Label(client.email, systemImage: "envelope")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                    }
-                }
+                HStack(spacing: 12) { contactLabels }
             }
 
             Spacer()
         }
         .contentShape(Rectangle())
+    }
+
+    @ViewBuilder
+    private var contactLabels: some View {
+        if !client.phone.isEmpty {
+            Label(client.phone, systemImage: "phone")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                // Keep the phone number whole on narrow widths (e.g. the iPhone Duo
+                // outer display); the email truncates instead.
+                .layoutPriority(1)
+        }
+        if !client.email.isEmpty {
+            Label(client.email, systemImage: "envelope")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
     }
 }
