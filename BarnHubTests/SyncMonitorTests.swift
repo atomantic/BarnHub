@@ -158,3 +158,37 @@ final class SyncMonitorTests: XCTestCase {
         return .idle
     }
 }
+
+// MARK: - iCloud account changes
+
+@MainActor
+final class SyncMonitorAccountTests: XCTestCase {
+
+    func test_signedOutAtLaunch_showsNotAvailable() {
+        let monitor = SyncMonitor(notificationCenter: NotificationCenter(), hasAccount: { false })
+        XCTAssertEqual(monitor.status, .notAvailable)
+    }
+
+    func test_signingInLater_recoversFromNotAvailable() async {
+        let center = NotificationCenter()
+        var signedIn = false
+        let monitor = SyncMonitor(notificationCenter: center, hasAccount: { signedIn })
+        XCTAssertEqual(monitor.status, .notAvailable)
+
+        signedIn = true
+        center.post(name: .NSUbiquityIdentityDidChange, object: nil)
+        for _ in 0..<50 where monitor.status == .notAvailable {
+            await Task.yield()
+        }
+        XCTAssertEqual(monitor.status, .idle)
+    }
+
+    func test_signingOut_showsNotAvailable() {
+        var signedIn = true
+        let monitor = SyncMonitor(notificationCenter: NotificationCenter(), hasAccount: { signedIn })
+        XCTAssertEqual(monitor.status, .idle)
+        signedIn = false
+        monitor.updateAccountAvailability()
+        XCTAssertEqual(monitor.status, .notAvailable)
+    }
+}
