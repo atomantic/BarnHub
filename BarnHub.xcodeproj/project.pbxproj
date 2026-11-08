@@ -303,6 +303,8 @@
 		AEA5BCB2BDC4A6439D5CD43A /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */; };
 		4FE38312FD483F327A9D45C8 /* CareVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCBB85258536085901F4090 /* CareVisitEditView.swift */; };
 		770F8DBC0BBE545A4820FC68 /* CareVisitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCBB85258536085901F4090 /* CareVisitEditView.swift */; };
+		53D567010B2ACDE7C02A3CF4 /* ScreenWalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448E98B7AB0B0C6C7F500CA0 /* ScreenWalkTests.swift */; };
+		A1D06DB90CB6DA0A7EBBC625 /* ScreenWalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448E98B7AB0B0C6C7F500CA0 /* ScreenWalkTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -319,6 +321,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 99889D60A11D60E2AA54819D;
 			remoteInfo = BarnHub;
+		};
+		BC21DD01E0C020419137C42D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FF17BABA8A436D4E974B167;
+			remoteInfo = "BarnHub macOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -494,6 +503,8 @@
 		F2F22558C1477023B4D4434D /* DashboardWidgetPrimitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWidgetPrimitives.swift; sourceTree = "<group>"; };
 		5B3F1FCD463C16D0FA3B76DD /* HomeWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWidgets.swift; sourceTree = "<group>"; };
 		7FCBB85258536085901F4090 /* CareVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareVisitEditView.swift; sourceTree = "<group>"; };
+		448E98B7AB0B0C6C7F500CA0 /* ScreenWalkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenWalkTests.swift; sourceTree = "<group>"; };
+		5FDE3BD78C4B6FDA71DD7570 /* BarnHubMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarnHubMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +537,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C078F7E8E424178F9C88DAC0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -536,6 +554,7 @@
 				F9D22AD988431229927A9911 /* BarnHubTests.xctest */,
 				B838B4D0315032B59B4A1CC9 /* BarnHubUITests.xctest */,
 				888831ADC9A6B88ACAA195B4 /* BarnHub.app */,
+				5FDE3BD78C4B6FDA71DD7570 /* BarnHubMacUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -624,6 +643,7 @@
 			children = (
 				1E512067702B1DE5393F4838 /* BarnHubUITests.swift */,
 				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
+				448E98B7AB0B0C6C7F500CA0 /* ScreenWalkTests.swift */,
 			);
 			path = BarnHubUITests;
 			sourceTree = "<group>";
@@ -961,6 +981,23 @@
 			productReference = 39336BD3A0262B77EFBBEFA1 /* BarnHub.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4524B752C0262F7505F95BF2 /* BarnHubMacUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BA341A47811E8B8DC7F50EC /* Build configuration list for PBXNativeTarget "BarnHubMacUITests" */;
+			buildPhases = (
+				95422B64725854925CFFE32C /* Sources */,
+				C078F7E8E424178F9C88DAC0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B959CB460070FF24E5DB7315 /* PBXTargetDependency */,
+			);
+			name = BarnHubMacUITests;
+			productName = BarnHubMacUITests;
+			productReference = 5FDE3BD78C4B6FDA71DD7570 /* BarnHubMacUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -981,6 +1018,10 @@
 					};
 					99889D60A11D60E2AA54819D = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					4524B752C0262F7505F95BF2 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 8FF17BABA8A436D4E974B167;
 					};
 				};
 			};
@@ -1009,6 +1050,7 @@
 				124C588D1E4E0F457FAD7DFF /* BarnHubTests */,
 				0C28F3E67EF128E4928C9ADF /* BarnHubUITests */,
 				8FF17BABA8A436D4E974B167 /* BarnHub macOS */,
+				4524B752C0262F7505F95BF2 /* BarnHubMacUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1186,6 +1228,7 @@
 			files = (
 				8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */,
 				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
+				53D567010B2ACDE7C02A3CF4 /* ScreenWalkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1354,6 +1397,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		95422B64725854925CFFE32C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1D06DB90CB6DA0A7EBBC625 /* ScreenWalkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1366,6 +1417,11 @@
 			isa = PBXTargetDependency;
 			target = 99889D60A11D60E2AA54819D /* BarnHub */;
 			targetProxy = AA11035E9A94DFC6B5DC3503 /* PBXContainerItemProxy */;
+		};
+		B959CB460070FF24E5DB7315 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8FF17BABA8A436D4E974B167 /* BarnHub macOS */;
+			targetProxy = BC21DD01E0C020419137C42D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1701,6 +1757,40 @@
 			};
 			name = Debug;
 		};
+		0007418D3FFCA325C8BC5150 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 37;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.6.2;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookMacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "BarnHub macOS";
+			};
+			name = Debug;
+		};
+		D5BEBFC1DD273D9842E3E121 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 37;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.6.2;
+				PRODUCT_BUNDLE_IDENTIFIER = net.shadowpuppet.BarnBookMacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "BarnHub macOS";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1745,6 +1835,15 @@
 			buildConfigurations = (
 				8004BA2B5FF07C65F5E44969 /* Release */,
 				D9E62DF18AE4756BBA9D0EEC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8BA341A47811E8B8DC7F50EC /* Build configuration list for PBXNativeTarget "BarnHubMacUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0007418D3FFCA325C8BC5150 /* Debug */,
+				D5BEBFC1DD273D9842E3E121 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

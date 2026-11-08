@@ -5,6 +5,7 @@ import UIKit
 #elseif canImport(AppKit)
 import AppKit
 #endif
+import CoreText
 
 struct PreviewSampleData {
     static var previewContainer: ModelContainer = {
@@ -66,6 +67,15 @@ struct PreviewSampleData {
 
         let feedPlanEntries = createFeedPlanEntries(horses: horses, products: feedProducts)
         feedPlanEntries.forEach { context.insert($0) }
+
+        // Weights, documents and an invoice, so the weight chart, document viewers
+        // and invoice history have something to show (the UI tests open each one).
+        createWeightEntries(horse: horses[0]).forEach { context.insert($0) }
+        createHorseDocuments(horse: horses[0]).forEach { context.insert($0) }
+        if clients.count > 2 {
+            createClientDocuments(client: clients[2]).forEach { context.insert($0) }
+            context.insert(createInvoice(client: clients[2]))
+        }
 
         try? context.save()
     }
@@ -134,6 +144,95 @@ struct PreviewSampleData {
         }
 
         return entries
+    }
+
+    static func createWeightEntries(horse: Horse) -> [WeightEntry] {
+        let calendar = Calendar.current
+        let weights: [Double] = [1135, 1142, 1150, 1148, 1156, 1162]
+        return weights.enumerated().map { index, weight in
+            let monthsAgo = weights.count - 1 - index
+            let entry = WeightEntry(
+                date: calendar.date(byAdding: .month, value: -monthsAgo, to: .now) ?? .now,
+                weight: weight
+            )
+            entry.horse = horse
+            return entry
+        }
+    }
+
+    static func createHorseDocuments(horse: Horse) -> [HorseDocument] {
+        let coggins = HorseDocument(
+            title: "Coggins Certificate",
+            documentType: .pdf,
+            fileData: samplePDF(title: "Equine Infectious Anemia Test", lines: [
+                "Horse: \(horse.name)", "Result: Negative", "Veterinarian: Dr. Sarah Chen",
+            ])
+        )
+        let photo = HorseDocument(
+            title: "Registration Photo",
+            documentType: .photo,
+            fileData: loadPhoto("arrow")
+        )
+        let docs = [coggins, photo]
+        docs.forEach { $0.horse = horse }
+        return docs
+    }
+
+    static func createClientDocuments(client: Client) -> [ClientDocument] {
+        let agreement = ClientDocument(
+            title: "Boarding Agreement",
+            documentType: .pdf,
+            fileData: samplePDF(title: "Boarding Agreement", lines: [
+                "Client: \(client.fullName)", "Full care board, monthly", "Signed by both parties",
+            ])
+        )
+        let waiver = ClientDocument(
+            title: "Signed Waiver",
+            documentType: .photo,
+            fileData: loadPhoto("bella")
+        )
+        let docs = [agreement, waiver]
+        docs.forEach { $0.client = client }
+        return docs
+    }
+
+    static func createInvoice(client: Client) -> Invoice {
+        let start = lastMonth(daysBeforeFirst: 30)
+        let end = lastMonth(daysBeforeFirst: 1)
+        let invoice = Invoice(
+            startDate: start,
+            endDate: end,
+            totalAmount: 150,
+            pdfData: samplePDF(title: "Invoice", lines: [
+                "Bill to: \(client.fullName)", "Weekly lessons x2", "Total: 150.00",
+            ])
+        )
+        invoice.client = client
+        return invoice
+    }
+
+    /// A one-page PDF with a heading and a few lines of text, drawn with Core
+    /// Graphics so it works on iOS and macOS alike.
+    static func samplePDF(title: String, lines: [String]) -> Data {
+        let data = NSMutableData()
+        var mediaBox = CGRect(x: 0, y: 0, width: 612, height: 792)
+        guard let consumer = CGDataConsumer(data: data as CFMutableData),
+              let pdf = CGContext(consumer: consumer, mediaBox: &mediaBox, nil) else { return Data() }
+        pdf.beginPDFPage(nil)
+        var y: CGFloat = 700
+        for (index, text) in ([title] + lines).enumerated() {
+            let font = CTFontCreateWithName("Helvetica" as CFString, index == 0 ? 24 : 14, nil)
+            let string = NSAttributedString(
+                string: text,
+                attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font]
+            )
+            pdf.textPosition = CGPoint(x: 72, y: y)
+            CTLineDraw(CTLineCreateWithAttributedString(string), pdf)
+            y -= index == 0 ? 40 : 22
+        }
+        pdf.endPDFPage()
+        pdf.closePDF()
+        return data as Data
     }
 
     private static func loadPhoto(_ name: String, ext: String = "jpeg") -> Data? {

@@ -1,0 +1,360 @@
+import XCTest
+
+/// Pre-deploy screen walk: opens every screen with sample data and checks that
+/// each one shows its content, not just that the app didn't crash.
+///
+/// Each screen is opened on a fresh launch with `-screenshotRoute <page>` (see
+/// `ScreenshotRouter`, Debug builds only) on the first matching sample record,
+/// then the test waits for text that only appears once the screen has rendered
+/// its data. The journey tests tap through the app like a user would, including
+/// opening each document and invoice, where a blank sheet has bitten before.
+///
+/// Runs on iPhone and iPad (`BarnHubUITests`) and on the native Mac app
+/// (`BarnHubMacUITests`). Run all three with `./scripts/ui_check.sh`.
+final class ScreenWalkTests: XCTestCase {
+    var app: XCUIApplication!
+
+    /// A screen to open and the text it must show. Every string in `expect` has
+    /// to appear (in a label, value, title or identifier, ignoring case); at
+    /// least one of `anyOf` too, when it's given.
+    struct Screen {
+        let page: String
+        let expect: [String]
+        var anyOf: [String] = []
+    }
+
+    // MARK: - Screens
+
+    static let tabScreens: [Screen] = [
+        Screen(page: "home", expect: ["tile_horses", "tile_reports", "5 horses"]),
+        Screen(page: "horses", expect: ["Arrow", "Cleo"]),
+        Screen(page: "clients", expect: ["Chen", "Rivera"]),
+        Screen(page: "schedule", expect: ["Vet Schedule", "Feed Products"]),
+        Screen(page: "accounting", expect: ["This Month", "Recent Transactions"],
+               anyOf: ["Arena footing", "Weekly lesson", "Group trail ride", "Dressage training"]),
+    ]
+
+    static let homeScreens: [Screen] = [
+        Screen(page: "reports", expect: ["Income vs Expenses", "Monthly Trend"]),
+        Screen(page: "supplies", expect: ["Fly Spray", "Pine Shavings"]),
+        Screen(page: "homeBarnNotes", expect: ["stiff in his left front"]),
+        Screen(page: "dataManagement", expect: ["Export", "Delete All Data"]),
+        Screen(page: "paywall", expect: ["Restore Purchases"]),
+        Screen(page: "settings", expect: ["Subscription", "Feedback"]),
+    ]
+
+    static let horseScreens: [Screen] = [
+        Screen(page: "horseDetail", expect: ["Thoroughbred", "Slight sensitivity in left front hoof"]),
+        Screen(page: "addHorse", expect: ["New Horse", "Breed"]),
+        Screen(page: "editHorse", expect: ["Edit Horse", "Thoroughbred", "Bay with white blaze"]),
+        Screen(page: "addVetRecord", expect: ["New Vet Record", "Vet Name"]),
+        Screen(page: "editVetRecord", expect: ["Edit Vet Record", "Annual vaccinations"]),
+        Screen(page: "addFarrierVisit", expect: ["New Farrier Visit", "Service Description"]),
+        Screen(page: "editFarrierVisit", expect: ["Edit Farrier Visit", "Barefoot trim"]),
+        Screen(page: "addDentistVisit", expect: ["New Dentist Visit", "Service Description"]),
+        Screen(page: "editDentistVisit", expect: ["Edit Dentist Visit", "Routine dental float"]),
+        Screen(page: "healthTimeline", expect: ["Health Timeline", "Annual vaccinations"]),
+        Screen(page: "weightChart", expect: ["Weight Trend", "1162 lbs"]),
+        Screen(page: "horseDocuments", expect: ["Coggins Certificate", "Registration Photo"]),
+        Screen(page: "feedPlan", expect: ["Feed Plan", "Sweet Feed", "Timothy Hay"]),
+        Screen(page: "addFeedEntry", expect: ["Add Feed Item", "Assigned Person"]),
+        Screen(page: "editFeedEntry", expect: ["Edit Feed Item", "Sweet Feed"]),
+    ]
+
+    static let clientScreens: [Screen] = [
+        Screen(page: "clientDetail", expect: ["sarah.c@example.com", "Beginner rider"]),
+        Screen(page: "addClient", expect: ["New Client", "First Name"]),
+        Screen(page: "editClient", expect: ["Edit Client", "sarah.c@example.com"]),
+        Screen(page: "manageHorses", expect: ["Manage Horses", "Arrow", "Cleo"]),
+        Screen(page: "invoiceHistory", expect: ["Invoice History", "150.00"]),
+        Screen(page: "paymentHistory", expect: ["Payment History", "Weekly lesson — Sarah"]),
+        Screen(page: "clientDocuments", expect: ["Boarding Agreement", "Signed Waiver"]),
+    ]
+
+    static let accountingScreens: [Screen] = [
+        Screen(page: "transactions", expect: ["Transactions", "Hay delivery"]),
+        Screen(page: "addTransaction", expect: ["New Transaction", "Memo"]),
+        Screen(page: "editTransaction", expect: ["Edit Transaction"],
+               anyOf: ["Weekly lesson — Sarah on Arrow", "Arena footing maintenance"]),
+    ]
+
+    static let scheduleScreens: [Screen] = [
+        Screen(page: "barnSupplies", expect: ["Supplies", "Fly Spray"]),
+        Screen(page: "addSupply", expect: ["New Supply", "Unit (e.g., lbs, bags)"]),
+        Screen(page: "editSupply", expect: ["Edit Supply", "Fly Spray"]),
+        Screen(page: "reminders", expect: ["Reminders", "Barn inspection"]),
+        Screen(page: "addReminder", expect: ["New Reminder", "Due Date"]),
+        Screen(page: "editReminder", expect: ["Edit Reminder", "Barn inspection"]),
+        Screen(page: "barnNotes", expect: ["Barn Notes", "stiff in his left front"]),
+        Screen(page: "addBarnNote", expect: ["New Note", "What happened at the barn?"]),
+        Screen(page: "editBarnNote", expect: ["Edit Note", "stiff in his left front"]),
+        Screen(page: "vetSchedule", expect: ["Vet Schedule", "Annual vaccinations"]),
+        Screen(page: "scheduleVet", expect: ["New Vet Record", "Vet Name"]),
+        Screen(page: "farrierSchedule", expect: ["Farrier Schedule", "Trim and reset front shoes"]),
+        Screen(page: "scheduleFarrier", expect: ["New Farrier Visit", "Service Description"]),
+        Screen(page: "dentistSchedule", expect: ["Dentist Schedule", "Routine dental float"]),
+        Screen(page: "scheduleDentist", expect: ["New Dentist Visit", "Service Description"]),
+        Screen(page: "lessons", expect: ["Lessons", "Posting trot and diagonals"]),
+        Screen(page: "addLesson", expect: ["New Lesson", "Lesson Type"]),
+        Screen(page: "editLesson", expect: ["Edit Lesson", "Posting trot and diagonals"]),
+        Screen(page: "feedProducts", expect: ["Feed Products", "Alfalfa Cubes"]),
+        Screen(page: "addFeedProduct", expect: ["New Feed Product", "Brand"]),
+        Screen(page: "editFeedProduct", expect: ["Edit Product", "Alfalfa Cubes"]),
+    ]
+
+    // MARK: - Setup
+
+    override func setUp() {
+        super.setUp()
+        // Report every screen that fails, not just the first.
+        continueAfterFailure = true
+        app = XCUIApplication()
+    }
+
+    override func tearDown() {
+        app.terminate()
+        super.tearDown()
+    }
+
+    private func launch(page: String? = nil) {
+        app.terminate()
+        app.launchArguments = [
+            "-SeedSampleData", "-ForceProMode",
+            "-net.shadowpuppet.BarnBook.hasCompletedFirstLaunch", "YES",
+            "-net.shadowpuppet.BarnBook.appLocale", "en",
+            "-net.shadowpuppet.BarnBook.currencyCode", "USD",
+            "-AppleLanguages", "(en)",
+            "-AppleLocale", "en_US",
+        ] + (page.map { ["-screenshotRoute", $0] } ?? [])
+        app.launch()
+    }
+
+    // MARK: - Every screen
+
+    func testTabScreens() { walk(Self.tabScreens) }
+    func testHomeScreens() { walk(Self.homeScreens) }
+    func testHorseScreens() { walk(Self.horseScreens) }
+    func testClientScreens() { walk(Self.clientScreens) }
+    func testAccountingScreens() { walk(Self.accountingScreens) }
+    func testScheduleScreens() { walk(Self.scheduleScreens) }
+
+    private func walk(_ screens: [Screen]) {
+        for screen in screens {
+            XCTContext.runActivity(named: screen.page) { _ in
+                launch(page: screen.page)
+                assertShows(screen.expect, anyOf: screen.anyOf, on: screen.page)
+            }
+        }
+    }
+
+    // MARK: - Journeys
+
+    /// Taps each tab (tab bar on iPhone, sidebar on iPad and Mac) and checks
+    /// that its screen fills in.
+    func testTabNavigation() {
+        launch()
+        let tabs: [(title: String, sidebarID: String, screen: Screen)] = [
+            ("Horses", "sidebar_horses", Self.tabScreens[1]),
+            ("Clients", "sidebar_clients", Self.tabScreens[2]),
+            ("Schedule", "sidebar_schedule", Self.tabScreens[3]),
+            ("Accounting", "sidebar_accounting", Self.tabScreens[4]),
+            ("Home", "sidebar_home", Self.tabScreens[0]),
+        ]
+        for tab in tabs {
+            XCTContext.runActivity(named: tab.title) { _ in
+                selectTab(tab.title, sidebarID: tab.sidebarID)
+                assertShows(tab.screen.expect, anyOf: tab.screen.anyOf, on: tab.title)
+            }
+        }
+    }
+
+    /// Opens a horse from the list, then its documents.
+    func testHorseListToDetailToDocuments() {
+        launch()
+        selectTab("Horses", sidebarID: "sidebar_horses")
+        tapText("Arrow")
+        assertShows(["Slight sensitivity in left front hoof"], on: "horse detail")
+        tapText("Documents")
+        assertShows(["Coggins Certificate", "Registration Photo"], on: "horse documents")
+    }
+
+    /// Opens a client from the list, then their documents.
+    func testClientListToDetailToDocuments() {
+        launch()
+        selectTab("Clients", sidebarID: "sidebar_clients")
+        tapText("Chen")
+        assertShows(["sarah.c@example.com"], on: "client detail")
+        tapText("Documents")
+        assertShows(["Boarding Agreement", "Signed Waiver"], on: "client documents")
+    }
+
+    func testHorsePhotoDocumentOpens() {
+        openDocument("Registration Photo", from: "horseDocuments")
+    }
+
+    func testHorsePDFDocumentOpens() {
+        openDocument("Coggins Certificate", from: "horseDocuments")
+    }
+
+    func testClientPhotoDocumentOpens() {
+        openDocument("Signed Waiver", from: "clientDocuments")
+    }
+
+    func testClientPDFDocumentOpens() {
+        openDocument("Boarding Agreement", from: "clientDocuments")
+    }
+
+    /// Tapping an invoice shares its PDF: the share sheet must show it, not open blank.
+    func testInvoiceOpensShareSheet() {
+        launch(page: "invoiceHistory")
+        assertShows(["150.00"], on: "invoice history")
+        tapText("150.00")
+        assertShareSheetShown(for: "invoice")
+    }
+
+    /// Tapping a document row opens it in Quick Look, which must show the file.
+    private func openDocument(_ title: String, from page: String) {
+        launch(page: page)
+        assertShows([title], on: page)
+        tapText(title)
+        #if os(macOS)
+        // Quick Look opens as a panel titled with the file name.
+        let titled = NSPredicate(format: "title CONTAINS[c] %@", title)
+        let panel = app.windows.matching(titled).firstMatch
+        let dialog = app.dialogs.matching(titled).firstMatch
+        XCTAssertTrue(panel.waitForExistence(timeout: 10) || dialog.exists, "\(title): no Quick Look panel opened")
+        #else
+        // Quick Look's own bar: a Done button over the file, titled with its name.
+        let done = app.buttons["Done"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10), "\(title): no viewer opened (no Done button)")
+        let titled = app.navigationBars.matching(NSPredicate(format: "identifier CONTAINS[c] %@ OR label CONTAINS[c] %@", title, title))
+            .firstMatch.exists || element(containing: title) != nil
+        XCTAssertTrue(titled, "\(title): viewer doesn't name the file")
+        #endif
+        attachScreenshot(named: "\(page) \(title)")
+        assertStillRunning(title)
+    }
+
+    private func assertShareSheetShown(for name: String) {
+        #if os(macOS)
+        // The Mac share sheet offers Reveal in Finder only when it has the file.
+        let reveal = app.buttons["Reveal in Finder"]
+        XCTAssertTrue(reveal.waitForExistence(timeout: 10), "\(name): share sheet missing or blank")
+        #else
+        let sheet = app.otherElements["ActivityListView"]
+        XCTAssertTrue(sheet.waitForExistence(timeout: 10), "\(name): share sheet missing or blank")
+        #endif
+        attachScreenshot(named: "\(name) share sheet")
+        assertStillRunning(name)
+    }
+
+    // MARK: - Helpers
+
+    /// Waits for every string in `texts`, and one of `anyOf`, then checks the
+    /// app is still running. Attaches a screenshot either way.
+    private func assertShows(_ texts: [String], anyOf: [String] = [], on screen: String,
+                             timeout: TimeInterval = 10,
+                             file: StaticString = #filePath, line: UInt = #line) {
+        let deadline = Date().addingTimeInterval(timeout)
+        var missing = texts
+        var foundAny = anyOf.isEmpty
+        repeat {
+            missing = missing.filter { element(containing: $0) == nil }
+            if !foundAny { foundAny = anyOf.contains { element(containing: $0) != nil } }
+            if missing.isEmpty && foundAny { break }
+            Thread.sleep(forTimeInterval: 0.3)
+        } while Date() < deadline && app.state == .runningForeground
+
+        attachScreenshot(named: screen)
+        assertStillRunning(screen, file: file, line: line)
+        XCTAssertTrue(missing.isEmpty, "\(screen): didn't show \(missing)", file: file, line: line)
+        XCTAssertTrue(foundAny, "\(screen): didn't show any of \(anyOf)", file: file, line: line)
+    }
+
+    private func assertStillRunning(_ screen: String, file: StaticString = #filePath, line: UInt = #line) {
+        XCTAssertEqual(app.state, .runningForeground, "\(screen): app is no longer running (crashed?)",
+                       file: file, line: line)
+    }
+
+    /// The first visible element whose label, value, title or identifier
+    /// contains `text`, ignoring case.
+    private func element(containing text: String) -> XCUIElement? {
+        let byLabel = NSPredicate(format: "label CONTAINS[c] %@ OR identifier == %@ OR title CONTAINS[c] %@",
+                                  text, text, text)
+        // Only text elements: on other types `value` can be a number or a bool.
+        let byValue = NSPredicate(format: "value CONTAINS[c] %@", text)
+        let queries: [XCUIElementQuery] = [
+            app.staticTexts.matching(byLabel),
+            app.buttons.matching(byLabel),
+            app.cells.matching(byLabel),
+            app.otherElements.matching(byLabel),
+            app.navigationBars.matching(byLabel),
+            app.windows.matching(byLabel),
+            app.staticTexts.matching(byValue),
+            app.textFields.matching(byValue),
+            app.textViews.matching(byValue),
+            app.textFields.matching(byLabel),
+            app.textViews.matching(byLabel),
+        ]
+        return queries.lazy.map(\.firstMatch).first { $0.exists }
+    }
+
+    /// Taps the first element showing `text`, scrolling down to find it.
+    private func tapText(_ text: String, file: StaticString = #filePath, line: UInt = #line) {
+        let byLabel = NSPredicate(format: "label CONTAINS[c] %@", text)
+        let queries = [
+            app.buttons.matching(byLabel),
+            app.cells.matching(byLabel),
+            app.staticTexts.matching(byLabel),
+            app.staticTexts.matching(NSPredicate(format: "value CONTAINS[c] %@", text)),
+        ]
+        for attempt in 0..<12 {
+            if let target = queries.lazy.map(\.firstMatch).first(where: { $0.exists && $0.isHittable }) {
+                press(target)
+                return
+            }
+            // Wait for the screen first, then scroll down a step at a time.
+            if attempt >= 3 { scrollDown() } else { Thread.sleep(forTimeInterval: 0.5) }
+        }
+        XCTFail("Nothing to tap showing \"\(text)\"", file: file, line: line)
+    }
+
+    private func press(_ element: XCUIElement) {
+        #if os(macOS)
+        element.click()
+        #else
+        element.tap()
+        #endif
+    }
+
+    private func scrollDown() {
+        #if os(macOS)
+        app.windows.firstMatch.scroll(byDeltaX: 0, deltaY: -300)
+        #else
+        app.swipeUp()
+        #endif
+    }
+
+    /// Selects a tab from the tab bar (iPhone), or the sidebar (iPad, Mac).
+    private func selectTab(_ title: String, sidebarID: String,
+                           file: StaticString = #filePath, line: UInt = #line) {
+        let tabBarButton = app.tabBars.buttons[title]
+        let sidebarItem = app.descendants(matching: .any)[sidebarID]
+        let deadline = Date().addingTimeInterval(10)
+        while Date() < deadline {
+            for item in [tabBarButton, sidebarItem] where item.exists && item.isHittable {
+                press(item)
+                return
+            }
+            Thread.sleep(forTimeInterval: 0.3)
+        }
+        XCTFail("No tab or sidebar item for \(title)", file: file, line: line)
+    }
+
+    private func attachScreenshot(named name: String) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .deleteOnSuccess
+        add(attachment)
+    }
+}
