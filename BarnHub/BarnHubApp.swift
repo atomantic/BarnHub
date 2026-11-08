@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import StoreKit
+import UserNotifications
 
 #if os(macOS)
 @MainActor
@@ -45,6 +46,11 @@ struct BarnHubApp: App {
     @NSApplicationDelegateAdaptor(BarnHubMacAppDelegate.self) private var appDelegate
     #endif
 
+    init() {
+        // Before launch finishes, so a tap that cold-launches the app is delivered.
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+    }
+
     private var modelContainer: ModelContainer = {
         let isSeedMode = ProcessInfo.processInfo.arguments.contains("-SeedSampleData")
         let config = isSeedMode
@@ -86,6 +92,7 @@ struct BarnHubApp: App {
                 .environment(notificationService)
                 .environment(syncMonitor)
                 .task {
+                    ShareTempFiles.purgeLeftoversAtLaunch()
                     // Refresh status only — never request cold. The actual permission
                     // request happens after the user opts in via FirstLaunchSheet.
                     await notificationService.refreshAuthorizationStatus()
@@ -182,11 +189,8 @@ struct ContentView: View {
     @State private var storageRetryRequested = false
     @State private var showStorageBugReport = false
 
-    @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
-    private var incompleteReminders: [Reminder]
-    @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
-    @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
-    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
+    @Environment(\.scenePhase) private var scenePhase
+    private let notificationDelegate = NotificationDelegate.shared
 
     var body: some View {
         @Bindable var router = router
@@ -211,16 +215,15 @@ struct ContentView: View {
             if !hasCompletedFirstLaunch && StorageMode.current != .inMemoryFallback {
                 showFirstLaunchSheet = true
             }
-            notificationService.scheduleAllPending(context: modelContext)
-            let overdueRems = incompleteReminders.filter { $0.dueDate.isOverdue }.count
-            let overdueVet = vetRecords.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
-            let overdueFarrier = farrierVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
-            let overdueDentist = dentistVisits.filter { ($0.nextDueDate ?? .distantFuture).isOverdue }.count
-            let overdueCount = overdueRems + overdueVet + overdueFarrier + overdueDentist
-            let todayCount = incompleteReminders.filter { Calendar.current.isDateInToday($0.dueDate) }.count
-            notificationService.scheduleMorningSummary(overdueCount: overdueCount, todayCount: todayCount)
+            notificationService.attach(to: modelContext)
+            notificationService.requestSync(delay: .zero)
             handleScreenshotRouteFromLaunchArgs()
+            routeNotificationTap()
         }
+        .onChange(of: scenePhase) {
+            if scenePhase == .active { notificationService.requestSync() }
+        }
+        .onChange(of: notificationDelegate.pendingDeepLink) { routeNotificationTap() }
         .onOpenURL { url in
             handleIncomingURL(url)
         }
@@ -294,6 +297,11 @@ struct ContentView: View {
         } else {
             DeepLinkHandler.handle(url: url, router: router)
         }
+    }
+
+    private func routeNotificationTap() {
+        guard let url = notificationDelegate.consumeDeepLink() else { return }
+        DeepLinkHandler.handle(url: url, router: router)
     }
 
     private func handleScreenshotRouteFromLaunchArgs() {

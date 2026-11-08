@@ -5,7 +5,6 @@ struct HorseListView: View {
     @Query(sort: \Horse.name) private var horses: [Horse]
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
-    @Environment(NotificationService.self) private var notificationService
 
     @State private var searchText = ""
     @State private var showInactive = false
@@ -132,7 +131,6 @@ struct HorseListView: View {
         guard let horse: Horse = modelContext.existingModel(for: id) else { return }
         if delete {
             BarnHubLogger.info("Deleting horse name=\(horse.name)")
-            notificationService.cancelNotifications(for: horse)
             RecordRemoval.delete(horse, in: modelContext)
             toast.show(appLocalized("Horse deleted", comment: "Toast after deleting a horse"))
         } else {

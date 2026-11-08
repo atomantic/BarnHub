@@ -6,7 +6,6 @@ struct VetRecordEditView: View {
     var recordID: PersistentIdentifier? = nil
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(NotificationService.self) private var notificationService
 
     @State private var date = Date.now
     @State private var vetName = ""
@@ -136,14 +135,12 @@ struct VetRecordEditView: View {
         record.reminderFrequency = reminderFrequency
 
         modelContext.saveWithLogging()
-        notificationService.scheduleVetRecord(record)
         toast.showAndDismiss(appLocalized("Vet record saved", comment: "Toast after saving a vet record"), dismiss: dismiss)
     }
 
     private func deleteRecord() {
         guard let record = existingRecord else { return }
         BarnHubLogger.info("Deleting vet record vet=\(record.vetName)")
-        notificationService.cancelVetRecord(record)
         modelContext.delete(record)
         modelContext.saveWithLogging()
         toast.showAndDismiss(appLocalized("Vet record deleted", comment: "Toast after deleting a vet record"), dismiss: dismiss)

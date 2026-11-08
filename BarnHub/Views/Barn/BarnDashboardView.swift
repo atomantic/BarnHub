@@ -158,21 +158,36 @@ struct BarnDashboardView: View {
             ))
         }
 
+        // Recurring lessons repeat across whatever the calendar can show.
+        let window = lessonWindow
         for lesson in allLessons {
-            guard let nextDate = lesson.nextDate else { continue }
-            events.append(ScheduleEvent(
-                id: "les-\(lesson.persistentModelID.hashValue)",
-                date: nextDate,
-                title: lesson.client?.fullName ?? "No Client",
-                subtitle: [lesson.lessonType.displayName, lesson.horse.map { "on \($0.name)" }]
-                    .compactMap { $0 }.joined(separator: " "),
-                type: .lesson,
-                modelID: lesson.persistentModelID,
-                durationMinutes: lesson.duration
-            ))
+            let subtitle = [lesson.lessonType.displayName, lesson.horse.map { "on \($0.name)" }]
+                .compactMap { $0 }.joined(separator: " ")
+            for occurrence in lesson.occurrences(from: window.start, to: window.end) {
+                events.append(ScheduleEvent(
+                    id: "les-\(lesson.persistentModelID.hashValue)-\(Int(occurrence.timeIntervalSince1970))",
+                    date: occurrence,
+                    title: lesson.client?.fullName ?? "No Client",
+                    subtitle: subtitle,
+                    type: .lesson,
+                    modelID: lesson.persistentModelID,
+                    durationMinutes: lesson.duration
+                ))
+            }
         }
 
         return events
+    }
+
+    /// The selected month plus a week either side, which covers the day, week
+    /// and month grids (including leading and trailing days of the month grid).
+    private var lessonWindow: DateInterval {
+        let cal = Calendar.current
+        let monthStart = cal.date(from: cal.dateComponents([.year, .month], from: selectedDate)) ?? selectedDate
+        let start = cal.date(byAdding: .day, value: -7, to: monthStart) ?? monthStart
+        let monthEnd = cal.date(byAdding: .month, value: 1, to: monthStart) ?? monthStart
+        let end = cal.date(byAdding: .day, value: 7, to: monthEnd) ?? monthEnd
+        return DateInterval(start: start, end: end)
     }
 
     private var eventsByDay: [Date: [ScheduleEvent]] {

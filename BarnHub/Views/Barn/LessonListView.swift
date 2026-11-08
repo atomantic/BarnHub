@@ -12,8 +12,8 @@ struct LessonListView: View {
     private var displayedLessons: [Lesson] {
         if showUpcomingOnly {
             return allLessons
-                .filter { $0.nextDate != nil }
-                .sorted { ($0.nextDate ?? .distantFuture) < ($1.nextDate ?? .distantFuture) }
+                .filter { $0.scheduledDate() != nil }
+                .sorted { ($0.scheduledDate() ?? .distantFuture) < ($1.scheduledDate() ?? .distantFuture) }
         }
         return allLessons
     }
@@ -91,7 +91,8 @@ struct LessonListView: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                let displayDate = lesson.nextDate ?? lesson.date
+                // A recurring lesson shows its next occurrence, not its first date.
+                let displayDate = lesson.scheduledDate() ?? lesson.date
                 Text(displayDate.shortFormatted)
                     .font(.subheadline)
                     .foregroundStyle(displayDate.isOverdue ? .red : .primary)
