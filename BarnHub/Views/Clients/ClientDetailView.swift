@@ -21,7 +21,7 @@ struct ClientDetailView: View {
     @State private var showContractGenerator = false
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     private var sortedRecentTransactions: [Transaction] {

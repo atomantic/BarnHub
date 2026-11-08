@@ -32,6 +32,32 @@ final class BarnHubTests: XCTestCase {
         XCTAssertEqual(horses.first?.name, "Thunder")
     }
 
+    func testExistingModel_isNilAfterDelete() {
+        let horse = Horse()
+        horse.name = "Thunder"
+        context.insert(horse)
+        try! context.save()
+        let id = horse.persistentModelID
+
+        let found: Horse? = context.existingModel(for: id)
+        XCTAssertEqual(found?.name, "Thunder")
+
+        // A fresh context hasn't registered the horse, so this takes the fetch path.
+        let other = ModelContext(container)
+        let fetched: Horse? = other.existingModel(for: id)
+        XCTAssertEqual(fetched?.name, "Thunder")
+
+        context.delete(horse)
+        let pending: Horse? = context.existingModel(for: id)
+        XCTAssertNil(pending, "deleted but not yet saved")
+
+        try! context.save()
+        let gone: Horse? = context.existingModel(for: id)
+        XCTAssertNil(gone)
+        let goneElsewhere: Horse? = ModelContext(container).existingModel(for: id)
+        XCTAssertNil(goneElsewhere)
+    }
+
     func testFeedUnitDisplayName_isSingularForOne() {
         XCTAssertEqual(FeedUnit.scoops.displayName(for: 1), "scoop")
         XCTAssertEqual(FeedUnit.scoops.displayName(for: 2), "scoops")

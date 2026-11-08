@@ -104,7 +104,6 @@ struct HorseListView: View {
                     Label("Show Inactive", systemImage: "eye")
                 }
                 .toggleStyle(.button)
-                .tint(showInactive ? .primary : .secondary)
                 .help(Text("Show Inactive"))
             }
         }

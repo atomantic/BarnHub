@@ -27,7 +27,7 @@ struct FeedProductListView: View {
                         } label: {
                             productRow(product)
                         }
-                        .tint(.primary)
+                        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button("Delete", role: .destructive) {
                                 productToDelete = product

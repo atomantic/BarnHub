@@ -39,7 +39,7 @@ struct ScheduleListView<Record: Identifiable>: View {
                                 nextDueDate: nextDueDate(record)
                             )
                         }
-                        .tint(.primary)
+                        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                     }
                 }
             }

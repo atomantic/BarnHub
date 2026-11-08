@@ -123,13 +123,13 @@ struct LessonEditView: View {
         lesson.nextDate = hasNextDate ? (nextDate ?? date) : nil
 
         if let horseID = selectedHorseID {
-            lesson.horse = modelContext.model(for: horseID) as? Horse
+            lesson.horse = modelContext.existingModel(for: horseID)
         } else {
             lesson.horse = nil
         }
 
         if let clientID = selectedClientID {
-            lesson.client = modelContext.model(for: clientID) as? Client
+            lesson.client = modelContext.existingModel(for: clientID)
         } else {
             lesson.client = nil
         }

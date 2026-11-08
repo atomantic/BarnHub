@@ -78,7 +78,7 @@ struct BarnNoteEditView: View {
         note.category = category
 
         if let horseID = selectedHorseID {
-            note.horse = modelContext.model(for: horseID) as? Horse
+            note.horse = modelContext.existingModel(for: horseID)
         } else {
             note.horse = nil
         }
