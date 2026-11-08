@@ -68,7 +68,7 @@ final class DataExportServiceTests: XCTestCase {
     func test_exportHorsesCSV_headerMatchesImportExpectation() throws {
         let csv = try DataExportService.exportHorsesCSV(from: context)
         let header = csv.components(separatedBy: "\n")[0]
-        XCTAssertEqual(header, "Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active")
+        XCTAssertEqual(header, "Name,Breed,Date of Birth,Color/Markings,Weight (lbs),Purchase Price,Stall,Medical Notes,Feeding Schedule,Active,Gender")
     }
 
     // MARK: - Clients CSV
