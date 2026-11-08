@@ -2,7 +2,40 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 
+/// The entry point. As the host of `BarnHubTests` the app launches a blank
+/// window instead of `BarnHubApp`, so a unit-test run never opens the CloudKit
+/// store, starts StoreKit or calls the notification center, any of which can
+/// block the host before XCTest connects (#39). UI tests launch the real app:
+/// only the unit-test host process gets `XCTestConfigurationFilePath`.
 @main
+enum BarnHubMain {
+    static func main() {
+        if isUnitTestHost {
+            UnitTestHostApp.main()
+        } else {
+            BarnHubApp.main()
+        }
+    }
+
+    /// Debug builds only, so a release build always starts the real app.
+    static var isUnitTestHost: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+        #else
+        false
+        #endif
+    }
+}
+
+/// An app with no startup work, for hosting unit tests.
+private struct UnitTestHostApp: App {
+    var body: some Scene {
+        WindowGroup {
+            EmptyView()
+        }
+    }
+}
+
 struct BarnHubApp: App {
     @State private var router = Router()
     @State private var storeService = StoreService()

@@ -2,18 +2,17 @@ import SwiftUI
 import SwiftData
 
 struct FarrierScheduleView: View {
-    // Only records with a next due date, sorted by it in the store (#32).
-    @Query(filter: #Predicate<FarrierVisit> { $0.nextDueDate != nil }, sort: \FarrierVisit.nextDueDate)
+    // Only records with a next due date, sorted by it in the store (#32);
+    // ScheduleListView drops the superseded ones (#50).
+    @Query(DashboardQueries.farrierScheduled)
     private var scheduledVisits: [FarrierVisit]
 
     var body: some View {
         ScheduleListView(
             records: scheduledVisits,
-            horseName: { $0.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name") },
-            horseID: { $0.horse?.persistentModelID },
+            newest: \.farrier,
             providerName: { $0.farrierName },
             description: { $0.serviceDescription },
-            nextDueDate: { $0.nextDueDate },
             navigationTitle: "Farrier Schedule",
             emptyIcon: "hammer",
             emptyTitle: "No Scheduled Farrier Visits",

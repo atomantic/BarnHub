@@ -219,6 +219,55 @@ final class DashboardQueriesTests: XCTestCase {
         XCTAssertEqual(farrier.map(\.subtitle), ["latest"])
     }
 
+    /// #50: the Vet, Farrier and Dentist Schedule lists show each horse's current
+    /// due date only, like Home, the calendar and notifications.
+    func testScheduleListsLeaveOutSupersededDueDates() throws {
+        let horse = Horse(name: "Storm")
+        let other = Horse(name: "Bella")
+        context.insert(horse)
+        context.insert(other)
+
+        // Vet: the newer visit's later due date replaces the older one's.
+        let oldVet = VetRecord(date: days(-60), vetName: "old", nextDueDate: days(2))
+        let newVet = VetRecord(date: days(-5), vetName: "new", nextDueDate: days(30))
+        let otherVet = VetRecord(date: days(-90), vetName: "other", nextDueDate: days(2))
+        for record in [oldVet, newVet, otherVet] { context.insert(record) }
+        oldVet.horse = horse
+        newVet.horse = horse
+        otherVet.horse = other
+
+        // Farrier: a newer visit with no next due date still supersedes the old one.
+        let oldFarrier = FarrierVisit(date: days(-50), farrierName: "old", nextDueDate: days(1))
+        let newFarrier = FarrierVisit(date: days(-2), farrierName: "new")
+        context.insert(oldFarrier)
+        context.insert(newFarrier)
+        oldFarrier.horse = horse
+        newFarrier.horse = horse
+
+        // Dentist: an overdue due date that a newer visit replaced, and a current one.
+        let oldDentist = DentistVisit(date: days(-400), dentistName: "old", nextDueDate: days(-35))
+        let newDentist = DentistVisit(date: days(-30), dentistName: "new", nextDueDate: days(335))
+        let otherDentist = DentistVisit(date: days(-100), dentistName: "other", nextDueDate: days(265))
+        for visit in [oldDentist, newDentist, otherDentist] { context.insert(visit) }
+        oldDentist.horse = horse
+        newDentist.horse = horse
+        otherDentist.horse = other
+        try context.save()
+
+        let newest = NewestCareRecords.fetch(in: context)
+        let vet = NewestCareRecords.current(try context.fetch(DashboardQueries.vetScheduled), newest: newest.vet)
+        XCTAssertEqual(vet.map(\.vetName), ["other", "new"], "soonest first, superseded left out")
+        let farrier = NewestCareRecords.current(try context.fetch(DashboardQueries.farrierScheduled), newest: newest.farrier)
+        XCTAssertEqual(farrier.map(\.farrierName), [])
+        let dentist = NewestCareRecords.current(try context.fetch(DashboardQueries.dentistScheduled), newest: newest.dentist)
+        XCTAssertEqual(dentist.map(\.dentistName), ["other", "new"])
+
+        // The same records NotificationService schedules.
+        let allVet = try context.fetch(FetchDescriptor<VetRecord>())
+        let notified = NotificationService.latestPerHorse(allVet, horse: { $0.horse }, date: { $0.date }, due: { $0.nextDueDate })
+        XCTAssertEqual(Set(notified.compactMap { $0.nextDueDate == nil ? nil : $0.vetName }), Set(vet.map(\.vetName)))
+    }
+
     // MARK: - Schedule index
 
     func testScheduleIndexGroupsByDaySortedWithStableIDs() throws {
