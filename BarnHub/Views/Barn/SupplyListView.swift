@@ -9,7 +9,7 @@ struct SupplyListView: View {
 
     @State private var searchText = ""
     @State private var showDeleteConfirmation = false
-    @State private var itemToDelete: SupplyItem?
+    @State private var itemToDelete: PendingDeletion?
     @State private var toast = ToastState()
     @State private var sortOrder = [KeyPathComparator(\SupplyItem.name)]
     @State private var selection: PersistentIdentifier?
@@ -51,7 +51,7 @@ struct SupplyListView: View {
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button("Delete", role: .destructive) {
-                                itemToDelete = item
+                                itemToDelete = PendingDeletion(id: item.persistentModelID, name: item.name)
                                 showDeleteConfirmation = true
                             }
                         }
@@ -78,7 +78,11 @@ struct SupplyListView: View {
                 confirmTitle: "Delete",
                 confirmRole: .destructive
             ) {
-                guard let item = itemToDelete else { return }
+                guard let pending = itemToDelete,
+                      let item: SupplyItem = modelContext.existingModel(for: pending.id) else {
+                    itemToDelete = nil
+                    return
+                }
                 modelContext.deleteWithLogging(item)
                 toast.show(appLocalized("Supply deleted"))
                 itemToDelete = nil
@@ -124,7 +128,7 @@ struct SupplyListView: View {
                     Label("Edit Supply", systemImage: "pencil")
                 }
                 Button(role: .destructive) {
-                    itemToDelete = item
+                    itemToDelete = PendingDeletion(id: item.persistentModelID, name: item.name)
                     showDeleteConfirmation = true
                 } label: {
                     Label("Delete Supply", systemImage: "trash")

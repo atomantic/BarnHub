@@ -13,7 +13,7 @@ struct ClientDocumentsView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoLoadTask: Task<Void, Never>?
     @State private var showDeleteConfirmation = false
-    @State private var documentToDelete: ClientDocument?
+    @State private var documentToDelete: PendingDeletion?
     @State private var showToast = false
     @State private var toastMessage = ""
     @State private var showShareSheet = false
@@ -41,7 +41,7 @@ struct ClientDocumentsView: View {
                         documentRow(doc)
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button("Delete", role: .destructive) {
-                                    documentToDelete = doc
+                                    documentToDelete = PendingDeletion(id: doc.persistentModelID, name: doc.title)
                                     showDeleteConfirmation = true
                                 }
                                 Button("Share") {
@@ -121,11 +121,15 @@ struct ClientDocumentsView: View {
             ConfirmationDialog(
                 isPresented: $showDeleteConfirmation,
                 title: "Delete Document",
-                message: "Are you sure you want to delete \"\(documentToDelete?.title ?? "this document")\"?",
+                message: "Are you sure you want to delete \"\(documentToDelete?.name ?? "this document")\"?",
                 confirmTitle: "Delete",
                 confirmRole: .destructive
             ) {
-                guard let doc = documentToDelete else { return }
+                guard let pending = documentToDelete,
+                      let doc: ClientDocument = modelContext.existingModel(for: pending.id) else {
+                    documentToDelete = nil
+                    return
+                }
                 modelContext.deleteWithLogging(doc)
                 toastMessage = appLocalized("Document deleted")
                 showToast = true
