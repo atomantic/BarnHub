@@ -13,16 +13,31 @@ enum ShareTempFiles {
 
     /// Writes `data` to a fresh share folder and returns the file's URL.
     static func write(_ data: Data, fileName: String, fileExtension: String) throws -> URL {
-        let folder = rootDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
-        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let folder = try makeShareFolder()
         let url = folder.appendingPathComponent(sanitizedFileName(fileName, fileExtension: fileExtension))
         do {
             try data.write(to: url, options: .atomic)
         } catch {
-            try? FileManager.default.removeItem(at: folder)
+            discardShareFolder(folder)
             throw error
         }
         return url
+    }
+
+    /// Creates an empty `tmp/BarnHubShare/<UUID>/` folder for callers that write
+    /// their own files (the CSV export). Share a file or subfolder placed
+    /// directly inside it so `cleanUp(_:)` removes the whole share folder.
+    static func makeShareFolder() throws -> URL {
+        let folder = rootDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return folder
+    }
+
+    /// Deletes a share folder that was never shown in a share sheet (the write
+    /// failed or was cancelled), on every platform.
+    static func discardShareFolder(_ folder: URL) {
+        guard folder.deletingLastPathComponent().standardizedFileURL == rootDirectory.standardizedFileURL else { return }
+        try? FileManager.default.removeItem(at: folder)
     }
 
     /// Removes the share folder that holds `url`. Call when the share sheet is
