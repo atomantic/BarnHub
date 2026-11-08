@@ -310,7 +310,6 @@ struct ContentView: View {
             ForEach(Router.AppTab.allCases, id: \.self) { tab in
                 Tab(tab.title, systemImage: tab.icon, value: tab) {
                     tabStack(for: tab)
-                        .withNavControls(router: router)
                 }
             }
         }
@@ -325,40 +324,50 @@ struct ContentView: View {
             NavigationStack(path: $router.homePath) {
                 HomeView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router, onBrandHeader: true)
+                    #endif
             }
-            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.home.title, systemImage: Router.AppTab.home.icon) }
             .tag(Router.AppTab.home)
 
             NavigationStack(path: $router.horsesPath) {
                 HorseListView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
-            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.horses.title, systemImage: Router.AppTab.horses.icon) }
             .tag(Router.AppTab.horses)
 
             NavigationStack(path: $router.clientsPath) {
                 ClientListView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
-            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.clients.title, systemImage: Router.AppTab.clients.icon) }
             .tag(Router.AppTab.clients)
 
             NavigationStack(path: $router.schedulePath) {
                 BarnDashboardView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
-            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.schedule.title, systemImage: Router.AppTab.schedule.icon) }
             .tag(Router.AppTab.schedule)
 
             NavigationStack(path: $router.accountingPath) {
                 AccountingDashboardView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
-            .withNavControls(router: router)
             .tabItem { Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon) }
             .tag(Router.AppTab.accounting)
         }
@@ -386,26 +395,41 @@ struct ContentView: View {
             NavigationStack(path: $router.homePath) {
                 HomeView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router, onBrandHeader: true)
+                    #endif
             }
         case .horses:
             NavigationStack(path: $router.horsesPath) {
                 HorseListView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
         case .clients:
             NavigationStack(path: $router.clientsPath) {
                 ClientListView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
         case .schedule:
             NavigationStack(path: $router.schedulePath) {
                 BarnDashboardView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
         case .accounting:
             NavigationStack(path: $router.accountingPath) {
                 AccountingDashboardView()
                     .withRouteDestinations()
+                    #if os(iOS)
+                    .withNavControls(router: router)
+                    #endif
             }
         }
     }
@@ -413,15 +437,21 @@ struct ContentView: View {
 
 private extension View {
     #if os(iOS)
-    func withNavControls(router: Router) -> some View {
+    /// Sync status and the Settings button for a tab's root screen.
+    ///
+    /// Must be applied inside the tab's `NavigationStack` (to the root view), or the
+    /// navigation bar never picks the items up. `onBrandHeader` draws them white for
+    /// Home, whose green header sits behind the bar; every other screen uses the
+    /// default tint so the button stays visible on a light bar.
+    func withNavControls(router: Router, onBrandHeader: Bool = false) -> some View {
         toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                SyncIndicatorView()
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                SyncIndicatorView(onBrandHeader: onBrandHeader)
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
-                    Label("Settings", systemImage: "gearshape.fill")
-                        .foregroundStyle(.white)
+                    Label("Settings", systemImage: "gearshape")
+                        .foregroundStyle(onBrandHeader ? AnyShapeStyle(.white) : AnyShapeStyle(.tint))
                 }
             }
         }
