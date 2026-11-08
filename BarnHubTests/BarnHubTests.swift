@@ -225,11 +225,13 @@ final class BarnHubTests: XCTestCase {
     }
 
     func testCurrencyFormatting() {
-        XCTAssertEqual(150.50.asCurrency, "$150.50")
-        XCTAssertEqual(0.0.asCurrency, "$0.00")
-        XCTAssertEqual((-25.99).asCurrency, "-$25.99")
-        XCTAssertEqual(1_000_000.0.asCurrency, "$1,000,000.00")
-        XCTAssertEqual(0.01.asCurrency, "$0.01")
-        XCTAssertEqual(9999.999.asCurrency, "$10,000.00")
+        let us = Locale(identifier: "en_US")
+        func usd(_ value: Double) -> String { Double.currency(value, code: "USD", locale: us) }
+        XCTAssertEqual(usd(150.50), "$150.50")
+        XCTAssertEqual(usd(0), "$0.00")
+        XCTAssertEqual(usd(-25.99), "-$25.99")
+        XCTAssertEqual(usd(1_000_000), "$1,000,000.00")
+        XCTAssertEqual(usd(0.01), "$0.01")
+        XCTAssertEqual(usd(9999.999), "$10,000.00")
     }
 }

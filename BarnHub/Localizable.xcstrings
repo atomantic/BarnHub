@@ -11061,6 +11061,59 @@
         }
       }
     },
+    "Vet Visit" : {
+      "comment" : "Health timeline title for a vet record without a description",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tierarzttermin"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visita del veterinario"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visita del veterinario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visite vétérinaire"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visita veterinaria"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bezoek dierenarts"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visita do veterinário"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinärbesök"
+          }
+        }
+      }
+    },
     "Dentist visit deleted" : {
       "comment" : "Toast after deleting a dentist visit",
       "localizations" : {
@@ -14057,6 +14110,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hovslagare planerad: %@"
+          }
+        }
+      }
+    },
+    "Farrier: %@" : {
+      "comment" : "Calendar event title for a farrier visit coming due: the horse's name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hufschmied: %@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herrador: %@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herrador: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maréchal-ferrant : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maniscalco: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoefsmid: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferrador: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hovslagare: %@"
+          }
+        }
+      }
+    },
+    "Dentist: %@" : {
+      "comment" : "Calendar event title for a dentist visit coming due: the horse's name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahnarzt: %@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentista: %@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentista: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentiste : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentista: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tandarts: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dentista: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tandläkare: %@"
           }
         }
       }
@@ -18503,6 +18662,59 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "%@: %lld" : {
+      "comment" : "CSV import result: why rows were skipped, then how many",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ : %2$lld"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$lld"
           }
         }
       }
@@ -26141,6 +26353,59 @@
         }
       }
     },
+    "Overdue · %@" : {
+      "comment" : "Action Items subtitle for an overdue reminder: its due date",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überfällig · %@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vencido · %@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vencido · %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En retard · %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scaduto · %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over tijd · %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atrasado · %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Försenad · %@"
+          }
+        }
+      }
+    },
     "Overdue (%lld)" : {
       "comment" : "A heading that indicates there are overdue items. The number in parentheses is replaced with the actual number of overdue items.",
       "extractionState" : "stale",
@@ -28990,56 +29255,108 @@
         }
       }
     },
-    "reorder at" : {
-      "comment" : "Label for the reorder threshold value in the supply list.",
-      "isCommentAutoGenerated" : true,
+    "%@ · reorder at %@" : {
+      "comment" : "Low stock alert subtitle: quantity on hand, then the reorder level",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nachbestellen bei"
+            "value" : "%1$@ · Nachbestellen bei %2$@"
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reordenar en"
+            "value" : "%1$@ · reponer en %2$@"
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reordenar en"
+            "value" : "%1$@ · reponer en %2$@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réapprovisionner à"
+            "value" : "%1$@ · réapprovisionner à %2$@"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Riordinare a"
+            "value" : "%1$@ · riordinare a %2$@"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nabestellen bij"
+            "value" : "%1$@ · nabestellen bij %2$@"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reabastecer em"
+            "value" : "%1$@ · repor em %2$@"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beställ vid"
+            "value" : "%1$@ · beställ vid %2$@"
+          }
+        }
+      }
+    },
+    "%@ %@ · reorder at %@" : {
+      "comment" : "Low stock alert subtitle: quantity on hand, its unit (typed by the user, e.g. 'bags'), then the reorder level",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · Nachbestellen bei %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · reponer en %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · reponer en %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · réapprovisionner à %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · riordinare a %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · nabestellen bij %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · repor em %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ · beställ vid %3$@"
           }
         }
       }
@@ -35339,6 +35656,112 @@
         }
       }
     },
+    "Linked Expenses" : {
+      "comment" : "Client Payment History summary: total of expenses linked to the client, shown as a negative amount",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verknüpfte Ausgaben"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos vinculados"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos vinculados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépenses liées"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spese collegate"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gekoppelde uitgaven"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Despesas vinculadas"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopplade utgifter"
+          }
+        }
+      }
+    },
+    "Total, Paid and Unpaid count charges to the client only. Expenses linked to the client are the barn's own costs, so they aren't part of what the client owes." : {
+      "comment" : "Client Payment History summary footer, shown when the client has linked expenses",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamt, Bezahlt und Unbezahlt zählen nur Beträge, die dem Klienten berechnet werden. Mit dem Klienten verknüpfte Ausgaben sind eigene Kosten des Stalls und gehören nicht zu dem, was der Klient schuldet."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total, Pagado y No pagado solo cuentan los cargos al cliente. Los gastos vinculados al cliente son costes propios del establo, así que no forman parte de lo que debe el cliente."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total, Pagado y No pagado solo cuentan los cargos al cliente. Los gastos vinculados al cliente son costos propios del establo, así que no forman parte de lo que debe el cliente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total, Payé et Non payé ne comptent que les montants facturés au client. Les dépenses liées au client sont des coûts propres à l'écurie : elles ne font pas partie de ce que le client doit."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totale, Pagato e Non pagato contano solo gli addebiti al cliente. Le spese collegate al cliente sono costi della scuderia, quindi non fanno parte di quanto il cliente deve."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totaal, Betaald en Onbetaald tellen alleen bedragen die aan de klant worden doorberekend. Uitgaven die aan de klant zijn gekoppeld, zijn kosten van de stal zelf en horen niet bij wat de klant verschuldigd is."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total, Pago e Não pago contam apenas as cobranças ao cliente. Despesas vinculadas ao cliente são custos do próprio estábulo, então não fazem parte do que o cliente deve."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Totalt, Betald och Obetald räknar bara avgifter till kunden. Utgifter som är kopplade till kunden är stallets egna kostnader och ingår inte i det kunden är skyldig."
+          }
+        }
+      }
+    },
     "Unpaid: %@" : {
       "comment" : "The title of a row in the Action Items widget that shows an unpaid lesson. The argument is the client's name.",
       "isCommentAutoGenerated" : true,
@@ -35389,6 +35812,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Obetald: %@"
+          }
+        }
+      }
+    },
+    "%@ · %@" : {
+      "comment" : "Action Items subtitle for an unpaid lesson: the amount owed, then the lesson date",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
           }
         }
       }
@@ -36259,6 +36735,59 @@
         }
       }
     },
+    "Vet: %@" : {
+      "comment" : "Calendar event title for a vet visit coming due: the horse's name",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tierarzt: %@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinario: %@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinario: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vétérinaire : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinario: %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dierenarts: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinário: %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veterinär: %@"
+          }
+        }
+      }
+    },
     "Vet Name" : {
       "comment" : "A label for the name of the veterinarian.",
       "isCommentAutoGenerated" : true,
@@ -36998,6 +37527,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vikt"
+          }
+        }
+      }
+    },
+    "Weight recorded" : {
+      "comment" : "Health timeline subtitle for a weight entry",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht erfasst"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso registrado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso registrado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids enregistré"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso registrato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht vastgelegd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peso registrado"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vikt registrerad"
           }
         }
       }
