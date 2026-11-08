@@ -183,6 +183,8 @@ struct HomeView: View {
                     min(260, max(210, height * 0.32))
                 }
                 #endif
+                // Let the green run under the vertical tab bar / side toolbar.
+                .barnBackgroundExtension()
 
             VStack(spacing: 6) {
                 Image("Logo")

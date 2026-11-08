@@ -73,13 +73,11 @@ struct AccountingDashboardView: View {
         }
         .navigationTitle("Accounting")
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    router.navigate(to: AccountingRoute.edit(nil))
-                } label: {
-                    Label("New Transaction", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: AccountingRoute.edit(nil))
+            } label: {
+                Label("New Transaction", systemImage: "plus")
             }
         }
     }

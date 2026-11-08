@@ -40,13 +40,11 @@ struct FeedProductListView: View {
         }
         .navigationTitle("Feed Products")
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    router.navigate(to: BarnRoute.feedProductEdit(nil))
-                } label: {
-                    Label("New Feed Product", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: BarnRoute.feedProductEdit(nil))
+            } label: {
+                Label("New Feed Product", systemImage: "plus")
             }
         }
         .overlay {

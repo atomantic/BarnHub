@@ -46,13 +46,11 @@ struct SupplyListView: View {
         .searchable(text: $searchText, prompt: "Search supplies")
         .navigationTitle("Supplies")
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    router.navigate(to: BarnRoute.supplyEdit(nil))
-                } label: {
-                    Label("New Supply", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: BarnRoute.supplyEdit(nil))
+            } label: {
+                Label("New Supply", systemImage: "plus")
             }
         }
         .overlay {

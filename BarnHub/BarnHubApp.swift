@@ -444,9 +444,13 @@ private extension View {
     /// Home, whose green header sits behind the bar; every other screen uses the
     /// default tint so the button stays visible on a light bar.
     func withNavControls(router: Router, onBrandHeader: Bool = false) -> some View {
-        toolbar {
+        // The sync badge is informational, so it's the first thing to fold into the
+        // overflow menu on a narrow bar; the Settings button stays visible.
+        prioritizedToolbarItem(.low, placement: .topBarTrailing) {
+            SyncIndicatorView(onBrandHeader: onBrandHeader)
+        }
+        .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                SyncIndicatorView(onBrandHeader: onBrandHeader)
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
