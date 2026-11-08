@@ -15,10 +15,7 @@ final class ModelSchemaTests: XCTestCase {
         try super.setUpWithError()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: config
         )
         context = ModelContext(container)
@@ -29,6 +26,39 @@ final class ModelSchemaTests: XCTestCase {
         container = nil
         super.tearDown()
     }
+
+    // MARK: - Shared model list
+
+    /// Every `@Model` class compiled into the app, found through the runtime so a
+    /// new model can't be left out of `BarnHubSchema.models` unnoticed.
+    private func modelTypesInApp() throws -> Set<String> {
+        let image = try XCTUnwrap(class_getImageName(Horse.self))
+        var count: UInt32 = 0
+        let names = try XCTUnwrap(objc_copyClassNamesForImage(image, &count))
+        defer { free(names) }
+        var found = Set<String>()
+        for index in 0..<Int(count) {
+            guard let cls = objc_getClass(names[index]) as? AnyClass,
+                  cls is any PersistentModel.Type else { continue }
+            found.insert(String(describing: cls))
+        }
+        return found
+    }
+
+    func test_sharedModelList_matchesEveryModelType() throws {
+        let inApp = try modelTypesInApp()
+        let listed = BarnHubSchema.models.map { String(describing: $0) }
+        XCTAssertTrue(inApp.contains("Horse"), "runtime lookup found no models: \(inApp)")
+        XCTAssertEqual(Set(listed), inApp, "BarnHubSchema.models must list every @Model type")
+        XCTAssertEqual(Set(listed).count, listed.count, "BarnHubSchema.models lists a type twice")
+    }
+
+    func test_container_hasAnEntityPerListedModel() {
+        let entities = Set(container.schema.entities.map(\.name))
+        XCTAssertEqual(entities, Set(BarnHubSchema.models.map { String(describing: $0) }))
+    }
+
+    // MARK: - Insert and fetch
 
     func test_Horse_canBeInsertedAndFetched() throws {
         let h = Horse(name: "Blaze")
@@ -138,6 +168,35 @@ final class ModelSchemaTests: XCTestCase {
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(results.first?.duration, 45)
         XCTAssertEqual(results.first?.lessonType, .group)
+    }
+
+    func test_DentistVisit_canBeInsertedAndFetched() throws {
+        context.insert(DentistVisit(dentistName: "Dr. Float", serviceDescription: "Float"))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<DentistVisit>())
+        XCTAssertEqual(results.map(\.dentistName), ["Dr. Float"])
+    }
+
+    func test_HorseDocument_canBeInsertedAndFetched() throws {
+        context.insert(HorseDocument(title: "Coggins", documentType: .pdf))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<HorseDocument>())
+        XCTAssertEqual(results.map(\.title), ["Coggins"])
+    }
+
+    func test_FeedProduct_canBeInsertedAndFetched() throws {
+        context.insert(FeedProduct(name: "Senior Feed", defaultUnit: .scoops))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<FeedProduct>())
+        XCTAssertEqual(results.map(\.name), ["Senior Feed"])
+    }
+
+    func test_FeedPlanEntry_canBeInsertedAndFetched() throws {
+        context.insert(FeedPlanEntry(amount: 2, unit: .scoops, feedTime: .evening))
+        try context.save()
+        let results = try context.fetch(FetchDescriptor<FeedPlanEntry>())
+        XCTAssertEqual(results.map(\.amount), [2])
+        XCTAssertEqual(results.first?.feedTime, .evening)
     }
 
     /// #28: onboarding inserts a horse, then links clients. With a `= nil` default on
