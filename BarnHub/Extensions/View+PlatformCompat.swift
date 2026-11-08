@@ -181,21 +181,21 @@ struct WideColumns<Leading: View, Trailing: View>: View {
 /// `NavigationSplitView`, so router deep links and links inside the detail still
 /// push onto the same stack.
 struct ListDetailSplit<ListColumn: View, Detail: View>: View {
-    /// Total width available, as measured by the caller.
-    let width: CGFloat
     private let listColumn: ListColumn
     private let detail: Detail
+    /// Measured here and clamped, so resizing a window only redraws when the
+    /// list column's width actually changes, not on every point of drag (#32).
+    @State private var listWidth: CGFloat = 300
 
     /// The narrowest width at which the split is worth showing.
     static var minimumWidth: CGFloat { 760 }
 
-    init(width: CGFloat, @ViewBuilder list: () -> ListColumn, @ViewBuilder detail: () -> Detail) {
-        self.width = width
+    init(@ViewBuilder list: () -> ListColumn, @ViewBuilder detail: () -> Detail) {
         self.listColumn = list()
         self.detail = detail()
     }
 
-    private var listWidth: CGFloat { min(400, max(300, width * 0.36)) }
+    static func listWidth(forTotal width: CGFloat) -> CGFloat { min(400, max(300, width * 0.36)) }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -205,6 +205,7 @@ struct ListDetailSplit<ListColumn: View, Detail: View>: View {
             detail
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .onGeometryChange(for: CGFloat.self) { Self.listWidth(forTotal: $0.size.width) } action: { listWidth = $0 }
     }
 }
 
