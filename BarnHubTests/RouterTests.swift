@@ -1,4 +1,5 @@
 import XCTest
+import SwiftData
 @testable import BarnHub
 
 final class RouterTests: XCTestCase {
@@ -180,5 +181,63 @@ final class RouterTests: XCTestCase {
         XCTAssertEqual(router.selectedTab, .horses)
         XCTAssertTrue(router.horsesPath.isEmpty)
         XCTAssertNil(sync.pendingSync)
+    }
+
+    // MARK: - List beside detail
+
+    private func makeHorseID() throws -> (ModelContainer, PersistentIdentifier) {
+        let container = try ModelContainer(
+            for: Horse.self, Client.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        let context = ModelContext(container)
+        let horse = Horse()
+        horse.name = "Arrow"
+        context.insert(horse)
+        try context.save()
+        return (container, horse.persistentModelID)
+    }
+
+    func testShowHorse_withSplit_selectsInsteadOfPushing() throws {
+        let (container, id) = try makeHorseID()
+        defer { _ = container }
+        let router = Router()
+        router.horsesShowSplit = true
+        router.navigate(to: HorseRoute.list, tab: .horses)
+
+        router.showHorse(id)
+
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertEqual(router.selectedHorseID, id)
+        XCTAssertTrue(router.horsesPath.isEmpty, "The split shows the detail, so nothing is pushed")
+    }
+
+    func testShowHorse_withoutSplit_pushesDetail() throws {
+        let (container, id) = try makeHorseID()
+        defer { _ = container }
+        let router = Router()
+
+        router.showHorse(id)
+
+        XCTAssertEqual(router.selectedTab, .horses)
+        XCTAssertEqual(router.horsesPath.count, 1)
+        XCTAssertNil(router.selectedHorseID)
+    }
+
+    func testSidebarSync_itemPickedInListIsNotTreatedAsTap() throws {
+        let (container, id) = try makeHorseID()
+        defer { _ = container }
+        let router = Router()
+        router.horsesShowSplit = true
+        router.selectedTab = .horses
+        router.navigate(to: HorseRoute.list, tab: .horses)
+        var sync = SidebarSelectionSync()
+
+        let synced = sync.syncItem(.horse(id), current: .horses)
+        XCTAssertEqual(synced, .horse(id))
+        sync.userSelectionChanged(to: .horse(id), router: router)
+
+        XCTAssertEqual(router.horsesPath.count, 1, "Highlighting the row must not pop the stack")
+        XCTAssertNil(sync.syncItem(.horse(id), current: .horse(id)))
     }
 }
