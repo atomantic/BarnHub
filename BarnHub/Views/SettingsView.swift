@@ -18,6 +18,7 @@ struct SettingsView: View {
     @State private var showWelcomeSheet = false
     @State private var showBugReport = false
     #if os(macOS)
+    @Environment(\.openURL) private var openURL
     @State private var showPaywall = false
     /// The Settings window reopens on the tab used last, like other Mac apps.
     @AppStorage("net.shadowpuppet.BarnBook.settings.tab") private var settingsTab = "general"
@@ -269,7 +270,7 @@ struct SettingsView: View {
                 }
             }
             .formStyle(.grouped)
-            .frame(height: 340)
+            .frame(height: 370)
             .tabItem { Label("Feedback", systemImage: "envelope") }
             .tag("feedback")
         }
@@ -314,8 +315,11 @@ struct SettingsView: View {
 
     private var feedbackSection: some View {
         Section("Feedback") {
+            // A button like the other actions here (it opens Mail, but stays in the app's voice).
             if let url = URL(string: "mailto:\(Self.feedbackEmail)?subject=BarnHub%20Feedback") {
-                Link(destination: url) {
+                Button {
+                    openURL(url)
+                } label: {
                     settingsRow("Send Feedback", icon: "envelope")
                 }
             }
