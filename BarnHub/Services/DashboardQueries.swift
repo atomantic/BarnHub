@@ -16,6 +16,17 @@ extension Calendar {
         let end = self.date(byAdding: .month, value: 1, to: start) ?? start
         return DateInterval(start: start, end: end)
     }
+
+    /// The days picked in a pair of date-only pickers, `start` day through `end`
+    /// day, as `[startOfDay(start), startOfDay(end) + 1 day)`. Date pickers keep
+    /// the time of day they were created with, so comparing the raw dates would
+    /// drop records later on the end day or earlier on the start day. Empty (at
+    /// the start day) when `end` is before `start`.
+    func dayRange(from start: Date, through end: Date) -> DateInterval {
+        let first = startOfDay(for: start)
+        let afterLast = date(byAdding: .day, value: 1, to: startOfDay(for: end)) ?? first
+        return DateInterval(start: first, end: max(first, afterLast))
+    }
 }
 
 // MARK: - Transactions
@@ -30,15 +41,17 @@ extension Transaction {
         #Predicate<Transaction> { $0.date >= start && $0.date < end }
     }
 
-    /// The All Transactions filters: optional type and category, and a date range
-    /// inclusive at both ends. Unknown stored raw values match the same filters
-    /// their computed `type` / `category` fall back to (expense / other).
+    /// The All Transactions filters: optional type and category, and dates in
+    /// `range` (`[start, end)`, see `Calendar.dayRange`). Unknown stored raw values
+    /// match the same filters their computed `type` / `category` fall back to
+    /// (expense / other).
     static func listPredicate(
         type: TransactionType?,
         category: TransactionCategory?,
-        from start: Date,
-        through end: Date
+        in range: DateInterval
     ) -> Predicate<Transaction> {
+        let start = range.start
+        let end = range.end
         let incomeRaw = Self.incomeRaw
         let anyType = type == nil
         let wantsIncome = type == .income
@@ -48,7 +61,7 @@ extension Transaction {
         let matchesUnknownCategory = category == .other
         let knownCategories = TransactionCategory.allCases.map(\.rawValue)
         return #Predicate<Transaction> { txn in
-            txn.date >= start && txn.date <= end
+            txn.date >= start && txn.date < end
                 && (anyType
                     || (wantsIncome && txn.typeRaw == incomeRaw)
                     || (wantsExpense && txn.typeRaw != incomeRaw))
