@@ -12,6 +12,7 @@ struct HorseDocumentsView: View {
     @State private var showCamera = false
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoLoadTask: Task<Void, Never>?
+    @State private var fileImportTask: Task<Void, Never>?
     @State private var showDeleteConfirmation = false
     @State private var documentToDelete: PendingDeletion?
     @State private var toast = ToastState()
@@ -93,8 +94,14 @@ struct HorseDocumentsView: View {
             photoLoadTask = Task {
                 do {
                     if let data = try await newItem.loadTransferable(type: Data.self) {
-                        await MainActor.run {
-                            addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: data)
+                        let jpeg = await ImageProcessing.downsampledJPEGInBackground(
+                            from: data, maxPixelSize: ImageProcessing.documentMaxPixelSize
+                        )
+                        guard !Task.isCancelled else { return }
+                        if let jpeg {
+                            addDocument(title: "Photo \(Date.now.shortFormatted)", type: .photo, data: jpeg)
+                        } else {
+                            toast.show(appLocalized("Failed to load photo"), isError: true)
                         }
                     }
                 } catch is CancellationError {
@@ -109,8 +116,21 @@ struct HorseDocumentsView: View {
         }
         #if os(iOS)
         .fullScreenCover(isPresented: $showCamera) {
-            CameraView { imageData in
-                addDocument(title: "Scan \(Date.now.shortFormatted)", type: .photo, data: imageData)
+            CameraView { capture in
+                photoLoadTask?.cancel()
+                photoLoadTask = Task {
+                    let jpeg = await ImageProcessing.downsampledJPEGInBackground(
+                        from: capture.image,
+                        orientation: capture.orientation,
+                        maxPixelSize: ImageProcessing.documentMaxPixelSize
+                    )
+                    guard !Task.isCancelled else { return }
+                    if let jpeg {
+                        addDocument(title: "Scan \(Date.now.shortFormatted)", type: .photo, data: jpeg)
+                    } else {
+                        toast.show(appLocalized("Failed to load photo"), isError: true)
+                    }
+                }
             }
         }
         #endif
@@ -133,8 +153,14 @@ struct HorseDocumentsView: View {
             }
         }
         .toast(toast)
-        .onDisappear { photoLoadTask?.cancel() }
-        .sheet(isPresented: $showShareSheet) {
+        .onDisappear {
+            photoLoadTask?.cancel()
+            fileImportTask?.cancel()
+        }
+        .sheet(isPresented: $showShareSheet, onDismiss: {
+            ShareTempFiles.cleanUp(shareURL)
+            shareURL = nil
+        }) {
             if let url = shareURL {
                 ShareSheet(items: [url])
             }
@@ -172,13 +198,28 @@ struct HorseDocumentsView: View {
     }
 
     private func handlePDFImport(_ result: Result<[URL], Error>) {
-        guard case .success(let urls) = result, let url = urls.first else { return }
-        guard url.startAccessingSecurityScopedResource() else { return }
-        defer { url.stopAccessingSecurityScopedResource() }
-
-        guard let data = try? Data(contentsOf: url) else { return }
-        let name = url.deletingPathExtension().lastPathComponent
-        addDocument(title: name, type: .pdf, data: data)
+        let url: URL
+        switch result {
+        case .success(let urls):
+            guard let first = urls.first else { return }
+            url = first
+        case .failure(let error):
+            BarnHubLogger.error("PDF picker failed error=\(error.localizedDescription)")
+            toast.show(appLocalized("Could not open file: \(error.localizedDescription)", comment: "File open error"), isError: true)
+            return
+        }
+        fileImportTask?.cancel()
+        fileImportTask = Task {
+            do {
+                let data = try await DocumentImport.readFile(at: url)
+                guard !Task.isCancelled else { return }
+                addDocument(title: url.deletingPathExtension().lastPathComponent, type: .pdf, data: data)
+            } catch {
+                guard !Task.isCancelled else { return }
+                BarnHubLogger.error("PDF import failed error=\(error.localizedDescription)")
+                toast.show(error.localizedDescription, isError: true)
+            }
+        }
     }
 
     private func addDocument(title: String, type: DocumentType, data: Data) {
@@ -193,9 +234,13 @@ struct HorseDocumentsView: View {
 
     private func shareDocument(_ doc: HorseDocument) {
         guard let data = doc.fileData else { return }
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(doc.fileName)
-        try? data.write(to: tempURL)
-        shareURL = tempURL
-        showShareSheet = true
+        do {
+            ShareTempFiles.cleanUp(shareURL)
+            shareURL = try ShareTempFiles.write(data, fileName: doc.title, fileExtension: doc.fileExtension)
+            showShareSheet = true
+        } catch {
+            BarnHubLogger.error("Failed to write document for sharing error=\(error.localizedDescription)")
+            toast.show(appLocalized("Failed to share document"), isError: true)
+        }
     }
 }

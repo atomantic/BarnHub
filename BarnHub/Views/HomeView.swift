@@ -106,8 +106,11 @@ struct HomeView: View {
 
         var items: [ScheduleItem] = []
 
-        for lesson in lessons where calendar.isDateInToday(lesson.date) && lesson.date >= now {
-            items.append(ScheduleItem(date: lesson.date, label: "\(timeFormatter.string(from: lesson.date)) Lesson"))
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now)) ?? now
+        for lesson in lessons {
+            for date in lesson.homeDates(from: now, before: tomorrow) {
+                items.append(ScheduleItem(date: date, label: "\(timeFormatter.string(from: date)) Lesson"))
+            }
         }
         for record in vetRecords {
             guard let due = record.nextDueDate, calendar.isDateInToday(due), due >= now else { continue }
@@ -415,21 +418,23 @@ struct HomeView: View {
         let routerRef = router
         var events: [DashboardEvent] = []
 
-        for lesson in lessons where lesson.date >= now && lesson.date < cutoff {
+        for lesson in lessons {
             let subtitle = [lesson.client?.fullName, lesson.horse?.name]
                 .compactMap { $0 }.joined(separator: " • ")
             let lessonID = lesson.persistentModelID
-            events.append(DashboardEvent(
-                id: "lesson-\(lessonID.hashValue)",
-                date: lesson.date,
-                icon: "book.fill",
-                iconColor: .blue,
-                title: appLocalized("Lesson", comment: "Dashboard event type"),
-                subtitle: subtitle.isEmpty ? nil : subtitle,
-                action: {
-                    routerRef.navigate(to: BarnRoute.lessonEdit(lessonID), tab: .schedule)
-                }
-            ))
+            for date in lesson.homeDates(from: now, before: cutoff) {
+                events.append(DashboardEvent(
+                    id: "lesson-\(lessonID.hashValue)-\(Int(date.timeIntervalSince1970))",
+                    date: date,
+                    icon: "book.fill",
+                    iconColor: .blue,
+                    title: appLocalized("Lesson", comment: "Dashboard event type"),
+                    subtitle: subtitle.isEmpty ? nil : subtitle,
+                    action: {
+                        routerRef.navigate(to: BarnRoute.lessonEdit(lessonID), tab: .schedule)
+                    }
+                ))
+            }
         }
 
         for record in vetRecords {

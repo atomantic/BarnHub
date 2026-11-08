@@ -320,16 +320,25 @@ struct HorseFeedPlanView: View {
 
     @ViewBuilder
     private func productImage(_ entry: FeedPlanEntry) -> some View {
-        if let photoData = entry.product?.photoData, let image = Image(photoData: photoData) {
-            image
-                .resizable()
-                .scaledToFill()
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+        if let product = entry.product {
+            CachedPhotoView(data: product.thumbnailData) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            } placeholder: {
+                leafPlaceholder
+            }
+            .backfillsThumbnail(for: product)
         } else {
-            Image(systemName: "leaf.fill")
-                .foregroundStyle(.barnGreen)
-                .font(.title3)
+            leafPlaceholder
         }
+    }
+
+    private var leafPlaceholder: some View {
+        Image(systemName: "leaf.fill")
+            .foregroundStyle(.barnGreen)
+            .font(.title3)
     }
 
     private var emptyState: some View {

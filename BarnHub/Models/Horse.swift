@@ -23,6 +23,11 @@ final class Horse {
     @Attribute(.externalStorage)
     var photoData: Data? = nil
 
+    /// ~256 px JPEG of `photoData` for rows and avatars. Kept inline (a few KB)
+    /// so lists never load the full photo; nil until generated, and backfilled
+    /// lazily for records saved before it existed.
+    var thumbnailData: Data? = nil
+
     // No `= nil` default on either side of this many-to-many (#28): the macro turns
     // a default into an init accessor that maintains the inverse before the model
     // is registered, which asserts on macOS 14.0-14.3 / iOS 17.0-17.3. The
