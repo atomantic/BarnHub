@@ -137,4 +137,54 @@ final class RecurrenceTests: XCTestCase {
         XCTAssertEqual(oneOff.homeDates(from: now, before: day(2), calendar: calendar), [day(1, hour: 9)])
         XCTAssertEqual(daily.homeDates(from: now, before: day(2), calendar: calendar), [day(0, hour: 12), day(1, hour: 12)])
     }
+
+    // MARK: - Vet record reminder frequency (#37)
+
+    func testVetFrequencySuggestsNextDueOneStepAfterVisit() {
+        let visit = now
+        var followUp = VetFollowUp()
+        followUp.setFrequency(.annually, visitDate: visit, calendar: calendar)
+        XCTAssertTrue(followUp.hasNextDue, "picking a frequency turns Next Due on")
+        XCTAssertEqual(followUp.nextDueDate, calendar.date(byAdding: .year, value: 1, to: visit))
+
+        // A suggestion that wasn't edited follows the frequency and the visit date.
+        followUp.setFrequency(.quarterly, visitDate: visit, calendar: calendar)
+        XCTAssertEqual(followUp.nextDueDate, calendar.date(byAdding: .month, value: 3, to: visit))
+        let laterVisit = calendar.date(byAdding: .day, value: 5, to: visit)!
+        followUp.visitDateChanged(to: laterVisit, calendar: calendar)
+        XCTAssertEqual(followUp.nextDueDate, calendar.date(byAdding: .month, value: 3, to: laterVisit))
+
+        // Once leaves the date alone.
+        let suggested = followUp.nextDueDate
+        followUp.setFrequency(.once, visitDate: laterVisit, calendar: calendar)
+        XCTAssertTrue(followUp.hasNextDue)
+        XCTAssertEqual(followUp.nextDueDate, suggested)
+        XCTAssertEqual(followUp.frequency, .once)
+    }
+
+    func testVetFrequencyKeepsANextDueDateTheUserPicked() {
+        let visit = now
+        let picked = calendar.date(byAdding: .day, value: 45, to: visit)!
+
+        // Picked by hand after a suggestion.
+        var followUp = VetFollowUp()
+        followUp.setFrequency(.monthly, visitDate: visit, calendar: calendar)
+        followUp.nextDueDate = picked
+        followUp.setFrequency(.annually, visitDate: visit, calendar: calendar)
+        XCTAssertEqual(followUp.nextDueDate, picked)
+        followUp.visitDateChanged(to: calendar.date(byAdding: .day, value: 1, to: visit)!, calendar: calendar)
+        XCTAssertEqual(followUp.nextDueDate, picked)
+        XCTAssertEqual(followUp.frequency, .annually, "the frequency is still saved")
+
+        // Loaded from an existing record.
+        var existing = VetFollowUp(hasNextDue: true, nextDueDate: picked, frequency: .once)
+        existing.setFrequency(.biannually, visitDate: visit, calendar: calendar)
+        XCTAssertEqual(existing.nextDueDate, picked)
+
+        // Next Due turned off: the frequency suggests a date again.
+        existing.hasNextDue = false
+        existing.setFrequency(.annually, visitDate: visit, calendar: calendar)
+        XCTAssertTrue(existing.hasNextDue)
+        XCTAssertEqual(existing.nextDueDate, calendar.date(byAdding: .year, value: 1, to: visit))
+    }
 }

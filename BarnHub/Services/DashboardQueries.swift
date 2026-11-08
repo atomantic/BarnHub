@@ -223,6 +223,21 @@ enum DashboardQueries {
         )
     }
 
+    // Every record with a next due date, soonest first: the Vet, Farrier and
+    // Dentist Schedule lists, before superseded records are dropped (#50).
+
+    static var vetScheduled: FetchDescriptor<VetRecord> {
+        FetchDescriptor(predicate: #Predicate<VetRecord> { $0.nextDueDate != nil }, sortBy: [SortDescriptor(\.nextDueDate)])
+    }
+
+    static var farrierScheduled: FetchDescriptor<FarrierVisit> {
+        FetchDescriptor(predicate: #Predicate<FarrierVisit> { $0.nextDueDate != nil }, sortBy: [SortDescriptor(\.nextDueDate)])
+    }
+
+    static var dentistScheduled: FetchDescriptor<DentistVisit> {
+        FetchDescriptor(predicate: #Predicate<DentistVisit> { $0.nextDueDate != nil }, sortBy: [SortDescriptor(\.nextDueDate)])
+    }
+
     /// Incomplete reminders due in `[start, end]`.
     static func reminders(from start: Date, through end: Date) -> FetchDescriptor<Reminder> {
         FetchDescriptor(

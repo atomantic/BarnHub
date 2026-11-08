@@ -1,15 +1,24 @@
 import SwiftUI
 import SwiftData
 
-struct ScheduleListView<Record: Identifiable>: View {
+/// A list of vet, farrier or dentist records with a next due date. Like Home,
+/// the calendar and notifications, it leaves out a due date that a newer record
+/// for the same horse has superseded (#50).
+struct ScheduleListView<Record: HorseCareRecord>: View {
     @Environment(Router.self) private var router
+    @Environment(\.modelContext) private var modelContext
+    @Environment(SyncMonitor.self) private var syncMonitor
+    /// Bumped on every save and CloudKit import, so the newest-record map (not a
+    /// `@Query`) is rebuilt only when the data changes, not on every render.
+    @State private var dataVersion = 0
+    @State private var newestCare = NewestCareRecordsCache()
 
+    /// Records with a next due date, in display order.
     let records: [Record]
-    let horseName: (Record) -> String
-    let horseID: (Record) -> PersistentIdentifier?
+    /// Which kind's newest records supersede these.
+    let newest: KeyPath<NewestCareRecords, [PersistentIdentifier: SupersedeKey]>
     let providerName: (Record) -> String
     let description: (Record) -> String
-    let nextDueDate: (Record) -> Date?
     let navigationTitle: LocalizedStringKey
     let emptyIcon: String
     let emptyTitle: LocalizedStringKey
@@ -18,8 +27,12 @@ struct ScheduleListView<Record: Identifiable>: View {
     let addLabel: LocalizedStringKey
 
     var body: some View {
+        let current = NewestCareRecords.current(
+            records,
+            newest: newestCare.value(version: dataVersion, context: modelContext)[keyPath: newest]
+        )
         Group {
-            if records.isEmpty {
+            if current.isEmpty {
                 EmptyStateView(
                     icon: emptyIcon,
                     title: emptyTitle,
@@ -27,16 +40,16 @@ struct ScheduleListView<Record: Identifiable>: View {
                 )
             } else {
                 List {
-                    ForEach(records) { record in
+                    ForEach(current) { record in
                         Button {
-                            guard let id = horseID(record) else { return }
+                            guard let id = record.horse?.persistentModelID else { return }
                             router.navigate(to: HorseRoute.detail(id))
                         } label: {
                             ScheduleRecordRow(
-                                horseName: horseName(record),
+                                horseName: record.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name"),
                                 providerName: providerName(record),
                                 description: description(record),
-                                nextDueDate: nextDueDate(record)
+                                nextDueDate: record.nextDueDate
                             )
                         }
                         .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
@@ -55,5 +68,9 @@ struct ScheduleListView<Record: Identifiable>: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave).receive(on: RunLoop.main)) { _ in
+            dataVersion &+= 1
+        }
+        .onChange(of: syncMonitor.lastSuccessfulSync) { dataVersion &+= 1 }
     }
 }
