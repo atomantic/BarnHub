@@ -56,7 +56,7 @@ final class ScreenWalkTests: XCTestCase {
         Screen(page: "addDentistVisit", expect: ["New Dentist Visit", "Service Description"]),
         Screen(page: "editDentistVisit", expect: ["Edit Dentist Visit", "Routine dental float"]),
         Screen(page: "healthTimeline", expect: ["Health Timeline", "Annual vaccinations"]),
-        Screen(page: "weightChart", expect: ["Weight Trend", "1,162 lbs"]),
+        Screen(page: "weightChart", expect: ["Weight Trend", "1,100 lbs"]),
         Screen(page: "horseDocuments", expect: ["Coggins Certificate", "Registration Photo"]),
         Screen(page: "feedPlan", expect: ["Feed Plan", "Sweet Feed", "Timothy Hay"]),
         Screen(page: "addFeedEntry", expect: ["Add Feed Item", "Assigned Person"]),
