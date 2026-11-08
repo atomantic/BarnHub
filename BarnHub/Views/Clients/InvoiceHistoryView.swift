@@ -5,8 +5,7 @@ struct InvoiceHistoryView: View {
     let clientID: PersistentIdentifier
     @Environment(\.modelContext) private var modelContext
 
-    @State private var showShareSheet = false
-    @State private var selectedPDFURL: URL?
+    @State private var sharedPDF: SharedFile?
     @State private var toast = ToastState()
 
     private var client: Client? {
@@ -57,14 +56,7 @@ struct InvoiceHistoryView: View {
         .navigationTitle("Invoice History")
         .inlineNavTitle()
         .toast(toast)
-        .sheet(isPresented: $showShareSheet, onDismiss: {
-            ShareTempFiles.cleanUp(selectedPDFURL)
-            selectedPDFURL = nil
-        }) {
-            if let url = selectedPDFURL {
-                ShareSheet(items: [url])
-            }
-        }
+        .shareSheet($sharedPDF)
     }
 
     private func reshareInvoice(_ invoice: Invoice) {
@@ -78,8 +70,7 @@ struct InvoiceHistoryView: View {
             toast.show(appLocalized("Failed to load invoice"), isError: true)
             return
         }
-        selectedPDFURL = tempURL
-        showShareSheet = true
+        sharedPDF = SharedFile(url: tempURL)
     }
 
     private func deleteInvoices(at offsets: IndexSet) {
