@@ -37,7 +37,7 @@ final class ScreenWalkTests: XCTestCase {
     ]
 
     static let homeScreens: [Screen] = [
-        Screen(page: "reports", expect: ["Income vs Expenses", "Monthly Trend"]),
+        Screen(page: "reports", expect: ["Income vs Expenses", "Expenses by Category"]),
         Screen(page: "supplies", expect: ["Fly Spray", "Pine Shavings"]),
         Screen(page: "homeBarnNotes", expect: ["stiff in his left front"]),
         Screen(page: "dataManagement", expect: ["Export", "Delete All Data"]),
@@ -326,17 +326,19 @@ final class ScreenWalkTests: XCTestCase {
         return queries.lazy.map(\.firstMatch).first { $0.exists }
     }
 
-    /// Taps the first element showing `text`, scrolling down to find it.
+    /// Taps the first control showing `text`, scrolling down to find it.
+    /// Plain text is only tapped when no button or row shows it, so a section
+    /// header doesn't win over the row beneath it.
     private func tapText(_ text: String, file: StaticString = #filePath, line: UInt = #line) {
         let byLabel = NSPredicate(format: "label CONTAINS[c] %@", text)
-        let queries = [
-            app.buttons.matching(byLabel),
-            app.cells.matching(byLabel),
+        let controls = [app.buttons.matching(byLabel), app.cells.matching(byLabel)]
+        let texts = [
             app.staticTexts.matching(byLabel),
             app.staticTexts.matching(NSPredicate(format: "value CONTAINS[c] %@", text)),
         ]
         for attempt in 0..<12 {
-            if let target = queries.lazy.map(\.firstMatch).first(where: { $0.exists && $0.isHittable }) {
+            let candidates = controls.contains { $0.firstMatch.exists } ? controls : texts
+            if let target = candidates.lazy.map(\.firstMatch).first(where: { $0.exists && $0.isHittable }) {
                 press(target)
                 return
             }

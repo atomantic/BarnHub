@@ -36,8 +36,36 @@ struct ScreenshotRouter {
         router.popToRoot(tab: tab)
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 400_000_000)
+            // On a loaded machine the first push can land before the tab's
+            // stack is ready and be dropped. Until the route has taken effect,
+            // open it again; once it has, leave the app alone.
+            let before = state
             open()
+            guard page != "settings" else { return }
+            for _ in 0..<8 {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                guard state == before else { return }
+                open()
+            }
         }
+    }
+
+    /// What a route changes: the stacks, the form sheet and the split selections.
+    private struct NavigationState: Equatable {
+        let pathCounts: [Int]
+        let formID: UUID?
+        let horseID: PersistentIdentifier?
+        let clientID: PersistentIdentifier?
+    }
+
+    private var state: NavigationState {
+        NavigationState(
+            pathCounts: [router.homePath.count, router.horsesPath.count, router.clientsPath.count,
+                         router.schedulePath.count, router.accountingPath.count],
+            formID: router.presentedForm?.id,
+            horseID: router.selectedHorseID,
+            clientID: router.selectedClientID
+        )
     }
 
     private typealias Page = (tab: Router.AppTab, open: () -> Void)
