@@ -150,7 +150,7 @@ for rt in runtimes:
             echo "📱 Test device: $SIM_NAME ($SIM_UDID)" >&2
             echo "platform=iOS Simulator,id=$SIM_UDID"
         else
-            echo "platform=iOS Simulator,name=iPhone 16"
+            echo "platform=iOS Simulator,name=iPhone 17"
         fi
     )
     echo "📱 Test destination: $DESTINATION"

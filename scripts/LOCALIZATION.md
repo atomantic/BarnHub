@@ -37,7 +37,7 @@ Updates `BarnHub/Localizable.xcstrings` in place with all translations.
 **Step 4 — Verify & build**
 ```bash
 xcodebuild build -project BarnHub.xcodeproj -scheme BarnHub \
-  -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
+  -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 ```
 Spot-check a few strings in Xcode's String Catalog editor.
 

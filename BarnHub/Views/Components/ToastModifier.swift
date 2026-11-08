@@ -18,8 +18,10 @@ final class ToastState {
         Task {
             do {
                 try await Task.sleep(for: .seconds(0.5))
-                dismiss()
-            } catch is CancellationError { }
+            } catch {
+                return
+            }
+            dismiss()
         }
     }
 }
