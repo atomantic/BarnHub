@@ -57,13 +57,6 @@ struct VetRecordEditView: View {
                 }
             }
 
-            Section {
-                Button(isNew ? "Save Vet Record" : "Save Changes") {
-                    save()
-                }
-                .frame(maxWidth: .infinity)
-                .disabled(vetName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
-            }
 
             if !isNew {
                 Section {
@@ -75,6 +68,14 @@ struct VetRecordEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Vet Record" : "Edit Vet Record")
+        .toolbar {
+            // In the bar rather than at the bottom of the form, so it's always
+            // reachable and sits next to Cancel when the form opens as a sheet.
+            ToolbarItem(placement: .pinnedConfirmation) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(vetName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
+            }
+        }
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
