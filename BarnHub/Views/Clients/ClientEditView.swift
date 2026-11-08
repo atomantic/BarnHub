@@ -19,7 +19,6 @@ struct ClientEditView: View {
 
     private var isNew: Bool { clientID == nil }
     private var existingClient: Client? { modelContext.existingModel(for: clientID) }
-    private var saveButtonLabel: LocalizedStringKey { isNew ? "Add Client" : "Save Changes" }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Client" : "Edit Client" }
 
     var body: some View {
@@ -56,16 +55,17 @@ struct ClientEditView: View {
                 Toggle("Active", isOn: $isActive)
             }
 
-            Section {
-                Button(saveButtonLabel) {
-                    save()
-                }
-                .frame(maxWidth: .infinity)
-                .disabled(firstName.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+        .navigationTitle(navigationTitleKey)
+        .toolbar {
+            // In the bar rather than at the bottom of the form, so it's always
+            // reachable and sits next to Cancel when the form opens as a sheet.
+            ToolbarItem(placement: .pinnedConfirmation) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(firstName.trimmingCharacters(in: .whitespaces).isEmpty
                     && lastName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)

@@ -51,13 +51,6 @@ struct FarrierVisitEditView: View {
                 }
             }
 
-            Section {
-                Button(isNew ? "Save Farrier Visit" : "Save Changes") {
-                    save()
-                }
-                .frame(maxWidth: .infinity)
-                .disabled(farrierName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
-            }
 
             if !isNew {
                 Section {
@@ -69,6 +62,14 @@ struct FarrierVisitEditView: View {
             }
         }
         .navigationTitle(isNew ? "New Farrier Visit" : "Edit Farrier Visit")
+        .toolbar {
+            // In the bar rather than at the bottom of the form, so it's always
+            // reachable and sits next to Cancel when the form opens as a sheet.
+            ToolbarItem(placement: .pinnedConfirmation) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(farrierName.trimmingCharacters(in: .whitespaces).isEmpty || resolvedHorseID == nil)
+            }
+        }
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)

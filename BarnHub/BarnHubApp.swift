@@ -656,6 +656,7 @@ struct FormSheet: View {
         NavigationStack {
             content
                 .withRouteDestinations()
+                .tint(.barnGreen)  // sheets don't inherit the root's tint
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") { dismiss() }
@@ -663,7 +664,7 @@ struct FormSheet: View {
                 }
         }
         #if os(macOS)
-        .frame(minWidth: 560, idealWidth: 640, minHeight: 520, idealHeight: 640)
+        .frame(minWidth: 600, idealWidth: 680, minHeight: 520, idealHeight: 680)
         #endif
     }
 
