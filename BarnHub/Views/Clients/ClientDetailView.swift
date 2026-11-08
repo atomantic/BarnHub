@@ -41,13 +41,10 @@ struct ClientDetailView: View {
             }
         }
         .overlay {
-            ConfirmationDialog(
+            ClientRemovalDialog(
                 isPresented: $showDeleteConfirmation,
-                title: "Delete Client",
-                message: "Are you sure you want to delete this client? All associated transactions will also be removed.",
-                confirmTitle: "Delete",
-                confirmRole: .destructive,
-                onConfirm: deleteClient
+                onDeactivate: deactivateClient,
+                onDelete: deleteClient
             )
         }
         .toast(toast)
@@ -351,10 +348,17 @@ struct ClientDetailView: View {
     }
     #endif
 
+    private func deactivateClient() {
+        guard let client else { return }
+        BarnHubLogger.info("Deactivating client name=\(client.fullName)")
+        RecordRemoval.deactivate(client, in: modelContext)
+        toast.show(appLocalized("Client deactivated", comment: "Toast after deactivating a client"))
+    }
+
     private func deleteClient() {
         guard let client else { return }
         BarnHubLogger.info("Deleting client name=\(client.fullName)")
-        modelContext.deleteWithLogging(client)
+        RecordRemoval.delete(client, in: modelContext)
         if let onDelete {
             onDelete()
         } else {

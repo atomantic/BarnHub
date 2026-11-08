@@ -11,6 +11,7 @@ struct HorseDetailView: View {
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @Environment(StoreService.self) private var storeService
+    @Environment(NotificationService.self) private var notificationService
 
     @State private var showDeleteConfirmation = false
     @State private var toast = ToastState()
@@ -51,13 +52,10 @@ struct HorseDetailView: View {
             }
         }
         .overlay {
-            ConfirmationDialog(
+            HorseRemovalDialog(
                 isPresented: $showDeleteConfirmation,
-                title: "Delete Horse",
-                message: "Are you sure you want to delete this horse? All associated vet records, farrier visits, and dentist visits will also be removed.",
-                confirmTitle: "Delete",
-                confirmRole: .destructive,
-                onConfirm: deleteHorse
+                onMarkInactive: markHorseInactive,
+                onDelete: deleteHorse
             )
         }
         .toast(toast)
@@ -503,10 +501,18 @@ struct HorseDetailView: View {
         }
     }
 
+    private func markHorseInactive() {
+        guard let horse else { return }
+        BarnHubLogger.info("Marking horse inactive name=\(horse.name)")
+        RecordRemoval.markInactive(horse, in: modelContext)
+        toast.show(appLocalized("Horse marked inactive", comment: "Toast after marking a horse inactive"))
+    }
+
     private func deleteHorse() {
         guard let horse else { return }
         BarnHubLogger.info("Deleting horse name=\(horse.name)")
-        modelContext.deleteWithLogging(horse)
+        notificationService.cancelNotifications(for: horse)
+        RecordRemoval.delete(horse, in: modelContext)
         if let onDelete {
             onDelete()
         } else {

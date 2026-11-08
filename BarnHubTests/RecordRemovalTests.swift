@@ -134,4 +134,75 @@ final class RecordRemovalTests: XCTestCase {
         XCTAssertEqual(container.schema.entities.count, BarnHubSchema.models.count)
         XCTAssertEqual(BarnHubSchema.models.count, 16)
     }
+
+    // MARK: - Clients
+
+    func test_deactivateClient_keepsEveryLinkedRecord() throws {
+        let client = try makeClientWithHistory()
+        let totalBefore = try incomeTotal()
+
+        RecordRemoval.deactivate(client, in: context)
+
+        XCTAssertFalse(client.isActive)
+        XCTAssertEqual(try count(Client.self), 1)
+        XCTAssertEqual(client.transactions?.count, 2)
+        XCTAssertEqual(client.invoices?.count, 1)
+        XCTAssertEqual(client.lessons?.count, 1)
+        XCTAssertEqual(client.documents?.count, 1)
+        XCTAssertEqual(try incomeTotal(), totalBefore, "Reports totals must not change")
+    }
+
+    func test_deleteClient_keepsTransactionsAndLessonsUnlinked_removesInvoicesAndDocuments() throws {
+        let client = try makeClientWithHistory()
+        let totalBefore = try incomeTotal()
+
+        RecordRemoval.delete(client, in: context)
+
+        XCTAssertEqual(try count(Client.self), 0)
+        let transactions = try context.fetch(FetchDescriptor<Transaction>())
+        XCTAssertEqual(transactions.count, 2)
+        XCTAssertTrue(transactions.allSatisfy { $0.client == nil })
+        XCTAssertEqual(try incomeTotal(), totalBefore, "Income stays in Reports")
+        let lessons = try context.fetch(FetchDescriptor<Lesson>())
+        XCTAssertEqual(lessons.count, 1)
+        XCTAssertNil(lessons.first?.client)
+        XCTAssertEqual(try count(Invoice.self), 0, "Invoices are only reachable through the client")
+        XCTAssertEqual(try count(ClientDocument.self), 0)
+    }
+
+    // MARK: - Horses
+
+    func test_markHorseInactive_keepsRecords() throws {
+        let horse = Horse(name: "Blaze")
+        context.insert(horse)
+        let record = VetRecord(vetName: "Dr. Hooves")
+        context.insert(record)
+        record.horse = horse
+        try context.save()
+
+        RecordRemoval.markInactive(horse, in: context)
+
+        XCTAssertFalse(horse.isActive)
+        XCTAssertEqual(horse.vetRecords?.count, 1)
+    }
+
+    func test_deleteHorse_keepsLessonsUnlinked_removesHealthRecords() throws {
+        let horse = Horse(name: "Blaze")
+        context.insert(horse)
+        let record = VetRecord(vetName: "Dr. Hooves")
+        context.insert(record)
+        record.horse = horse
+        let lesson = Lesson(duration: 45, lessonType: .group, cost: 80)
+        context.insert(lesson)
+        lesson.horse = horse
+        try context.save()
+
+        RecordRemoval.delete(horse, in: context)
+
+        XCTAssertEqual(try count(Horse.self), 0)
+        XCTAssertEqual(try count(VetRecord.self), 0)
+        let lessons = try context.fetch(FetchDescriptor<Lesson>())
+        XCTAssertEqual(lessons.count, 1, "Lessons carry client billing")
+        XCTAssertNil(lessons.first?.horse)
+    }
 }
