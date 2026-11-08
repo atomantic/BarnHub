@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import SwiftData
 
@@ -18,6 +19,10 @@ import SwiftData
 /// identify them (see `DataRestoreService.Restorer`). Each existing record can
 /// be matched once, so restoring the same folder twice adds nothing, while an
 /// export with two identical rows still restores both into an empty store.
+/// When several existing owners share a key, rows that match one in every
+/// field get it first; the other rows take what's left. Horses and feed
+/// products that also match each other in every field are told apart by their
+/// photos (#85).
 ///
 /// **Cancel and errors.** Rows are saved in batches (500 rows, or about 32 MB
 /// of files) through a fresh `ModelContext` per batch, so photos and PDFs
@@ -180,13 +185,7 @@ enum DataRestoreService {
         /// then saves, so the next file can link to these records.
         private func each(_ kind: CSVExportKind, progress: (Double) -> Void,
                           _ body: (DataImportService.Row) throws -> Outcome) throws {
-            let url = root.appendingPathComponent("\(kind.rawValue).csv")
-            guard FileManager.default.fileExists(atPath: url.path) else {
-                BarnHubLogger.warning("Restore: no \(kind.rawValue).csv in folder")
-                return
-            }
-            let reader = try CSVReader(url: DataRestoreService.coordinated(url))
-            guard let header = reader.nextRow() else { return }
+            guard let (reader, header) = try open(kind) else { return }
             let columns = DataImportService.columnIndex(header)
             var rowNumber = 0
             while let fields = reader.nextRow() {
@@ -207,6 +206,40 @@ enum DataRestoreService {
             try save()
             try linkSaved()
             progress(1)
+        }
+
+        /// `kind`'s file after its header row, or nil when the folder has no
+        /// such file (or it's empty).
+        private func open(_ kind: CSVExportKind) throws -> (reader: CSVReader, header: [String])? {
+            let url = root.appendingPathComponent("\(kind.rawValue).csv")
+            guard FileManager.default.fileExists(atPath: url.path) else {
+                BarnHubLogger.warning("Restore: no \(kind.rawValue).csv in folder")
+                return nil
+            }
+            let reader = try CSVReader(url: DataRestoreService.coordinated(url))
+            guard let header = reader.nextRow() else { return nil }
+            return (reader, header)
+        }
+
+        /// The duplicate key and signature of every well-formed row in an
+        /// owner file, read ahead of the restore so that rows matching an
+        /// existing record exactly can claim it first (#81). Photos are read
+        /// only for rows matching existing twins (see `tieBroken`).
+        private func rowSignatures(_ kind: CSVExportKind, twins: Set<String> = [],
+                                   _ describe: (DataImportService.Row) -> (key: String, signature: String)?) throws
+            -> [(key: String, signature: String)] {
+            guard let (reader, header) = try open(kind) else { return [] }
+            let columns = DataImportService.columnIndex(header)
+            var rows: [(key: String, signature: String)] = []
+            while let fields = reader.nextRow() {
+                try Task.checkCancellation()
+                guard !DataImportService.isMalformed(fields, header: header, reader: reader) else { continue }
+                let row = DataImportService.Row(fields: fields, columns: columns)
+                if let described = describe(row) {
+                    rows.append((described.key, tieBroken(described.signature, key: described.key, row: row, twins: twins)))
+                }
+            }
+            return rows
         }
 
         private func insert<T: PersistentModel>(_ model: T, exportID: String? = nil, bytes: Int = 0) {
@@ -382,29 +415,90 @@ enum DataRestoreService {
             key(product.name, product.brand, product.defaultUnitRaw, product.notes)
         }
 
-        /// Unclaimed existing records by duplicate key, each with its signature.
-        private typealias Candidates = [String: [(id: PersistentIdentifier, signature: String)]]
+        /// Unclaimed existing records.
+        private struct Candidates {
+            /// By duplicate key, each with its signature.
+            var byKey: [String: [(id: PersistentIdentifier, signature: String)]] = [:]
+            /// Records set aside for the file's rows that match them exactly,
+            /// by duplicate key and signature (see `reserveExactMatches`).
+            var exact: [String: [PersistentIdentifier]] = [:]
+            /// Duplicate key plus signature shared by two or more records,
+            /// whose signatures then also carry their photo's fingerprint.
+            var twins: Set<String> = []
+        }
 
         /// Existing records of `T` grouped by duplicate key, read through a
         /// throwaway context (unbatched: batched fetches lose relationships
-        /// before iOS 27, #69).
+        /// before iOS 27, #69). Records sharing a key and signature (twins)
+        /// get `photo`'s fingerprint added to their signature; no other
+        /// record's photo is read.
         private func existingRecords<T: PersistentModel>(_: T.Type, signature: (T) -> String = { _ in "" },
+                                                         photo: ((T) -> Data?)? = nil,
                                                          _ keyOf: (T) -> String) throws -> Candidates {
             let scratch = ModelContext(container)
-            var map: Candidates = [:]
+            var map = Candidates()
+            var models: [String: [T]] = [:]
             for model in try scratch.fetch(FetchDescriptor<T>()) {
-                map[keyOf(model), default: []].append((model.persistentModelID, signature(model)))
+                let key = keyOf(model)
+                map.byKey[key, default: []].append((model.persistentModelID, signature(model)))
+                if photo != nil { models[key, default: []].append(model) }
+            }
+            guard let photo else { return map }
+            for (key, candidates) in map.byKey where candidates.count > 1 {
+                var counts: [String: Int] = [:]
+                for candidate in candidates { counts[candidate.signature, default: 0] += 1 }
+                let shared = Set(counts.filter { $0.value > 1 }.keys)
+                guard !shared.isEmpty, let group = models[key] else { continue }
+                for signature in shared { map.twins.insert(self.key(key, signature)) }
+                map.byKey[key] = zip(candidates, group).map { candidate, model in
+                    guard shared.contains(candidate.signature) else { return candidate }
+                    return (candidate.id, self.key(candidate.signature, fingerprint(photo(model))))
+                }
             }
             return map
         }
 
-        /// Takes one unclaimed existing record with `key`, preferring one whose
-        /// signature matches too. Each existing record is matched at most once.
+        /// SHA-256 of a photo, or "" for none.
+        private func fingerprint(_ data: Data?) -> String {
+            guard let data else { return "" }
+            return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        }
+
+        /// `signature`, plus the fingerprint of the row's `Photo` file when
+        /// existing twins share its key and signature (#85). The file is read
+        /// without counting it as restored; a missing file counts as no photo.
+        private func tieBroken(_ signature: String, key: String, row: DataImportService.Row, twins: Set<String>) -> String {
+            guard twins.contains(self.key(key, signature)) else { return signature }
+            let data = fileURL(row, "photo").flatMap { try? Data(contentsOf: DataRestoreService.coordinated($0)) }
+            return self.key(signature, fingerprint(data))
+        }
+
+        /// Sets aside, for each of `rows` in file order, an existing record
+        /// with the same key and signature. Claiming row by row let an earlier
+        /// row with no exact match take the record a later row matches
+        /// exactly, so twin clients were matched crosswise (#81).
+        private func reserveExactMatches(_ rows: [(key: String, signature: String)], in map: inout Candidates) {
+            for row in rows {
+                guard var candidates = map.byKey[row.key],
+                      let index = candidates.firstIndex(where: { $0.signature == row.signature }) else { continue }
+                map.exact[key(row.key, row.signature), default: []].append(candidates.remove(at: index).id)
+                map.byKey[row.key] = candidates
+            }
+        }
+
+        /// Takes the existing record set aside for a row with `key` and
+        /// `signature`, or else any remaining one with `key`. Each existing
+        /// record is matched at most once.
         private func claim(_ key: String, signature: String = "", in map: inout Candidates) -> PersistentIdentifier? {
-            guard var candidates = map[key], !candidates.isEmpty else { return nil }
-            let index = candidates.firstIndex { $0.signature == signature } ?? candidates.startIndex
-            let id = candidates.remove(at: index).id
-            map[key] = candidates
+            let exactKey = self.key(key, signature)
+            if var reserved = map.exact[exactKey], !reserved.isEmpty {
+                let id = reserved.removeFirst()
+                map.exact[exactKey] = reserved
+                return id
+            }
+            guard var candidates = map.byKey[key], !candidates.isEmpty else { return nil }
+            let id = candidates.removeFirst().id
+            map.byKey[key] = candidates
             return id
         }
 
@@ -438,19 +532,26 @@ enum DataRestoreService {
         /// Reads a `Photo` / `File` path relative to the folder. Blank paths are
         /// "no file"; missing files and paths leaving the folder are counted.
         private func file(_ row: DataImportService.Row, _ column: String) -> Data? {
-            guard let path = row.text(column) else { return nil }
-            let components = path.split(separator: "/")
-            guard !path.hasPrefix("/"), !components.contains(where: { $0 == ".." || $0 == "." }) else {
+            guard row.text(column) != nil else { return nil }
+            guard let url = fileURL(row, column) else {
                 result.filesMissing += 1
                 return nil
             }
-            let url = root.appendingPathComponent(path)
             guard let data = try? Data(contentsOf: DataRestoreService.coordinated(url)) else {
                 result.filesMissing += 1
                 return nil
             }
             result.filesRestored += 1
             return data
+        }
+
+        /// A `Photo` / `File` path inside the folder, or nil for a blank path or
+        /// one that leaves the folder.
+        private func fileURL(_ row: DataImportService.Row, _ column: String) -> URL? {
+            guard let path = row.text(column) else { return nil }
+            let components = path.split(separator: "/")
+            guard !path.hasPrefix("/"), !components.contains(where: { $0 == ".." || $0 == "." }) else { return nil }
+            return root.appendingPathComponent(path)
         }
 
         /// Runs `body`, turning a thrown `Skip` into a skipped row.
@@ -494,19 +595,26 @@ enum DataRestoreService {
         }
 
         private func restoreHorses(_ progress: (Double) -> Void) throws {
-            var existing = try existingRecords(Horse.self, signature: signature, horseKey)
+            var existing = try existingRecords(Horse.self, signature: signature, photo: { $0.photoData }, horseKey)
             let genders = DataImportService.horseGenderLookup()
+            func parse(_ row: DataImportService.Row) -> Swift.Result<Horse, DataImportService.SkipReason> {
+                DataImportService.parseHorse(row, dates: dates, numbers: numbers, genders: genders).map { $0.makeHorse() }
+            }
+            reserveExactMatches(try rowSignatures(.horses, twins: existing.twins) { row in
+                guard case .success(let horse) = parse(row) else { return nil }
+                return (horseKey(horse), signature(horse))
+            }, in: &existing)
             try each(.horses, progress: progress) { row in
-                let fields: DataImportService.HorseFields
-                switch DataImportService.parseHorse(row, dates: dates, numbers: numbers, genders: genders) {
-                case .success(let parsed): fields = parsed
+                let horse: Horse
+                switch parse(row) {
+                case .success(let parsed): horse = parsed
                 case .failure(let reason): return .skipped(reason)
                 }
                 let id = row.text("id")
-                let horse = fields.makeHorse()
                 let key = horseKey(horse)
                 if let id { ownerKeys[id] = key }
-                if let match = claim(key, signature: signature(horse), in: &existing) {
+                let exact = tieBroken(signature(horse), key: key, row: row, twins: existing.twins)
+                if let match = claim(key, signature: exact, in: &existing) {
                     if let id { owners[id] = match }
                     return .duplicate
                 }
@@ -520,6 +628,10 @@ enum DataRestoreService {
 
         private func restoreClients(_ progress: (Double) -> Void) throws {
             var existing = try existingRecords(Client.self, signature: signature, clientKey)
+            reserveExactMatches(try rowSignatures(.clients) { row in
+                guard case .success(let fields) = DataImportService.parseClient(row, hasFirstNameColumn: true) else { return nil }
+                return (fields.key, signature(fields.makeClient()))
+            }, in: &existing)
             try each(.clients, progress: progress) { row in
                 let fields: DataImportService.ClientFields
                 switch DataImportService.parseClient(row, hasFirstNameColumn: true) {
@@ -539,16 +651,25 @@ enum DataRestoreService {
         }
 
         private func restoreFeedProducts(_ progress: (Double) -> Void) throws {
-            var existing = try existingRecords(FeedProduct.self, signature: signature) { productKey(name: $0.name, brand: $0.brand) }
-            try each(.feedProducts, progress: progress) { row in
-                guard let name = row.text("name") else { return .skipped(.missingName) }
-                let brand = row.text("brand") ?? ""
-                let id = row.text("id")
-                let key = productKey(name: name, brand: brand)
-                let product = FeedProduct(name: name, brand: brand, notes: row.text("notes") ?? "")
+            var existing = try existingRecords(FeedProduct.self, signature: signature, photo: { $0.photoData }) {
+                productKey(name: $0.name, brand: $0.brand)
+            }
+            func parse(_ row: DataImportService.Row) -> FeedProduct? {
+                guard let name = row.text("name") else { return nil }
+                let product = FeedProduct(name: name, brand: row.text("brand") ?? "", notes: row.text("notes") ?? "")
                 if let unit = row.text("default unit") { product.defaultUnitRaw = unit }
+                return product
+            }
+            reserveExactMatches(try rowSignatures(.feedProducts, twins: existing.twins) { row in
+                parse(row).map { (productKey(name: $0.name, brand: $0.brand), signature($0)) }
+            }, in: &existing)
+            try each(.feedProducts, progress: progress) { row in
+                guard let product = parse(row) else { return .skipped(.missingName) }
+                let id = row.text("id")
+                let key = productKey(name: product.name, brand: product.brand)
                 if let id { ownerKeys[id] = key }
-                if let match = claim(key, signature: signature(product), in: &existing) {
+                let exact = tieBroken(signature(product), key: key, row: row, twins: existing.twins)
+                if let match = claim(key, signature: exact, in: &existing) {
                     if let id { owners[id] = match }
                     return .duplicate
                 }
@@ -569,19 +690,32 @@ enum DataRestoreService {
             for horse in try scratch.fetch(FetchDescriptor<Horse>()) {
                 for client in horse.clients ?? [] { existing[key(horseKey(horse), clientKey(client)), default: 0] += 1 }
             }
+            func linked(_ horse: Horse, _ client: Client) -> Bool {
+                (horse.clients ?? []).contains { $0.persistentModelID == client.persistentModelID }
+            }
+            // Rows whose horse and client are already linked use up their key
+            // first, so an earlier row for a twin can't take it and leave its
+            // own link out (#81).
+            for row in try rowSignatures(.horseClients, { row in
+                let horseID = row.text("horse id"), clientID = row.text("client id")
+                guard let horse = owner(horseID, as: Horse.self), let client = owner(clientID, as: Client.self),
+                      linked(horse, client) else { return nil }
+                return (key(ownerKey(horseID), ownerKey(clientID)), "")
+            }) {
+                existing[row.key] = max(0, (existing[row.key] ?? 0) - 1)
+            }
             try each(.horseClients, progress: progress) { row in
                 let horseExportID = row.text("horse id")
                 let clientExportID = row.text("client id")
                 guard let horse = owner(horseExportID, as: Horse.self),
                       let client = owner(clientExportID, as: Client.self) else { return .skipped(.unknownLink) }
+                if linked(horse, client) { return .duplicate }
                 let linkKey = key(ownerKey(horseExportID), ownerKey(clientExportID))
                 if let count = existing[linkKey], count > 0 {
                     existing[linkKey] = count - 1
                     return .duplicate
                 }
-                let clients = horse.clients ?? []
-                guard !clients.contains(where: { $0.persistentModelID == client.persistentModelID }) else { return .duplicate }
-                horse.clients = clients + [client]
+                horse.clients = (horse.clients ?? []) + [client]
                 if !insertedSet.contains(horse.persistentModelID), !insertedSet.contains(client.persistentModelID) {
                     addedLinks.append((horse.persistentModelID, client.persistentModelID))
                 }

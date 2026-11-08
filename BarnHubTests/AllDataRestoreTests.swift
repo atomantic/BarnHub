@@ -1,6 +1,7 @@
 import XCTest
 import SwiftData
 import CoreGraphics
+import os
 @testable import BarnHub
 
 /// Restore All Data (#71): an All Data export folder restored into the store,
@@ -221,7 +222,7 @@ final class AllDataRestoreTests: XCTestCase {
     }
 
     private func wipe() throws {
-        try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
         XCTAssertTrue(try snapshot().values.allSatisfy(\.isEmpty), "store is empty before the restore")
     }
 
@@ -324,7 +325,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// restore adds. Both used to slow down with every row.
     func test_cancel_withTwentyThousandRowsForOneHorse_restoresAndRollsBackQuickly() async throws {
         for horseExists in [true, false] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let folder = try await exportAllData()
             if !horseExists { try wipe() }
@@ -335,12 +336,12 @@ final class AllDataRestoreTests: XCTestCase {
             try csv.write(to: url, atomically: true, encoding: .utf8)
 
             let start = Date()
-            var cancelledAt: Date?
+            let cancelledAt = OSAllocatedUnfairLock<Date?>(initialState: nil)
             do {
                 _ = try await restore(folder) { index, _, _ in
                     // Step 17, the last file, runs after every weigh-in was saved.
                     if index == 17 {
-                        cancelledAt = Date()
+                        cancelledAt.withLock { $0 = Date() }
                         withUnsafeCurrentTask { $0?.cancel() }
                     }
                 }
@@ -349,7 +350,7 @@ final class AllDataRestoreTests: XCTestCase {
             }
             let end = Date()
 
-            let cancelled = try XCTUnwrap(cancelledAt)
+            let cancelled = try XCTUnwrap(cancelledAt.withLock { $0 })
             print("#77 timing horseExists=\(horseExists): restore \(cancelled.timeIntervalSince(start)) s, rollback \(end.timeIntervalSince(cancelled)) s")
             XCTAssertEqual(try snapshot(), before, "horseExists=\(horseExists)")
             // Generous ceiling (well under 10 s on an M-series simulator) so a slow runner doesn't flake.
@@ -361,7 +362,7 @@ final class AllDataRestoreTests: XCTestCase {
     /// export, with nothing left from before.
     func test_deleteAllDataThenRestore_leavesExactlyTheExport() async throws {
         for keepDocuments in [false, true] {
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: false)
             try seed()
             let exported = try snapshot()
             let folder = try await exportAllData()
@@ -374,21 +375,71 @@ final class AllDataRestoreTests: XCTestCase {
             try context.save()
             XCTAssertNotEqual(try snapshot(), exported)
 
-            try RecordRemoval.deleteAllData(in: context, keepDocuments: keepDocuments)
+            try RecordRemoval.deleteAllData(in: container, keepDocuments: keepDocuments)
             _ = try await restore(folder)
 
-            let restored = try snapshot()
-            if keepDocuments {
-                // Kept documents keep their owners, which the restore matches. Full
-                // equality waits on #81 (two same-key clients can be matched crosswise).
-                XCTAssertEqual(restored["horses"]?.count, exported["horses"]?.count)
-                XCTAssertEqual(restored["horseDocs"]?.count, exported["horseDocs"]?.count, "kept documents aren't added twice")
-                XCTAssertFalse(restored["horses"]!.contains { $0.hasPrefix("Leftover|") })
-                XCTAssertFalse(restored["clients"]!.contains { $0.contains("555-9999") })
-            } else {
-                XCTAssertEqual(restored, exported)
-            }
+            // With Keep Documents, the kept twin horses and Jane B are matched to
+            // their own rows, not to the twin listed first (#81).
+            XCTAssertEqual(try snapshot(), exported, "keepDocuments=\(keepDocuments)")
         }
+    }
+
+    /// Reverses the data rows of one of the export's CSV files, so its rows
+    /// come in the opposite order to the store's fetch order.
+    private func reverseRows(of kind: CSVExportKind, in folder: URL) throws {
+        let url = folder.appendingPathComponent("\(kind.rawValue).csv")
+        let reader = try CSVReader(url: url)
+        let header = try XCTUnwrap(reader.nextRow())
+        var rows: [[String]] = []
+        while let row = reader.nextRow() { rows.append(row) }
+        let writer = try CSVWriter(url: url)
+        try writer.writeRow(header)
+        for row in rows.reversed() { try writer.writeRow(row) }
+        try writer.finish()
+    }
+
+    /// Twin horses kept by Keep Documents are told apart by photo even when the
+    /// export lists them in the opposite order to the store (#85).
+    func test_keepDocumentsThenRestore_matchesTwinHorsesByPhoto_whateverTheOrder() async throws {
+        try seed()
+        let exported = try snapshot()
+        let folder = try await exportAllData()
+        try reverseRows(of: .horses, in: folder)
+
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: true)
+        _ = try await restore(folder)
+
+        XCTAssertEqual(try snapshot(), exported)
+        let storms = try ModelContext(container).fetch(FetchDescriptor<Horse>(predicate: #Predicate { $0.name == "Storm" }))
+        XCTAssertEqual(storms.count, 2)
+        let stormB = try XCTUnwrap(storms.first { $0.photoData == jpeg(0.9) })
+        XCTAssertEqual(stormB.vetRecords?.map(\.descriptionText), ["Vaccines"])
+        XCTAssertEqual(stormB.farrierVisits?.count, 1)
+        XCTAssertEqual(stormB.weightEntries?.count ?? 0, 0)
+    }
+
+    /// Twin feed products are told apart by photo too: a feed plan entry
+    /// restored into the store goes to the product with its row's photo (#85).
+    func test_restoreIntoStore_matchesTwinFeedProductsByPhoto_whateverTheOrder() async throws {
+        try seed()
+        let daisy = try XCTUnwrap(try context.fetch(FetchDescriptor<Horse>(predicate: #Predicate { $0.name == "Daisy" })).first)
+        let twin = FeedProduct(name: "Senior Feed", brand: "Acme", notes: "Soak first", defaultUnit: .lbs, photoData: jpeg(0.7))
+        context.insert(twin)
+        let plan = FeedPlanEntry(amount: 1, unit: .lbs, feedTime: .evening, assignedPerson: "Kim", notes: "")
+        context.insert(plan)
+        plan.horse = daisy
+        plan.product = twin
+        try context.save()
+        let exported = try snapshot()
+        let folder = try await exportAllData()
+        try reverseRows(of: .feedProducts, in: folder)
+        context.delete(plan)
+        try context.save()
+
+        let result = try await restore(folder)
+
+        XCTAssertEqual(result.imported, 1)
+        XCTAssertEqual(try snapshot(), exported)
     }
 
     func test_roundTrip_keepsSameNamedHorsesAndClientsDistinct() async throws {
