@@ -10,7 +10,10 @@ struct ClientListView: View {
     @State private var searchText = ""
     @State private var showInactive = false
     @State private var width: CGFloat = 0
-    @State private var clientPendingDelete: Client?
+    /// Held by ID, not model: the client may be deleted on another device before
+    /// the user answers, and reading a deleted model traps.
+    @State private var clientPendingRemoval: PersistentIdentifier?
+    @State private var toast = ToastState()
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -80,18 +83,16 @@ struct ClientListView: View {
             router.clientsShowSplit = split
         }
         .overlay {
-            ConfirmationDialog(
+            ClientRemovalDialog(
                 isPresented: Binding(
-                    get: { clientPendingDelete != nil },
-                    set: { if !$0 { clientPendingDelete = nil } }
+                    get: { clientPendingRemoval != nil },
+                    set: { if !$0 { clientPendingRemoval = nil } }
                 ),
-                title: "Delete Client",
-                message: "Are you sure you want to delete this client? All associated transactions will also be removed.",
-                confirmTitle: "Delete",
-                confirmRole: .destructive,
-                onConfirm: deletePendingClient
+                onDeactivate: { removePendingClient(delete: false) },
+                onDelete: { removePendingClient(delete: true) }
             )
         }
+        .toast(toast)
         .navigationTitle("Clients")
         .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search clients")
@@ -125,17 +126,25 @@ struct ClientListView: View {
             Label("Edit Client", systemImage: "pencil")
         }
         Button(role: .destructive) {
-            clientPendingDelete = client
+            clientPendingRemoval = client.persistentModelID
         } label: {
             Label("Delete Client", systemImage: "trash")
         }
     }
 
-    private func deletePendingClient() {
-        guard let client = clientPendingDelete else { return }
-        clientPendingDelete = nil
-        BarnHubLogger.info("Deleting client name=\(client.fullName)")
-        modelContext.deleteWithLogging(client)
+    private func removePendingClient(delete: Bool) {
+        let id = clientPendingRemoval
+        clientPendingRemoval = nil
+        guard let client: Client = modelContext.existingModel(for: id) else { return }
+        if delete {
+            BarnHubLogger.info("Deleting client name=\(client.fullName)")
+            RecordRemoval.delete(client, in: modelContext)
+            toast.show(appLocalized("Client deleted", comment: "Toast after deleting a client"))
+        } else {
+            BarnHubLogger.info("Deactivating client name=\(client.fullName)")
+            RecordRemoval.deactivate(client, in: modelContext)
+            toast.show(appLocalized("Client deactivated", comment: "Toast after deactivating a client"))
+        }
     }
 
     /// Keeps the split's selection on a client that's still listed, so the detail
@@ -143,5 +152,25 @@ struct ClientListView: View {
     private func keepSelection(in ids: [PersistentIdentifier]) {
         if let id = router.selectedClientID, ids.contains(id) { return }
         router.selectedClientID = ids.first
+    }
+}
+
+/// Asks whether to deactivate a client (the default, keeps all history) or delete
+/// them, instead of a bare "Delete" that would silently take their invoices with them.
+struct ClientRemovalDialog: View {
+    @Binding var isPresented: Bool
+    let onDeactivate: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        ChoiceDialog(
+            isPresented: $isPresented,
+            title: "Deactivate or Delete Client?",
+            message: "Deactivating hides this client from the list but keeps their invoices, transactions, lessons and documents, so Reports stay the same. Turn on Show Inactive to see them, and reactivate them any time with Edit.\n\nDeleting removes the client with their invoices and documents. Their transactions and lessons are kept without a client.",
+            choices: [
+                .init(title: "Deactivate Client", isDefault: true, action: onDeactivate),
+                .init(title: "Delete Client and Invoices", role: .destructive, action: onDelete),
+            ]
+        )
     }
 }

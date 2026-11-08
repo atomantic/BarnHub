@@ -266,6 +266,7 @@
 		BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BUGRPT00000000000000F003 /* BugReportServiceTests.swift */; };
 		TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0007000000000001 /* AppearanceManagerTests.swift */; };
 		TESTNEW0008000000000002 /* EnumsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0008000000000001 /* EnumsTests.swift */; };
+		B30DE1E7E000000000000A02 /* RecordRemovalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30DE1E7E000000000000A01 /* RecordRemovalTests.swift */; };
 		VIEWBARNCARD00AABB000002 /* View+BarnCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */; };
 /* End PBXBuildFile section */
 
@@ -436,6 +437,7 @@
 		BUGRPT00000000000000F003 /* BugReportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0007000000000001 /* AppearanceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManagerTests.swift; sourceTree = "<group>"; };
 		TESTNEW0008000000000001 /* EnumsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsTests.swift; sourceTree = "<group>"; };
+		B30DE1E7E000000000000A01 /* RecordRemovalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRemovalTests.swift; sourceTree = "<group>"; };
 		VIEWBARNCARD00AABB000001 /* View+BarnCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+BarnCard.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -719,6 +721,7 @@
 				TESTNEW0007000000000001 /* AppearanceManagerTests.swift */,
 				F110D1495EDA4682A978C6D5 /* ImageProcessingTests.swift */,
 				TESTNEW0008000000000001 /* EnumsTests.swift */,
+				B30DE1E7E000000000000A01 /* RecordRemovalTests.swift */,
 			);
 			path = BarnHubTests;
 			sourceTree = "<group>";
@@ -1205,6 +1208,7 @@
 				BUGRPT00000000000000B005 /* BugReportServiceTests.swift in Sources */,
 				TESTNEW0007000000000002 /* AppearanceManagerTests.swift in Sources */,
 				TESTNEW0008000000000002 /* EnumsTests.swift in Sources */,
+				B30DE1E7E000000000000A02 /* RecordRemovalTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@ struct FeedProductListView: View {
     @Query(sort: \FeedProduct.name) private var products: [FeedProduct]
 
     @State private var showDeleteConfirmation = false
-    @State private var productToDelete: FeedProduct?
+    @State private var productToDelete: PendingDeletion?
     @State private var toast = ToastState()
 
     var body: some View {
@@ -30,7 +30,7 @@ struct FeedProductListView: View {
                         .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button("Delete", role: .destructive) {
-                                productToDelete = product
+                                productToDelete = PendingDeletion(id: product.persistentModelID, name: product.name)
                                 showDeleteConfirmation = true
                             }
                         }
@@ -55,7 +55,11 @@ struct FeedProductListView: View {
                 confirmTitle: "Delete",
                 confirmRole: .destructive
             ) {
-                guard let product = productToDelete else { return }
+                guard let pending = productToDelete,
+                      let product: FeedProduct = modelContext.existingModel(for: pending.id) else {
+                    productToDelete = nil
+                    return
+                }
                 modelContext.deleteWithLogging(product)
                 toast.show(appLocalized("Product deleted"))
                 productToDelete = nil

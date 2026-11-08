@@ -20,6 +20,8 @@ struct FarrierVisitEditView: View {
 
     private var isNew: Bool { visitID == nil }
     private var existingVisit: FarrierVisit? { modelContext.existingModel(for: visitID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(visitID, as: FarrierVisit.self) }
 
     private var resolvedHorseID: PersistentIdentifier? {
         horseID ?? existingVisit?.horse?.persistentModelID ?? selectedHorseID
@@ -86,6 +88,7 @@ struct FarrierVisitEditView: View {
                 onConfirm: deleteVisit
             )
         }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -100,6 +103,11 @@ struct FarrierVisitEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         guard let horse else { return }
         let trimmedName = farrierName.trimmingCharacters(in: .whitespaces)
         let visit: FarrierVisit

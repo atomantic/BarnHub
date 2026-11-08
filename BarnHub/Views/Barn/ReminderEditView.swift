@@ -18,6 +18,8 @@ struct ReminderEditView: View {
 
     private var isNew: Bool { reminderID == nil }
     private var existingReminder: Reminder? { modelContext.existingModel(for: reminderID) }
+    /// Editing a record that was deleted meanwhile (here or on another device).
+    private var wasDeletedElsewhere: Bool { modelContext.isDeletedRecord(reminderID, as: Reminder.self) }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Reminder" : "Edit Reminder" }
 
     var body: some View {
@@ -55,6 +57,7 @@ struct ReminderEditView: View {
             }
         }
         .task { loadExisting() }
+        .deletedRecordNotice(wasDeletedElsewhere)
         .toast(toast)
     }
 
@@ -69,6 +72,11 @@ struct ReminderEditView: View {
     }
 
     private func save() {
+        // Never insert a replacement for a record deleted while the form was open.
+        guard !wasDeletedElsewhere else {
+            toast.showAndDismiss(appLocalized("This item was deleted", comment: "Toast when saving a record that was deleted elsewhere"), isError: true, dismiss: dismiss)
+            return
+        }
         let reminder: Reminder
         if let existing = existingReminder {
             reminder = existing

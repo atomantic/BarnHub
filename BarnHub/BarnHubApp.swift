@@ -58,12 +58,7 @@ struct BarnHubApp: App {
             : ModelConfiguration(cloudKitDatabase: .automatic)
         StorageMode.current = isSeedMode ? .inMemorySeed : .cloudKit
         do {
-            let container = try ModelContainer(
-                for: Horse.self, Client.self, Transaction.self,
-                VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
-                Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
-                configurations: config
-            )
+            let container = try ModelContainer(for: BarnHubSchema.schema, configurations: config)
             #if DEBUG
             if isSeedMode {
                 PreviewSampleData.populate(container: container)
@@ -74,9 +69,7 @@ struct BarnHubApp: App {
             BarnHubLogger.error("ModelContainer init failed: \(error.localizedDescription) — falling back to in-memory store")
             do {
                 let fallback = try ModelContainer(
-                    for: Horse.self, Client.self, Transaction.self,
-                    VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
-                    Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
+                    for: BarnHubSchema.schema,
                     configurations: ModelConfiguration(isStoredInMemoryOnly: true)
                 )
                 StorageMode.current = .inMemoryFallback
@@ -190,6 +183,12 @@ struct ContentView: View {
     #endif
     @AppStorage("net.shadowpuppet.BarnBook.hasCompletedFirstLaunch") private var hasCompletedFirstLaunch = false
     @State private var showFirstLaunchSheet = false
+    /// The CloudKit store failed to open and the app is running on a throwaway
+    /// in-memory store: nothing entered now survives a relaunch, so say so (#30).
+    @State private var showStorageFailure = StorageMode.current == .inMemoryFallback
+    @State private var storageRetryRequested = false
+    @State private var showStorageBugReport = false
+
     @Environment(\.scenePhase) private var scenePhase
     private let notificationDelegate = NotificationDelegate.shared
 
@@ -213,7 +212,7 @@ struct ContentView: View {
             #endif
         }
         .task {
-            if !hasCompletedFirstLaunch {
+            if !hasCompletedFirstLaunch && StorageMode.current != .inMemoryFallback {
                 showFirstLaunchSheet = true
             }
             notificationService.attach(to: modelContext)
@@ -238,6 +237,36 @@ struct ContentView: View {
         .sheet(isPresented: $showFirstLaunchSheet) {
             withAppEnvironment(FirstLaunchSheet())
         }
+        .alert("Your Data Can't Be Saved", isPresented: $showStorageFailure) {
+            Button("Retry") { retryStorage() }
+            Button("Report a Bug") { showStorageBugReport = true }
+        } message: {
+            if storageRetryRequested {
+                Text("To retry, quit BarnHub completely and open it again. On iPhone or iPad, swipe BarnHub away in the app switcher, then reopen it. If this keeps happening, report a bug.")
+            } else {
+                Text("BarnHub couldn't open its data store, so nothing you add or change now will be saved. It will be gone when the app closes.")
+            }
+        }
+        .onChange(of: showStorageFailure) { _, isShown in
+            // Blocking: the alert comes back until the app is relaunched, except
+            // while the bug report is open.
+            if !isShown && !showStorageBugReport {
+                DispatchQueue.main.async { showStorageFailure = true }
+            }
+        }
+        .sheet(isPresented: $showStorageBugReport, onDismiss: { showStorageFailure = true }) {
+            withAppEnvironment(BugReportView())
+        }
+    }
+
+    /// A new store can only be opened by relaunching: quit on the Mac, and explain
+    /// how to relaunch where an app can't quit itself.
+    private func retryStorage() {
+        #if os(macOS)
+        NSApplication.shared.terminate(nil)
+        #else
+        storageRetryRequested = true
+        #endif
     }
 
     /// Passes the app's shared objects into a sheet presented from this root view.

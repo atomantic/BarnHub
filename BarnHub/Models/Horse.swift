@@ -28,8 +28,12 @@ final class Horse {
     /// lazily for records saved before it existed.
     var thumbnailData: Data? = nil
 
+    // No `= nil` default on either side of this many-to-many (#28): the macro turns
+    // a default into an init accessor that maintains the inverse before the model
+    // is registered, which asserts on macOS 14.0-14.3 / iOS 17.0-17.3. The
+    // explicit inverse lives on this side only.
     @Relationship(deleteRule: .nullify, inverse: \Client.horses)
-    var clients: [Client]? = nil
+    var clients: [Client]?
 
     @Relationship(deleteRule: .cascade)
     var vetRecords: [VetRecord]? = nil

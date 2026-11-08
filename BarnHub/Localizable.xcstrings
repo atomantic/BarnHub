@@ -4925,58 +4925,6 @@
         }
       }
     },
-    "Are you sure you want to delete this client? All associated transactions will also be removed." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Möchtest du diesen Kunden wirklich löschen? Alle zugehörigen Transaktionen werden ebenfalls entfernt."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este cliente? Todas las transacciones asociadas también se eliminarán."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este cliente? Todas las transacciones asociadas también se eliminarán."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer ce client ? Toutes les transactions associées seront également supprimées."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sei sicuro di voler eliminare questo cliente? Tutte le transazioni associate verranno rimosse."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je zeker dat je deze klant wilt verwijderen? Alle bijbehorende transacties worden ook verwijderd."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tem certeza que deseja excluir este cliente? Todas as transações associadas também serão removidas."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Är du säker på att du vill ta bort denna klient? Alla tillhörande transaktioner tas också bort."
-          }
-        }
-      }
-    },
     "Are you sure you want to delete this dentist visit?" : {
       "comment" : "Confirmation message before deleting a dentist visit",
       "localizations" : {
@@ -5136,58 +5084,6 @@
         }
       }
     },
-    "Are you sure you want to delete this horse? All associated vet records, farrier visits, and dentist visits will also be removed." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Möchtest du dieses Pferd wirklich löschen? Alle zugehörigen Tierarztberichte, Hufschmiedbesuche und Zahnarztbesuche werden ebenfalls entfernt."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este caballo? Todos los registros veterinarios, visitas del herrador y visitas del dentista asociados también se eliminarán."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Seguro que quieres eliminar este caballo? Todos los registros veterinarios, visitas del herrador y visitas del dentista asociados también se eliminarán."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr de vouloir supprimer ce cheval ? Tous les dossiers vétérinaires, visites du maréchal-ferrant et visites dentaires associés seront également supprimés."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sei sicuro di voler eliminare questo cavallo? Tutti i registri veterinari, le visite del maniscalco e le visite dentistiche associati verranno rimossi."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je zeker dat je dit paard wilt verwijderen? Alle bijbehorende dierenartsdossiers, hoefsmeedbezoeken en tandartsbezoeken worden ook verwijderd."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tem certeza que deseja excluir este cavalo? Todos os registros veterinários, visitas do ferreiro e visitas do dentista associados também serão removidos."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Är du säker på att du vill ta bort denna häst? Alla tillhörande veterinärjournaler, hovslagarebesök och tandläkarbesök tas också bort."
-          }
-        }
-      }
-    },
     "Are you sure you want to delete this vet record?" : {
       "comment" : "Confirmation message before deleting a vet record",
       "localizations" : {
@@ -5237,59 +5133,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Är du säker på att du vill ta bort denna veterinärjournal?"
-          }
-        }
-      }
-    },
-    "Are You Sure?" : {
-      "comment" : "Delete confirmation alert title",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bist du sicher?"
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Estás seguro?"
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Estás seguro?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Êtes-vous sûr ?"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sei sicuro?"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weet je het zeker?"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tem certeza?"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Är du säker?"
           }
         }
       }
@@ -6897,6 +6740,112 @@
         }
       }
     },
+    "This item was deleted" : {
+      "comment" : "Toast when saving a record that was deleted elsewhere",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Eintrag wurde gelöscht"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este elemento se ha eliminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este elemento fue eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cet élément a été supprimé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo elemento è stato eliminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit item is verwijderd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este item foi excluído"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det här objektet har raderats"
+          }
+        }
+      }
+    },
+    "It was deleted on this or another device, so your changes can't be saved." : {
+      "comment" : "Explains why an edit form for a deleted record can't save",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er wurde auf diesem oder einem anderen Gerät gelöscht, daher können deine Änderungen nicht gespeichert werden."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se eliminó en este u otro dispositivo, así que no se pueden guardar tus cambios."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se eliminó en este u otro dispositivo, así que no se pueden guardar tus cambios."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il a été supprimé sur cet appareil ou un autre, vos modifications ne peuvent donc pas être enregistrées."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "È stato eliminato su questo o su un altro dispositivo, quindi le modifiche non possono essere salvate."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het is op dit of een ander apparaat verwijderd, dus je wijzigingen kunnen niet worden bewaard."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ele foi excluído neste ou em outro dispositivo, então suas alterações não podem ser salvas."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det raderades på den här eller en annan enhet, så dina ändringar kan inte sparas."
+          }
+        }
+      }
+    },
     "Cancel anytime during the trial." : {
       "comment" : "Text describing the cancellation policy for the free trial.",
       "isCommentAutoGenerated" : true,
@@ -7378,6 +7327,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kund tillagd"
+          }
+        }
+      }
+    },
+    "Client deactivated" : {
+      "comment" : "Toast after deactivating a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktiviert"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desactivado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desactivado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client désactivé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente disattivato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant gedeactiveerd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente desativado"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kund inaktiverad"
+          }
+        }
+      }
+    },
+    "Client deleted" : {
+      "comment" : "Toast after deleting a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde gelöscht"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client supprimé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente eliminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant verwijderd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente excluído"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kund borttagen"
           }
         }
       }
@@ -9631,6 +9686,165 @@
         }
       }
     },
+    "Permanently deletes all your BarnHub data from your iCloud account and from every device signed in to it." : {
+      "comment" : "Footer under the Delete All Data button",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löscht alle deine BarnHub-Daten dauerhaft aus deinem iCloud-Account und von jedem damit angemeldeten Gerät."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina permanentemente todos tus datos de BarnHub de tu cuenta de iCloud y de todos los dispositivos con esa sesión."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina permanentemente todos tus datos de BarnHub de tu cuenta de iCloud y de todos los dispositivos con esa sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprime définitivement toutes vos données BarnHub de votre compte iCloud et de tous les appareils connectés à ce compte."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina definitivamente tutti i tuoi dati di BarnHub dal tuo account iCloud e da tutti i dispositivi collegati."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijdert al je BarnHub-gegevens permanent uit je iCloud-account en van elk apparaat dat daarmee is ingelogd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclui permanentemente todos os seus dados do BarnHub da sua conta do iCloud e de todos os dispositivos conectados a ela."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raderar permanent all din BarnHub-data från ditt iCloud-konto och från alla enheter som är inloggade på det."
+          }
+        }
+      }
+    },
+    "Delete All Data?" : {
+      "comment" : "Delete All Data first alert title",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Daten löschen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Eliminar todos los datos?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Eliminar todos los datos?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les données ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminare tutti i dati?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle gegevens verwijderen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir todos os dados?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radera all data?"
+          }
+        }
+      }
+    },
+    "BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to." : {
+      "comment" : "Delete All Data first alert message: where data lives and the documents choice",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub speichert deine Daten weder auf eigenen noch auf fremden Servern. Sie liegen auf deinen Geräten und in deinem eigenen iCloud-Account. Deshalb werden sie aus deiner iCloud und von jedem damit angemeldeten Gerät gelöscht, nicht nur von diesem.\n\nDu kannst auch alle Pferde- und Kundendokumente und -fotos löschen oder sie behalten. Wenn du sie behältst, bleiben auch die zugehörigen Pferde und Kunden erhalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no guarda tus datos en servidores propios ni de terceros. Están en tus dispositivos y en tu propia cuenta de iCloud, así que esto los elimina de tu iCloud y de todos los dispositivos con esa sesión, no solo de este.\n\nTambién puedes eliminar todos los documentos y fotos de caballos y clientes, o conservarlos. Si los conservas, también se conservan los caballos y clientes a los que pertenecen."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no guarda tus datos en servidores propios ni de terceros. Están en tus dispositivos y en tu propia cuenta de iCloud, así que esto los elimina de tu iCloud y de todos los dispositivos con esa sesión, no solo de este.\n\nTambién puedes eliminar todos los documentos y fotos de caballos y clientes, o conservarlos. Si los conservas, también se conservan los caballos y clientes a los que pertenecen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub ne conserve vos données sur aucun serveur, ni le sien ni celui d'un tiers. Elles se trouvent sur vos appareils et dans votre propre compte iCloud : cette action les supprime donc de votre iCloud et de tous les appareils connectés à ce compte, pas seulement de celui-ci.\n\nVous pouvez aussi supprimer tous les documents et photos des chevaux et des clients, ou les conserver. Les conserver garde aussi les chevaux et clients auxquels ils appartiennent."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub non conserva i tuoi dati su server propri o di terzi. Si trovano sui tuoi dispositivi e nel tuo account iCloud, quindi questa azione li elimina dal tuo iCloud e da tutti i dispositivi collegati, non solo da questo.\n\nPuoi anche eliminare tutti i documenti e le foto di cavalli e clienti, oppure conservarli. Conservandoli, restano anche i cavalli e i clienti a cui appartengono."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub bewaart je gegevens niet op eigen servers of die van derden. Ze staan op je apparaten en in je eigen iCloud-account, dus dit verwijdert ze uit je iCloud en van elk apparaat dat daarmee is ingelogd, niet alleen van dit apparaat.\n\nJe kunt ook alle documenten en foto's van paarden en klanten verwijderen, of ze bewaren. Als je ze bewaart, blijven ook de paarden en klanten waar ze bij horen bewaard."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O BarnHub não guarda seus dados em servidores próprios nem de terceiros. Eles ficam nos seus dispositivos e na sua própria conta do iCloud, então isso os exclui do seu iCloud e de todos os dispositivos conectados a ela, não só deste.\n\nVocê também pode excluir todos os documentos e fotos de cavalos e clientes, ou mantê-los. Ao mantê-los, os cavalos e clientes a que pertencem também são mantidos."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub sparar inte dina data på egna eller andras servrar. De finns på dina enheter och i ditt eget iCloud-konto, så detta raderar dem från din iCloud och från alla enheter som är inloggade på det, inte bara den här.\n\nDu kan också radera alla dokument och foton för hästar och kunder, eller behålla dem. Om du behåller dem behålls även hästarna och kunderna de hör till."
+          }
+        }
+      }
+    },
     "Delete Client" : {
       "localizations" : {
         "de" : {
@@ -9679,6 +9893,218 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta bort klient"
+          }
+        }
+      }
+    },
+    "Deactivate or Delete Client?" : {
+      "comment" : "Title of the dialog shown when removing a client",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktivieren oder löschen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desactivar o eliminar cliente?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desactivar o eliminar cliente?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactiver ou supprimer le client ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattivare o eliminare il cliente?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant deactiveren of verwijderen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar ou excluir cliente?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaktivera eller ta bort kund?"
+          }
+        }
+      }
+    },
+    "Deactivating hides this client from the list but keeps their invoices, transactions, lessons and documents, so Reports stay the same. Turn on Show Inactive to see them, and reactivate them any time with Edit.\n\nDeleting removes the client with their invoices and documents. Their transactions and lessons are kept without a client." : {
+      "comment" : "Message of the dialog shown when removing a client: what Deactivate and Delete each do",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Deaktivieren verschwindet dieser Kunde aus der Liste, seine Rechnungen, Transaktionen, Unterrichtsstunden und Dokumente bleiben aber erhalten, sodass die Berichte unverändert bleiben. Mit „Inaktive anzeigen“ siehst du ihn weiterhin und kannst ihn jederzeit über „Bearbeiten“ wieder aktivieren.\n\nBeim Löschen werden der Kunde sowie seine Rechnungen und Dokumente entfernt. Seine Transaktionen und Unterrichtsstunden bleiben ohne Kunde erhalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al desactivarlo, este cliente desaparece de la lista, pero se conservan sus facturas, transacciones, clases y documentos, así que los informes no cambian. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el cliente, sus facturas y sus documentos. Sus transacciones y clases se conservan sin cliente."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al desactivarlo, este cliente desaparece de la lista, pero se conservan sus facturas, transacciones, clases y documentos, así que los informes no cambian. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el cliente, sus facturas y sus documentos. Sus transacciones y clases se conservan sin cliente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La désactivation masque ce client de la liste mais conserve ses factures, transactions, leçons et documents : les rapports restent identiques. Activez Afficher les inactifs pour le voir, et réactivez-le à tout moment via Modifier.\n\nLa suppression retire le client ainsi que ses factures et documents. Ses transactions et leçons sont conservées, sans client."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattivando il cliente, scompare dall'elenco ma fatture, transazioni, lezioni e documenti restano, quindi i report non cambiano. Attiva Mostra inattivi per vederlo e riattivalo quando vuoi da Modifica.\n\nEliminandolo, vengono rimossi il cliente, le sue fatture e i suoi documenti. Transazioni e lezioni restano, senza cliente."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deactiveren verbergt deze klant in de lijst, maar houdt facturen, transacties, lessen en documenten, zodat de rapporten gelijk blijven. Zet Toon inactieven aan om de klant te zien, en activeer hem altijd weer via Bewerken.\n\nVerwijderen haalt de klant met zijn facturen en documenten weg. Transacties en lessen blijven bewaard, zonder klant."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar oculta este cliente da lista, mas mantém faturas, transações, aulas e documentos, então os relatórios não mudam. Ative Mostrar inativos para vê-lo e reative-o quando quiser em Editar.\n\nExcluir remove o cliente com suas faturas e documentos. As transações e aulas são mantidas, sem cliente."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Att inaktivera döljer kunden i listan men behåller fakturor, transaktioner, lektioner och dokument, så rapporterna blir oförändrade. Slå på Visa inaktiva för att se kunden och återaktivera den när som helst med Redigera.\n\nAtt ta bort raderar kunden med fakturor och dokument. Transaktioner och lektioner behålls utan kund."
+          }
+        }
+      }
+    },
+    "Deactivate Client" : {
+      "comment" : "Recommended button: hide a client but keep their history",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde deaktivieren"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivar cliente"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivar cliente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactiver le client"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disattiva cliente"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant deactiveren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desativar cliente"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaktivera kund"
+          }
+        }
+      }
+    },
+    "Delete Client and Invoices" : {
+      "comment" : "Destructive button: delete a client with their invoices and documents",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kunde und Rechnungen löschen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar cliente y facturas"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar cliente y facturas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le client et ses factures"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina cliente e fatture"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klant en facturen verwijderen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir cliente e faturas"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort kund och fakturor"
           }
         }
       }
@@ -9842,6 +10268,59 @@
         }
       }
     },
+    "Keep Documents" : {
+      "comment" : "Delete All Data button: keep horse and client documents and their owners",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumente behalten"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conservar documentos"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conservar documentos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conserver les documents"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conserva i documenti"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documenten bewaren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manter documentos"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Behåll dokument"
+          }
+        }
+      }
+    },
     "Delete Farrier Visit" : {
       "comment" : "Button and confirmation title to delete a farrier visit",
       "localizations" : {
@@ -9943,6 +10422,218 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta bort häst"
+          }
+        }
+      }
+    },
+    "Mark Inactive or Delete Horse?" : {
+      "comment" : "Title of the dialog shown when removing a horse",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd als inaktiv markieren oder löschen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Marcar como inactivo o eliminar el caballo?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Marcar como inactivo o eliminar el caballo?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer le cheval comme inactif ou le supprimer ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnare il cavallo come inattivo o eliminarlo?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard als inactief markeren of verwijderen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo ou excluir o cavalo?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera hästen som inaktiv eller ta bort den?"
+          }
+        }
+      }
+    },
+    "Marking inactive hides this horse from the list but keeps all of its records. Turn on Show Inactive to see it, and reactivate it any time with Edit.\n\nDeleting removes the horse with its vet, farrier and dentist records, reminders, weights, barn notes, documents and feed plan. Its lessons are kept without a horse." : {
+      "comment" : "Message of the dialog shown when removing a horse: what Mark Inactive and Delete each do",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inaktiv markiert verschwindet dieses Pferd aus der Liste, alle seine Einträge bleiben aber erhalten. Mit „Inaktive anzeigen“ siehst du es weiterhin und kannst es jederzeit über „Bearbeiten“ wieder aktivieren.\n\nBeim Löschen werden das Pferd und seine Tierarzt-, Hufschmied- und Zahnarzteinträge, Erinnerungen, Gewichte, Stallnotizen, Dokumente und der Fütterungsplan entfernt. Seine Unterrichtsstunden bleiben ohne Pferd erhalten."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al marcarlo como inactivo, este caballo desaparece de la lista, pero se conservan todos sus registros. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el caballo y sus registros de veterinario, herrador y dentista, recordatorios, pesos, notas del establo, documentos y plan de alimentación. Sus clases se conservan sin caballo."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al marcarlo como inactivo, este caballo desaparece de la lista, pero se conservan todos sus registros. Activa Mostrar inactivos para verlo y reactívalo cuando quieras desde Editar.\n\nAl eliminarlo, se borran el caballo y sus registros de veterinario, herrador y dentista, recordatorios, pesos, notas del establo, documentos y plan de alimentación. Sus clases se conservan sin caballo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer comme inactif masque ce cheval de la liste mais conserve tous ses enregistrements. Activez Afficher les inactifs pour le voir, et réactivez-le à tout moment via Modifier.\n\nLa suppression retire le cheval avec ses dossiers vétérinaire, maréchal-ferrant et dentiste, rappels, pesées, notes d'écurie, documents et plan d'alimentation. Ses leçons sont conservées, sans cheval."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segnandolo come inattivo, questo cavallo scompare dall'elenco ma tutti i suoi record restano. Attiva Mostra inattivi per vederlo e riattivalo quando vuoi da Modifica.\n\nEliminandolo, vengono rimossi il cavallo e i suoi record di veterinario, maniscalco e dentista, promemoria, pesi, note di scuderia, documenti e piano alimentare. Le sue lezioni restano, senza cavallo."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inactief markeren verbergt dit paard in de lijst, maar houdt al zijn gegevens. Zet Toon inactieven aan om het te zien, en activeer het altijd weer via Bewerken.\n\nVerwijderen haalt het paard weg met zijn dierenarts-, hoefsmid- en tandartsgegevens, herinneringen, gewichten, stalaantekeningen, documenten en voederplan. Zijn lessen blijven bewaard, zonder paard."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo oculta este cavalo da lista, mas mantém todos os seus registros. Ative Mostrar inativos para vê-lo e reative-o quando quiser em Editar.\n\nExcluir remove o cavalo com seus registros de veterinário, ferrador e dentista, lembretes, pesos, notas do estábulo, documentos e plano de alimentação. As aulas dele são mantidas, sem cavalo."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Att markera som inaktiv döljer hästen i listan men behåller alla dess poster. Slå på Visa inaktiva för att se den och återaktivera den när som helst med Redigera.\n\nAtt ta bort raderar hästen med veterinär-, hovslagar- och tandläkarposter, påminnelser, vikter, stallanteckningar, dokument och foderplan. Dess lektioner behålls utan häst."
+          }
+        }
+      }
+    },
+    "Mark Inactive" : {
+      "comment" : "Recommended button: hide a horse but keep its records",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inaktiv markieren"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inactivo"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inactivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer comme inactif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segna come inattivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als inactief markeren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marcar como inativo"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markera som inaktiv"
+          }
+        }
+      }
+    },
+    "Delete Horse and Records" : {
+      "comment" : "Destructive button: delete a horse with its records",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd und Einträge löschen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar caballo y registros"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar caballo y registros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le cheval et ses dossiers"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina cavallo e record"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard en gegevens verwijderen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir cavalo e registros"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort häst och poster"
           }
         }
       }
@@ -12674,60 +13365,6 @@
         }
       }
     },
-    "Export Data First" : {
-      "comment" : "A button that appears in an alert when trying to delete all data, prompting the user to export data first.",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zuerst Daten exportieren"
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportar datos primero"
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportar datos primero"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exporter d'abord les données"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esporta prima i dati"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eerst gegevens exporteren"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportar dados primeiro"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportera data först"
-          }
-        }
-      }
-    },
     "Export failed" : {
       "comment" : "Error message shown to the user when exporting data fails.",
       "isCommentAutoGenerated" : true,
@@ -12782,54 +13419,55 @@
         }
       }
     },
-    "Export your barn data as CSV files for backup or use in spreadsheets." : {
+    "Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup." : {
+      "comment" : "Explains what the CSV export covers",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportieren Sie Ihre Stalldaten als CSV-Dateien zur Sicherung oder zur Verwendung in Tabellenkalkulationen."
+            "value" : "Exportiere Pferde, Kunden und Transaktionen als CSV-Dateien für Tabellenkalkulationen. Gesundheitseinträge, Rechnungen, Dokumente und Fotos sind nicht enthalten, daher ist der Export keine vollständige Sicherung."
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporta los datos de tu establo como archivos CSV para realizar copias de seguridad o utilizarlos en hojas de cálculo."
+            "value" : "Exporta caballos, clientes y transacciones como archivos CSV para usarlos en hojas de cálculo. La exportación no incluye registros de salud, facturas, documentos ni fotos, así que no es una copia de seguridad completa."
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporte los datos de su establo como archivos CSV para realizar copias de seguridad o utilizarlos en hojas de cálculo."
+            "value" : "Exporta caballos, clientes y transacciones como archivos CSV para usarlos en hojas de cálculo. La exportación no incluye registros de salud, facturas, documentos ni fotos, así que no es un respaldo completo."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportez les données de votre écurie sous forme de fichiers CSV pour les sauvegarder ou les utiliser dans des feuilles de calcul."
+            "value" : "Exportez les chevaux, clients et transactions en fichiers CSV pour les utiliser dans un tableur. L'export n'inclut pas les dossiers de santé, factures, documents ni photos : ce n'est pas une sauvegarde complète."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporta i dati della scuderia come file CSV per il backup o l'uso in fogli di calcolo."
+            "value" : "Esporta cavalli, clienti e transazioni come file CSV da usare nei fogli di calcolo. L'esportazione non include record sanitari, fatture, documenti e foto, quindi non è un backup completo."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporteer uw stalgegevens als CSV-bestanden voor back-up of gebruik in spreadsheets."
+            "value" : "Exporteer paarden, klanten en transacties als CSV-bestanden voor gebruik in spreadsheets. De export bevat geen gezondheidsgegevens, facturen, documenten of foto's, dus het is geen volledige back-up."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporte seus dados do estábulo como arquivos CSV para backup ou uso em planilhas."
+            "value" : "Exporte cavalos, clientes e transações como arquivos CSV para usar em planilhas. A exportação não inclui registros de saúde, faturas, documentos nem fotos, então não é um backup completo."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportera dina stalldata som CSV-filer för säkerhetskopiering eller användning i kalkylblad."
+            "value" : "Exportera hästar, kunder och transaktioner som CSV-filer för kalkylark. Exporten innehåller inte hälsoposter, fakturor, dokument eller foton, så den är ingen fullständig säkerhetskopia."
           }
         }
       }
@@ -14378,6 +15016,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Slutlig bekräftelse"
+          }
+        }
+      }
+    },
+    "This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices." : {
+      "comment" : "Final delete confirmation message when documents are deleted too",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann nicht rückgängig gemacht werden. Alle Pferde, Kunden, Einträge, Transaktionen, Rechnungen, Dokumente und Fotos werden aus deiner iCloud und von all deinen Geräten gelöscht."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, registros, transacciones, facturas, documentos y fotos se eliminarán de tu iCloud y de todos tus dispositivos."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, registros, transacciones, facturas, documentos y fotos se eliminarán de tu iCloud y de todos tus dispositivos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action est irréversible. Tous les chevaux, clients, enregistrements, transactions, factures, documents et photos seront supprimés de votre iCloud et de tous vos appareils."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa azione non può essere annullata. Tutti i cavalli, clienti, record, transazioni, fatture, documenti e foto verranno eliminati dal tuo iCloud e da tutti i tuoi dispositivi."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit kan niet ongedaan worden gemaakt. Alle paarden, klanten, gegevens, transacties, facturen, documenten en foto's worden verwijderd uit je iCloud en van al je apparaten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso não pode ser desfeito. Todos os cavalos, clientes, registros, transações, faturas, documentos e fotos serão excluídos do seu iCloud e de todos os seus dispositivos."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta kan inte ångras. Alla hästar, kunder, poster, transaktioner, fakturor, dokument och foton raderas från din iCloud och alla dina enheter."
+          }
+        }
+      }
+    },
+    "This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices." : {
+      "comment" : "Final delete confirmation message when documents are kept",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann nicht rückgängig gemacht werden. Alles außer den Pferde- und Kundendokumenten und den Pferden und Kunden, zu denen sie gehören, wird aus deiner iCloud und von all deinen Geräten gelöscht."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todo, excepto los documentos de caballos y clientes y los caballos y clientes a los que pertenecen, se eliminará de tu iCloud y de todos tus dispositivos."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todo, excepto los documentos de caballos y clientes y los caballos y clientes a los que pertenecen, se eliminará de tu iCloud y de todos tus dispositivos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action est irréversible. Tout, sauf les documents des chevaux et des clients ainsi que les chevaux et clients auxquels ils appartiennent, sera supprimé de votre iCloud et de tous vos appareils."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa azione non può essere annullata. Tutto, tranne i documenti di cavalli e clienti e i cavalli e i clienti a cui appartengono, verrà eliminato dal tuo iCloud e da tutti i tuoi dispositivi."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit kan niet ongedaan worden gemaakt. Alles behalve de documenten van paarden en klanten, en de paarden en klanten waar ze bij horen, wordt verwijderd uit je iCloud en van al je apparaten."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso não pode ser desfeito. Tudo, exceto os documentos de cavalos e clientes e os cavalos e clientes a que pertencem, será excluído do seu iCloud e de todos os seus dispositivos."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta kan inte ångras. Allt utom dokumenten för hästar och kunder, och hästarna och kunderna de hör till, raderas från din iCloud och alla dina enheter."
           }
         }
       }
@@ -16248,6 +16992,112 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Häst uppdaterad"
+          }
+        }
+      }
+    },
+    "Horse marked inactive" : {
+      "comment" : "Toast after marking a horse inactive",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd als inaktiv markiert"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo marcado como inactivo"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo marcado como inactivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheval marqué comme inactif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavallo segnato come inattivo"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard als inactief gemarkeerd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavalo marcado como inativo"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Häst markerad som inaktiv"
+          }
+        }
+      }
+    },
+    "Horse deleted" : {
+      "comment" : "Toast after deleting a horse",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pferd gelöscht"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo eliminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caballo eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheval supprimé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavallo eliminato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paard verwijderd"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavalo excluído"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Häst borttagen"
           }
         }
       }
@@ -24918,60 +25768,6 @@
         }
       }
     },
-    "Permanently removes all horses, clients, transactions, vet records, farrier visits, supplies, and reminders from this device." : {
-      "comment" : "A footer label under the \"Reset\" section of the data management view, explaining that deleting all data will permanently remove all stored information from the device.",
-      "isCommentAutoGenerated" : true,
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entfernt dauerhaft alle Pferde, Klienten, Transaktionen, Tierarztberichte, Hufschmiedtermine, Bestände und Erinnerungen von diesem Gerät."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elimina de forma permanente todos los caballos, clientes, transacciones, historiales veterinarios, visitas del herrador, suministros y recordatorios de este dispositivo."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elimina de forma permanente todos los caballos, clientes, transacciones, registros veterinarios, visitas del herrador, insumos y recordatorios de este dispositivo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supprime définitivement tous les chevaux, clients, transactions, dossiers vétérinaires, visites de maréchal-ferrant, articles et rappels de cet appareil."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rimuove permanentemente tutti i cavalli, i clienti, le transazioni, i registri veterinari, le visite del maniscalco, gli articoli e i promemoria da questo dispositivo."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwijdert definitief alle paarden, klanten, transacties, dierenartsverslagen, hoefsmidbezoeken, voorraden en herinneringen van dit apparaat."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove permanentemente todos os cavalos, clientes, transações, registros veterinários, visitas do ferrador, itens e lembretes deste dispositivo."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tar bort alla hästar, kunder, transaktioner, veterinärjournaler, hovslagarbesök, artiklar och påminnelser permanent från denna enhet."
-          }
-        }
-      }
-    },
     "Phone" : {
       "comment" : "A label displayed above a client's phone number.",
       "isCommentAutoGenerated" : true,
@@ -27109,6 +27905,218 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rapportera en bugg"
+          }
+        }
+      }
+    },
+    "Your Data Can't Be Saved" : {
+      "comment" : "Alert title when the persistent store failed and the app runs on a temporary in-memory store",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Daten können nicht gespeichert werden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pueden guardar tus datos"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pueden guardar tus datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos données ne peuvent pas être enregistrées"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile salvare i tuoi dati"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gegevens kunnen niet worden bewaard"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não é possível salvar seus dados"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dina data kan inte sparas"
+          }
+        }
+      }
+    },
+    "BarnHub couldn't open its data store, so nothing you add or change now will be saved. It will be gone when the app closes." : {
+      "comment" : "Alert message when the persistent store failed to open",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub konnte seinen Datenspeicher nicht öffnen. Was du jetzt hinzufügst oder änderst, wird nicht gespeichert und ist weg, sobald die App geschlossen wird."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no pudo abrir su almacén de datos, así que nada de lo que añadas o cambies ahora se guardará. Se perderá al cerrar la app."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no pudo abrir su almacén de datos, así que nada de lo que agregues o cambies ahora se guardará. Se perderá al cerrar la app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub n'a pas pu ouvrir sa base de données : rien de ce que vous ajoutez ou modifiez maintenant ne sera enregistré. Tout disparaîtra à la fermeture de l'app."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub non è riuscita ad aprire il suo archivio dati, quindi nulla di ciò che aggiungi o modifichi ora verrà salvato. Andrà perso alla chiusura dell'app."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub kon zijn gegevensopslag niet openen, dus niets wat je nu toevoegt of wijzigt wordt bewaard. Het is weg zodra de app sluit."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O BarnHub não conseguiu abrir o armazenamento de dados, então nada do que você adicionar ou alterar agora será salvo. Tudo será perdido quando o app fechar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub kunde inte öppna sin datalagring, så inget du lägger till eller ändrar nu sparas. Det försvinner när appen stängs."
+          }
+        }
+      }
+    },
+    "To retry, quit BarnHub completely and open it again. On iPhone or iPad, swipe BarnHub away in the app switcher, then reopen it. If this keeps happening, report a bug." : {
+      "comment" : "Alert message after tapping Retry: how to relaunch the app",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beende BarnHub vollständig und öffne die App erneut, um es noch einmal zu versuchen. Auf iPhone oder iPad wischst du BarnHub im App-Umschalter weg und öffnest die App dann wieder. Wenn das immer wieder passiert, melde bitte einen Fehler."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para reintentarlo, cierra BarnHub por completo y vuelve a abrirla. En iPhone o iPad, desliza BarnHub hacia arriba en el selector de apps y vuelve a abrirla. Si sigue ocurriendo, informa de un error."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para reintentarlo, cierra BarnHub por completo y vuelve a abrirla. En iPhone o iPad, desliza BarnHub hacia arriba en el selector de apps y vuelve a abrirla. Si sigue ocurriendo, reporta un error."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour réessayer, quittez complètement BarnHub et rouvrez-la. Sur iPhone ou iPad, balayez BarnHub vers le haut dans le sélecteur d'apps, puis rouvrez-la. Si le problème persiste, signalez un bug."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per riprovare, chiudi completamente BarnHub e riaprila. Su iPhone o iPad, scorri via BarnHub nel selettore delle app, poi riaprila. Se continua a succedere, segnala un bug."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop BarnHub volledig en open de app opnieuw om het nog eens te proberen. Veeg BarnHub op iPhone of iPad weg in de appkiezer en open de app daarna weer. Blijft dit gebeuren, meld dan een bug."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para tentar novamente, feche o BarnHub completamente e abra de novo. No iPhone ou iPad, deslize o BarnHub para cima no seletor de apps e abra-o novamente. Se isso continuar acontecendo, relate um bug."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avsluta BarnHub helt och öppna appen igen för att försöka på nytt. På iPhone eller iPad sveper du bort BarnHub i appväxlaren och öppnar den igen. Om det fortsätter att hända, rapportera en bugg."
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "comment" : "Button that retries opening the data store by relaunching",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riprova"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opnieuw proberen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentar novamente"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Försök igen"
           }
         }
       }
@@ -31065,59 +32073,6 @@
         }
       }
     },
-    "This cannot be undone. All horses, clients, transactions, and records will be permanently deleted." : {
-      "comment" : "Final delete confirmation message",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dies kann nicht rückgängig gemacht werden. Alle Pferde, Klienten, Transaktionen und Datensätze werden dauerhaft gelöscht."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, transacciones y registros serán eliminados permanentemente."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, transacciones y registros serán eliminados permanentemente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette action est irréversible. Tous les chevaux, clients, transactions et enregistrements seront définitivement supprimés."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Questa azione non può essere annullata. Tutti i cavalli, clienti, transazioni e record verranno eliminati definitivamente."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit kan niet ongedaan worden gemaakt. Alle paarden, klanten, transacties en records worden permanent verwijderd."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Isso não pode ser desfeito. Todos os cavalos, clientes, transações e registros serão excluídos permanentemente."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detta kan inte ångras. Alla hästar, kunder, transaktioner och poster kommer att raderas permanent."
-          }
-        }
-      }
-    },
     "This client may have been deleted." : {
       "localizations" : {
         "de" : {
@@ -31376,59 +32331,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detta lägger till nya poster från CSV-filen. Befintlig data kommer inte att ändras eller tas bort."
-          }
-        }
-      }
-    },
-    "This will permanently delete ALL data from BarnHub on this device. Consider exporting your data first so you have a backup." : {
-      "comment" : "Delete warning message",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dadurch werden ALLE Daten von BarnHub auf diesem Gerät dauerhaft gelöscht. Exportieren Sie Ihre Daten zuerst, um eine Sicherungskopie zu haben."
-          }
-        },
-        "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esto eliminará permanentemente TODOS los datos de BarnHub en este dispositivo. Considera exportar tus datos primero para tener una copia de seguridad."
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esto eliminará permanentemente TODOS los datos de BarnHub en este dispositivo. Considera exportar tus datos primero para tener una copia de seguridad."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cela supprimera définitivement TOUTES les données de BarnHub sur cet appareil. Pensez à exporter vos données d'abord pour avoir une sauvegarde."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Questo eliminerà definitivamente TUTTI i dati di BarnHub su questo dispositivo. Considera di esportare i tuoi dati prima per avere un backup."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dit verwijdert ALLE gegevens van BarnHub op dit apparaat permanent. Overweeg eerst uw gegevens te exporteren zodat u een back-up heeft."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Isso excluirá permanentemente TODOS os dados do BarnHub neste dispositivo. Considere exportar seus dados primeiro para ter um backup."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detta kommer att permanent radera ALL data från BarnHub på den här enheten. Överväg att exportera dina data först så att du har en säkerhetskopia."
           }
         }
       }
