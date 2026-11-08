@@ -67,7 +67,7 @@ struct TransactionEditView: View {
         .frame(maxWidth: .infinity)
         #endif
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem(placement: .pinnedConfirmation) {
                 Button("Save") {
                     save()
                 }

@@ -43,15 +43,15 @@ struct ClientListView: View {
         .navigationTitle("Clients")
         .inlineNavTitle()
         .searchable(text: $searchText, prompt: "Search clients")
+        .prioritizedToolbarItem(.high, placement: .trailingBar, isPresent: isPro) {
+            Button {
+                router.navigate(to: ClientRoute.edit(nil))
+            } label: {
+                Label("Add Client", systemImage: "plus")
+            }
+        }
         .toolbar {
             if isPro {
-                ToolbarItem(placement: .trailingBar) {
-                    Button {
-                        router.navigate(to: ClientRoute.edit(nil))
-                    } label: {
-                        Label("Add Client", systemImage: "plus")
-                    }
-                }
                 ToolbarItem(placement: .leadingBar) {
                     Toggle(isOn: $showInactive) {
                         Label("Show Inactive", systemImage: "eye")

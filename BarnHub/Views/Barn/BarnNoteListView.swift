@@ -80,13 +80,11 @@ struct BarnNoteListView: View {
         }
         .navigationTitle("Barn Notes")
         .inlineNavTitle()
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    router.navigate(to: BarnRoute.barnNoteEdit(nil))
-                } label: {
-                    Label("New Note", systemImage: "plus")
-                }
+        .prioritizedToolbarItem(.high, placement: .primaryAction) {
+            Button {
+                router.navigate(to: BarnRoute.barnNoteEdit(nil))
+            } label: {
+                Label("New Note", systemImage: "plus")
             }
         }
         .toast(toast)
