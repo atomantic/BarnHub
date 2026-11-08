@@ -59,7 +59,7 @@ CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests
 
 ## Localization
 
-The app uses **Xcode String Catalogs** (`Localizable.xcstrings`) with 9 supported languages + English source. Locale is set via `.environment(\.locale)` at the root view in `BarnHubApp.swift`.
+The app uses **Xcode String Catalogs** (`Localizable.xcstrings`) with English as the source and 8 translations (9 languages in all). Locale is set via `.environment(\.locale)` at the root view in `BarnHubApp.swift`.
 
 ### Adding localized strings
 
@@ -87,8 +87,8 @@ The app uses **Xcode String Catalogs** (`Localizable.xcstrings`) with 9 supporte
 - **Never store localized strings in SwiftData** — store raw enum values (`rawValue`), compute `displayName` at display time
 - **Never cache `DateFormatter` as static** — use `Date.FormatStyle` or create formatters per-call so they respect locale changes
 - **`comment:` parameter is required** on all `appLocalized()` calls — it helps translators and auto-populates in the string catalog
-- **After adding new strings**, build the project — Xcode auto-extracts new keys into `Localizable.xcstrings` with state `"new"`. Then add translations for all 9 languages
-- **Every new user-facing string must be localized immediately** — never add strings without also adding translations for all 9 supported languages in `Localizable.xcstrings`. This applies to SwiftUI view text (`Text`, `Label`, `Section`, `navigationTitle`, button labels, empty states, toast messages, confirmation dialogs) and programmatic strings via `appLocalized()`
+- **After adding new strings**, add their keys to `Localizable.xcstrings` with translations for all 8 non-English languages. Building in the Xcode app extracts new keys with state `"new"`, but a command-line `xcodebuild` build does not touch the catalog, so add keys by hand there (next to related keys, without re-sorting the file)
+- **Every new user-facing string must be localized immediately** — never add strings without also adding translations for all 8 non-English languages in `Localizable.xcstrings`. This applies to SwiftUI view text (`Text`, `Label`, `Section`, `navigationTitle`, button labels, empty states, toast messages, confirmation dialogs) and programmatic strings via `appLocalized()`
 
 ### Supported languages
 
