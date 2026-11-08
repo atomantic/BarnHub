@@ -119,7 +119,7 @@ rollback_build_bump() {
 trap rollback_build_bump EXIT
 
 if ! $SKIP_TESTS; then
-    # The same suite as CI: unit tests plus the screen walk on iPhone, iPad and Mac.
+    # Unit tests, as in CI. The UI screen walk is a rare audit (./scripts/test.sh --all).
     echo "🧪 Running tests (./scripts/test.sh)..."
     if ! ./scripts/test.sh; then
         echo "❌ Tests failed; not deploying. Results are in .build/test-results/."
