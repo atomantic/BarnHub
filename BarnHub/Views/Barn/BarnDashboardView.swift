@@ -80,7 +80,8 @@ struct BarnDashboardView: View {
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
-    @State private var viewMode: CalendarViewMode = .week
+    // Remembered across launches (and settable via launch argument for screenshots).
+    @AppStorage("net.shadowpuppet.BarnBook.schedule.viewMode") private var viewMode: CalendarViewMode = .week
     @State private var selectedDate: Date = .now
 
     var body: some View {
