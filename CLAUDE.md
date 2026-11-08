@@ -42,7 +42,7 @@ Local deploy via `./deploy.sh` (used when CI build credits are exhausted):
 
 Requires `.env` file with App Store Connect API credentials (see `.env.example`).
 
-CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests` on every pull request and on push to `main`, on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`). It doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
+CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests` on the `xcode-27` runner image (the iOS 27 SDK isn't on `macos-latest`), but it is **manual-only** (`workflow_dispatch`): run it from the Actions tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`. It doesn't run automatically on pull requests or pushes because macOS minutes on this private repo are billed; automatic runs wait on Adam's decision. So a local `xcodebuild build` and `BarnHubTests` run (see Build Commands) are still required before merging. CI doesn't deploy: TestFlight uploads only happen through `./deploy.sh`.
 
 ## Key Patterns
 
