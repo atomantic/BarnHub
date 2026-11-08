@@ -171,3 +171,95 @@ struct WideColumns<Leading: View, Trailing: View>: View {
     }
 }
 #endif
+
+// MARK: - List + detail
+
+/// A list column beside the selected item's detail, for the Horses and Clients
+/// tabs when there's room (iPad, iPhone Duo inner display in landscape, Mac).
+///
+/// It lives inside the tab's `NavigationStack` rather than replacing it with a
+/// `NavigationSplitView`, so router deep links and links inside the detail still
+/// push onto the same stack.
+struct ListDetailSplit<ListColumn: View, Detail: View>: View {
+    /// Total width available, as measured by the caller.
+    let width: CGFloat
+    private let listColumn: ListColumn
+    private let detail: Detail
+
+    /// The narrowest width at which the split is worth showing.
+    static var minimumWidth: CGFloat { 760 }
+
+    init(width: CGFloat, @ViewBuilder list: () -> ListColumn, @ViewBuilder detail: () -> Detail) {
+        self.width = width
+        self.listColumn = list()
+        self.detail = detail()
+    }
+
+    private var listWidth: CGFloat { min(400, max(300, width * 0.36)) }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            listColumn
+                .frame(width: listWidth)
+            Divider()
+            detail
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+}
+
+extension View {
+    /// Sets the navigation title, except when the view is the detail pane of a
+    /// `ListDetailSplit`: there the list's title stays in the bar.
+    @ViewBuilder
+    func detailNavigationTitle(_ title: String, isEmbedded: Bool) -> some View {
+        if isEmbedded {
+            self
+        } else {
+            navigationTitle(title).inlineNavTitle()
+        }
+    }
+}
+
+/// The top of an embedded detail pane: the item's name, standing in for the
+/// navigation title the pane doesn't set, and the actions on that item. Keeping
+/// Edit and Delete here, rather than in the bar beside the list's own actions,
+/// makes it clear what they act on.
+struct DetailPaneHeader: View {
+    let title: String
+    var subtitle: String = ""
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        Section {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.title2.bold())
+                        .foregroundStyle(.primary)
+                    if !subtitle.isEmpty {
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer(minLength: 0)
+                Button(action: onEdit) {
+                    Label("Edit", systemImage: "pencil")
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.barnGreen)
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete", systemImage: "trash")
+                        .labelStyle(.iconOnly)
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+                .help(Text("Delete"))
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
+        }
+    }
+}
