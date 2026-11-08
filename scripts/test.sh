@@ -132,7 +132,8 @@ for step in "${STEPS[@]}"; do
             run ipad "$(ui_filter BarnHubUITests)" -scheme BarnHub \
                 -destination "platform=iOS Simulator,id=$(udid "$IPAD")" CODE_SIGNING_ALLOWED=NO ;;
         mac)
-            if pgrep -xq BarnHub; then
+            # Only the Mac app: simulator copies of BarnHub don't count.
+            if ps -axo command= | grep -q '/BarnHub\.app/Contents/MacOS/BarnHub'; then
                 FAILED=1; RESULTS+=("❌ mac: quit BarnHub first (the tests launch their own copy)"); continue
             fi
             # Ad-hoc signed without entitlements: an unsigned test runner is

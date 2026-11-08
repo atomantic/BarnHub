@@ -54,7 +54,7 @@ final class ScreenWalkTests: XCTestCase {
         Screen(page: "addDentistVisit", expect: ["New Dentist Visit", "Service Description"]),
         Screen(page: "editDentistVisit", expect: ["Edit Dentist Visit", "Routine dental float"]),
         Screen(page: "healthTimeline", expect: ["Health Timeline", "Annual vaccinations"]),
-        Screen(page: "weightChart", expect: ["Weight Trend", "1162 lbs"]),
+        Screen(page: "weightChart", expect: ["Weight Trend", "1,162 lbs"]),
         Screen(page: "horseDocuments", expect: ["Coggins Certificate", "Registration Photo"]),
         Screen(page: "feedPlan", expect: ["Feed Plan", "Sweet Feed", "Timothy Hay"]),
         Screen(page: "addFeedEntry", expect: ["Add Feed Item", "Assigned Person"]),
@@ -258,11 +258,20 @@ final class ScreenWalkTests: XCTestCase {
         let deadline = Date().addingTimeInterval(timeout)
         var missing = texts
         var foundAny = anyOf.isEmpty
+        let scrollAfter = Date().addingTimeInterval(3)
+        var scrolls = 0
         repeat {
             missing = missing.filter { element(containing: $0) == nil }
             if !foundAny { foundAny = anyOf.contains { element(containing: $0) != nil } }
             if missing.isEmpty && foundAny { break }
-            Thread.sleep(forTimeInterval: 0.3)
+            // Lists build rows lazily, so text below the fold only exists once
+            // it's scrolled to. Give the screen a moment, then scroll down.
+            if Date() > scrollAfter && scrolls < 5 {
+                scrollDown()
+                scrolls += 1
+            } else {
+                Thread.sleep(forTimeInterval: 0.3)
+            }
         } while Date() < deadline && app.state == .runningForeground
 
         attachScreenshot(named: screen)
@@ -283,6 +292,8 @@ final class ScreenWalkTests: XCTestCase {
                                   text, text, text)
         // Only text elements: on other types `value` can be a number or a bool.
         let byValue = NSPredicate(format: "value CONTAINS[c] %@", text)
+        // An empty text field shows its prompt only as the placeholder.
+        let byPlaceholder = NSPredicate(format: "placeholderValue CONTAINS[c] %@", text)
         let queries: [XCUIElementQuery] = [
             app.staticTexts.matching(byLabel),
             app.buttons.matching(byLabel),
@@ -295,6 +306,8 @@ final class ScreenWalkTests: XCTestCase {
             app.textViews.matching(byValue),
             app.textFields.matching(byLabel),
             app.textViews.matching(byLabel),
+            app.textFields.matching(byPlaceholder),
+            app.textViews.matching(byPlaceholder),
         ]
         return queries.lazy.map(\.firstMatch).first { $0.exists }
     }
