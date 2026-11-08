@@ -129,6 +129,25 @@ struct BarnHubApp: App {
                 }
             }
 
+            // File ▸ New… in place of New Window: BarnHub is a single-window app.
+            CommandGroup(replacing: .newItem) {
+                Button("New Horse") {
+                    router.navigate(to: HorseRoute.edit(nil), tab: .horses)
+                }
+                .keyboardShortcut("n", modifiers: .command)
+
+                Button("New Client") {
+                    router.navigate(to: ClientRoute.edit(nil), tab: .clients)
+                }
+                .keyboardShortcut("n", modifiers: [.command, .shift])
+                .disabled(!FeatureGate.canAccessClients(storeService.isPro))
+
+                Button("New Transaction") {
+                    router.navigate(to: AccountingRoute.edit(nil), tab: .accounting)
+                }
+                .keyboardShortcut("n", modifiers: [.command, .option])
+            }
+
             #if os(macOS)
             CommandGroup(replacing: .appTermination) {
                 Button("Quit BarnHub") { NSApplication.shared.terminate(nil) }
@@ -286,6 +305,17 @@ struct ContentView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
+                #if os(macOS)
+                // Opens the Settings window (same as ⌘,) rather than a page in this one.
+                SettingsLink {
+                    Image(systemName: "gearshape")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(appLocalized("Settings"))
+                .help(Text("Settings"))
+                #else
                 Button {
                     router.navigate(to: HomeRoute.settings)
                 } label: {
@@ -295,6 +325,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(appLocalized("Settings"))
+                #endif
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
