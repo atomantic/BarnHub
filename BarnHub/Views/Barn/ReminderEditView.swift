@@ -4,7 +4,6 @@ import SwiftData
 struct ReminderEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(NotificationService.self) private var notificationService
 
     let reminderID: PersistentIdentifier?
 
@@ -82,7 +81,6 @@ struct ReminderEditView: View {
         reminder.notes = notes.trimmingCharacters(in: .whitespaces)
         reminder.dueDate = dueDate
         reminder.frequency = frequency
-        reminder.isCompleted = isCompleted
 
         if let horseID = selectedHorseID {
             reminder.horse = modelContext.existingModel(for: horseID)
@@ -90,8 +88,13 @@ struct ReminderEditView: View {
             reminder.horse = nil
         }
 
-        modelContext.saveWithLogging()
-        notificationService.scheduleReminder(reminder)
+        // Saves, and creates the next occurrence when a recurring reminder is
+        // completed here.
+        if reminder.isCompleted != isCompleted {
+            ReminderService.setCompleted(reminder, isCompleted, in: modelContext)
+        } else {
+            modelContext.saveWithLogging()
+        }
         toast.showAndDismiss(isNew ? appLocalized("Reminder added") : appLocalized("Reminder updated"), dismiss: dismiss)
     }
 }

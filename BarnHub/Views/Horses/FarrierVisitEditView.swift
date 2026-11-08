@@ -6,7 +6,6 @@ struct FarrierVisitEditView: View {
     var visitID: PersistentIdentifier? = nil
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(NotificationService.self) private var notificationService
 
     @State private var date = Date.now
     @State private var farrierName = ""
@@ -120,14 +119,12 @@ struct FarrierVisitEditView: View {
         visit.nextDueDate = hasNextDue ? nextDueDate : nil
 
         modelContext.saveWithLogging()
-        notificationService.scheduleFarrierVisit(visit)
         toast.showAndDismiss(appLocalized("Farrier visit saved", comment: "Toast after saving a farrier visit"), dismiss: dismiss)
     }
 
     private func deleteVisit() {
         guard let visit = existingVisit else { return }
         BarnHubLogger.info("Deleting farrier visit farrier=\(visit.farrierName)")
-        notificationService.cancelFarrierVisit(visit)
         modelContext.delete(visit)
         modelContext.saveWithLogging()
         toast.showAndDismiss(appLocalized("Farrier visit deleted", comment: "Toast after deleting a farrier visit"), dismiss: dismiss)

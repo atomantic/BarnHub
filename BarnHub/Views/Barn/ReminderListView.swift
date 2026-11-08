@@ -4,7 +4,6 @@ import SwiftData
 struct ReminderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
-    @Environment(NotificationService.self) private var notificationService
 
     @Query(sort: \Reminder.dueDate) private var reminders: [Reminder]
 
@@ -120,9 +119,7 @@ struct ReminderListView: View {
     }
 
     private func toggleCompletion(_ reminder: Reminder) {
-        reminder.isCompleted.toggle()
-        modelContext.saveWithLogging()
-        notificationService.scheduleReminder(reminder)
+        ReminderService.setCompleted(reminder, !reminder.isCompleted, in: modelContext)
         toast.show(reminder.isCompleted ? "Marked complete" : "Marked incomplete")
     }
 }

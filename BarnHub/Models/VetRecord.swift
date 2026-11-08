@@ -8,6 +8,8 @@ final class VetRecord {
     var descriptionText: String = ""
     var cost: Double = 0
     var nextDueDate: Date? = nil
+    /// Stable key for this record's local notification (see Reminder.notificationKey).
+    var notificationKey: UUID? = nil
     var reminderFrequencyRaw: String = ReminderFrequency.once.rawValue
 
     @Relationship(deleteRule: .nullify)
@@ -31,6 +33,7 @@ final class VetRecord {
         self.descriptionText = descriptionText
         self.cost = cost
         self.nextDueDate = nextDueDate
+        self.notificationKey = UUID()
         self.reminderFrequencyRaw = reminderFrequency.rawValue
     }
 }
