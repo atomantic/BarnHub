@@ -2,13 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct DentistScheduleView: View {
-    @Query(sort: \DentistVisit.date, order: .reverse) private var allDentistVisits: [DentistVisit]
-
-    private var scheduledVisits: [DentistVisit] {
-        allDentistVisits
-            .filter { $0.nextDueDate != nil }
-            .sorted { ($0.nextDueDate ?? .distantFuture) < ($1.nextDueDate ?? .distantFuture) }
-    }
+    // Only records with a next due date, sorted by it in the store (#32).
+    @Query(filter: #Predicate<DentistVisit> { $0.nextDueDate != nil }, sort: \DentistVisit.nextDueDate)
+    private var scheduledVisits: [DentistVisit]
 
     var body: some View {
         ScheduleListView(
