@@ -165,4 +165,16 @@ final class DeepLinkHandlerTests: XCTestCase {
         DeepLinkHandler.handle(url: url, router: router)
         XCTAssertTrue(router.horsesPath.isEmpty)
     }
+
+    /// The system only routes barnhub:// URLs (notification taps, simctl openurl,
+    /// links from other apps) to the app when the host app's Info.plist registers
+    /// the scheme (#78).
+    func testHostAppRegistersBarnhubURLScheme() throws {
+        let urlTypes = try XCTUnwrap(
+            Bundle.main.infoDictionary?["CFBundleURLTypes"] as? [[String: Any]],
+            "Info.plist has no CFBundleURLTypes"
+        )
+        let schemes = urlTypes.flatMap { $0["CFBundleURLSchemes"] as? [String] ?? [] }
+        XCTAssertTrue(schemes.contains("barnhub"), "Registered schemes: \(schemes)")
+    }
 }
