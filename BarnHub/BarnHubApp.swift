@@ -52,12 +52,7 @@ struct BarnHubApp: App {
             : ModelConfiguration(cloudKitDatabase: .automatic)
         StorageMode.current = isSeedMode ? .inMemorySeed : .cloudKit
         do {
-            let container = try ModelContainer(
-                for: Horse.self, Client.self, Transaction.self,
-                VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
-                Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
-                configurations: config
-            )
+            let container = try ModelContainer(for: BarnHubSchema.schema, configurations: config)
             #if DEBUG
             if isSeedMode {
                 PreviewSampleData.populate(container: container)
@@ -68,9 +63,7 @@ struct BarnHubApp: App {
             BarnHubLogger.error("ModelContainer init failed: \(error.localizedDescription) — falling back to in-memory store")
             do {
                 let fallback = try ModelContainer(
-                    for: Horse.self, Client.self, Transaction.self,
-                    VetRecord.self, FarrierVisit.self, DentistVisit.self, SupplyItem.self, Reminder.self,
-                    Invoice.self, WeightEntry.self, ClientDocument.self, HorseDocument.self, FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
+                    for: BarnHubSchema.schema,
                     configurations: ModelConfiguration(isStoredInMemoryOnly: true)
                 )
                 StorageMode.current = .inMemoryFallback
