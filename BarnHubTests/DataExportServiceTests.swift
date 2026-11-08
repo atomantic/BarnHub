@@ -11,10 +11,7 @@ final class DataExportServiceTests: XCTestCase {
         try super.setUpWithError()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(
-            for: Horse.self, Client.self, Transaction.self,
-            VetRecord.self, FarrierVisit.self, SupplyItem.self, Reminder.self,
-            Invoice.self, WeightEntry.self, ClientDocument.self,
-            BarnNote.self, Lesson.self,
+            for: BarnHubSchema.schema,
             configurations: config
         )
         context = ModelContext(container)

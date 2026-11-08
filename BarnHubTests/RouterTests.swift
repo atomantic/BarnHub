@@ -187,7 +187,7 @@ final class RouterTests: XCTestCase {
 
     private func makeHorseID() throws -> (ModelContainer, PersistentIdentifier) {
         let container = try ModelContainer(
-            for: Horse.self, Client.self,
+            for: BarnHubSchema.schema,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         let context = ModelContext(container)
