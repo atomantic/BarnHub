@@ -250,9 +250,12 @@ final class ScreenWalkTests: XCTestCase {
         #else
         // The share sheet's activity list, or its Copy action (iPad popovers
         // don't always expose the list by name).
+        // iPad hosts the share sheet out of process, invisible to XCUITest, so
+        // fall back to the app's debug marker that one is presented.
         let sheet = app.otherElements["ActivityListView"]
         let copy = app.buttons["Copy"]
-        let shown = sheet.waitForExistence(timeout: 10) || copy.exists
+        let marker = app.descendants(matching: .any)["share_sheet_presented"]
+        let shown = sheet.waitForExistence(timeout: 10) || copy.exists || marker.exists
         XCTAssertTrue(shown, "\(name): share sheet missing or blank")
         #endif
         attachScreenshot(named: "\(name) share sheet")
