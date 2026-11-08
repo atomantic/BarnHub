@@ -244,7 +244,7 @@ struct DataManagementView: View {
     private var csvProgressOverlay: some View {
         if let title = csvJob.title {
             VStack(spacing: 12) {
-                Text(title)
+                Text(csvJob.isCancelling ? appLocalized("Cancelling…", comment: "Progress title after tapping Cancel while an export, import or restore stops and undoes its work") : title)
                     .font(.headline)
                 ProgressView(value: csvJob.progress)
                     .frame(width: 220)
@@ -255,6 +255,7 @@ struct DataManagementView: View {
                         .monospacedDigit()
                 }
                 Button("Cancel", role: .cancel) { csvJob.cancel() }
+                    .disabled(csvJob.isCancelling)
             }
             .padding(20)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
@@ -569,6 +570,8 @@ private final class CSVJob {
     /// Which file an export is writing, shown below the bar.
     private(set) var detail: String?
     private(set) var progress: Double = 0
+    /// Cancel was tapped; the job is stopping (a restore undoes what it added).
+    private(set) var isCancelling = false
     private var task: Task<Void, Never>?
 
     func run<T: Sendable>(
@@ -581,6 +584,7 @@ private final class CSVJob {
         self.title = title
         detail = nil
         progress = 0
+        isCancelling = false
         let report: CSVProgressHandler = { [weak self] value in
             Task { @MainActor in self?.progress = value }
         }
@@ -607,11 +611,14 @@ private final class CSVJob {
             }
             self.title = nil
             self.detail = nil
+            self.isCancelling = false
             self.task = nil
         }
     }
 
     func cancel() {
-        task?.cancel()
+        guard let task, !isCancelling else { return }
+        isCancelling = true
+        task.cancel()
     }
 }
