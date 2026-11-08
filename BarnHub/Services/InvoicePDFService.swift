@@ -1,10 +1,9 @@
 import Foundation
-#if os(iOS) || targetEnvironment(macCatalyst)
-import UIKit
 
+/// Builds the client invoice PDF in two steps, so the slow part can run off the
+/// main actor (#41): `document(…)` resolves every localized and formatted string
+/// on the main actor, then `render(_:)` draws those plain values on any thread.
 struct InvoicePDFService {
-    private static let headerColor = UIColor(red: 74/255, green: 124/255, blue: 63/255, alpha: 1)
-
     struct LineItem {
         let date: Date
         let description: String
@@ -12,13 +11,73 @@ struct InvoicePDFService {
         let amount: Double
     }
 
-    static func generatePDF(
+    /// Everything the invoice prints, already localized and formatted.
+    struct Document: Sendable {
+        struct Row: Sendable {
+            let date: String
+            let description: String
+            let category: String
+            let amount: String
+        }
+
+        let title: String
+        /// Client, period and generated date, one per line.
+        let info: String
+        let dateHeader: String
+        let descriptionHeader: String
+        let categoryHeader: String
+        let amountHeader: String
+        let rows: [Row]
+        let totalLabel: String
+        let total: String
+    }
+
+    /// Resolves the invoice's text. Main actor because currency formatting uses a
+    /// shared formatter.
+    @MainActor
+    static func document(
         clientName: String,
         startDate: Date,
         endDate: Date,
         lineItems: [LineItem],
-        total: Double
-    ) -> Data {
+        total: Double,
+        generatedAt: Date = .now
+    ) -> Document {
+        let info = [
+            "\(appLocalized("Client", comment: "Invoice PDF label")): \(clientName)",
+            "\(appLocalized("Period", comment: "Invoice PDF label")): \(startDate.shortFormatted) – \(endDate.shortFormatted)",
+            "\(appLocalized("Generated", comment: "Invoice PDF label")): \(generatedAt.shortFormatted)",
+        ].joined(separator: "\n")
+        return Document(
+            title: appLocalized("BarnHub Invoice", comment: "Invoice PDF title"),
+            info: info,
+            dateHeader: appLocalized("Date", comment: "Invoice PDF column header"),
+            descriptionHeader: appLocalized("Description", comment: "Invoice PDF column header"),
+            categoryHeader: appLocalized("Category", comment: "Invoice PDF column header"),
+            amountHeader: appLocalized("Amount", comment: "Invoice PDF column header"),
+            rows: lineItems.map {
+                Document.Row(
+                    date: $0.date.shortFormatted,
+                    description: $0.description,
+                    category: $0.category,
+                    amount: $0.amount.asCurrency
+                )
+            },
+            totalLabel: appLocalized("Total Due:", comment: "Invoice PDF total label"),
+            total: total.asCurrency
+        )
+    }
+}
+
+#if os(iOS) || targetEnvironment(macCatalyst)
+import UIKit
+
+extension InvoicePDFService {
+    private static let headerColor = UIColor(red: 74/255, green: 124/255, blue: 63/255, alpha: 1)
+
+    /// Draws `document` as PDF data. Reads nothing but its argument, so it's safe
+    /// to call from a background task.
+    static func render(_ document: Document) -> Data {
         let pageWidth: CGFloat = 612
         let pageHeight: CGFloat = 792
         let margin: CGFloat = 50
@@ -35,8 +94,7 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 24),
                 .foregroundColor: headerColor
             ]
-            let title = appLocalized("BarnHub Invoice", comment: "Invoice PDF title") as NSString
-            title.draw(at: CGPoint(x: margin, y: yOffset), withAttributes: titleAttrs)
+            (document.title as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: titleAttrs)
             yOffset += 36
 
             // Client & date range
@@ -44,9 +102,8 @@ struct InvoicePDFService {
                 .font: UIFont.systemFont(ofSize: 12),
                 .foregroundColor: UIColor.darkGray
             ]
-            let info = "\(appLocalized("Client", comment: "Invoice PDF label")): \(clientName)\n\(appLocalized("Period", comment: "Invoice PDF label")): \(startDate.shortFormatted) – \(endDate.shortFormatted)\n\(appLocalized("Generated", comment: "Invoice PDF label")): \(Date.now.shortFormatted)" as NSString
             let infoRect = CGRect(x: margin, y: yOffset, width: contentWidth, height: 60)
-            info.draw(in: infoRect, withAttributes: infoAttrs)
+            (document.info as NSString).draw(in: infoRect, withAttributes: infoAttrs)
             yOffset += 70
 
             // Divider
@@ -58,10 +115,10 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 10),
                 .foregroundColor: UIColor.darkGray
             ]
-            (appLocalized("Date", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: headerAttrs)
-            (appLocalized("Description", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 80, y: yOffset), withAttributes: headerAttrs)
-            (appLocalized("Category", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: headerAttrs)
-            (appLocalized("Amount", comment: "Invoice PDF column header") as NSString).draw(at: CGPoint(x: margin + 450, y: yOffset), withAttributes: headerAttrs)
+            (document.dateHeader as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: headerAttrs)
+            (document.descriptionHeader as NSString).draw(at: CGPoint(x: margin + 80, y: yOffset), withAttributes: headerAttrs)
+            (document.categoryHeader as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: headerAttrs)
+            (document.amountHeader as NSString).draw(at: CGPoint(x: margin + 450, y: yOffset), withAttributes: headerAttrs)
             yOffset += 20
 
             drawLine(context: context.cgContext, y: yOffset, margin: margin, width: contentWidth)
@@ -73,20 +130,20 @@ struct InvoicePDFService {
                 .foregroundColor: UIColor.black
             ]
 
-            for item in lineItems {
+            for row in document.rows {
                 if yOffset > pageHeight - 100 {
                     context.beginPage()
                     yOffset = margin
                 }
 
-                (item.date.shortFormatted as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: rowAttrs)
+                (row.date as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: rowAttrs)
 
                 let descRect = CGRect(x: margin + 80, y: yOffset, width: 250, height: 30)
-                (item.description as NSString).draw(in: descRect, withAttributes: rowAttrs)
+                (row.description as NSString).draw(in: descRect, withAttributes: rowAttrs)
 
-                (item.category as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: rowAttrs)
+                (row.category as NSString).draw(at: CGPoint(x: margin + 340, y: yOffset), withAttributes: rowAttrs)
 
-                let amountStr = item.amount.asCurrency as NSString
+                let amountStr = row.amount as NSString
                 let amountSize = amountStr.size(withAttributes: rowAttrs)
                 amountStr.draw(at: CGPoint(x: margin + contentWidth - amountSize.width, y: yOffset), withAttributes: rowAttrs)
 
@@ -102,8 +159,8 @@ struct InvoicePDFService {
                 .font: UIFont.boldSystemFont(ofSize: 14),
                 .foregroundColor: UIColor.black
             ]
-            (appLocalized("Total Due:", comment: "Invoice PDF total label") as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: totalAttrs)
-            let totalStr = total.asCurrency as NSString
+            (document.totalLabel as NSString).draw(at: CGPoint(x: margin, y: yOffset), withAttributes: totalAttrs)
+            let totalStr = document.total as NSString
             let totalSize = totalStr.size(withAttributes: totalAttrs)
             totalStr.draw(at: CGPoint(x: margin + contentWidth - totalSize.width, y: yOffset), withAttributes: totalAttrs)
         }
@@ -120,21 +177,8 @@ struct InvoicePDFService {
 
 #else
 
-struct InvoicePDFService {
-    struct LineItem {
-        let date: Date
-        let description: String
-        let category: String
-        let amount: Double
-    }
-
-    static func generatePDF(
-        clientName: String,
-        startDate: Date,
-        endDate: Date,
-        lineItems: [LineItem],
-        total: Double
-    ) -> Data { Data() }
+extension InvoicePDFService {
+    static func render(_ document: Document) -> Data { Data() }
 }
 
 #endif
