@@ -34,7 +34,7 @@ struct DataManagementView: View {
             } header: {
                 Text("Export")
             } footer: {
-                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
             }
 
             Section {
@@ -71,7 +71,7 @@ struct DataManagementView: View {
     private var dataContent: some View {
         List {
             Section {
-                Text("Export horses, clients and transactions as CSV files for use in spreadsheets. The export leaves out health records, invoices, documents and photos, so it isn't a full backup.")
+                Text("Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowBackground(Color.clear)
