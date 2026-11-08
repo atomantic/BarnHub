@@ -8,10 +8,13 @@
 #   iphone  ScreenWalkTests on iPhone: opens every screen with sample data and
 #           fails if one crashes or doesn't show its content
 #   ipad    ScreenWalkTests on iPad
-#   mac     ScreenWalkTests on the native Mac app (BarnHubMacUITests)
+#   mac     ScreenWalkTests on the native Mac app (BarnHubMacUITests). Opt-in:
+#           it drives real windows on this Mac and, sharing the app's bundle ID,
+#           would quit a BarnHub you have open, so it never runs by default.
 #
 # Usage:
-#   ./scripts/test.sh                      # everything
+#   ./scripts/test.sh                      # unit, iphone, ipad
+#   ./scripts/test.sh --all                # those plus mac
 #   ./scripts/test.sh --unit               # pick steps (flags combine)
 #   ./scripts/test.sh --iphone --ipad --mac   # just the UI screen walk
 #   ./scripts/test.sh --iphone --only testHorseScreens   # one UI test method
@@ -23,8 +26,8 @@
 # Results go to .build/test-results/<step>.xcresult with a screenshot of each
 # failing screen, and the full log beside it. `open` an .xcresult to look.
 #
-# The Mac step drives the real app window, so quit BarnHub first and leave the
-# Mac alone while it runs. macOS asks for Accessibility access the first time.
+# The Mac step refuses to start while BarnHub is open. Leave the Mac alone while
+# it runs; macOS asks for Accessibility access the first time.
 
 set -uo pipefail
 
@@ -42,12 +45,13 @@ while [[ $# -gt 0 ]]; do
         --iphone) STEPS+=(iphone); shift ;;
         --ipad)   STEPS+=(ipad); shift ;;
         --mac)    STEPS+=(mac); shift ;;
+        --all)    STEPS+=(unit iphone ipad mac); shift ;;
         --only)   ONLY="${2:?--only needs a test method name}"; shift 2 ;;
-        -h|--help) sed -n '3,28p' "$0"; exit 0 ;;
+        -h|--help) sed -n '3,31p' "$0"; exit 0 ;;
         *) echo "Unknown option: $1 (see --help)"; exit 2 ;;
     esac
 done
-[[ ${#STEPS[@]} -eq 0 ]] && STEPS=(unit iphone ipad mac)
+[[ ${#STEPS[@]} -eq 0 ]] && STEPS=(unit iphone ipad)
 
 # Prints "<name>|<udid>|<os>" for the best available simulator: an exact name
 # match on the newest runtime (or SIM_OS), else the first device of that family.
@@ -131,8 +135,13 @@ for step in "${STEPS[@]}"; do
             if pgrep -xq BarnHub; then
                 FAILED=1; RESULTS+=("❌ mac: quit BarnHub first (the tests launch their own copy)"); continue
             fi
+            # Ad-hoc signed without entitlements: an unsigned test runner is
+            # "damaged" to Gatekeeper, and the app's iCloud entitlements need a
+            # profile. The tests use an in-memory store, so they need neither.
             run mac "$(ui_filter BarnHubMacUITests)" -scheme BarnHubMacUITests \
-                -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO ;;
+                -destination "platform=macOS" \
+                CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+                PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS= ;;
     esac
 done
 
