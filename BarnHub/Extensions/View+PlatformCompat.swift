@@ -45,6 +45,17 @@ extension View {
 #endif
     }
 
+    /// `.backgroundExtensionEffect()` on iOS / macOS 26+, so a full-bleed background
+    /// continues under bars and sidebars; no-op on older systems.
+    @ViewBuilder
+    func barnBackgroundExtension() -> some View {
+        if #available(iOS 26.0, macOS 26.0, *) {
+            self.backgroundExtensionEffect()
+        } else {
+            self
+        }
+    }
+
     /// `.manageSubscriptionsSheet` on iOS; no-op on macOS.
     @ViewBuilder
     func barnManageSubscriptionsSheet(isPresented: Binding<Bool>) -> some View {
@@ -76,5 +87,60 @@ extension ToolbarItemPlacement {
 #else
         .cancellationAction
 #endif
+    }
+
+    /// Save/confirm button placement. On iOS 27+ `.topBarPinnedTrailing` keeps it
+    /// in the bar instead of letting it collapse into the overflow menu on narrow
+    /// bars (iPhone Duo outer display in landscape); `.confirmationAction` elsewhere.
+    static var pinnedConfirmation: ToolbarItemPlacement {
+#if os(iOS)
+        if #available(iOS 27.0, *) {
+            return .topBarPinnedTrailing
+        }
+#endif
+        return .confirmationAction
+    }
+}
+
+// MARK: - Toolbar visibility priority
+
+/// How hard the system should try to keep a toolbar item out of the overflow menu.
+enum BarnToolbarPriority {
+    case high, low
+
+    @available(iOS 27.0, macOS 26.1, *)
+    fileprivate var system: ToolbarItemVisibilityPriority {
+        switch self {
+        case .high: .high
+        case .low: .low
+        }
+    }
+}
+
+extension View {
+    /// Adds one toolbar item ranked with `visibilityPriority` on iOS 27 / macOS 26.1+,
+    /// and a plain `ToolbarItem` on older systems.
+    ///
+    /// `ToolbarContentBuilder` has no `buildLimitedAvailability`, so the availability
+    /// check has to sit at the view level rather than inside a `.toolbar { }` block.
+    @ViewBuilder
+    func prioritizedToolbarItem<Content: View>(
+        _ priority: BarnToolbarPriority,
+        placement: ToolbarItemPlacement,
+        isPresent: Bool = true,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        if !isPresent {
+            self
+        } else if #available(iOS 27.0, macOS 26.1, *) {
+            toolbar {
+                ToolbarItem(placement: placement, content: content)
+                    .visibilityPriority(priority.system)
+            }
+        } else {
+            toolbar {
+                ToolbarItem(placement: placement, content: content)
+            }
+        }
     }
 }

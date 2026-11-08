@@ -93,8 +93,8 @@ struct BarnDashboardView: View {
             .inlineNavTitle()
             .toolbar {
                 ToolbarItem(placement: .trailingBar) { categoriesMenu }
-                ToolbarItem(placement: .trailingBar) { addEventMenu }
             }
+            .prioritizedToolbarItem(.high, placement: .trailingBar) { addEventMenu }
         #endif
     }
 
@@ -253,24 +253,40 @@ struct BarnDashboardView: View {
         sizeClass == .regular && viewMode != .day
     }
 
+    @ViewBuilder
     private var iOSCalendar: some View {
-        HStack(spacing: 0) {
-            VStack(spacing: 0) {
-                calendarControlBar
-                Divider()
-                calendarContent
-                    .frame(maxHeight: .infinity)
-            }
-            .frame(maxWidth: .infinity)
-
-            if showsDayPanel {
-                Divider()
-                // Equal halves keep the split on the fold when iPhone Duo is partially open.
+        if showsDayPanel, #available(iOS 27.1, *) {
+            // ArrangementView places the split on the hinge (and accounts for the
+            // vertical tab bar), which a plain HStack of equal halves can't do.
+            ArrangementView {
+                calendarColumn
+            } secondary: {
                 dayDetailPanel
-                    .frame(maxWidth: .infinity)
             }
+            .arrangementViewStyle(.split.axes(.horizontal))
+            .background(Color.barnOffWhite)
+        } else {
+            HStack(spacing: 0) {
+                calendarColumn
+                    .frame(maxWidth: .infinity)
+
+                if showsDayPanel {
+                    Divider()
+                    dayDetailPanel
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .background(Color.barnOffWhite)
         }
-        .background(Color.barnOffWhite)
+    }
+
+    private var calendarColumn: some View {
+        VStack(spacing: 0) {
+            calendarControlBar
+            Divider()
+            calendarContent
+                .frame(maxHeight: .infinity)
+        }
     }
 
     private var calendarControlBar: some View {
