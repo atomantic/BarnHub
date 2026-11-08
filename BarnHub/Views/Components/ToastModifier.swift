@@ -6,6 +6,10 @@ final class ToastState {
     var message = ""
     var isError = false
 
+    /// Closes the form sheet this toast lives in, when it lives in one. Set by
+    /// `.toast(_:)` from the environment (see `FormSheet`).
+    @ObservationIgnored var closeFormSheet: (() -> Void)?
+
     func show(_ message: String, isError: Bool = false) {
         self.message = message
         self.isError = isError
@@ -21,7 +25,13 @@ final class ToastState {
             } catch {
                 return
             }
-            dismiss()
+            // In a form sheet, close the sheet itself: the form's DismissAction
+            // doesn't reliably close it on macOS, which left Save needing Cancel.
+            if let closeFormSheet {
+                closeFormSheet()
+            } else {
+                dismiss()
+            }
         }
     }
 }
@@ -54,9 +64,11 @@ struct ToastModifier: ViewModifier {
 struct ToastStateModifier: ViewModifier {
     @Bindable var state: ToastState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.closeFormSheet) private var closeFormSheet
 
     func body(content: Content) -> some View {
         content
+            .onAppear { state.closeFormSheet = closeFormSheet }
             .overlay(alignment: .top) {
                 if state.isPresented {
                     ToastView(message: state.message, isError: state.isError)
