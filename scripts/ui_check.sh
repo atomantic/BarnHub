@@ -43,9 +43,11 @@ done
 [[ ${#PLATFORMS[@]} -eq 0 ]] && PLATFORMS=(iphone ipad mac)
 
 if [[ -z "${IPAD_SIM:-}" ]]; then
-    available=$(xcrun simctl list devices available 2>/dev/null)
-    IPAD_SIM=$(echo "$available" | grep -m1 -o 'iPad Pro 13-inch[^(]*' | sed 's/ *$//')
-    [[ -z "$IPAD_SIM" ]] && IPAD_SIM=$(echo "$available" | grep -m1 -o 'iPad[^(]*' | sed 's/ *$//')
+    # Device lines look like "    iPad Pro 13-inch (M5) (<UDID>) (Shutdown)": keep the name.
+    ipads=$(xcrun simctl list devices available 2>/dev/null | grep -E '^ +iPad' \
+        | sed -E 's/^ +//; s/ \([0-9A-F-]{36}\).*$//')
+    IPAD_SIM=$(echo "$ipads" | grep -m1 '^iPad Pro 13-inch')
+    [[ -z "$IPAD_SIM" ]] && IPAD_SIM=$(echo "$ipads" | head -1)
 fi
 
 mkdir -p "$OUT_DIR"
