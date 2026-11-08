@@ -9,7 +9,7 @@ struct WeightChartView: View {
     @State private var selectedEntry: WeightEntry?
 
     private var horse: Horse? {
-        modelContext.model(for: horseID) as? Horse
+        modelContext.existingModel(for: horseID)
     }
 
     private var entries: [WeightEntry] {

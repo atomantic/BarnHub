@@ -23,7 +23,7 @@ struct FeedPlanEntryEditView: View {
 
     private var isNew: Bool { entryID == nil }
     private var existingEntry: FeedPlanEntry? { modelContext.existingModel(for: entryID) }
-    private var horse: Horse? { modelContext.model(for: horseID) as? Horse }
+    private var horse: Horse? { modelContext.existingModel(for: horseID) }
 
     var body: some View {
         Form {

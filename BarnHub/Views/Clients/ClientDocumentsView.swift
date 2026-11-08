@@ -20,7 +20,7 @@ struct ClientDocumentsView: View {
     @State private var shareURL: URL?
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     private var documents: [ClientDocument] {

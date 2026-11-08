@@ -10,7 +10,7 @@ struct InvoiceHistoryView: View {
     @State private var toast = ToastState()
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     private var invoices: [Invoice] {
