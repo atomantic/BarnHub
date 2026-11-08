@@ -10,7 +10,7 @@ import XCTest
 /// opening each document and invoice, where a blank sheet has bitten before.
 ///
 /// Runs on iPhone and iPad (`BarnHubUITests`) and on the native Mac app
-/// (`BarnHubMacUITests`). Run all three with `./scripts/ui_check.sh`.
+/// (`BarnHubMacUITests`). Run all three with `./scripts/test.sh`.
 final class ScreenWalkTests: XCTestCase {
     var app: XCUIApplication!
 

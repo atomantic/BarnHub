@@ -5,14 +5,13 @@ Build, archive, and upload to TestFlight locally.
 ## Instructions
 
 1. **Pre-flight checks**:
-   - Run `xcodebuild test` to ensure all tests pass
-   - Run `./scripts/ui_check.sh` (iPhone, iPad and Mac) to make sure every screen renders; don't deploy if it fails
+   - `./deploy.sh` runs the full `./scripts/test.sh` (unit tests plus every screen on iPhone, iPad and Mac) and stops if it fails. Quit BarnHub on the Mac first
    - Run `git status` to ensure working tree is clean (no uncommitted changes)
    - If there are uncommitted changes, ask the user to commit first
 
 2. **Run the deploy script**:
    - Execute `./deploy.sh` from the project root
-   - This will: increment build number, run tests, archive, export IPA, and upload to TestFlight
+   - This will: increment build number, run ./scripts/test.sh, archive, export IPA, and upload to TestFlight
    - If tests already passed in this session, the user may want `./deploy.sh --skip-tests`
 
 3. **Monitor the upload**:

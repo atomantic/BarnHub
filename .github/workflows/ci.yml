@@ -1,6 +1,8 @@
 name: CI
 
-# Build and unit tests only. TestFlight uploads stay local (./deploy.sh).
+# The full suite from scripts/test.sh (unit tests plus the UI screen walk on
+# iPhone, iPad and Mac), the same one deploy.sh runs. TestFlight uploads stay
+# local (./deploy.sh).
 # Manual only: macOS minutes on this private repo are billed, so automatic runs
 # on pull requests / pushes wait on Adam's decision. Start it from the Actions
 # tab ("Run workflow") or with `gh workflow run ci.yml --ref <branch>`.
@@ -17,7 +19,7 @@ jobs:
     # The app uses the iOS 27 SDK, which GitHub only ships on the xcode-27 image
     # (a preview as of 2026-11; macos-latest / macos-26 top out at Xcode 26.6).
     runs-on: xcode-27
-    timeout-minutes: 45
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -33,19 +35,13 @@ jobs:
           xcodebuild -version
           xcrun simctl list devices available | grep -E 'iPhone|-- iOS'
 
-      - name: Run unit tests
-        run: |
-          set -o pipefail
-          xcodebuild test \
-            -project BarnHub.xcodeproj \
-            -scheme BarnHub \
-            -only-testing:BarnHubTests \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -destination-timeout 120 \
-            -configuration Debug \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            -skipPackagePluginValidation \
-            -skipMacroValidation \
-            | xcbeautify
+      - name: Run tests
+        run: ./scripts/test.sh
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: .build/test-results
+          retention-days: 7
