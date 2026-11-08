@@ -48,7 +48,10 @@ struct HorseListView: View {
                             .contextMenu { rowActions(horse) }
                     }
                 } detail: {
-                    if let id = router.selectedHorseID {
+                    // Only for an item in the list: a just-inserted item has a temporary
+                    // ID until it's saved, and resolving that afterwards traps.
+                    if let id = router.selectedHorseID,
+                       filteredHorses.contains(where: { $0.persistentModelID == id }) {
                         HorseDetailView(horseID: id, isEmbedded: true) {
                             router.selectedHorseID = nil
                         }

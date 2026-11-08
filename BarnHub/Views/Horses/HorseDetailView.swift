@@ -115,10 +115,10 @@ struct HorseDetailView: View {
 
     private func infoSection(_ horse: Horse) -> some View {
         Section("Info") {
-            LabeledContent("Breed", value: horse.breed)
+            LabeledContent("Breed", value: horse.breed.isEmpty ? "--" : horse.breed)
             LabeledContent("Gender", value: horse.gender.displayName)
             LabeledContent("Date of Birth", value: horse.dateOfBirth.shortFormatted)
-            LabeledContent("Color/Markings", value: horse.colorMarkings)
+            LabeledContent("Color/Markings", value: horse.colorMarkings.isEmpty ? "--" : horse.colorMarkings)
             LabeledContent("Weight", value: horse.weight > 0 ? "\(Int(horse.weight)) lbs" : "--")
             if horse.purchasePrice > 0 {
                 LabeledContent("Purchase Price", value: horse.purchasePrice.asCurrency)

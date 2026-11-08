@@ -53,7 +53,10 @@ struct ClientListView: View {
                             .contextMenu { rowActions(client) }
                     }
                 } detail: {
-                    if let id = router.selectedClientID {
+                    // Only for an item in the list: a just-inserted item has a temporary
+                    // ID until it's saved, and resolving that afterwards traps.
+                    if let id = router.selectedClientID,
+                       filteredClients.contains(where: { $0.persistentModelID == id }) {
                         ClientDetailView(clientID: id, isEmbedded: true) {
                             router.selectedClientID = nil
                         }

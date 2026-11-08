@@ -4,6 +4,7 @@ import SwiftData
 struct ClientEditView: View {
     let clientID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
+    @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
 
     @State private var firstName = ""
@@ -19,7 +20,6 @@ struct ClientEditView: View {
 
     private var isNew: Bool { clientID == nil }
     private var existingClient: Client? { modelContext.existingModel(for: clientID) }
-    private var saveButtonLabel: LocalizedStringKey { isNew ? "Add Client" : "Save Changes" }
     private var navigationTitleKey: LocalizedStringKey { isNew ? "New Client" : "Edit Client" }
 
     var body: some View {
@@ -56,16 +56,17 @@ struct ClientEditView: View {
                 Toggle("Active", isOn: $isActive)
             }
 
-            Section {
-                Button(saveButtonLabel) {
-                    save()
-                }
-                .frame(maxWidth: .infinity)
-                .disabled(firstName.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+        .navigationTitle(navigationTitleKey)
+        .toolbar {
+            // In the bar rather than at the bottom of the form, so it's always
+            // reachable and sits next to Cancel when the form opens as a sheet.
+            ToolbarItem(placement: .pinnedConfirmation) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(firstName.trimmingCharacters(in: .whitespaces).isEmpty
                     && lastName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .navigationTitle(navigationTitleKey)
         .inlineNavTitle()
         #if os(macOS)
         .formStyle(.grouped)
@@ -92,6 +93,7 @@ struct ClientEditView: View {
         let trimmedFirst = firstName.trimmingCharacters(in: .whitespaces)
         let trimmedLast = lastName.trimmingCharacters(in: .whitespaces)
         guard !trimmedFirst.isEmpty || !trimmedLast.isEmpty else { return }
+        var newClient: Client?
 
         if let client = existingClient {
             client.firstName = trimmedFirst
@@ -116,9 +118,14 @@ struct ClientEditView: View {
             )
             modelContext.insert(client)
             BarnHubLogger.info("Creating client name=\(trimmedFirst) \(trimmedLast)")
+            newClient = client
         }
 
         modelContext.saveWithLogging()
+        // Show the new client beside the list; read the ID after saving (see HorseEditView).
+        if let newClient, router.clientsShowSplit {
+            router.selectedClientID = newClient.persistentModelID
+        }
         toast.showAndDismiss(isNew ? appLocalized("Client added") : appLocalized("Client updated"), dismiss: dismiss)
     }
 }

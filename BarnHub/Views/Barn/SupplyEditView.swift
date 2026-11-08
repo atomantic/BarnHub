@@ -25,14 +25,23 @@ struct SupplyEditView: View {
         Form {
             Section("Details") {
                 TextField("Name", text: $name)
-                TextField("Category", text: $categoryRaw)
+                // Labelled rows: once filled in, a bare field shows only its value.
+                LabeledContent("Category") {
+                    TextField("Category", text: $categoryRaw)
+                        .labelsHidden()
+                        .multilineTextAlignment(.trailing)
+                }
                 LabeledContent("Quantity") {
                     TextField("0", value: $quantity, format: .number)
                         .labelsHidden()
                         .decimalKeyboard()
                         .multilineTextAlignment(.trailing)
                 }
-                TextField("Unit (e.g., lbs, bags)", text: $unit)
+                LabeledContent("Unit") {
+                    TextField("Unit (e.g., lbs, bags)", text: $unit)
+                        .labelsHidden()
+                        .multilineTextAlignment(.trailing)
+                }
                 LabeledContent("Reorder Threshold") {
                     TextField("0", value: $reorderThreshold, format: .number)
                         .labelsHidden()

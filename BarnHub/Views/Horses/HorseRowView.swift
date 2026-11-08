@@ -14,10 +14,12 @@ struct HorseRowView: View {
                     .clipShape(Circle())
                     .accessibilityHidden(true)
             } else {
-                Image(systemName: horse.isActive ? "checkmark.circle.fill" : "xmark.circle")
-                    .foregroundStyle(horse.isActive ? Color.barnGreen : Color.gray)
+                // Placeholder avatar, the same size as a photo.
+                Image(systemName: "figure.equestrian.sports")
                     .font(.subheadline)
+                    .foregroundStyle(horse.isActive ? Color.barnGreen : Color.gray)
                     .frame(width: 40, height: 40)
+                    .background(Circle().fill((horse.isActive ? Color.barnGreen : Color.gray).opacity(0.15)))
                     .accessibilityHidden(true)
             }
 
@@ -47,7 +49,7 @@ struct HorseRowView: View {
 
             Spacer()
 
-            if horse.photoData != nil && !horse.isActive {
+            if !horse.isActive {
                 Image(systemName: "xmark.circle")
                     .foregroundStyle(.gray)
                     .font(.caption)

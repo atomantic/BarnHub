@@ -85,18 +85,19 @@ struct FeedProductEditView: View {
                     .frame(minHeight: 60)
             }
 
-            Section {
-                Button(isNew ? "Add Product" : "Save Changes") {
-                    save()
-                }
-                .frame(maxWidth: .infinity)
-                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
         }
         #if os(macOS)
         .formStyle(.grouped)
         #endif
         .navigationTitle(isNew ? "New Feed Product" : "Edit Product")
+        .toolbar {
+            // In the bar rather than at the bottom of the form, so it's always
+            // reachable and sits next to Cancel when the form opens as a sheet.
+            ToolbarItem(placement: .pinnedConfirmation) {
+                Button(isNew ? "Add" : "Save") { save() }
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        }
         .inlineNavTitle()
         .toast(toast)
         .task { loadExisting() }
