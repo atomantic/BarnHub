@@ -69,7 +69,11 @@ struct BarnHubApp: App {
             : ModelConfiguration(cloudKitDatabase: .automatic)
         StorageMode.current = isSeedMode ? .inMemorySeed : .cloudKit
         do {
-            let container = try ModelContainer(for: BarnHubSchema.schema, configurations: config)
+            let container = try ModelContainer(
+                for: BarnHubSchema.schema,
+                migrationPlan: BarnHubMigrationPlan.self,
+                configurations: config
+            )
             #if DEBUG
             if isSeedMode {
                 PreviewSampleData.populate(container: container)
