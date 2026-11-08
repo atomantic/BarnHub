@@ -3,29 +3,19 @@ import Foundation
 extension Double {
     private static let currencyKey = "net.shadowpuppet.BarnBook.currencyCode"
 
-    private static let currencyFormatter: NumberFormatter = {
-        let f = NumberFormatter()
-        f.numberStyle = .currency
-        f.currencyCode = appCurrencyCode
-        return f
-    }()
-
     static var appCurrencyCode: String {
         let code = UserDefaults.standard.string(forKey: currencyKey) ?? ""
         return code.isEmpty ? "USD" : code
     }
 
-    /// Syncs the cached formatter when currency changes. Called from SettingsView.
-    static func refreshCurrencyFormatter() {
-        currencyFormatter.currencyCode = appCurrencyCode
+    /// The amount in the app currency, formatted for the in-app language
+    /// (`Locale.app`): "$1,250.00" in English, "1.250,00 $" in German.
+    var asCurrency: String {
+        Self.currency(self, code: Self.appCurrencyCode, locale: .app)
     }
 
-    var asCurrency: String {
-        let fmt = Self.currencyFormatter
-        if fmt.currencyCode != Self.appCurrencyCode {
-            fmt.currencyCode = Self.appCurrencyCode
-        }
-        return fmt.string(from: NSNumber(value: self)) ?? "0.00"
+    static func currency(_ value: Double, code: String, locale: Locale) -> String {
+        value.formatted(.currency(code: code).locale(locale))
     }
 
     /// Compact currency for chart axes: "$950", "$1.5K", "-$12K", "1,2 Mio. €".

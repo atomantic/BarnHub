@@ -521,14 +521,15 @@ struct ScheduleEventIndex {
         let unknownHorse = appLocalized("Unknown Horse", comment: "Fallback horse name")
         let noClient = appLocalized("No Client", comment: "Calendar lesson title when the lesson has no client")
         func appendCare<R: HorseCareRecord>(
-            _ records: [R], newest: [PersistentIdentifier: SupersedeKey], type: ScheduleEventType, provider: (R) -> String
+            _ records: [R], newest: [PersistentIdentifier: SupersedeKey], type: ScheduleEventType,
+            title: (String) -> String, provider: (R) -> String
         ) {
             for record in NewestCareRecords.current(records, newest: newest) {
                 guard let dueDate = record.nextDueDate else { continue }
                 events.append(ScheduleEvent(
                     id: ScheduleEventID(record.persistentModelID),
                     date: dueDate,
-                    title: "\(type.label): \(record.horse?.name ?? unknownHorse)",
+                    title: title(record.horse?.name ?? unknownHorse),
                     subtitle: provider(record),
                     type: type,
                     modelID: record.persistentModelID,
@@ -536,9 +537,12 @@ struct ScheduleEventIndex {
                 ))
             }
         }
-        appendCare(inputs.vetRecords, newest: inputs.newest.vet, type: .vet) { $0.vetName }
-        appendCare(inputs.farrierVisits, newest: inputs.newest.farrier, type: .farrier) { $0.farrierName }
-        appendCare(inputs.dentistVisits, newest: inputs.newest.dentist, type: .dentist) { $0.dentistName }
+        appendCare(inputs.vetRecords, newest: inputs.newest.vet, type: .vet,
+                   title: { appLocalized("Vet: \($0)", comment: "Calendar event title for a vet visit coming due: the horse's name") }) { $0.vetName }
+        appendCare(inputs.farrierVisits, newest: inputs.newest.farrier, type: .farrier,
+                   title: { appLocalized("Farrier: \($0)", comment: "Calendar event title for a farrier visit coming due: the horse's name") }) { $0.farrierName }
+        appendCare(inputs.dentistVisits, newest: inputs.newest.dentist, type: .dentist,
+                   title: { appLocalized("Dentist: \($0)", comment: "Calendar event title for a dentist visit coming due: the horse's name") }) { $0.dentistName }
 
         for lesson in inputs.lessons {
             let occurrences = lesson.occurrences(from: window.start, to: window.end, calendar: calendar)

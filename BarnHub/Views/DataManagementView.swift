@@ -314,7 +314,7 @@ struct DataManagementView: View {
             lines.append(appLocalized("\(r.skipped) rows skipped", comment: "CSV import result: invalid rows, followed by one line per reason"))
             for reason in DataImportService.SkipReason.allCases {
                 if let count = r.skipReasons[reason] {
-                    lines.append("\(reason.label): \(count)")
+                    lines.append(appLocalized("\(reason.label): \(count)", comment: "CSV import result: why rows were skipped, then how many"))
                 }
             }
         }
