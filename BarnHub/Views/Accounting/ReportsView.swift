@@ -17,14 +17,14 @@ struct ReportsView: View {
 
     var body: some View {
         // Only the selected period's transactions are fetched (#32).
-        QueryContent(ReportData.descriptor(for: selectedPeriod)) { transactions in
-            report(ReportData(transactions: transactions))
+        QueryContent(FinanceSummary.descriptor(for: selectedPeriod)) { transactions in
+            report(FinanceSummary(transactions: transactions))
         }
         .navigationTitle("Reports")
         .inlineNavTitle()
     }
 
-    private func report(_ data: ReportData) -> some View {
+    private func report(_ data: FinanceSummary) -> some View {
         ScrollView {
             VStack(spacing: 20) {
                 periodPicker
@@ -70,7 +70,7 @@ struct ReportsView: View {
     }
 
     @ViewBuilder
-    private func wideChartsLayout(data: ReportData) -> some View {
+    private func wideChartsLayout(data: FinanceSummary) -> some View {
         let hasTrend = data.monthlyTotals.count > 1
         let hasCategories = !data.expensesByCategory.isEmpty || !data.incomeByCategory.isEmpty
 
@@ -120,7 +120,7 @@ struct ReportsView: View {
 
     // MARK: - Summary Cards
 
-    private func summaryCards(data: ReportData) -> some View {
+    private func summaryCards(data: FinanceSummary) -> some View {
         HStack(spacing: 12) {
             SummaryCard(title: "Income", amount: data.totalIncome, color: .green, icon: "arrow.down.circle.fill")
             SummaryCard(title: "Expenses", amount: data.totalExpenses, color: .red, icon: "arrow.up.circle.fill")
@@ -130,7 +130,7 @@ struct ReportsView: View {
 
     // MARK: - Income vs Expense Bar Chart
 
-    private func incomeExpenseChart(data: ReportData) -> some View {
+    private func incomeExpenseChart(data: FinanceSummary) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Income vs Expenses")
                 .font(.headline)
@@ -168,7 +168,7 @@ struct ReportsView: View {
 
     // MARK: - Monthly Trend
 
-    private func monthlyTrendChart(data: ReportData) -> some View {
+    private func monthlyTrendChart(data: FinanceSummary) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Monthly Trend")
                 .font(.headline)
@@ -382,103 +382,3 @@ struct ReportsView: View {
         [.green, .barnGreen, .teal, .cyan, .mint, .blue, .indigo, .purple, .yellow]
     }
 }
-
-// MARK: - Report Data
-
-struct ReportData {
-    let filteredTransactions: [Transaction]
-    let totalIncome: Double
-    let totalExpenses: Double
-    let netBalance: Double
-    let expensesByCategory: [(category: TransactionCategory, amount: Double)]
-    let incomeByCategory: [(category: TransactionCategory, amount: Double)]
-    let monthlyTotals: [MonthlyTotal]
-
-    /// Totals for `filtered`, the transactions of one period (see `descriptor(for:)`).
-    init(transactions filtered: [Transaction]) {
-        self.filteredTransactions = filtered
-
-        var income: Double = 0
-        var expenses: Double = 0
-        var expenseGroups: [TransactionCategory: Double] = [:]
-        var incomeGroups: [TransactionCategory: Double] = [:]
-        var monthGroups: [Date: (income: Double, expenses: Double)] = [:]
-        let calendar = Calendar.current
-
-        for t in filtered {
-            if t.type == .income {
-                income += t.amount
-                incomeGroups[t.category, default: 0] += t.amount
-            } else {
-                expenses += t.amount
-                expenseGroups[t.category, default: 0] += t.amount
-            }
-            let components = calendar.dateComponents([.year, .month], from: t.date)
-            let monthStart = calendar.date(from: components) ?? t.date
-            var entry = monthGroups[monthStart, default: (income: 0, expenses: 0)]
-            if t.type == .income { entry.income += t.amount } else { entry.expenses += t.amount }
-            monthGroups[monthStart] = entry
-        }
-
-        self.totalIncome = income
-        self.totalExpenses = expenses
-        self.netBalance = income - expenses
-        self.expensesByCategory = expenseGroups.map { (category: $0.key, amount: $0.value) }.sorted { $0.amount > $1.amount }
-        self.incomeByCategory = incomeGroups.map { (category: $0.key, amount: $0.value) }.sorted { $0.amount > $1.amount }
-        self.monthlyTotals = monthGroups.map { MonthlyTotal(month: $0.key, income: $0.value.income, expenses: $0.value.expenses) }.sorted { $0.month < $1.month }
-    }
-
-    /// Fetches the transactions in `period` as of `now`. "This" periods run from
-    /// their start up to now; Last Month is the whole previous month.
-    static func descriptor(for period: ReportPeriod, now: Date = .now, calendar: Calendar = .current) -> FetchDescriptor<Transaction> {
-        let thisMonthStart = calendar.monthInterval(containing: now).start
-        let start: Date
-        switch period {
-        case .thisMonth:
-            start = thisMonthStart
-        case .lastMonth:
-            guard let lastMonthStart = calendar.date(byAdding: .month, value: -1, to: thisMonthStart) else { return FetchDescriptor() }
-            return FetchDescriptor(predicate: Transaction.dated(from: lastMonthStart, before: thisMonthStart))
-        case .thisQuarter:
-            let month = calendar.component(.month, from: now)
-            var components = calendar.dateComponents([.year], from: now)
-            components.month = ((month - 1) / 3) * 3 + 1
-            components.day = 1
-            guard let quarterStart = calendar.date(from: components) else { return FetchDescriptor() }
-            start = quarterStart
-        case .thisYear:
-            var components = calendar.dateComponents([.year], from: now)
-            components.month = 1
-            components.day = 1
-            guard let yearStart = calendar.date(from: components) else { return FetchDescriptor() }
-            start = yearStart
-        case .allTime:
-            return FetchDescriptor()
-        }
-        return FetchDescriptor(predicate: #Predicate<Transaction> { $0.date >= start && $0.date <= now })
-    }
-}
-
-// MARK: - Supporting Types
-
-enum ReportPeriod: String, CaseIterable, Identifiable {
-    case thisMonth, lastMonth, thisQuarter, thisYear, allTime
-    var id: String { rawValue }
-    var label: String {
-        switch self {
-        case .thisMonth: return "Month"
-        case .lastMonth: return "Last Mo"
-        case .thisQuarter: return "Quarter"
-        case .thisYear: return "Year"
-        case .allTime: return "All"
-        }
-    }
-}
-
-struct MonthlyTotal: Identifiable {
-    let id = UUID()
-    let month: Date
-    let income: Double
-    let expenses: Double
-}
-

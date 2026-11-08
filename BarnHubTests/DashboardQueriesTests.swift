@@ -110,24 +110,27 @@ final class DashboardQueriesTests: XCTestCase {
     }
 
     func testReportDescriptorMatchesPeriods() throws {
-        let now = Date.now
+        // A fixed mid-month "now", so "later this month" can't spill into next month.
+        let now = calendar.date(from: DateComponents(year: 2026, month: 5, day: 14, hour: 10))!
         let month = calendar.monthInterval(containing: now)
         let lastMonthStart = calendar.date(byAdding: .month, value: -1, to: month.start)!
         let inThisMonth = Transaction(amount: 1, date: month.start)
-        let future = Transaction(amount: 2, date: days(1, from: now))
+        let laterThisMonth = Transaction(amount: 2, date: days(1, from: now))
         let lastMonth = Transaction(amount: 3, date: lastMonthStart.addingTimeInterval(3600))
         let lastYear = Transaction(amount: 4, date: calendar.date(byAdding: .year, value: -1, to: month.start)!)
-        for txn in [inThisMonth, future, lastMonth, lastYear] { context.insert(txn) }
+        let nextMonth = Transaction(amount: 5, date: month.end)
+        for txn in [inThisMonth, laterThisMonth, lastMonth, lastYear, nextMonth] { context.insert(txn) }
         try context.save()
 
         func amounts(_ period: ReportPeriod) throws -> Set<Double> {
-            Set(try context.fetch(ReportData.descriptor(for: period, now: now)).map(\.amount))
+            Set(try context.fetch(FinanceSummary.descriptor(for: period, now: now)).map(\.amount))
         }
-        XCTAssertEqual(try amounts(.thisMonth), [1])
+        // The current period is the whole calendar month, including later dates in it.
+        XCTAssertEqual(try amounts(.thisMonth), [1, 2])
         XCTAssertEqual(try amounts(.lastMonth), [3])
-        XCTAssertEqual(try amounts(.allTime), [1, 2, 3, 4])
-        XCTAssertTrue(try amounts(.thisYear).isSuperset(of: [1]))
-        XCTAssertFalse(try amounts(.thisYear).contains(4))
+        XCTAssertEqual(try amounts(.thisQuarter), [1, 2, 3, 5], "April–June")
+        XCTAssertEqual(try amounts(.thisYear), [1, 2, 3, 5])
+        XCTAssertEqual(try amounts(.allTime), [1, 2, 3, 4, 5])
     }
 
     // MARK: - Supplies and lessons

@@ -314,7 +314,7 @@ struct HomeSummary {
             let start = calendar.startOfDay(for: anchor)
             self.anchor = anchor
             self.today = start
-            self.month = calendar.monthInterval(containing: start)
+            self.month = FinanceSummary.currentMonth(asOf: start, calendar: calendar)
             self.soonEnd = calendar.date(byAdding: .day, value: 2, to: start) ?? start
             self.dueEnd = calendar.date(byAdding: .day, value: 8, to: start) ?? start
         }
