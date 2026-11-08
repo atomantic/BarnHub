@@ -19,6 +19,9 @@ xcodebuild build -project BarnHub.xcodeproj -scheme BarnHub \
 xcodebuild test -project BarnHub.xcodeproj -scheme BarnHub \
   -only-testing:BarnHubTests \
   -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
+
+# Pre-deploy UI check: every screen on iPhone, iPad and the Mac app (~15+ min)
+./scripts/ui_check.sh            # or --iphone / --ipad / --mac, --only <testMethod>
 ```
 
 When more than one iOS runtime is installed, `name=iPhone 17` matches several
@@ -28,15 +31,17 @@ on both the oldest iOS you have (26.x) and the newest. SwiftData behaves
 differently across them; for example, batched fetches lose relationships before
 iOS 27 (#69).
 
+`scripts/ui_check.sh` runs `ScreenWalkTests` (in `BarnHubUITests` for iPhone and iPad, and `BarnHubMacUITests` for the native Mac app). It opens every screen with `-SeedSampleData` and fails when a screen crashes or doesn't show its sample content, including the document viewers and invoice share sheet. Failure screenshots land in `.build/ui-check/<platform>.xcresult`. Quit BarnHub on the Mac first, and don't use the Mac while the Mac run drives its window.
+
 ## Git Workflow
 
 After every feature or bug fix:
 
-1. **Build and test** — verify `xcodebuild build` and `xcodebuild test` pass
+1. **Build and test** — verify `xcodebuild build` and `xcodebuild test` pass. For UI changes, also run `./scripts/ui_check.sh` (at least `--iphone`)
 2. **`/simplify`** — run code review for reuse, quality, and efficiency; fix issues found
 3. **`/do:review`** — deep code review against best practices
 4. **`/do:push`** — commit and push to GitHub
-5. **`/release`** — when ready for TestFlight, run the local deploy (see below)
+5. **`/release`** — when ready for TestFlight, run `./scripts/ui_check.sh` on all platforms, then the local deploy (see below)
 
 ## TestFlight Deployment
 
@@ -63,6 +68,7 @@ CI via GitHub Actions (`.github/workflows/ci.yml`) builds and runs `BarnHubTests
 - **Destructive actions**: Use confirmation dialogs — never `window.confirm`
 - **Logging**: Use `BarnHubLogger.info/success/warning/error`. Never log names, emails, or other personal data; log counts, types, or flags instead
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument (Debug builds only, like `-screenshotRoute` and `barnhub://screenshot/…`; Release ignores them)
+- **New screens need a UI check entry**: when adding a route or screen, add a page for it in `ScreenshotRouter` (Debug) and a `Screen` with the sample text it must show in `ScreenWalkTests`, so `scripts/ui_check.sh` covers it. If the screen shows data, make sure `PreviewSampleData` has some
 
 ## Localization
 

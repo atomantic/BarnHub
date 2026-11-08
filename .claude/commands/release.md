@@ -6,6 +6,7 @@ Build, archive, and upload to TestFlight locally.
 
 1. **Pre-flight checks**:
    - Run `xcodebuild test` to ensure all tests pass
+   - Run `./scripts/ui_check.sh` (iPhone, iPad and Mac) to make sure every screen renders; don't deploy if it fails
    - Run `git status` to ensure working tree is clean (no uncommitted changes)
    - If there are uncommitted changes, ask the user to commit first
 
