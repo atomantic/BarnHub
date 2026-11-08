@@ -103,7 +103,7 @@ final class CSVWriter {
 struct DataExportService {
     private static let fetchBatchSize = 500
 
-    static let horsesHeader = ["Name", "Breed", "Date of Birth", "Color/Markings", "Weight (lbs)", "Purchase Price", "Stall", "Medical Notes", "Feeding Schedule", "Active"]
+    static let horsesHeader = ["Name", "Breed", "Date of Birth", "Color/Markings", "Weight (lbs)", "Purchase Price", "Stall", "Medical Notes", "Feeding Schedule", "Active", "Gender"]
     static let clientsHeader = ["First Name", "Last Name", "Email", "Phone", "Emergency Contact", "Emergency Phone", "Notes", "Active"]
     static let transactionsHeader = ["Date", "Type", "Category", "Amount", "Memo", "Client", "Paid"]
     static let horseClientsHeader = ["Horse", "Client"]
@@ -165,7 +165,7 @@ struct DataExportService {
         case .horses:
             try paged(FetchDescriptor<Horse>(sortBy: [SortDescriptor(\.name)]), context, progress) { h in
                 try writer.writeRow([h.name, h.breed, day(h.dateOfBirth), h.colorMarkings, num(h.weight),
-                                     num(h.purchasePrice), h.stallNumber, h.medicalNotes, h.feedingSchedule, "\(h.isActive)"])
+                                     num(h.purchasePrice), h.stallNumber, h.medicalNotes, h.feedingSchedule, "\(h.isActive)", h.gender.rawValue])
             }
         case .clients:
             try paged(FetchDescriptor<Client>(sortBy: [SortDescriptor(\.lastName)]), context, progress) { c in
