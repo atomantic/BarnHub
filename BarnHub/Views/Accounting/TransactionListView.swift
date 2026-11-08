@@ -81,20 +81,29 @@ struct TransactionListView: View {
 
     private var filterBar: some View {
         HStack(spacing: 16) {
-            Picker("Type", selection: $selectedType) {
-                Text("All").tag(nil as TransactionType?)
-                ForEach(TransactionType.allCases) { type in
-                    Text(type.displayName).tag(type as TransactionType?)
+            // Explicit labels: iOS menu pickers hide their own.
+            HStack(spacing: 6) {
+                Text("Type").foregroundStyle(.secondary)
+                Picker("Type", selection: $selectedType) {
+                    Text("All").tag(nil as TransactionType?)
+                    ForEach(TransactionType.allCases) { type in
+                        Text(type.displayName).tag(type as TransactionType?)
+                    }
                 }
+                .labelsHidden()
+                .fixedSize()
             }
-            .fixedSize()
-            Picker("Category", selection: $selectedCategory) {
-                Text("All").tag(nil as TransactionCategory?)
-                ForEach(TransactionCategory.allCases) { cat in
-                    Text(cat.displayName).tag(cat as TransactionCategory?)
+            HStack(spacing: 6) {
+                Text("Category").foregroundStyle(.secondary)
+                Picker("Category", selection: $selectedCategory) {
+                    Text("All").tag(nil as TransactionCategory?)
+                    ForEach(TransactionCategory.allCases) { cat in
+                        Text(cat.displayName).tag(cat as TransactionCategory?)
+                    }
                 }
+                .labelsHidden()
+                .fixedSize()
             }
-            .fixedSize()
             Spacer()
             DatePicker("From", selection: $startDate, displayedComponents: .date)
                 .fixedSize()
@@ -113,30 +122,35 @@ struct TransactionListView: View {
             TableColumn("Date", value: \.date) { txn in
                 Text(txn.date, format: .dateTime.year().month(.abbreviated).day())
             }
-            .width(min: 90, ideal: 110)
+            .width(min: 80, ideal: 100, max: 120)
             TableColumn("Category", value: \.categoryRaw) { txn in
                 Text(txn.category.displayName)
             }
-            .width(min: 90, ideal: 120)
+            .width(min: 80, ideal: 110, max: 150)
+            // Description takes the leftover width.
             TableColumn("Description", value: \.memo) { txn in
                 Text(txn.memo)
-                    .foregroundStyle(.secondary)
             }
+            .width(min: 160, ideal: 400)
             TableColumn("Client") { txn in
                 Text(txn.client?.fullName ?? "")
             }
-            .width(min: 80, ideal: 140)
+            .width(min: 80, ideal: 130, max: 200)
             TableColumn("Amount", value: \.signedAmount) { txn in
                 Text(txn.amount.asCurrency)
                     .monospacedDigit()
                     .foregroundStyle(txn.type == .income ? .green : .red)
             }
-            .width(min: 80, ideal: 100)
+            .width(min: 70, ideal: 90, max: 120)
             TableColumn("Paid") { txn in
                 if txn.isPaid {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                         .accessibilityLabel(Text("Paid"))
+                } else {
+                    Image(systemName: "circle")
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(Text("Unpaid"))
                 }
             }
             .width(40)
