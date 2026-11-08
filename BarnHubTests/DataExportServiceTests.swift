@@ -116,4 +116,55 @@ final class DataExportServiceTests: XCTestCase {
         XCTAssertTrue(dataLine.contains("boarding"), "Expected 'boarding' in: \(dataLine)")
         XCTAssertTrue(dataLine.contains("150.0"), "Expected '150.0' in: \(dataLine)")
     }
+
+    // MARK: - Escaping
+
+    func test_field_formulaLeadingCells_arePrefixedWithQuote() {
+        XCTAssertEqual(CSVWriter.field("=SUM(A1:A2)"), "'=SUM(A1:A2)")
+        XCTAssertEqual(CSVWriter.field("+1 555 0100"), "'+1 555 0100")
+        XCTAssertEqual(CSVWriter.field("-2+3"), "'-2+3")
+        XCTAssertEqual(CSVWriter.field("@cmd"), "'@cmd")
+        XCTAssertEqual(CSVWriter.field("\tTab"), "'\tTab")
+        XCTAssertEqual(CSVWriter.field("Plain"), "Plain")
+        XCTAssertEqual(CSVWriter.field("a=b"), "a=b")
+    }
+
+    func test_field_quotesCommaQuoteNewlineAndCarriageReturn() {
+        XCTAssertEqual(CSVWriter.field("a,b"), "\"a,b\"")
+        XCTAssertEqual(CSVWriter.field("say \"hi\""), "\"say \"\"hi\"\"\"")
+        XCTAssertEqual(CSVWriter.field("a\nb"), "\"a\nb\"")
+        XCTAssertEqual(CSVWriter.field("a\rb"), "\"a\rb\"")
+        XCTAssertEqual(CSVWriter.field("=1,2"), "\"'=1,2\"")
+    }
+
+    func test_exportClientsCSV_formulaInNotes_isNeutralized() throws {
+        let client = Client(firstName: "Eve", lastName: "Mallory")
+        client.notes = "=HYPERLINK(\"http://example.com\",\"click\")"
+        context.insert(client)
+        try context.save()
+
+        let csv = try DataExportService.exportClientsCSV(from: context)
+        XCTAssertTrue(csv.contains("\"'=HYPERLINK("), "Formula cell should be prefixed and quoted. Got:\n\(csv)")
+        XCTAssertFalse(csv.contains(",=HYPERLINK"), csv)
+    }
+
+    func test_exportTransactionsCSV_dateUsesGivenTimeZone() throws {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "America/Los_Angeles")!
+        let evening = cal.date(from: DateComponents(year: 2026, month: 1, day: 15, hour: 20))!
+        context.insert(Transaction(amount: 10, date: evening, category: .feed, type: .expense))
+        try context.save()
+
+        let options = CSVOptions(timeZone: cal.timeZone, locale: Locale(identifier: "en_US"))
+        let csv = try DataExportService.exportTransactionsCSV(from: context, options: options)
+        XCTAssertTrue(csv.contains("\n2026-01-15,expense,feed,10.0,"), csv)
+    }
+
+    func test_number_threeFractionDigits_isWrittenUnambiguously() {
+        XCTAssertEqual(CSVWriter.number(150), "150.0")
+        XCTAssertEqual(CSVWriter.number(123.456), "123.4560")
+        XCTAssertEqual(CSVWriter.number(1234.567), "1234.567")
+        let de = CSVAmountParser(options: CSVOptions(locale: Locale(identifier: "de_DE")))
+        XCTAssertEqual(de.parse(CSVWriter.number(123.456)), 123.456)
+    }
 }
