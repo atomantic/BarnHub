@@ -32,6 +32,20 @@ final class BarnHubTests: XCTestCase {
         XCTAssertEqual(horses.first?.name, "Thunder")
     }
 
+    func testFeedUnitDisplayName_isSingularForOne() {
+        XCTAssertEqual(FeedUnit.scoops.displayName(for: 1), "scoop")
+        XCTAssertEqual(FeedUnit.scoops.displayName(for: 2), "scoops")
+        XCTAssertEqual(FeedUnit.flakes.displayName(for: 0.5), "flakes")
+        XCTAssertEqual(FeedUnit.other.displayName(for: 1), "unit")
+    }
+
+    func testFeedPlanEntrySummary_usesSingularUnitForOne() {
+        let entry = FeedPlanEntry(amount: 1, unit: .scoops)
+        XCTAssertTrue(entry.summary.hasPrefix("1 scoop "), entry.summary)
+        let two = FeedPlanEntry(amount: 2, unit: .scoops)
+        XCTAssertTrue(two.summary.hasPrefix("2 scoops "), two.summary)
+    }
+
     func testClientFullName() {
         let client = Client()
         client.firstName = "Jane"

@@ -10,6 +10,32 @@ enum SidebarSelection: Hashable {
     case schedule
     case schedulePage(ScheduleSubpage)
     case accounting
+    case accountingPage(AccountingSubpage)
+
+    enum AccountingSubpage: String, Hashable, CaseIterable {
+        case transactions, reports
+
+        var route: any Hashable {
+            switch self {
+            case .transactions: return AccountingRoute.list
+            case .reports: return HomeRoute.reports
+            }
+        }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .transactions: return "Transactions"
+            case .reports: return "Reports"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .transactions: return "list.bullet.rectangle"
+            case .reports: return "chart.bar.xaxis"
+            }
+        }
+    }
 
     enum ScheduleSubpage: String, Hashable, CaseIterable {
         case reminders, vetSchedule, farrierSchedule, dentistSchedule, lessons, supplies, barnNotes, feedProducts
@@ -71,6 +97,7 @@ struct SidebarView: View {
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.horsesExpanded") private var horsesExpanded = true
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.clientsExpanded") private var clientsExpanded = true
     @AppStorage("net.shadowpuppet.BarnBook.sidebar.scheduleExpanded") private var scheduleExpanded = true
+    @AppStorage("net.shadowpuppet.BarnBook.sidebar.accountingExpanded") private var accountingExpanded = true
 
     private var isPro: Bool { storeService.isPro }
 
@@ -120,9 +147,17 @@ struct SidebarView: View {
                     .accessibilityIdentifier("sidebar_schedule")
             }
 
-            Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon)
-                .tag(SidebarSelection.accounting)
-                .accessibilityIdentifier("sidebar_accounting")
+            DisclosureGroup(isExpanded: $accountingExpanded) {
+                ForEach(SidebarSelection.AccountingSubpage.allCases, id: \.self) { sub in
+                    Label(sub.title, systemImage: sub.icon)
+                        .font(.subheadline)
+                        .tag(SidebarSelection.accountingPage(sub))
+                }
+            } label: {
+                Label(Router.AppTab.accounting.title, systemImage: Router.AppTab.accounting.icon)
+                    .tag(SidebarSelection.accounting)
+                    .accessibilityIdentifier("sidebar_accounting")
+            }
         }
         .navigationTitle("BarnHub")
         .listStyle(.sidebar)
@@ -201,7 +236,7 @@ extension SidebarSelection {
         case .horses, .horse: return .horses
         case .clients, .client: return .clients
         case .schedule, .schedulePage: return .schedule
-        case .accounting: return .accounting
+        case .accounting, .accountingPage: return .accounting
         }
     }
 
@@ -233,6 +268,9 @@ extension SidebarSelection {
         case .schedulePage(let sub):
             router.popToRoot(tab: .schedule)
             router.navigate(to: sub.barnRoute, tab: .schedule)
+        case .accountingPage(let sub):
+            router.popToRoot(tab: .accounting)
+            router.navigate(to: sub.route, tab: .accounting)
         }
     }
 }
