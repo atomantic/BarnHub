@@ -52,4 +52,38 @@ final class BarnHubUITests: XCTestCase {
         tabBar.buttons["Accounting"].tap()
         tabBar.buttons["Home"].tap()
     }
+
+    /// #35: an amount typed on the decimal pad without a currency symbol, and
+    /// without pressing Return (the pad has none), is saved.
+    func testTypedAmountWithoutSymbolIsSaved() {
+        // Skip the first-launch sheet, which would cover the tab bar.
+        app.terminate()
+        app.launchArguments = ["-net.shadowpuppet.BarnBook.hasCompletedFirstLaunch", "YES"]
+        app.launch()
+
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["Accounting"].tap()
+        let newTransaction = app.buttons["New Transaction"].firstMatch
+        XCTAssertTrue(newTransaction.waitForExistence(timeout: 5))
+        newTransaction.tap()
+
+        let memo = "UI test \(Int(Date().timeIntervalSince1970))"
+        let memoField = app.textFields["Memo"]
+        XCTAssertTrue(memoField.waitForExistence(timeout: 5))
+        memoField.tap()
+        memoField.typeText(memo)
+
+        // Type the amount last and save straight away, so nothing but the
+        // keystrokes themselves can commit it.
+        let amount = app.textFields.element(boundBy: 0)
+        amount.tap()
+        amount.typeText("12.50")
+
+        app.buttons["Save"].tap()
+
+        let row = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", memo)).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "saved transaction listed")
+        XCTAssertTrue(row.label.contains("12.50"), "saved amount: \(row.label)")
+    }
 }
