@@ -273,7 +273,18 @@ struct DataExportService {
                                                   _ progress: CSVProgressHandler?, _ body: (T) throws -> Void) throws {
         var descriptor = descriptor
         descriptor.includePendingChanges = false
-        let items = try context.fetch(descriptor, batchSize: fetchBatchSize)
+        // Before iOS 27, a batched fetch returns objects whose relationships read
+        // as empty, and a to-many one (Horse.clients) traps in SwiftData, so
+        // older systems fetch everything at once.
+        if #available(iOS 27, macOS 27, macCatalyst 27, *) {
+            try iterate(try context.fetch(descriptor, batchSize: fetchBatchSize), progress, body)
+        } else {
+            try iterate(try context.fetch(descriptor), progress, body)
+        }
+    }
+
+    private static func iterate<C: Collection>(_ items: C, _ progress: CSVProgressHandler?,
+                                               _ body: (C.Element) throws -> Void) throws {
         let total = items.count
         for (i, item) in items.enumerated() {
             if i % fetchBatchSize == 0 {
