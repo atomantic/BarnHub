@@ -224,9 +224,25 @@ struct ContentView: View {
         .onOpenURL { url in
             handleIncomingURL(url)
         }
+        .sheet(item: $router.presentedForm) { form in
+            FormSheet(form: form)
+        }
+        .onAppear { updateFormPresentation() }
+        #if os(iOS)
+        .onChange(of: sizeClass) { updateFormPresentation() }
+        #endif
         .sheet(isPresented: $showFirstLaunchSheet) {
             FirstLaunchSheet()
         }
+    }
+
+    /// Forms open as sheets on the Mac and in iPad-sized windows, and push on iPhone.
+    private func updateFormPresentation() {
+        #if os(macOS)
+        router.presentsFormsAsSheets = true
+        #else
+        router.presentsFormsAsSheets = sizeClass == .regular
+        #endif
     }
 
     private func handleIncomingURL(_ url: URL) {
@@ -514,79 +530,154 @@ private extension View {
 
     func withRouteDestinations() -> some View {
         self
-            .navigationDestination(for: HomeRoute.self) { route in
-                switch route {
-                case .horses: HorseListView()
-                case .clients: ClientListView()
-                case .schedule: BarnDashboardView()
-                case .supplies: SupplyListView()
-                case .accounting: AccountingDashboardView()
-                case .reports: ReportsView()
-                case .barnNotes: BarnNoteListView()
-                case .settings: SettingsView()
-                case .dataManagement: DataManagementView()
+            .navigationDestination(for: HomeRoute.self) { $0.destination }
+            .navigationDestination(for: HorseRoute.self) { $0.destination }
+            .navigationDestination(for: ClientRoute.self) { $0.destination }
+            .navigationDestination(for: AccountingRoute.self) { $0.destination }
+            .navigationDestination(for: BarnRoute.self) { $0.destination }
+            .navigationDestination(for: SubscriptionRoute.self) { $0.destination }
+    }
+}
+
+// MARK: - Route destinations
+
+extension HomeRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .horses: HorseListView()
+        case .clients: ClientListView()
+        case .schedule: BarnDashboardView()
+        case .supplies: SupplyListView()
+        case .accounting: AccountingDashboardView()
+        case .reports: ReportsView()
+        case .barnNotes: BarnNoteListView()
+        case .settings: SettingsView()
+        case .dataManagement: DataManagementView()
+        }
+    }
+}
+
+extension HorseRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .list: HorseListView()
+        case .detail(let id): HorseDetailView(horseID: id)
+        case .edit(let id): HorseEditView(horseID: id)
+        case .addVetRecord(let id): VetRecordEditView(horseID: id)
+        case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
+        case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
+        case .editVetRecord(let id): VetRecordEditView(horseID: nil, recordID: id)
+        case .editFarrierVisit(let id): FarrierVisitEditView(horseID: nil, visitID: id)
+        case .editDentistVisit(let id): DentistVisitEditView(horseID: nil, visitID: id)
+        case .healthTimeline(let id): HealthTimelineView(horseID: id)
+        case .weightChart(let id): WeightChartView(horseID: id)
+        case .documents(let id): HorseDocumentsView(horseID: id)
+        case .feedPlan(let id): HorseFeedPlanView(horseID: id)
+        case .editFeedEntry(let horseID, let entryID): FeedPlanEntryEditView(horseID: horseID, entryID: entryID)
+        }
+    }
+}
+
+extension ClientRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .list: ClientListView()
+        case .detail(let id): ClientDetailView(clientID: id)
+        case .edit(let id): ClientEditView(clientID: id)
+        case .manageHorses(let id): ClientHorsesView(clientID: id)
+        case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
+        case .paymentHistory(let id): ClientPaymentHistoryView(clientID: id)
+        case .documents(let id): ClientDocumentsView(clientID: id)
+        }
+    }
+}
+
+extension AccountingRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .list: TransactionListView()
+        case .edit(let id): TransactionEditView(transactionID: id)
+        }
+    }
+}
+
+extension BarnRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .supplies: SupplyListView()
+        case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
+        case .reminders: ReminderListView()
+        case .reminderEdit(let id): ReminderEditView(reminderID: id)
+        case .barnNotes: BarnNoteListView()
+        case .barnNoteEdit(let id): BarnNoteEditView(noteID: id)
+        case .vetSchedule: VetScheduleView()
+        case .addVetRecord: VetRecordEditView(horseID: nil)
+        case .farrierSchedule: FarrierScheduleView()
+        case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
+        case .dentistSchedule: DentistScheduleView()
+        case .addDentistVisit: DentistVisitEditView(horseID: nil)
+        case .lessons: LessonListView()
+        case .lessonEdit(let id): LessonEditView(lessonID: id)
+        case .feedProducts: FeedProductListView()
+        case .feedProductEdit(let id): FeedProductEditView(productID: id)
+        }
+    }
+}
+
+extension SubscriptionRoute {
+    /// The screen this route shows, whether pushed or presented as a form sheet.
+    @MainActor @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .paywall: PaywallView()
+        }
+    }
+}
+
+// MARK: - Form sheets
+
+/// Shows an add/edit form route as a sheet with a Cancel button, used on the
+/// Mac and at regular width instead of pushing the form onto the tab's stack.
+struct FormSheet: View {
+    let form: Router.PresentedForm
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            content
+                .withRouteDestinations()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
                 }
-            }
-            .navigationDestination(for: HorseRoute.self) { route in
-                switch route {
-                case .list: HorseListView()
-                case .detail(let id): HorseDetailView(horseID: id)
-                case .edit(let id): HorseEditView(horseID: id)
-                case .addVetRecord(let id): VetRecordEditView(horseID: id)
-                case .addFarrierVisit(let id): FarrierVisitEditView(horseID: id)
-                case .addDentistVisit(let id): DentistVisitEditView(horseID: id)
-                case .editVetRecord(let id): VetRecordEditView(horseID: nil, recordID: id)
-                case .editFarrierVisit(let id): FarrierVisitEditView(horseID: nil, visitID: id)
-                case .editDentistVisit(let id): DentistVisitEditView(horseID: nil, visitID: id)
-                case .healthTimeline(let id): HealthTimelineView(horseID: id)
-                case .weightChart(let id): WeightChartView(horseID: id)
-                case .documents(let id): HorseDocumentsView(horseID: id)
-                case .feedPlan(let id): HorseFeedPlanView(horseID: id)
-                case .editFeedEntry(let horseID, let entryID): FeedPlanEntryEditView(horseID: horseID, entryID: entryID)
-                }
-            }
-            .navigationDestination(for: ClientRoute.self) { route in
-                switch route {
-                case .list: ClientListView()
-                case .detail(let id): ClientDetailView(clientID: id)
-                case .edit(let id): ClientEditView(clientID: id)
-                case .manageHorses(let id): ClientHorsesView(clientID: id)
-                case .invoiceHistory(let id): InvoiceHistoryView(clientID: id)
-                case .paymentHistory(let id): ClientPaymentHistoryView(clientID: id)
-                case .documents(let id): ClientDocumentsView(clientID: id)
-                }
-            }
-            .navigationDestination(for: AccountingRoute.self) { route in
-                switch route {
-                case .list: TransactionListView()
-                case .edit(let id): TransactionEditView(transactionID: id)
-                }
-            }
-            .navigationDestination(for: BarnRoute.self) { route in
-                switch route {
-                case .supplies: SupplyListView()
-                case .supplyEdit(let id): SupplyEditView(supplyItemID: id)
-                case .reminders: ReminderListView()
-                case .reminderEdit(let id): ReminderEditView(reminderID: id)
-                case .barnNotes: BarnNoteListView()
-                case .barnNoteEdit(let id): BarnNoteEditView(noteID: id)
-                case .vetSchedule: VetScheduleView()
-                case .addVetRecord: VetRecordEditView(horseID: nil)
-                case .farrierSchedule: FarrierScheduleView()
-                case .addFarrierVisit: FarrierVisitEditView(horseID: nil)
-                case .dentistSchedule: DentistScheduleView()
-                case .addDentistVisit: DentistVisitEditView(horseID: nil)
-                case .lessons: LessonListView()
-                case .lessonEdit(let id): LessonEditView(lessonID: id)
-                case .feedProducts: FeedProductListView()
-                case .feedProductEdit(let id): FeedProductEditView(productID: id)
-                }
-            }
-            .navigationDestination(for: SubscriptionRoute.self) { route in
-                switch route {
-                case .paywall: PaywallView()
-                }
-            }
+        }
+        #if os(macOS)
+        .frame(minWidth: 560, idealWidth: 640, minHeight: 520, idealHeight: 640)
+        #endif
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if let route = form.route.base as? HorseRoute {
+            route.destination
+        } else if let route = form.route.base as? ClientRoute {
+            route.destination
+        } else if let route = form.route.base as? AccountingRoute {
+            route.destination
+        } else if let route = form.route.base as? BarnRoute {
+            route.destination
+        }
     }
 }
 
