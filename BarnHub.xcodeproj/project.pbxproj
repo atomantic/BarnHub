@@ -131,6 +131,7 @@
 		18EF50A28941205C01A9BCA5 /* FeedProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A190DB466D9CAD6AB34833 /* FeedProduct.swift */; };
 		80DF3222E78C339AB99FE239 /* HorseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0B2139601FAF7FAE12C875 /* HorseListView.swift */; };
 		8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E512067702B1DE5393F4838 /* BarnHubUITests.swift */; };
+		DRSTUI076000000000000002 /* DataResetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DRSTUI076000000000000001 /* DataResetUITests.swift */; };
 		8577723B2B9EB839BA4CD511 /* HorseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BEEAC495C182AA5F82B218 /* HorseRowView.swift */; };
 		873115BAC93C0159BCB86D42 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162F54183A973C74E91D0DD7 /* TransactionEditView.swift */; };
 		87DA624D2AAB4188B6D329FF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 943D638300E743FE98F4D65E /* Localizable.xcstrings */; };
@@ -274,6 +275,7 @@
 		TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0002000000000001 /* DataExportServiceTests.swift */; };
 		EXPALL045000000000000002 /* AllDataExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EXPALL045000000000000001 /* AllDataExportTests.swift */; };
 		RSTALL071000000000000005 /* AllDataRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = RSTALL071000000000000004 /* AllDataRestoreTests.swift */; };
+		DRSTFL076000000000000002 /* DataResetStepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DRSTFL076000000000000001 /* DataResetStepTests.swift */; };
 		TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0003000000000001 /* DataImportServiceTests.swift */; };
 		TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TESTNEW0004000000000001 /* NotificationServiceTests.swift */; };
 		B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000004 /* RecurrenceTests.swift */; };
@@ -346,6 +348,7 @@
 		162F54183A973C74E91D0DD7 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditView.swift; sourceTree = "<group>"; };
 		17FD7B53BC587AAC85435CCD /* BarnHub-macOS.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = "BarnHub-macOS.entitlements"; sourceTree = "<group>"; };
 		1E512067702B1DE5393F4838 /* BarnHubUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubUITests.swift; sourceTree = "<group>"; };
+		DRSTUI076000000000000001 /* DataResetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResetUITests.swift; sourceTree = "<group>"; };
 		1F0B2139601FAF7FAE12C875 /* HorseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorseListView.swift; sourceTree = "<group>"; };
 		201B61197773820D4015D429 /* FarrierVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierVisitEditView.swift; sourceTree = "<group>"; };
 		DENT00112233445566770003 /* DentistVisitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistVisitEditView.swift; sourceTree = "<group>"; };
@@ -478,6 +481,7 @@
 		TESTNEW0002000000000001 /* DataExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportServiceTests.swift; sourceTree = "<group>"; };
 		EXPALL045000000000000001 /* AllDataExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataExportTests.swift; sourceTree = "<group>"; };
 		RSTALL071000000000000004 /* AllDataRestoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllDataRestoreTests.swift; sourceTree = "<group>"; };
+		DRSTFL076000000000000001 /* DataResetStepTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResetStepTests.swift; sourceTree = "<group>"; };
 		TESTNEW0003000000000001 /* DataImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImportServiceTests.swift; sourceTree = "<group>"; };
 		TESTNEW0004000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
 		B4A10001REMSVC0000000004 /* RecurrenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceTests.swift; sourceTree = "<group>"; };
@@ -628,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				1E512067702B1DE5393F4838 /* BarnHubUITests.swift */,
+				DRSTUI076000000000000001 /* DataResetUITests.swift */,
 				F607182930415263C4D5E6F7 /* ScreenshotTests.swift */,
 			);
 			path = BarnHubUITests;
@@ -789,6 +794,7 @@
 				TESTNEW0002000000000001 /* DataExportServiceTests.swift */,
 				EXPALL045000000000000001 /* AllDataExportTests.swift */,
 				RSTALL071000000000000004 /* AllDataRestoreTests.swift */,
+				DRSTFL076000000000000001 /* DataResetStepTests.swift */,
 				TESTNEW0003000000000001 /* DataImportServiceTests.swift */,
 				TESTNEW0004000000000001 /* NotificationServiceTests.swift */,
 				B4A10001REMSVC0000000004 /* RecurrenceTests.swift */,
@@ -1193,6 +1199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8293D3A78740C0033301853F /* BarnHubUITests.swift in Sources */,
+				DRSTUI076000000000000002 /* DataResetUITests.swift in Sources */,
 				E5F6071829304152B3C4D5E6 /* ScreenshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1352,6 +1359,7 @@
 				TESTNEW0002000000000002 /* DataExportServiceTests.swift in Sources */,
 				EXPALL045000000000000002 /* AllDataExportTests.swift in Sources */,
 				RSTALL071000000000000005 /* AllDataRestoreTests.swift in Sources */,
+				DRSTFL076000000000000002 /* DataResetStepTests.swift in Sources */,
 				TESTNEW0003000000000002 /* DataImportServiceTests.swift in Sources */,
 				TESTNEW0004000000000002 /* NotificationServiceTests.swift in Sources */,
 				B4A10001REMSVC0000000005 /* RecurrenceTests.swift in Sources */,
