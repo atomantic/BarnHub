@@ -92,11 +92,16 @@ struct ReportsView: View {
             if hasTrend {
                 monthlyTrendChart(data: data)
             }
-            if !data.expensesByCategory.isEmpty {
-                categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
-            }
-            if !data.incomeByCategory.isEmpty {
-                categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+            // No trend (e.g. a single month): put the two breakdowns side by side.
+            HStack(alignment: .top, spacing: 16) {
+                if !data.expensesByCategory.isEmpty {
+                    categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
+                        .frame(maxWidth: .infinity)
+                }
+                if !data.incomeByCategory.isEmpty {
+                    categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
     }
@@ -170,7 +175,8 @@ struct ReportsView: View {
             Chart(data.monthlyTotals) { total in
                 LineMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income)
+                    y: .value("Income", total.income),
+                    series: .value("Series", "Income")
                 )
                 .foregroundStyle(.green)
                 .symbol(Circle())
@@ -178,14 +184,16 @@ struct ReportsView: View {
 
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income)
+                    y: .value("Income", total.income),
+                    series: .value("Series", "Income")
                 )
                 .foregroundStyle(.green.opacity(0.1))
                 .interpolationMethod(.catmullRom)
 
                 LineMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses)
+                    y: .value("Expenses", total.expenses),
+                    series: .value("Series", "Expenses")
                 )
                 .foregroundStyle(.red)
                 .symbol(Circle())
@@ -193,7 +201,8 @@ struct ReportsView: View {
 
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses)
+                    y: .value("Expenses", total.expenses),
+                    series: .value("Series", "Expenses")
                 )
                 .foregroundStyle(.red.opacity(0.1))
                 .interpolationMethod(.catmullRom)
