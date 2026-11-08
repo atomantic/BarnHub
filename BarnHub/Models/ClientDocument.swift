@@ -18,10 +18,10 @@ final class ClientDocument {
         set { typeRaw = newValue.rawValue }
     }
 
-    var fileName: String {
-        let safe = title.replacingOccurrences(of: " ", with: "_")
-        let ext = documentType == .photo ? "jpg" : "pdf"
-        return "\(safe).\(ext)"
+    /// The extension the shared file should carry: photos picked before
+    /// documents were normalized to JPEG may still be HEIC or PNG.
+    var fileExtension: String {
+        documentType == .photo ? ImageProcessing.fileExtension(forImageData: fileData) : "pdf"
     }
 
     init(title: String = "", documentType: DocumentType = .pdf, fileData: Data? = nil) {

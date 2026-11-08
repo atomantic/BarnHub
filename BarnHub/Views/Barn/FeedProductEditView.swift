@@ -12,6 +12,7 @@ struct FeedProductEditView: View {
     @State private var notes = ""
     @State private var defaultUnit: FeedUnit = .scoops
     @State private var photoData: Data?
+    @State private var thumbnailData: Data?
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoLoadTask: Task<Void, Never>?
     @State private var showCamera = false
@@ -24,12 +25,16 @@ struct FeedProductEditView: View {
         Form {
             Section {
                 VStack(spacing: 12) {
-                    if let photoData, let image = Image(photoData: photoData) {
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 120, height: 120)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    if photoData != nil {
+                        CachedPhotoView(data: photoData, maxPixelSize: 360) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            Color.secondary.opacity(0.15)
+                        }
+                        .frame(width: 120, height: 120)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     } else {
                         Image(systemName: "leaf.circle.fill")
                             .resizable()
@@ -57,6 +62,7 @@ struct FeedProductEditView: View {
                             Button(role: .destructive) {
                                 withAnimation {
                                     photoData = nil
+                                    thumbnailData = nil
                                     selectedPhoto = nil
                                 }
                             } label: {
@@ -106,29 +112,40 @@ struct FeedProductEditView: View {
             photoLoadTask?.cancel()
             photoLoadTask = Task {
                 do {
-                    if let data = try await newItem.loadTransferable(type: Data.self) {
-                        await MainActor.run {
-                            photoData = data.downsampledImage(maxDimension: 800)
-                            selectedPhoto = nil
-                        }
-                    }
+                    guard let data = try await newItem.loadTransferable(type: Data.self) else { return }
+                    let processed = await ImageProcessing.processPhoto(from: data)
+                    guard !Task.isCancelled else { return }
+                    apply(processed)
+                    selectedPhoto = nil
                 } catch is CancellationError {
                     // cancelled
                 } catch {
-                    await MainActor.run {
-                        toast.show(appLocalized("Failed to load photo"), isError: true)
-                    }
+                    toast.show(appLocalized("Failed to load photo"), isError: true)
                 }
             }
         }
         #if os(iOS)
         .fullScreenCover(isPresented: $showCamera) {
-            CameraView { imageData in
-                photoData = imageData.downsampledImage(maxDimension: 800)
+            CameraView { capture in
+                photoLoadTask?.cancel()
+                photoLoadTask = Task {
+                    let processed = await ImageProcessing.processPhoto(from: capture.image, orientation: capture.orientation)
+                    guard !Task.isCancelled else { return }
+                    apply(processed)
+                }
             }
         }
         #endif
         .onDisappear { photoLoadTask?.cancel() }
+    }
+
+    private func apply(_ processed: ImageProcessing.ProcessedPhoto?) {
+        guard let processed else {
+            toast.show(appLocalized("Failed to load photo"), isError: true)
+            return
+        }
+        photoData = processed.photo
+        thumbnailData = processed.thumbnail
     }
 
     private func loadExisting() {
@@ -138,6 +155,7 @@ struct FeedProductEditView: View {
         notes = product.notes
         defaultUnit = product.defaultUnit
         photoData = product.photoData
+        thumbnailData = product.thumbnailData
     }
 
     private func save() {
@@ -150,6 +168,7 @@ struct FeedProductEditView: View {
             product.notes = notes
             product.defaultUnit = defaultUnit
             product.photoData = photoData
+            product.thumbnailData = thumbnailData
             BarnHubLogger.info("Updating feed product name=\(trimmedName)")
         } else {
             let product = FeedProduct(
@@ -159,6 +178,7 @@ struct FeedProductEditView: View {
                 defaultUnit: defaultUnit,
                 photoData: photoData
             )
+            product.thumbnailData = thumbnailData
             modelContext.insert(product)
             BarnHubLogger.info("Creating feed product name=\(trimmedName)")
         }
