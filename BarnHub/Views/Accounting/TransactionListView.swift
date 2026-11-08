@@ -28,7 +28,11 @@ struct TransactionListView: View {
     /// Only the transactions matching the filters are fetched (#32).
     private var filteredDescriptor: FetchDescriptor<Transaction> {
         FetchDescriptor(
-            predicate: Transaction.listPredicate(type: selectedType, category: selectedCategory, from: startDate, through: endDate),
+            predicate: Transaction.listPredicate(
+                type: selectedType,
+                category: selectedCategory,
+                in: Calendar.current.dayRange(from: startDate, through: endDate)
+            ),
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
     }

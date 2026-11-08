@@ -24,6 +24,8 @@
 		0A07620D5186E24DDCA66836 /* DataImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCC001122334455DATA0003 /* DataImportService.swift */; };
 		0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
 		B5A679D08E7AE281DD4089FC /* DashboardQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */; };
+		163787ECC4DD65DF11C4C165 /* FinanceSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C08BC994CE674ECF81D291 /* FinanceSummary.swift */; };
+		F851C8889CEFCE530C8087CC /* InvoiceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4189BC5D5E8C6BDF998F12 /* InvoiceBuilder.swift */; };
 		B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		0B326F92553B0A8255FB605C /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E49121D576E6628ED2785E /* Enums.swift */; };
 		0C52A3FD77C3562CA8CB2874 /* ClientPaymentHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC843FE000473583C12C01A8 /* ClientPaymentHistoryView.swift */; };
@@ -66,6 +68,9 @@
 		417E12155EF3C79FCF5EB07E /* ConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61497DC3F4BF5ADD8F450F5 /* ConfirmationDialog.swift */; };
 		41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */; };
 		5C580F86CEAE8F45A6ED9DDA /* DashboardQueriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */; };
+		823E8DF43CEEA26581B20A16 /* LocaleFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F03AA64F389E4EEA36598A4 /* LocaleFormattingTests.swift */; };
+		B538E6469BCD746AC7278BC1 /* FinanceSummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC6FEAEDD989E854062452 /* FinanceSummaryTests.swift */; };
+		6F8C0E60698F80D92523FEE0 /* InvoiceBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9F715A9AF795BC4A5982AB /* InvoiceBuilderTests.swift */; };
 		44932DED4DDB38C1486D4CA4 /* HorsePickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6078912345678 /* HorsePickerSection.swift */; };
 		462C72CBD666EC1A27EA58DD /* View+PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24679C3DFC35D8458271D8C1 /* View+PlatformCompat.swift */; };
 		476E83C7E956AB45BF4C59A3 /* VetRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8A6A12276BB472310E25E6 /* VetRecord.swift */; };
@@ -110,6 +115,8 @@
 		BAF339757A773E0B89048E24 /* HorseDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B633B5D058042761A458610 /* HorseDocument.swift */; };
 		72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87672D6719409A6B5AEE4D7 /* NotificationService.swift */; };
 		CF460BAF38FD3C489F166D21 /* DashboardQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */; };
+		EBA3FEF7869555BBD90AC423 /* FinanceSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C08BC994CE674ECF81D291 /* FinanceSummary.swift */; };
+		5C5BF6C14AF5E2C15A567BD3 /* InvoiceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4189BC5D5E8C6BDF998F12 /* InvoiceBuilder.swift */; };
 		B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A10001REMSVC0000000001 /* ReminderService.swift */; };
 		7552E6840F5214ED8C19D918 /* ReminderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93731FF9F5265CC5C9D7DF53 /* ReminderEditView.swift */; };
 		77313261E0469C1A89D5632C /* AccountingDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E145A0ED03726A87CB92407 /* AccountingDashboardView.swift */; };
@@ -398,6 +405,8 @@
 		C66384AD07AF442DAD2F63D8 /* InvoicePDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicePDFService.swift; sourceTree = "<group>"; };
 		C87672D6719409A6B5AEE4D7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQueries.swift; sourceTree = "<group>"; };
+		10C08BC994CE674ECF81D291 /* FinanceSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceSummary.swift; sourceTree = "<group>"; };
+		9C4189BC5D5E8C6BDF998F12 /* InvoiceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceBuilder.swift; sourceTree = "<group>"; };
 		B4A10001REMSVC0000000001 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		CALVIEWS00112233AABB0001 /* CalendarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViews.swift; sourceTree = "<group>"; };
 		CC22334455667788AABB0001 /* RouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterTests.swift; sourceTree = "<group>"; };
@@ -421,6 +430,9 @@
 		DD11223344556677SYNC0003 /* SyncIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncIndicatorView.swift; sourceTree = "<group>"; };
 		E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEventTests.swift; sourceTree = "<group>"; };
 		5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQueriesTests.swift; sourceTree = "<group>"; };
+		9F03AA64F389E4EEA36598A4 /* LocaleFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleFormattingTests.swift; sourceTree = "<group>"; };
+		CBDC6FEAEDD989E854062452 /* FinanceSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceSummaryTests.swift; sourceTree = "<group>"; };
+		DF9F715A9AF795BC4A5982AB /* InvoiceBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceBuilderTests.swift; sourceTree = "<group>"; };
 		E37F1708354B487E6E5995EC /* ScheduleRecordRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleRecordRow.swift; sourceTree = "<group>"; };
 		ED04A28DB89B4BB6A7F17558 /* BarnHubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarnHubApp.swift; sourceTree = "<group>"; };
 		F3762210D653233401BC7D64 /* FarrierScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FarrierScheduleView.swift; sourceTree = "<group>"; };
@@ -605,6 +617,8 @@
 				AA11223344556677AABB0001 /* StoreService.swift */,
 				C87672D6719409A6B5AEE4D7 /* NotificationService.swift */,
 				C8A2D3D1B130CD29B88DC097 /* DashboardQueries.swift */,
+				10C08BC994CE674ECF81D291 /* FinanceSummary.swift */,
+				9C4189BC5D5E8C6BDF998F12 /* InvoiceBuilder.swift */,
 				B4A10001REMSVC0000000001 /* ReminderService.swift */,
 				D01D4B1C5E53EE1D71A6A086 /* ModelContext+Helpers.swift */,
 				DD11223344556677SYNC0001 /* SyncMonitor.swift */,
@@ -715,6 +729,9 @@
 				8400E9C51028A856C60639AB /* BarnHubTests.swift */,
 				E00BDC91F3F84FC29E243CD4 /* TimelineEventTests.swift */,
 				5EBD516DB4E802452DBE28DE /* DashboardQueriesTests.swift */,
+				9F03AA64F389E4EEA36598A4 /* LocaleFormattingTests.swift */,
+				CBDC6FEAEDD989E854062452 /* FinanceSummaryTests.swift */,
+				DF9F715A9AF795BC4A5982AB /* InvoiceBuilderTests.swift */,
 				2EC26A7E1ACC483BB0E13D91 /* WeightEntryTests.swift */,
 				AB694A490656430DBDBC7C9C /* InvoiceTests.swift */,
 				AA11223344556677AABB000F /* FeatureGateTests.swift */,
@@ -1046,6 +1063,8 @@
 				14DE75B6956AFDFEB4DDEDDE /* StoreService.swift in Sources */,
 				0A77492C2759299A0A3A6C6B /* NotificationService.swift in Sources */,
 				B5A679D08E7AE281DD4089FC /* DashboardQueries.swift in Sources */,
+				163787ECC4DD65DF11C4C165 /* FinanceSummary.swift in Sources */,
+				F851C8889CEFCE530C8087CC /* InvoiceBuilder.swift in Sources */,
 				B4A10001REMSVC0000000002 /* ReminderService.swift in Sources */,
 				A2367BD7482ADBCF508F12D3 /* FeatureGate.swift in Sources */,
 				00BC5C60B37697E8C3A198D0 /* PaywallView.swift in Sources */,
@@ -1175,6 +1194,8 @@
 				AA11223344556677AABB0002 /* StoreService.swift in Sources */,
 				72FDBF1590C23A0C725FD997 /* NotificationService.swift in Sources */,
 				CF460BAF38FD3C489F166D21 /* DashboardQueries.swift in Sources */,
+				EBA3FEF7869555BBD90AC423 /* FinanceSummary.swift in Sources */,
+				5C5BF6C14AF5E2C15A567BD3 /* InvoiceBuilder.swift in Sources */,
 				B4A10001REMSVC0000000003 /* ReminderService.swift in Sources */,
 				AA11223344556677AABB0004 /* FeatureGate.swift in Sources */,
 				AA11223344556677AABB0006 /* PaywallView.swift in Sources */,
@@ -1209,6 +1230,9 @@
 				AA11223344556677AABB0010 /* FeatureGateTests.swift in Sources */,
 				41D9FC3B233446BFB7C8AC7C /* TimelineEventTests.swift in Sources */,
 				5C580F86CEAE8F45A6ED9DDA /* DashboardQueriesTests.swift in Sources */,
+				823E8DF43CEEA26581B20A16 /* LocaleFormattingTests.swift in Sources */,
+				B538E6469BCD746AC7278BC1 /* FinanceSummaryTests.swift in Sources */,
+				6F8C0E60698F80D92523FEE0 /* InvoiceBuilderTests.swift in Sources */,
 				495FB4301AA1475AA10C0E76 /* WeightEntryTests.swift in Sources */,
 				22E45E06F2344B0EBEB291B7 /* InvoiceTests.swift in Sources */,
 				CC22334455667788AABB0002 /* RouterTests.swift in Sources */,

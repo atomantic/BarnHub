@@ -48,24 +48,59 @@ final class SyncMonitor {
     private var importStatus: SyncStatus = .idle
     private var exportStatus: SyncStatus = .idle
 
-    init() {
-        if FileManager.default.ubiquityIdentityToken == nil {
-            status = .notAvailable
-            BarnHubLogger.warning("iCloud account not available")
-            return
-        }
+    /// Whether an iCloud account is signed in; injectable for tests.
+    private let hasAccount: () -> Bool
+    private let notificationCenter: NotificationCenter
 
-        NotificationCenter.default.addObserver(
+    /// Observes CloudKit events and iCloud account changes even when no account
+    /// is signed in at launch, so signing in later (or switching accounts)
+    /// recovers from "iCloud unavailable" without relaunching.
+    init(
+        notificationCenter: NotificationCenter = .default,
+        hasAccount: @escaping () -> Bool = { FileManager.default.ubiquityIdentityToken != nil }
+    ) {
+        self.hasAccount = hasAccount
+        self.notificationCenter = notificationCenter
+        notificationCenter.addObserver(
             self,
             selector: #selector(handleSyncEvent(_:)),
             name: NSPersistentCloudKitContainer.eventChangedNotification,
             object: nil
         )
-        BarnHubLogger.info("SyncMonitor started, listening for CloudKit events")
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(handleIdentityChange(_:)),
+            name: .NSUbiquityIdentityDidChange,
+            object: nil
+        )
+        updateAccountAvailability()
+        BarnHubLogger.info("SyncMonitor started, listening for CloudKit events and account changes")
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationCenter.removeObserver(self)
+    }
+
+    @objc private func handleIdentityChange(_ notification: Notification) {
+        Task { @MainActor in
+            self.updateAccountAvailability()
+        }
+    }
+
+    /// Shows "iCloud unavailable" while signed out; on sign-in, goes back to
+    /// waiting for the first sync event.
+    func updateAccountAvailability() {
+        if !hasAccount() {
+            if status != .notAvailable {
+                status = .notAvailable
+                BarnHubLogger.warning("iCloud account not available")
+            }
+        } else if status == .notAvailable {
+            importStatus = .idle
+            exportStatus = .idle
+            resolveStatus()
+            BarnHubLogger.info("iCloud account available")
+        }
     }
 
     @objc private func handleSyncEvent(_ notification: Notification) {
@@ -110,7 +145,8 @@ final class SyncMonitor {
     }
 
     private func resolveStatus() {
-        let newStatus = computeStatus()
+        // Without an account, sync events (failed setups) don't change what we show.
+        let newStatus = !hasAccount() ? .notAvailable : computeStatus()
         if let date = latestSucceededDate(), lastSuccessfulSync != date {
             lastSuccessfulSync = date
         }
