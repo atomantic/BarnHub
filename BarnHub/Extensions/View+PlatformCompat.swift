@@ -248,14 +248,16 @@ struct DetailPaneHeader: View {
                 Button(action: onEdit) {
                     Label("Edit", systemImage: "pencil")
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.borderedProminent)
+                .tint(.barnGreen)
                 Button(role: .destructive, action: onDelete) {
                     Label("Delete", systemImage: "trash")
                         .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.bordered)
+                .tint(.red)
+                .help(Text("Delete"))
             }
-            .tint(.barnGreen)
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
         }
