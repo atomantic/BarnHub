@@ -15,9 +15,7 @@ struct ClientPaymentHistoryView: View {
 
     var body: some View {
         let sorted = sortedTransactions
-        let totalAmount = sorted.reduce(0) { $0 + $1.amount }
-        let totalPaid = sorted.filter(\.isPaid).reduce(0) { $0 + $1.amount }
-        let totalUnpaid = sorted.filter { !$0.isPaid }.reduce(0) { $0 + $1.amount }
+        let balance = ClientBalance(sorted)
 
         return Group {
             if let client {
@@ -50,7 +48,7 @@ struct ClientPaymentHistoryView: View {
                                     Spacer()
 
                                     VStack(alignment: .trailing, spacing: 4) {
-                                        Text(transaction.amount.asCurrency)
+                                        Text(transaction.signedAmount.asCurrency)
                                             .font(.subheadline)
                                             .fontWeight(.medium)
                                             .foregroundStyle(transaction.type == .income ? .green : .primary)
@@ -65,15 +63,24 @@ struct ClientPaymentHistoryView: View {
                             }
                         }
 
-                        Section("Summary") {
-                            LabeledContent("Total", value: totalAmount.asCurrency)
+                        Section {
+                            LabeledContent("Total", value: balance.charged.asCurrency)
                             LabeledContent("Paid") {
-                                Text(totalPaid.asCurrency)
+                                Text(balance.paid.asCurrency)
                                     .foregroundStyle(.green)
                             }
                             LabeledContent("Unpaid") {
-                                Text(totalUnpaid.asCurrency)
-                                    .foregroundStyle(totalUnpaid > 0 ? .red : .secondary)
+                                Text(balance.unpaid.asCurrency)
+                                    .foregroundStyle(balance.unpaid > 0 ? .red : .secondary)
+                            }
+                            if balance.linkedExpenses > 0 {
+                                LabeledContent("Linked Expenses", value: (-balance.linkedExpenses).asCurrency)
+                            }
+                        } header: {
+                            Text("Summary")
+                        } footer: {
+                            if balance.linkedExpenses > 0 {
+                                Text("Total, Paid and Unpaid count charges to the client only. Expenses linked to the client are the barn's own costs, so they aren't part of what the client owes.")
                             }
                         }
                     }

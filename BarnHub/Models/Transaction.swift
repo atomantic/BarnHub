@@ -23,6 +23,10 @@ final class Transaction {
         set { typeRaw = newValue.rawValue }
     }
 
+    /// Income positive, expenses negative: the Amount column's sort key, and
+    /// the amount client screens show so a linked expense reads as a cost.
+    var signedAmount: Double { type == .income ? amount : -amount }
+
     init(
         amount: Double = 0,
         date: Date = .now,
