@@ -383,6 +383,64 @@ final class AllDataRestoreTests: XCTestCase {
         }
     }
 
+    /// Reverses the data rows of one of the export's CSV files, so its rows
+    /// come in the opposite order to the store's fetch order.
+    private func reverseRows(of kind: CSVExportKind, in folder: URL) throws {
+        let url = folder.appendingPathComponent("\(kind.rawValue).csv")
+        let reader = try CSVReader(url: url)
+        let header = try XCTUnwrap(reader.nextRow())
+        var rows: [[String]] = []
+        while let row = reader.nextRow() { rows.append(row) }
+        let writer = try CSVWriter(url: url)
+        try writer.writeRow(header)
+        for row in rows.reversed() { try writer.writeRow(row) }
+        try writer.finish()
+    }
+
+    /// Twin horses kept by Keep Documents are told apart by photo even when the
+    /// export lists them in the opposite order to the store (#85).
+    func test_keepDocumentsThenRestore_matchesTwinHorsesByPhoto_whateverTheOrder() async throws {
+        try seed()
+        let exported = try snapshot()
+        let folder = try await exportAllData()
+        try reverseRows(of: .horses, in: folder)
+
+        try RecordRemoval.deleteAllData(in: container, keepDocuments: true)
+        _ = try await restore(folder)
+
+        XCTAssertEqual(try snapshot(), exported)
+        let storms = try ModelContext(container).fetch(FetchDescriptor<Horse>(predicate: #Predicate { $0.name == "Storm" }))
+        XCTAssertEqual(storms.count, 2)
+        let stormB = try XCTUnwrap(storms.first { $0.photoData == jpeg(0.9) })
+        XCTAssertEqual(stormB.vetRecords?.map(\.descriptionText), ["Vaccines"])
+        XCTAssertEqual(stormB.farrierVisits?.count, 1)
+        XCTAssertEqual(stormB.weightEntries?.count ?? 0, 0)
+    }
+
+    /// Twin feed products are told apart by photo too: a feed plan entry
+    /// restored into the store goes to the product with its row's photo (#85).
+    func test_restoreIntoStore_matchesTwinFeedProductsByPhoto_whateverTheOrder() async throws {
+        try seed()
+        let daisy = try XCTUnwrap(try context.fetch(FetchDescriptor<Horse>(predicate: #Predicate { $0.name == "Daisy" })).first)
+        let twin = FeedProduct(name: "Senior Feed", brand: "Acme", notes: "Soak first", defaultUnit: .lbs, photoData: jpeg(0.7))
+        context.insert(twin)
+        let plan = FeedPlanEntry(amount: 1, unit: .lbs, feedTime: .evening, assignedPerson: "Kim", notes: "")
+        context.insert(plan)
+        plan.horse = daisy
+        plan.product = twin
+        try context.save()
+        let exported = try snapshot()
+        let folder = try await exportAllData()
+        try reverseRows(of: .feedProducts, in: folder)
+        context.delete(plan)
+        try context.save()
+
+        let result = try await restore(folder)
+
+        XCTAssertEqual(result.imported, 1)
+        XCTAssertEqual(try snapshot(), exported)
+    }
+
     func test_roundTrip_keepsSameNamedHorsesAndClientsDistinct() async throws {
         try seed()
         let folder = try await exportAllData()
