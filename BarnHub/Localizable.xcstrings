@@ -13631,55 +13631,108 @@
         }
       }
     },
-    "Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record and links records to horses and clients by name. Photos, document files and invoice PDFs aren't included, so it isn't a full backup." : {
+    "Export your records as CSV files for use in spreadsheets. All Data saves one file for each kind of record, with IDs that link related records, plus horse and feed photos, horse and client documents and invoice PDFs in folders next to the files. With many photos or documents it can be large." : {
       "comment" : "Explains what the CSV export covers",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportiere deine Einträge als CSV-Dateien für Tabellenkalkulationen. „Alle Daten“ speichert eine Datei pro Eintragsart und verknüpft Einträge über den Namen mit Pferden und Kunden. Fotos, Dokumentdateien und Rechnungs-PDFs sind nicht enthalten, daher ist der Export keine vollständige Sicherung."
+            "value" : "Exportiere deine Einträge als CSV-Dateien für Tabellenkalkulationen. „Alle Daten“ speichert eine Datei pro Eintragsart mit IDs, die zusammengehörige Einträge verknüpfen, und legt Pferde- und Futterfotos, Pferde- und Kundendokumente sowie Rechnungs-PDFs in Ordnern neben den Dateien ab. Bei vielen Fotos oder Dokumenten kann der Export groß werden."
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. «Todos los datos» guarda un archivo por cada tipo de registro y vincula los registros con caballos y clientes por su nombre. No incluye fotos, archivos de documentos ni PDF de facturas, así que no es una copia de seguridad completa."
+            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. «Todos los datos» guarda un archivo por cada tipo de registro, con ID que vinculan los registros relacionados, e incluye fotos de caballos y piensos, documentos de caballos y clientes y PDF de facturas en carpetas junto a los archivos. Con muchas fotos o documentos puede ocupar bastante."
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. \"Todos los datos\" guarda un archivo por cada tipo de registro y vincula los registros con caballos y clientes por su nombre. No incluye fotos, archivos de documentos ni PDF de facturas, así que no es un respaldo completo."
+            "value" : "Exporta tus registros como archivos CSV para usarlos en hojas de cálculo. \"Todos los datos\" guarda un archivo por cada tipo de registro, con ID que vinculan los registros relacionados, e incluye fotos de caballos y alimentos, documentos de caballos y clientes y PDF de facturas en carpetas junto a los archivos. Con muchas fotos o documentos puede pesar bastante."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportez vos données en fichiers CSV pour les utiliser dans un tableur. « Toutes les données » enregistre un fichier par type de donnée et relie chaque entrée à son cheval ou à son client par son nom. Les photos, fichiers de documents et PDF de factures ne sont pas inclus : ce n'est pas une sauvegarde complète."
+            "value" : "Exportez vos données en fichiers CSV pour les utiliser dans un tableur. « Toutes les données » enregistre un fichier par type de donnée, avec des identifiants qui relient les données liées, ainsi que les photos des chevaux et des aliments, les documents des chevaux et des clients et les PDF des factures dans des dossiers à côté des fichiers. Avec beaucoup de photos ou de documents, l’export peut être volumineux."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esporta i tuoi record come file CSV da usare nei fogli di calcolo. \"Tutti i dati\" salva un file per ogni tipo di record e collega i record a cavalli e clienti tramite il nome. Foto, file dei documenti e PDF delle fatture non sono inclusi, quindi non è un backup completo."
+            "value" : "Esporta i tuoi dati come file CSV da usare nei fogli di calcolo. «Tutti i dati» salva un file per ogni tipo di dato, con ID che collegano i dati correlati, insieme alle foto di cavalli e mangimi, ai documenti di cavalli e clienti e ai PDF delle fatture in cartelle accanto ai file. Con molte foto o documenti può essere pesante."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporteer je gegevens als CSV-bestanden voor gebruik in spreadsheets. 'Alle gegevens' bewaart één bestand per soort gegevens en koppelt ze op naam aan paarden en klanten. Foto's, documentbestanden en factuur-pdf's zijn niet inbegrepen, dus het is geen volledige back-up."
+            "value" : "Exporteer je gegevens als CSV-bestanden voor gebruik in spreadsheets. Alle gegevens slaat één bestand per soort gegevens op, met ID's die bij elkaar horende gegevens koppelen, plus foto's van paarden en voer, documenten van paarden en klanten en factuur-pdf's in mappen naast de bestanden. Met veel foto's of documenten kan de export groot zijn."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exporte seus registros como arquivos CSV para usar em planilhas. \"Todos os dados\" salva um arquivo para cada tipo de registro e liga os registros a cavalos e clientes pelo nome. Fotos, arquivos de documentos e PDFs de faturas não são incluídos, então não é um backup completo."
+            "value" : "Exporte seus registros como arquivos CSV para usar em planilhas. \"Todos os dados\" salva um arquivo para cada tipo de registro, com IDs que ligam os registros relacionados, além de fotos de cavalos e rações, documentos de cavalos e clientes e PDFs de faturas em pastas ao lado dos arquivos. Com muitas fotos ou documentos, pode ficar grande."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exportera dina poster som CSV-filer för kalkylark. ”Alla data” sparar en fil per typ av post och kopplar posterna till hästar och kunder via namn. Foton, dokumentfiler och faktura-PDF:er ingår inte, så det är ingen fullständig säkerhetskopia."
+            "value" : "Exportera dina poster som CSV-filer för kalkylark. Alla data sparar en fil för varje typ av post, med ID:n som länkar ihop poster som hör ihop, plus foton på hästar och foder, häst- och kunddokument och faktura-PDF:er i mappar bredvid filerna. Med många foton eller dokument kan exporten bli stor."
+          }
+        }
+      }
+    },
+    "Step %lld of %lld: %@" : {
+      "comment" : "Export progress: which file is being written, e.g. Step 3 of 17: transactions.csv",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritt %1$lld von %2$lld: %3$@"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paso %1$lld de %2$lld: %3$@"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paso %1$lld de %2$lld: %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape %1$lld sur %2$lld : %3$@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passaggio %1$lld di %2$lld: %3$@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stap %1$lld van %2$lld: %3$@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etapa %1$lld de %2$lld: %3$@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steg %1$lld av %2$lld: %3$@"
           }
         }
       }
