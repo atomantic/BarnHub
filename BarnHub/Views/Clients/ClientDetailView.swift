@@ -4,6 +4,9 @@ import SwiftData
 struct ClientDetailView: View {
     let clientID: PersistentIdentifier
     @Environment(\.modelContext) private var modelContext
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     @Environment(Router.self) private var router
     @Environment(StoreService.self) private var storeService
     @Environment(\.dismiss) private var dismiss
@@ -234,13 +237,28 @@ struct ClientDetailView: View {
 
     #if os(iOS)
     private func iOSClientLayout(_ client: Client) -> some View {
-        List {
-            contactSection(client)
-            emergencySection(client)
-            notesSection(client)
-            horsesSection(client)
-            transactionsSection(client)
-            proSections()
+        Group {
+            if sizeClass == .regular {
+                // Same split as macOS: contact + horses left, money + documents right.
+                WideColumns {
+                    contactSection(client)
+                    emergencySection(client)
+                    notesSection(client)
+                    horsesSection(client)
+                } trailing: {
+                    transactionsSection(client)
+                    proSections()
+                }
+            } else {
+                List {
+                    contactSection(client)
+                    emergencySection(client)
+                    notesSection(client)
+                    horsesSection(client)
+                    transactionsSection(client)
+                    proSections()
+                }
+            }
         }
         .navigationTitle(client.fullName)
         .inlineNavTitle()

@@ -3,6 +3,9 @@ import SwiftData
 import PhotosUI
 
 struct HorseEditView: View {
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
     let horseID: PersistentIdentifier?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -186,13 +189,27 @@ struct HorseEditView: View {
         }
         .navigationTitle(navigationTitleKey)
         #else
-        Form {
-            photoSection
-            basicInfoSection
-            detailsSection
-            medicalNotesSection
-            feedingScheduleSection
-            saveSection
+        Group {
+            if sizeClass == .regular {
+                WideColumns {
+                    photoSection
+                    basicInfoSection
+                    detailsSection
+                } trailing: {
+                    medicalNotesSection
+                    feedingScheduleSection
+                    saveSection
+                }
+            } else {
+                Form {
+                    photoSection
+                    basicInfoSection
+                    detailsSection
+                    medicalNotesSection
+                    feedingScheduleSection
+                    saveSection
+                }
+            }
         }
         .navigationTitle(navigationTitleKey)
         .inlineNavTitle()

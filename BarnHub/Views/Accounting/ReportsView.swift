@@ -8,6 +8,9 @@ struct ReportsView: View {
     @Query private var transactions: [Transaction]
 
     @State private var selectedPeriod: ReportPeriod = .thisMonth
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    #endif
 
     private var reportData: ReportData {
         ReportData(transactions: transactions, period: selectedPeriod)
@@ -28,38 +31,45 @@ struct ReportsView: View {
                 } else {
                     incomeExpenseChart(data: data)
                     if showFullReports {
-                        #if os(macOS)
-                        macOSChartsLayout(data: data)
-                        #else
-                        if data.monthlyTotals.count > 1 {
-                            monthlyTrendChart(data: data)
+                        if isWide {
+                            wideChartsLayout(data: data)
+                        } else {
+                            if data.monthlyTotals.count > 1 {
+                                monthlyTrendChart(data: data)
+                            }
+                            if !data.expensesByCategory.isEmpty {
+                                categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
+                            }
+                            if !data.incomeByCategory.isEmpty {
+                                categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+                            }
                         }
-                        if !data.expensesByCategory.isEmpty {
-                            categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
-                        }
-                        if !data.incomeByCategory.isEmpty {
-                            categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
-                        }
-                        #endif
                     } else {
                         lockedSection
                     }
                 }
             }
             .padding()
-            #if os(macOS)
+            // Keep charts readable on very wide screens (Mac, iPad landscape).
             .frame(maxWidth: 960)
             .frame(maxWidth: .infinity)
-            #endif
         }
         .background(Color.barnOffWhite)
         .navigationTitle("Reports")
         .inlineNavTitle()
     }
 
-    #if os(macOS)
+    /// macOS always; iOS at regular width (iPad, iPhone Duo inner display).
+    private var isWide: Bool {
+        #if os(macOS)
+        true
+        #else
+        sizeClass == .regular
+        #endif
+    }
+
     @ViewBuilder
-    private func macOSChartsLayout(data: ReportData) -> some View {
+    private func wideChartsLayout(data: ReportData) -> some View {
         let hasTrend = data.monthlyTotals.count > 1
         let hasCategories = !data.expensesByCategory.isEmpty || !data.incomeByCategory.isEmpty
 
@@ -82,15 +92,19 @@ struct ReportsView: View {
             if hasTrend {
                 monthlyTrendChart(data: data)
             }
-            if !data.expensesByCategory.isEmpty {
-                categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
-            }
-            if !data.incomeByCategory.isEmpty {
-                categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+            // No trend (e.g. a single month): put the two breakdowns side by side.
+            HStack(alignment: .top, spacing: 16) {
+                if !data.expensesByCategory.isEmpty {
+                    categoryBreakdownSection("Expenses by Category", data: data.expensesByCategory, total: data.totalExpenses, colors: expenseCategoryColors)
+                        .frame(maxWidth: .infinity)
+                }
+                if !data.incomeByCategory.isEmpty {
+                    categoryBreakdownSection("Income by Category", data: data.incomeByCategory, total: data.totalIncome, colors: incomeCategoryColors)
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
     }
-    #endif
 
     // MARK: - Period Picker
 
@@ -161,7 +175,8 @@ struct ReportsView: View {
             Chart(data.monthlyTotals) { total in
                 LineMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income)
+                    y: .value("Income", total.income),
+                    series: .value("Series", "Income")
                 )
                 .foregroundStyle(.green)
                 .symbol(Circle())
@@ -169,14 +184,17 @@ struct ReportsView: View {
 
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Income", total.income)
+                    y: .value("Income", total.income),
+                    series: .value("Series", "Income"),
+                    stacking: .unstacked
                 )
                 .foregroundStyle(.green.opacity(0.1))
                 .interpolationMethod(.catmullRom)
 
                 LineMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses)
+                    y: .value("Expenses", total.expenses),
+                    series: .value("Series", "Expenses")
                 )
                 .foregroundStyle(.red)
                 .symbol(Circle())
@@ -184,7 +202,9 @@ struct ReportsView: View {
 
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
-                    y: .value("Expenses", total.expenses)
+                    y: .value("Expenses", total.expenses),
+                    series: .value("Series", "Expenses"),
+                    stacking: .unstacked
                 )
                 .foregroundStyle(.red.opacity(0.1))
                 .interpolationMethod(.catmullRom)
