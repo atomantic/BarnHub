@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SyncIndicatorView: View {
     @Environment(SyncMonitor.self) private var syncMonitor
-    /// White icon for a bar drawn over the green Home header (iOS only).
+    /// White icon for a transparent bar over the green Home header (iOS before 26;
+    /// Liquid Glass bars use the system colors instead).
     var onBrandHeader = false
 
     var body: some View {
