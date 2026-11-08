@@ -112,7 +112,7 @@ struct ClientEditView: View {
             client.emergencyPhone = emergencyPhone
             client.notes = notes
             client.isActive = isActive
-            BarnHubLogger.info("Updating client name=\(trimmedFirst) \(trimmedLast)")
+            BarnHubLogger.info("Updating client")
         } else {
             let client = Client(
                 firstName: trimmedFirst,
@@ -125,7 +125,7 @@ struct ClientEditView: View {
                 isActive: isActive
             )
             modelContext.insert(client)
-            BarnHubLogger.info("Creating client name=\(trimmedFirst) \(trimmedLast)")
+            BarnHubLogger.info("Creating client")
             newClient = client
         }
 

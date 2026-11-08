@@ -230,7 +230,7 @@ struct ClientDocumentsView: View {
         modelContext.insert(doc)
         modelContext.saveWithLogging()
         toast.show(appLocalized("Document added"))
-        BarnHubLogger.success("Document added client=\(client.fullName) title=\(title) type=\(type.rawValue)")
+        BarnHubLogger.success("Client document added type=\(type.rawValue) documents=\(client.documents?.count ?? 0)")
     }
 
     private func shareDocument(_ doc: ClientDocument) {

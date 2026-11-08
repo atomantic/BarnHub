@@ -59,7 +59,27 @@ enum BarnHubSchema {
         FeedProduct.self, FeedPlanEntry.self, BarnNote.self, Lesson.self,
     ]
 
-    static var schema: Schema { Schema(models) }
+    /// The current schema, versioned so later model changes can migrate.
+    static var schema: Schema { Schema(versionedSchema: BarnHubSchemaV1.self) }
+}
+
+/// The schema as shipped before versioning was added. It names the live model
+/// types, so it adds a version identifier without changing any entity, attribute
+/// or version hash: stores created before it open unchanged.
+///
+/// Before the next model change, copy today's model definitions into this enum
+/// as nested types (`BarnHubSchemaV1.Horse`, …) so V1 stays frozen, add
+/// `BarnHubSchemaV2` naming the live types, and add a stage to the plan. CloudKit
+/// stores only allow lightweight (additive) stages.
+enum BarnHubSchemaV1: VersionedSchema {
+    static let versionIdentifier = Schema.Version(1, 0, 0)
+    static var models: [any PersistentModel.Type] { BarnHubSchema.models }
+}
+
+/// No stages yet: V1 is the only version.
+enum BarnHubMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [BarnHubSchemaV1.self] }
+    static var stages: [MigrationStage] { [] }
 }
 
 // MARK: - Removing records

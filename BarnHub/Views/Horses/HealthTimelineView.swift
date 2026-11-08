@@ -268,7 +268,7 @@ struct HealthTimelineView: View {
         entry.horse = horse
         modelContext.insert(entry)
         horse.weight = weightValue
-        BarnHubLogger.success("Weight logged for horse=\(horse.name) weight=\(weightValue)")
+        BarnHubLogger.success("Weight logged weight=\(weightValue)")
         toast.show(appLocalized("Weight logged: \(Int(weightValue)) lbs", comment: "Weight logging confirmation"))
         newWeight = ""
     }
