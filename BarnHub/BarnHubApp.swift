@@ -175,6 +175,8 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
     @Environment(NotificationService.self) private var notificationService
+    @Environment(StoreService.self) private var storeService
+    @Environment(AppearanceManager.self) private var appearanceManager
     @Environment(\.modelContext) private var modelContext
     #if os(macOS)
     @Environment(\.openSettings) private var openSettings
@@ -225,15 +227,27 @@ struct ContentView: View {
             handleIncomingURL(url)
         }
         .sheet(item: $router.presentedForm) { form in
-            FormSheet(form: form)
+            withAppEnvironment(FormSheet(form: form))
         }
         .onAppear { updateFormPresentation() }
         #if os(iOS)
         .onChange(of: sizeClass) { updateFormPresentation() }
         #endif
         .sheet(isPresented: $showFirstLaunchSheet) {
-            FirstLaunchSheet()
+            withAppEnvironment(FirstLaunchSheet())
         }
+    }
+
+    /// Passes the app's shared objects into a sheet presented from this root view.
+    /// Mac Catalyst doesn't carry the window's @Observable environment into these
+    /// sheets, and a view reading a missing object traps.
+    private func withAppEnvironment(_ content: some View) -> some View {
+        content
+            .environment(router)
+            .environment(storeService)
+            .environment(appearanceManager)
+            .environment(notificationService)
+            .environment(syncMonitor)
     }
 
     /// Forms open as sheets on the Mac and in iPad-sized windows, and push on iPhone.

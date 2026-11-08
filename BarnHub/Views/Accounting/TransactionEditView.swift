@@ -105,7 +105,7 @@ struct TransactionEditView: View {
         txn.isPaid = isPaid
 
         if let clientID = selectedClientID {
-            txn.client = modelContext.model(for: clientID) as? Client
+            txn.client = modelContext.existingModel(for: clientID)
         } else {
             txn.client = nil
         }

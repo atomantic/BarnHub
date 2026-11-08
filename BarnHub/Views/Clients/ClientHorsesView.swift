@@ -10,7 +10,7 @@ struct ClientHorsesView: View {
     @State private var toast = ToastState()
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     var body: some View {

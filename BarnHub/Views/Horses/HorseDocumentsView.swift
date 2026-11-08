@@ -19,7 +19,7 @@ struct HorseDocumentsView: View {
     @State private var shareURL: URL?
 
     private var horse: Horse? {
-        modelContext.model(for: horseID) as? Horse
+        modelContext.existingModel(for: horseID)
     }
 
     private var documents: [HorseDocument] {
@@ -164,7 +164,7 @@ struct HorseDocumentsView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .tint(.primary)
+        .foregroundStyle(.primary)  // not .tint(.primary): a hierarchical tint can loop endlessly on Mac Catalyst
     }
 
     private func handlePDFImport(_ result: Result<[URL], Error>) {

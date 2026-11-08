@@ -15,7 +15,7 @@ struct ContractGeneratorView: View {
     @State private var toast = ToastState()
 
     private var client: Client? {
-        modelContext.model(for: clientID) as? Client
+        modelContext.existingModel(for: clientID)
     }
 
     private var assignedHorses: [Horse] {
@@ -24,7 +24,7 @@ struct ContractGeneratorView: View {
 
     private var selectedHorse: Horse? {
         guard let id = selectedHorseID else { return nil }
-        return modelContext.model(for: id) as? Horse
+        return modelContext.existingModel(for: id)
     }
 
     var body: some View {

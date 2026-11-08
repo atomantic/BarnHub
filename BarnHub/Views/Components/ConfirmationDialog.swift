@@ -36,10 +36,13 @@ struct ConfirmationDialog: View {
                         .frame(maxWidth: .infinity)
 
                         Button(confirmTitle, role: confirmRole) {
-                            isPresented = false
+                            // Confirm first: callers may clear their pending item
+                            // when the dialog closes.
                             onConfirm()
+                            isPresented = false
                         }
                         .frame(maxWidth: .infinity)
+                        .tint(confirmRole == .destructive ? .red : nil)
                     }
                     .buttonStyle(.bordered)
                 }
