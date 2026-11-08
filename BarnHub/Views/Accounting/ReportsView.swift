@@ -185,7 +185,8 @@ struct ReportsView: View {
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
                     y: .value("Income", total.income),
-                    series: .value("Series", "Income")
+                    series: .value("Series", "Income"),
+                    stacking: .unstacked
                 )
                 .foregroundStyle(.green.opacity(0.1))
                 .interpolationMethod(.catmullRom)
@@ -202,7 +203,8 @@ struct ReportsView: View {
                 AreaMark(
                     x: .value("Month", total.month, unit: .month),
                     y: .value("Expenses", total.expenses),
-                    series: .value("Series", "Expenses")
+                    series: .value("Series", "Expenses"),
+                    stacking: .unstacked
                 )
                 .foregroundStyle(.red.opacity(0.1))
                 .interpolationMethod(.catmullRom)
