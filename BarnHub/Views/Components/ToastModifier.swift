@@ -19,18 +19,24 @@ final class ToastState {
     @MainActor
     func showAndDismiss(_ message: String, isError: Bool = false, dismiss: DismissAction) {
         show(message, isError: isError)
+        closeAfterToast { dismiss() }
+    }
+
+    /// Closes the form once the toast has had a moment. In a form sheet this closes
+    /// the sheet itself: the form's DismissAction doesn't reliably close it on macOS,
+    /// which left Save needing Cancel. Elsewhere (a pushed form) it calls `fallback`.
+    @MainActor
+    func closeAfterToast(fallback: @escaping @MainActor () -> Void) {
         Task {
             do {
                 try await Task.sleep(for: .seconds(0.5))
             } catch {
                 return
             }
-            // In a form sheet, close the sheet itself: the form's DismissAction
-            // doesn't reliably close it on macOS, which left Save needing Cancel.
             if let closeFormSheet {
                 closeFormSheet()
             } else {
-                dismiss()
+                fallback()
             }
         }
     }
