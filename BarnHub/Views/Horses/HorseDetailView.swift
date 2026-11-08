@@ -372,10 +372,10 @@ struct HorseDetailView: View {
     #if os(iOS)
     private func iOSLayout(_ horse: Horse) -> some View {
         Group {
-            if sizeClass == .regular {
+            // The embedded pane beside the list is too narrow for two columns.
+            if sizeClass == .regular && !isEmbedded {
                 // Same split as macOS: profile on the left, records on the right.
                 WideColumns {
-                    if isEmbedded { DetailPaneHeader(title: horse.name) }
                     photoSection(horse)
                     quickLinksSection()
                     infoSection(horse)
@@ -390,7 +390,7 @@ struct HorseDetailView: View {
                 }
             } else {
                 List {
-                    if isEmbedded { DetailPaneHeader(title: horse.name) }
+                    if isEmbedded { paneHeader(horse) }
                     photoSection(horse)
                     quickLinksSection()
                     infoSection(horse)
@@ -404,7 +404,7 @@ struct HorseDetailView: View {
             }
         }
         .detailNavigationTitle(horse.name, isEmbedded: isEmbedded)
-        .toolbar { horseToolbar }
+        .toolbar { if !isEmbedded { horseToolbar } }
     }
     #endif
 
@@ -413,7 +413,7 @@ struct HorseDetailView: View {
     /// for the two-column window layout.
     private func macOSPaneLayout(_ horse: Horse) -> some View {
         Form {
-            DetailPaneHeader(title: horse.name)
+            paneHeader(horse)
             photoSection(horse)
             quickLinksSection()
             infoSection(horse)
@@ -425,7 +425,6 @@ struct HorseDetailView: View {
             clientsSection()
         }
         .formStyle(.grouped)
-        .toolbar { horseToolbar }
     }
 
     private func macOSLayout(_ horse: Horse) -> some View {
@@ -474,6 +473,15 @@ struct HorseDetailView: View {
         .toolbar { horseToolbar }
     }
     #endif
+
+    private func paneHeader(_ horse: Horse) -> some View {
+        DetailPaneHeader(
+            title: horse.name,
+            subtitle: [horse.breed, horse.gender.displayName].filter { !$0.isEmpty }.joined(separator: " · "),
+            onEdit: { router.navigate(to: HorseRoute.edit(horseID)) },
+            onDelete: { showDeleteConfirmation = true }
+        )
+    }
 
     @ToolbarContentBuilder
     private var horseToolbar: some ToolbarContent {
