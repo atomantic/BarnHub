@@ -9951,6 +9951,59 @@
         }
       }
     },
+    "Delete All Data, Then Restore" : {
+      "comment" : "Restore All Data button: run Delete All Data, then restore the folder into the empty store",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Daten löschen, dann wiederherstellen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar todos los datos y restaurar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar todos los datos y restaurar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les données, puis restaurer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina tutti i dati, poi ripristina"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle gegevens verwijderen en dan herstellen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir todos os dados e depois restaurar"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radera all data och återställ sedan"
+          }
+        }
+      }
+    },
     "Restore All Data" : {
       "comment" : "Data management action and dialog title: restore a BarnHub Export folder saved by All Data",
       "localizations" : {
@@ -10000,6 +10053,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Återställ all data"
+          }
+        }
+      }
+    },
+    "Restore and Keep My Data" : {
+      "comment" : "Restore All Data button: add what's missing and keep existing records unchanged",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen und meine Daten behalten"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar y conservar mis datos"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar y conservar mis datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer et garder mes données"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristina e mantieni i miei dati"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstellen en mijn gegevens bewaren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar e manter meus dados"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställ och behåll mina data"
           }
         }
       }
@@ -10057,55 +10163,55 @@
         }
       }
     },
-    "BarnHub adds the records, photos, documents and invoices in this folder. Nothing you already have is changed or removed, and records that are already in BarnHub are skipped, so restoring the same folder again doesn't add duplicates. To replace your data instead, use Delete All Data first." : {
-      "comment" : "Restore All Data confirmation message: what is added, how duplicates are handled, how to replace instead",
+    "Restore only adds what's missing. Records, photos, documents and invoices in this folder that aren't in BarnHub yet are added. Records you already have are kept unchanged, even where the folder's copy differs: for example, it won't add a photo to a horse you already have. Nothing is deleted.\n\nTo replace your data with this folder instead, choose Delete All Data, Then Restore." : {
+      "comment" : "Restore All Data confirmation after picking a folder: restoring merges, and how to replace instead",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub fügt die Einträge, Fotos, Dokumente und Rechnungen aus diesem Ordner hinzu. Nichts, was du schon hast, wird geändert oder entfernt, und Einträge, die bereits in BarnHub sind, werden übersprungen. Wenn du denselben Ordner noch einmal wiederherstellst, entstehen also keine Duplikate. Um deine Daten stattdessen zu ersetzen, verwende zuerst „Alle Daten löschen“."
+            "value" : "Die Wiederherstellung fügt nur hinzu, was fehlt. Einträge, Fotos, Dokumente und Rechnungen aus diesem Ordner, die noch nicht in BarnHub sind, werden hinzugefügt. Einträge, die du schon hast, bleiben unverändert, auch wenn die Kopie im Ordner abweicht: Einem Pferd, das du schon hast, wird zum Beispiel kein Foto hinzugefügt. Es wird nichts gelöscht.\n\nUm deine Daten stattdessen durch diesen Ordner zu ersetzen, wähle „Alle Daten löschen, dann wiederherstellen“."
           }
         },
         "es-ES" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub añade los registros, fotos, documentos y facturas de esta carpeta. No se cambia ni se elimina nada de lo que ya tienes, y se omiten los registros que ya están en BarnHub, así que restaurar la misma carpeta otra vez no crea duplicados. Para reemplazar tus datos, usa primero «Eliminar todos los datos»."
+            "value" : "La restauración solo añade lo que falta. Se añaden los registros, fotos, documentos y facturas de esta carpeta que aún no están en BarnHub. Los registros que ya tienes no cambian, aunque la copia de la carpeta sea distinta: por ejemplo, no se añade una foto a un caballo que ya tienes. No se elimina nada.\n\nPara reemplazar tus datos por esta carpeta, elige «Eliminar todos los datos y restaurar»."
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub agrega los registros, fotos, documentos y facturas de esta carpeta. No se cambia ni se elimina nada de lo que ya tienes, y se omiten los registros que ya están en BarnHub, así que restaurar la misma carpeta otra vez no crea duplicados. Para reemplazar tus datos, usa primero «Eliminar todos los datos»."
+            "value" : "La restauración solo agrega lo que falta. Se agregan los registros, fotos, documentos y facturas de esta carpeta que aún no están en BarnHub. Los registros que ya tienes no cambian, aunque la copia de la carpeta sea distinta: por ejemplo, no se agrega una foto a un caballo que ya tienes. No se elimina nada.\n\nPara reemplazar tus datos por esta carpeta, elige «Eliminar todos los datos y restaurar»."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub ajoute les enregistrements, photos, documents et factures de ce dossier. Rien de ce que vous avez déjà n’est modifié ni supprimé, et les enregistrements déjà présents dans BarnHub sont ignorés : restaurer à nouveau le même dossier ne crée donc pas de doublons. Pour remplacer vos données, utilisez d’abord « Supprimer toutes les données »."
+            "value" : "La restauration ajoute seulement ce qui manque. Les enregistrements, photos, documents et factures de ce dossier qui ne sont pas encore dans BarnHub sont ajoutés. Les enregistrements que vous avez déjà restent inchangés, même si la copie du dossier est différente : par exemple, aucune photo n’est ajoutée à un cheval que vous avez déjà. Rien n’est supprimé.\n\nPour remplacer plutôt vos données par ce dossier, choisissez « Supprimer toutes les données, puis restaurer »."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub aggiunge i record, le foto, i documenti e le fatture di questa cartella. Niente di ciò che hai già viene modificato o rimosso, e i record già presenti in BarnHub vengono saltati, quindi ripristinare di nuovo la stessa cartella non crea duplicati. Per sostituire i tuoi dati, usa prima “Elimina tutti i dati”."
+            "value" : "Il ripristino aggiunge solo ciò che manca. Vengono aggiunti i record, le foto, i documenti e le fatture di questa cartella che non sono ancora in BarnHub. I record che hai già restano invariati, anche se la copia nella cartella è diversa: per esempio, non viene aggiunta una foto a un cavallo che hai già. Non viene eliminato nulla.\n\nPer sostituire invece i tuoi dati con questa cartella, scegli “Elimina tutti i dati, poi ripristina”."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub voegt de records, foto's, documenten en facturen uit deze map toe. Niets wat je al hebt wordt gewijzigd of verwijderd, en records die al in BarnHub staan worden overgeslagen, dus dezelfde map nog eens herstellen geeft geen dubbele records. Wil je je gegevens vervangen, gebruik dan eerst ‘Alle gegevens verwijderen’."
+            "value" : "Herstellen voegt alleen toe wat ontbreekt. Records, foto's, documenten en facturen uit deze map die nog niet in BarnHub staan, worden toegevoegd. Records die je al hebt blijven ongewijzigd, ook als de kopie in de map afwijkt: zo krijgt een paard dat je al hebt bijvoorbeeld geen foto erbij. Er wordt niets verwijderd.\n\nWil je je gegevens in plaats daarvan door deze map vervangen, kies dan ‘Alle gegevens verwijderen en dan herstellen’."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O BarnHub adiciona os registros, fotos, documentos e faturas desta pasta. Nada do que você já tem é alterado ou removido, e os registros que já estão no BarnHub são ignorados, então restaurar a mesma pasta de novo não cria duplicatas. Para substituir seus dados, use antes “Excluir todos os dados”."
+            "value" : "A restauração só adiciona o que está faltando. Os registros, fotos, documentos e faturas desta pasta que ainda não estão no BarnHub são adicionados. Os registros que você já tem continuam iguais, mesmo que a cópia da pasta seja diferente: por exemplo, nenhuma foto é adicionada a um cavalo que você já tem. Nada é excluído.\n\nPara substituir seus dados por esta pasta, escolha “Excluir todos os dados e depois restaurar”."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "BarnHub lägger till posterna, fotona, dokumenten och fakturorna i den här mappen. Inget du redan har ändras eller tas bort, och poster som redan finns i BarnHub hoppas över, så att återställa samma mapp igen ger inga dubbletter. Om du vill ersätta dina data i stället använder du först ”Radera all data”."
+            "value" : "Återställningen lägger bara till det som saknas. Poster, foton, dokument och fakturor i den här mappen som inte redan finns i BarnHub läggs till. Poster du redan har lämnas oförändrade, även om kopian i mappen skiljer sig: till exempel läggs inget foto till på en häst du redan har. Inget raderas.\n\nOm du i stället vill ersätta dina data med den här mappen väljer du ”Radera all data och återställ sedan”."
           }
         }
       }
@@ -10216,6 +10322,59 @@
         }
       }
     },
+    "Delete All Data, Then Restore?" : {
+      "comment" : "Title of the documents question before Delete All Data, Then Restore",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Daten löschen, dann wiederherstellen?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Eliminar todos los datos y restaurar?"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Eliminar todos los datos y restaurar?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les données, puis restaurer ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminare tutti i dati e poi ripristinare?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle gegevens verwijderen en dan herstellen?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir todos os dados e depois restaurar?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radera all data och återställ sedan?"
+          }
+        }
+      }
+    },
     "BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to." : {
       "comment" : "Delete All Data first alert message: where data lives and the documents choice",
       "localizations" : {
@@ -10265,6 +10424,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BarnHub sparar inte dina data på egna eller andras servrar. De finns på dina enheter och i ditt eget iCloud-konto, så detta raderar dem från din iCloud och från alla enheter som är inloggade på det, inte bara den här.\n\nDu kan också radera alla dokument och foton för hästar och kunder, eller behålla dem. Om du behåller dem behålls även hästarna och kunderna de hör till."
+          }
+        }
+      }
+    },
+    "BarnHub doesn't keep your data on its own or any third-party servers. It lives on your devices and in your own iCloud account, so this deletes it from your iCloud and from every device signed in to it, not just this one. Then the folder is restored.\n\nYou can also delete all horse and client documents and photos, or keep them. Keeping them also keeps the horses and clients they belong to, and the restore skips the ones that are also in the folder." : {
+      "comment" : "Delete All Data, Then Restore first dialog: where data lives and the documents choice",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub speichert deine Daten weder auf eigenen noch auf fremden Servern. Sie liegen auf deinen Geräten und in deinem eigenen iCloud-Account. Deshalb werden sie aus deiner iCloud und von jedem damit angemeldeten Gerät gelöscht, nicht nur von diesem. Danach wird der Ordner wiederhergestellt.\n\nDu kannst auch alle Pferde- und Kundendokumente und -fotos löschen oder sie behalten. Wenn du sie behältst, bleiben auch die zugehörigen Pferde und Kunden erhalten, und die Wiederherstellung überspringt die, die auch im Ordner sind."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no guarda tus datos en servidores propios ni de terceros. Están en tus dispositivos y en tu propia cuenta de iCloud, así que esto los elimina de tu iCloud y de todos los dispositivos con esa sesión, no solo de este. Después se restaura la carpeta.\n\nTambién puedes eliminar todos los documentos y fotos de caballos y clientes, o conservarlos. Si los conservas, también se conservan los caballos y clientes a los que pertenecen, y la restauración omite los que también están en la carpeta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no guarda tus datos en servidores propios ni de terceros. Están en tus dispositivos y en tu propia cuenta de iCloud, así que esto los elimina de tu iCloud y de todos los dispositivos con esa sesión, no solo de este. Después se restaura la carpeta.\n\nTambién puedes eliminar todos los documentos y fotos de caballos y clientes, o conservarlos. Si los conservas, también se conservan los caballos y clientes a los que pertenecen, y la restauración omite los que también están en la carpeta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub ne conserve vos données sur aucun serveur, ni le sien ni celui d'un tiers. Elles se trouvent sur vos appareils et dans votre propre compte iCloud : cette action les supprime donc de votre iCloud et de tous les appareils connectés à ce compte, pas seulement de celui-ci. Le dossier est ensuite restauré.\n\nVous pouvez aussi supprimer tous les documents et photos des chevaux et des clients, ou les conserver. Les conserver garde aussi les chevaux et clients auxquels ils appartiennent, et la restauration ignore ceux qui sont aussi dans le dossier."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub non conserva i tuoi dati su server propri o di terzi. Si trovano sui tuoi dispositivi e nel tuo account iCloud, quindi questa azione li elimina dal tuo iCloud e da tutti i dispositivi collegati, non solo da questo. Poi la cartella viene ripristinata.\n\nPuoi anche eliminare tutti i documenti e le foto di cavalli e clienti, oppure conservarli. Conservandoli, restano anche i cavalli e i clienti a cui appartengono, e il ripristino salta quelli presenti anche nella cartella."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub bewaart je gegevens niet op eigen servers of die van derden. Ze staan op je apparaten en in je eigen iCloud-account, dus dit verwijdert ze uit je iCloud en van elk apparaat dat daarmee is ingelogd, niet alleen van dit apparaat. Daarna wordt de map hersteld.\n\nJe kunt ook alle documenten en foto's van paarden en klanten verwijderen, of ze bewaren. Als je ze bewaart, blijven ook de paarden en klanten waar ze bij horen bewaard, en slaat het herstel de exemplaren over die ook in de map staan."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O BarnHub não guarda seus dados em servidores próprios nem de terceiros. Eles ficam nos seus dispositivos e na sua própria conta do iCloud, então isso os exclui do seu iCloud e de todos os dispositivos conectados a ela, não só deste. Depois, a pasta é restaurada.\n\nVocê também pode excluir todos os documentos e fotos de cavalos e clientes, ou mantê-los. Ao mantê-los, os cavalos e clientes a que pertencem também são mantidos, e a restauração ignora os que também estão na pasta."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub sparar inte dina data på egna eller andras servrar. De finns på dina enheter och i ditt eget iCloud-konto, så detta raderar dem från din iCloud och från alla enheter som är inloggade på det, inte bara den här. Sedan återställs mappen.\n\nDu kan också radera alla dokument och foton för hästar och kunder, eller behålla dem. Om du behåller dem behålls även hästarna och kunderna de hör till, och återställningen hoppar över de som också finns i mappen."
           }
         }
       }
@@ -15974,6 +16186,59 @@
         }
       }
     },
+    "This cannot be undone. Every horse, client, record, transaction, invoice, document and photo will be deleted from your iCloud and all your devices, then the folder is restored." : {
+      "comment" : "Final Delete All Data, Then Restore confirmation when documents are deleted too",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann nicht rückgängig gemacht werden. Alle Pferde, Kunden, Einträge, Transaktionen, Rechnungen, Dokumente und Fotos werden aus deiner iCloud und von all deinen Geräten gelöscht, danach wird der Ordner wiederhergestellt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, registros, transacciones, facturas, documentos y fotos se eliminarán de tu iCloud y de todos tus dispositivos, y después se restaurará la carpeta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todos los caballos, clientes, registros, transacciones, facturas, documentos y fotos se eliminarán de tu iCloud y de todos tus dispositivos, y después se restaurará la carpeta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action est irréversible. Tous les chevaux, clients, enregistrements, transactions, factures, documents et photos seront supprimés de votre iCloud et de tous vos appareils, puis le dossier sera restauré."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa azione non può essere annullata. Tutti i cavalli, clienti, record, transazioni, fatture, documenti e foto verranno eliminati dal tuo iCloud e da tutti i tuoi dispositivi, poi la cartella verrà ripristinata."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit kan niet ongedaan worden gemaakt. Alle paarden, klanten, gegevens, transacties, facturen, documenten en foto's worden verwijderd uit je iCloud en van al je apparaten, daarna wordt de map hersteld."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso não pode ser desfeito. Todos os cavalos, clientes, registros, transações, faturas, documentos e fotos serão excluídos do seu iCloud e de todos os seus dispositivos, e depois a pasta será restaurada."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta kan inte ångras. Alla hästar, kunder, poster, transaktioner, fakturor, dokument och foton raderas från din iCloud och alla dina enheter, sedan återställs mappen."
+          }
+        }
+      }
+    },
     "This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices." : {
       "comment" : "Final delete confirmation message when documents are kept",
       "localizations" : {
@@ -16023,6 +16288,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detta kan inte ångras. Allt utom dokumenten för hästar och kunder, och hästarna och kunderna de hör till, raderas från din iCloud och alla dina enheter."
+          }
+        }
+      }
+    },
+    "This cannot be undone. Everything except horse and client documents, and the horses and clients they belong to, will be deleted from your iCloud and all your devices, then the folder is restored." : {
+      "comment" : "Final Delete All Data, Then Restore confirmation when documents are kept",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann nicht rückgängig gemacht werden. Alles außer den Pferde- und Kundendokumenten und den Pferden und Kunden, zu denen sie gehören, wird aus deiner iCloud und von all deinen Geräten gelöscht, danach wird der Ordner wiederhergestellt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todo, excepto los documentos de caballos y clientes y los caballos y clientes a los que pertenecen, se eliminará de tu iCloud y de todos tus dispositivos, y después se restaurará la carpeta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esto no se puede deshacer. Todo, excepto los documentos de caballos y clientes y los caballos y clientes a los que pertenecen, se eliminará de tu iCloud y de todos tus dispositivos, y después se restaurará la carpeta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette action est irréversible. Tout, sauf les documents des chevaux et des clients ainsi que les chevaux et clients auxquels ils appartiennent, sera supprimé de votre iCloud et de tous vos appareils, puis le dossier sera restauré."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questa azione non può essere annullata. Tutto, tranne i documenti di cavalli e clienti e i cavalli e i clienti a cui appartengono, verrà eliminato dal tuo iCloud e da tutti i tuoi dispositivi, poi la cartella verrà ripristinata."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit kan niet ongedaan worden gemaakt. Alles behalve de documenten van paarden en klanten, en de paarden en klanten waar ze bij horen, wordt verwijderd uit je iCloud en van al je apparaten, daarna wordt de map hersteld."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isso não pode ser desfeito. Tudo, exceto os documentos de cavalos e clientes e os cavalos e clientes a que pertencem, será excluído do seu iCloud e de todos os seus dispositivos, e depois a pasta será restaurada."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detta kan inte ångras. Allt utom dokumenten för hästar och kunder, och hästarna och kunderna de hör till, raderas från din iCloud och alla dina enheter, sedan återställs mappen."
           }
         }
       }
@@ -18538,6 +18856,59 @@
         }
       }
     },
+    "Restore Didn't Finish" : {
+      "comment" : "Alert title when the restore that follows Delete All Data is cancelled or fails",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung nicht abgeschlossen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La restauración no ha terminado"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La restauración no terminó"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La restauration n’a pas abouti"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino non completato"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstel niet voltooid"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A restauração não foi concluída"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen slutfördes inte"
+          }
+        }
+      }
+    },
     "Import failed: %@" : {
       "comment" : "Import error",
       "localizations" : {
@@ -18855,6 +19226,59 @@
         }
       }
     },
+    "Restore cancelled. Your data was already deleted, and nothing from the folder was added." : {
+      "comment" : "Alert after cancelling the restore that follows Delete All Data",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung abgebrochen. Deine Daten wurden bereits gelöscht, und aus dem Ordner wurde nichts hinzugefügt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración cancelada. Tus datos ya se habían eliminado y no se añadió nada de la carpeta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauración cancelada. Tus datos ya se habían eliminado y no se agregó nada de la carpeta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauration annulée. Vos données avaient déjà été supprimées, et rien du dossier n’a été ajouté."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino annullato. I tuoi dati erano già stati eliminati e non è stato aggiunto nulla dalla cartella."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstel geannuleerd. Je gegevens waren al verwijderd en er is niets uit de map toegevoegd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restauração cancelada. Seus dados já tinham sido excluídos, e nada da pasta foi adicionado."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen avbröts. Dina data hade redan raderats, och inget från mappen lades till."
+          }
+        }
+      }
+    },
     "Restore failed. Nothing was added." : {
       "comment" : "Toast when Restore All Data fails; everything it added was removed again",
       "localizations" : {
@@ -18904,6 +19328,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Återställningen misslyckades. Inget lades till."
+          }
+        }
+      }
+    },
+    "Restore failed. Your data was already deleted, and nothing from the folder was added." : {
+      "comment" : "Alert when the restore that follows Delete All Data fails",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung fehlgeschlagen. Deine Daten wurden bereits gelöscht, und aus dem Ordner wurde nichts hinzugefügt."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo restaurar. Tus datos ya se habían eliminado y no se añadió nada de la carpeta."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo restaurar. Tus datos ya se habían eliminado y no se agregó nada de la carpeta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de la restauration. Vos données avaient déjà été supprimées, et rien du dossier n’a été ajouté."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ripristino non riuscito. I tuoi dati erano già stati eliminati e non è stato aggiunto nulla dalla cartella."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstellen mislukt. Je gegevens waren al verwijderd en er is niets uit de map toegevoegd."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha na restauração. Seus dados já tinham sido excluídos, e nada da pasta foi adicionado."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Återställningen misslyckades. Dina data hade redan raderats, och inget från mappen lades till."
           }
         }
       }
@@ -20338,6 +20815,59 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Återställer…"
+          }
+        }
+      }
+    },
+    "Cancelling…" : {
+      "comment" : "Progress title after tapping Cancel while an export, import or restore stops and undoes its work",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird abgebrochen…"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelando…"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulation…"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annullamento…"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleren…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelando…"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryter…"
           }
         }
       }

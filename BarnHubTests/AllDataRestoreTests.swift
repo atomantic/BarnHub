@@ -319,6 +319,78 @@ final class AllDataRestoreTests: XCTestCase {
         XCTAssertLessThan(Date().timeIntervalSince(start), 60, "restore and rollback stay fast")
     }
 
+    /// #77: 20,000 weigh-ins for one horse, restored and then rolled back,
+    /// once for a horse that's already in the store and once for one the
+    /// restore adds. Both used to slow down with every row.
+    func test_cancel_withTwentyThousandRowsForOneHorse_restoresAndRollsBackQuickly() async throws {
+        for horseExists in [true, false] {
+            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try seed()
+            let folder = try await exportAllData()
+            if !horseExists { try wipe() }
+            let before = try snapshot()
+            let url = folder.appendingPathComponent("weight_entries.csv")
+            var csv = try String(contentsOf: url, encoding: .utf8)
+            for i in 0..<20_000 { csv += "extra-\(i),2020-01-01,Storm,\(900 + Double(i) / 100),horse-1\n" }
+            try csv.write(to: url, atomically: true, encoding: .utf8)
+
+            let start = Date()
+            var cancelledAt: Date?
+            do {
+                _ = try await restore(folder) { index, _, _ in
+                    // Step 17, the last file, runs after every weigh-in was saved.
+                    if index == 17 {
+                        cancelledAt = Date()
+                        withUnsafeCurrentTask { $0?.cancel() }
+                    }
+                }
+                XCTFail("expected cancellation")
+            } catch is CancellationError {
+            }
+            let end = Date()
+
+            let cancelled = try XCTUnwrap(cancelledAt)
+            print("#77 timing horseExists=\(horseExists): restore \(cancelled.timeIntervalSince(start)) s, rollback \(end.timeIntervalSince(cancelled)) s")
+            XCTAssertEqual(try snapshot(), before, "horseExists=\(horseExists)")
+            // Generous ceiling (well under 10 s on an M-series simulator) so a slow runner doesn't flake.
+            XCTAssertLessThan(end.timeIntervalSince(start), 30, "restore and rollback stay fast, horseExists=\(horseExists)")
+        }
+    }
+
+    /// Restore's "Delete All Data, Then Restore": the store ends up as the
+    /// export, with nothing left from before.
+    func test_deleteAllDataThenRestore_leavesExactlyTheExport() async throws {
+        for keepDocuments in [false, true] {
+            try RecordRemoval.deleteAllData(in: context, keepDocuments: false)
+            try seed()
+            let exported = try snapshot()
+            let folder = try await exportAllData()
+            // Edits made after the export: a new horse, a changed client and a photo the export doesn't have.
+            context.insert(Horse(name: "Leftover", breed: "Mustang"))
+            let sam = try XCTUnwrap(try context.fetch(FetchDescriptor<Client>(predicate: #Predicate { $0.firstName == "Sam" })).first)
+            sam.phone = "555-9999"
+            let daisy = try XCTUnwrap(try context.fetch(FetchDescriptor<Horse>(predicate: #Predicate { $0.name == "Daisy" })).first)
+            daisy.photoData = jpeg(0.3)
+            try context.save()
+            XCTAssertNotEqual(try snapshot(), exported)
+
+            try RecordRemoval.deleteAllData(in: context, keepDocuments: keepDocuments)
+            _ = try await restore(folder)
+
+            let restored = try snapshot()
+            if keepDocuments {
+                // Kept documents keep their owners, which the restore matches. Full
+                // equality waits on #81 (two same-key clients can be matched crosswise).
+                XCTAssertEqual(restored["horses"]?.count, exported["horses"]?.count)
+                XCTAssertEqual(restored["horseDocs"]?.count, exported["horseDocs"]?.count, "kept documents aren't added twice")
+                XCTAssertFalse(restored["horses"]!.contains { $0.hasPrefix("Leftover|") })
+                XCTAssertFalse(restored["clients"]!.contains { $0.contains("555-9999") })
+            } else {
+                XCTAssertEqual(restored, exported)
+            }
+        }
+    }
+
     func test_roundTrip_keepsSameNamedHorsesAndClientsDistinct() async throws {
         try seed()
         let folder = try await exportAllData()
