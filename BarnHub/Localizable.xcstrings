@@ -27048,6 +27048,218 @@
         }
       }
     },
+    "Your Data Can't Be Saved" : {
+      "comment" : "Alert title when the persistent store failed and the app runs on a temporary in-memory store",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Daten können nicht gespeichert werden"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pueden guardar tus datos"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pueden guardar tus datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos données ne peuvent pas être enregistrées"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile salvare i tuoi dati"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gegevens kunnen niet worden bewaard"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não é possível salvar seus dados"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dina data kan inte sparas"
+          }
+        }
+      }
+    },
+    "BarnHub couldn't open its data store, so nothing you add or change now will be saved. It will be gone when the app closes." : {
+      "comment" : "Alert message when the persistent store failed to open",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub konnte seinen Datenspeicher nicht öffnen. Was du jetzt hinzufügst oder änderst, wird nicht gespeichert und ist weg, sobald die App geschlossen wird."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no pudo abrir su almacén de datos, así que nada de lo que añadas o cambies ahora se guardará. Se perderá al cerrar la app."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub no pudo abrir su almacén de datos, así que nada de lo que agregues o cambies ahora se guardará. Se perderá al cerrar la app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub n'a pas pu ouvrir sa base de données : rien de ce que vous ajoutez ou modifiez maintenant ne sera enregistré. Tout disparaîtra à la fermeture de l'app."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub non è riuscita ad aprire il suo archivio dati, quindi nulla di ciò che aggiungi o modifichi ora verrà salvato. Andrà perso alla chiusura dell'app."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub kon zijn gegevensopslag niet openen, dus niets wat je nu toevoegt of wijzigt wordt bewaard. Het is weg zodra de app sluit."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O BarnHub não conseguiu abrir o armazenamento de dados, então nada do que você adicionar ou alterar agora será salvo. Tudo será perdido quando o app fechar."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BarnHub kunde inte öppna sin datalagring, så inget du lägger till eller ändrar nu sparas. Det försvinner när appen stängs."
+          }
+        }
+      }
+    },
+    "To retry, quit BarnHub completely and open it again. On iPhone or iPad, swipe BarnHub away in the app switcher, then reopen it. If this keeps happening, report a bug." : {
+      "comment" : "Alert message after tapping Retry: how to relaunch the app",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beende BarnHub vollständig und öffne die App erneut, um es noch einmal zu versuchen. Auf iPhone oder iPad wischst du BarnHub im App-Umschalter weg und öffnest die App dann wieder. Wenn das immer wieder passiert, melde bitte einen Fehler."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para reintentarlo, cierra BarnHub por completo y vuelve a abrirla. En iPhone o iPad, desliza BarnHub hacia arriba en el selector de apps y vuelve a abrirla. Si sigue ocurriendo, informa de un error."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para reintentarlo, cierra BarnHub por completo y vuelve a abrirla. En iPhone o iPad, desliza BarnHub hacia arriba en el selector de apps y vuelve a abrirla. Si sigue ocurriendo, reporta un error."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour réessayer, quittez complètement BarnHub et rouvrez-la. Sur iPhone ou iPad, balayez BarnHub vers le haut dans le sélecteur d'apps, puis rouvrez-la. Si le problème persiste, signalez un bug."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per riprovare, chiudi completamente BarnHub e riaprila. Su iPhone o iPad, scorri via BarnHub nel selettore delle app, poi riaprila. Se continua a succedere, segnala un bug."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop BarnHub volledig en open de app opnieuw om het nog eens te proberen. Veeg BarnHub op iPhone of iPad weg in de appkiezer en open de app daarna weer. Blijft dit gebeuren, meld dan een bug."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para tentar novamente, feche o BarnHub completamente e abra de novo. No iPhone ou iPad, deslize o BarnHub para cima no seletor de apps e abra-o novamente. Se isso continuar acontecendo, relate um bug."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avsluta BarnHub helt och öppna appen igen för att försöka på nytt. På iPhone eller iPad sveper du bort BarnHub i appväxlaren och öppnar den igen. Om det fortsätter att hända, rapportera en bugg."
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "comment" : "Button that retries opening the data store by relaunching",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riprova"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opnieuw proberen"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentar novamente"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Försök igen"
+          }
+        }
+      }
+    },
     "Report copied. Paste it into an email to %@." : {
       "comment" : "Toast after copying a bug report; the argument is the support email address",
       "localizations" : {
