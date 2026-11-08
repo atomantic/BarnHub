@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 // MARK: - Calendar View Mode
 
@@ -54,7 +55,7 @@ enum ScheduleEventType: String, CaseIterable {
 // MARK: - Schedule Event
 
 struct ScheduleEvent: Identifiable {
-    let id: String
+    let id: ScheduleEventID
     let date: Date
     let title: String
     let subtitle: String?
@@ -69,14 +70,6 @@ struct BarnDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) private var router
 
-    @Query(filter: #Predicate<Reminder> { !$0.isCompleted }, sort: \Reminder.dueDate)
-    private var incompleteReminders: [Reminder]
-
-    @Query(sort: \VetRecord.date, order: .reverse) private var vetRecords: [VetRecord]
-    @Query(sort: \FarrierVisit.date, order: .reverse) private var farrierVisits: [FarrierVisit]
-    @Query(sort: \DentistVisit.date, order: .reverse) private var dentistVisits: [DentistVisit]
-    @Query(sort: \Lesson.date, order: .reverse) private var allLessons: [Lesson]
-
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
@@ -85,124 +78,23 @@ struct BarnDashboardView: View {
     @State private var selectedDate: Date = .now
 
     var body: some View {
-        #if os(macOS)
-        macOSCalendar
-            .navigationTitle("Schedule")
-        #else
-        iOSCalendar
-            .navigationTitle("Schedule")
-            .inlineNavTitle()
-            .toolbar {
-                ToolbarItem(placement: .trailingBar) { categoriesMenu }
-            }
-            .prioritizedToolbarItem(.high, placement: .trailingBar) { addEventMenu }
+        // Events are fetched for the visible month (plus a week either side) and
+        // built once per render, not from every record in the store (#32).
+        ScheduleEventsQuery(window: ScheduleEventIndex.window(around: selectedDate)) { index in
+            #if os(macOS)
+            macOSCalendar(index)
+            #else
+            iOSCalendar(index)
+            #endif
+        }
+        .navigationTitle("Schedule")
+        #if !os(macOS)
+        .inlineNavTitle()
+        .toolbar {
+            ToolbarItem(placement: .trailingBar) { categoriesMenu }
+        }
+        .prioritizedToolbarItem(.high, placement: .trailingBar) { addEventMenu }
         #endif
-    }
-
-    // MARK: - Event Aggregation
-
-    private var allEvents: [ScheduleEvent] {
-        var events: [ScheduleEvent] = []
-
-        for reminder in incompleteReminders {
-            events.append(ScheduleEvent(
-                id: "rem-\(reminder.persistentModelID.hashValue)",
-                date: reminder.dueDate,
-                title: reminder.title,
-                subtitle: reminder.horse?.name,
-                type: .reminder,
-                modelID: reminder.persistentModelID,
-                durationMinutes: 30
-            ))
-        }
-
-        for record in vetRecords {
-            guard let dueDate = record.nextDueDate else { continue }
-            let horseName = record.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
-            events.append(ScheduleEvent(
-                id: "vet-\(record.persistentModelID.hashValue)",
-                date: dueDate,
-                title: "\(ScheduleEventType.vet.label): \(horseName)",
-                subtitle: record.vetName,
-                type: .vet,
-                modelID: record.persistentModelID,
-                durationMinutes: 60
-            ))
-        }
-
-        for visit in farrierVisits {
-            guard let dueDate = visit.nextDueDate else { continue }
-            let horseName = visit.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
-            events.append(ScheduleEvent(
-                id: "far-\(visit.persistentModelID.hashValue)",
-                date: dueDate,
-                title: "\(ScheduleEventType.farrier.label): \(horseName)",
-                subtitle: visit.farrierName,
-                type: .farrier,
-                modelID: visit.persistentModelID,
-                durationMinutes: 60
-            ))
-        }
-
-        for visit in dentistVisits {
-            guard let dueDate = visit.nextDueDate else { continue }
-            let horseName = visit.horse?.name ?? appLocalized("Unknown Horse", comment: "Fallback horse name")
-            events.append(ScheduleEvent(
-                id: "den-\(visit.persistentModelID.hashValue)",
-                date: dueDate,
-                title: "\(ScheduleEventType.dentist.label): \(horseName)",
-                subtitle: visit.dentistName,
-                type: .dentist,
-                modelID: visit.persistentModelID,
-                durationMinutes: 60
-            ))
-        }
-
-        // Recurring lessons repeat across whatever the calendar can show.
-        let window = lessonWindow
-        for lesson in allLessons {
-            let subtitle = [lesson.lessonType.displayName, lesson.horse.map { "on \($0.name)" }]
-                .compactMap { $0 }.joined(separator: " ")
-            for occurrence in lesson.occurrences(from: window.start, to: window.end) {
-                events.append(ScheduleEvent(
-                    id: "les-\(lesson.persistentModelID.hashValue)-\(Int(occurrence.timeIntervalSince1970))",
-                    date: occurrence,
-                    title: lesson.client?.fullName ?? "No Client",
-                    subtitle: subtitle,
-                    type: .lesson,
-                    modelID: lesson.persistentModelID,
-                    durationMinutes: lesson.duration
-                ))
-            }
-        }
-
-        return events
-    }
-
-    /// The selected month plus a week either side, which covers the day, week
-    /// and month grids (including leading and trailing days of the month grid).
-    private var lessonWindow: DateInterval {
-        let cal = Calendar.current
-        let monthStart = cal.date(from: cal.dateComponents([.year, .month], from: selectedDate)) ?? selectedDate
-        let start = cal.date(byAdding: .day, value: -7, to: monthStart) ?? monthStart
-        let monthEnd = cal.date(byAdding: .month, value: 1, to: monthStart) ?? monthStart
-        let end = cal.date(byAdding: .day, value: 7, to: monthEnd) ?? monthEnd
-        return DateInterval(start: start, end: end)
-    }
-
-    private var eventsByDay: [Date: [ScheduleEvent]] {
-        let cal = Calendar.current
-        var grouped: [Date: [ScheduleEvent]] = [:]
-        for event in allEvents {
-            let day = cal.startOfDay(for: event.date)
-            grouped[day, default: []].append(event)
-        }
-        return grouped
-    }
-
-    private func eventsForDay(_ date: Date) -> [ScheduleEvent] {
-        let day = Calendar.current.startOfDay(for: date)
-        return (eventsByDay[day] ?? []).sorted { $0.date < $1.date }
     }
 
     // MARK: - Navigation Helpers
@@ -270,7 +162,7 @@ struct BarnDashboardView: View {
     }
 
     @ViewBuilder
-    private var iOSCalendar: some View {
+    private func iOSCalendar(_ index: ScheduleEventIndex) -> some View {
         if showsDayPanel, #available(iOS 27.1, *) {
             // ArrangementView places the split on the hinge (and accounts for the
             // vertical tab bar), which a plain HStack of equal halves can't do.
@@ -278,20 +170,20 @@ struct BarnDashboardView: View {
             // panel when tall (inner display in portrait). Limiting it to the
             // horizontal axis hid the day panel in portrait (#19).
             ArrangementView {
-                calendarColumn
+                calendarColumn(index)
             } secondary: {
-                dayDetailPanel
+                dayDetailPanel(index)
             }
             .arrangementViewStyle(.split)
             .background(Color.barnOffWhite)
         } else {
             HStack(spacing: 0) {
-                calendarColumn
+                calendarColumn(index)
                     .frame(maxWidth: .infinity)
 
                 if showsDayPanel {
                     Divider()
-                    dayDetailPanel
+                    dayDetailPanel(index)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -299,11 +191,11 @@ struct BarnDashboardView: View {
         }
     }
 
-    private var calendarColumn: some View {
+    private func calendarColumn(_ index: ScheduleEventIndex) -> some View {
         VStack(spacing: 0) {
             calendarControlBar
             Divider()
-            calendarContent
+            calendarContent(index)
                 .frame(maxHeight: .infinity)
         }
     }
@@ -354,11 +246,11 @@ struct BarnDashboardView: View {
     }
 
     @ViewBuilder
-    private var calendarContent: some View {
+    private func calendarContent(_ index: ScheduleEventIndex) -> some View {
         switch viewMode {
         case .month:
             CalendarMonthView(
-                eventsByDay: eventsByDay,
+                eventsByDay: index.byDay,
                 monthStart: monthStart,
                 selectedDate: selectedDate,
                 onDateSelected: { selectedDate = $0 },
@@ -367,7 +259,7 @@ struct BarnDashboardView: View {
             )
         case .week:
             CalendarWeekView(
-                eventsByDay: eventsByDay,
+                eventsByDay: index.byDay,
                 weekStart: weekStart,
                 selectedDate: selectedDate,
                 onDateSelected: { date in
@@ -378,7 +270,7 @@ struct BarnDashboardView: View {
             )
         case .day:
             CalendarDayView(
-                events: eventsForDay(selectedDate),
+                events: index.events(on: selectedDate),
                 date: selectedDate,
                 onEventTapped: navigateToEvent
             )
@@ -441,11 +333,11 @@ struct BarnDashboardView: View {
 
     #if os(macOS)
 
-    private var macOSCalendar: some View {
+    private func macOSCalendar(_ index: ScheduleEventIndex) -> some View {
         VStack(spacing: 0) {
             macOSCalendarHeader
             Divider()
-            macOSCalendarContent
+            macOSCalendarContent(index)
         }
         .background(Color.barnOffWhite)
     }
@@ -496,13 +388,13 @@ struct BarnDashboardView: View {
     }
 
     @ViewBuilder
-    private var macOSCalendarContent: some View {
+    private func macOSCalendarContent(_ index: ScheduleEventIndex) -> some View {
         HStack(spacing: 0) {
             Group {
                 switch viewMode {
                 case .month:
                     CalendarMonthView(
-                        eventsByDay: eventsByDay,
+                        eventsByDay: index.byDay,
                         monthStart: monthStart,
                         selectedDate: selectedDate,
                         onDateSelected: { selectedDate = $0 },
@@ -511,7 +403,7 @@ struct BarnDashboardView: View {
                     )
                 case .week:
                     CalendarWeekView(
-                        eventsByDay: eventsByDay,
+                        eventsByDay: index.byDay,
                         weekStart: weekStart,
                         selectedDate: selectedDate,
                         onDateSelected: { selectedDate = $0 },
@@ -519,7 +411,7 @@ struct BarnDashboardView: View {
                     )
                 case .day:
                     CalendarDayView(
-                        events: eventsForDay(selectedDate),
+                        events: index.events(on: selectedDate),
                         date: selectedDate,
                         onEventTapped: navigateToEvent
                     )
@@ -529,7 +421,7 @@ struct BarnDashboardView: View {
 
             Divider()
 
-            dayDetailPanel
+            dayDetailPanel(index)
                 .frame(width: 280)
         }
     }
@@ -538,10 +430,8 @@ struct BarnDashboardView: View {
 
     // MARK: Day Detail Panel (macOS, and iOS at regular width — e.g. iPhone Duo inner display)
 
-    private var dayDetailPanel: some View {
-        let cal = Calendar.current
-        let selected = cal.startOfDay(for: selectedDate)
-        let dayEvents = (eventsByDay[selected] ?? []).sorted { $0.date < $1.date }
+    private func dayDetailPanel(_ index: ScheduleEventIndex) -> some View {
+        let dayEvents = index.events(on: selectedDate)
 
         return VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 2) {
@@ -614,5 +504,56 @@ struct BarnDashboardView: View {
 
     private func dayPanelEventRow(_ event: ScheduleEvent) -> some View {
         ScheduleEventRow(event: event, onTap: { navigateToEvent(event) }, showTime: false, verticalPadding: 6)
+    }
+}
+
+// MARK: - Event Query
+
+/// Fetches the calendar's records for `window` only and builds the event index
+/// once per render. Superseded vet, farrier and dentist due dates (an older
+/// visit whose horse has had a newer one) are left out, as in notifications.
+private struct ScheduleEventsQuery<Content: View>: View {
+    let window: DateInterval
+    private let content: (ScheduleEventIndex) -> Content
+
+    @Environment(\.modelContext) private var modelContext
+    @Environment(SyncMonitor.self) private var syncMonitor
+    /// Bumped on every save and CloudKit import, so the newest-record map (not a
+    /// `@Query`) is rebuilt only when the data changes, not on every render.
+    @State private var dataVersion = 0
+    @State private var newestCare = NewestCareRecordsCache()
+
+    @Query private var reminders: [Reminder]
+    @Query private var vetRecords: [VetRecord]
+    @Query private var farrierVisits: [FarrierVisit]
+    @Query private var dentistVisits: [DentistVisit]
+    @Query private var lessons: [Lesson]
+
+    init(window: DateInterval, @ViewBuilder content: @escaping (ScheduleEventIndex) -> Content) {
+        self.window = window
+        self.content = content
+        _reminders = Query(DashboardQueries.reminders(from: window.start, through: window.end))
+        _vetRecords = Query(DashboardQueries.vetDue(from: window.start, through: window.end))
+        _farrierVisits = Query(DashboardQueries.farrierDue(from: window.start, through: window.end))
+        _dentistVisits = Query(DashboardQueries.dentistDue(from: window.start, through: window.end))
+        _lessons = Query(DashboardQueries.calendarLessons(from: window.start, through: window.end))
+    }
+
+    var body: some View {
+        content(ScheduleEventIndex(
+            ScheduleEventIndex.Inputs(
+                reminders: reminders,
+                vetRecords: vetRecords,
+                farrierVisits: farrierVisits,
+                dentistVisits: dentistVisits,
+                lessons: lessons,
+                newest: newestCare.value(version: dataVersion, context: modelContext)
+            ),
+            window: window
+        ))
+        .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave).receive(on: RunLoop.main)) { _ in
+            dataVersion &+= 1
+        }
+        .onChange(of: syncMonitor.lastSuccessfulSync) { dataVersion &+= 1 }
     }
 }
