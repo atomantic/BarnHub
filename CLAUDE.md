@@ -71,6 +71,7 @@ CI via GitHub Actions (`.github/workflows/ci.yml`) runs `./scripts/test.sh` on t
 - **Logging**: Use `BarnHubLogger.info/success/warning/error`. Never log names, emails, or other personal data; log counts, types, or flags instead
 - **Preview data**: Use `PreviewSampleData.previewContainer` and `-SeedSampleData` launch argument (Debug builds only, like `-screenshotRoute` and `barnhub://screenshot/…`; Release ignores them)
 - **New screens need a UI check entry**: when adding a route or screen, add a page for it in `ScreenshotRouter` (Debug) and a `Screen` with the sample text it must show in `ScreenWalkTests`, so `scripts/test.sh` covers it. If the screen shows data, make sure `PreviewSampleData` has some
+- **Deep links**: The `barnhub` URL scheme is registered in `BarnHub/Info.plist` (iOS/Catalyst) and `BarnHub/Info-macOS.plist` (native macOS); `DeepLinkHandler` handles `barnhub://home|horses|clients|accounting|schedule[/reminders|vet|farrier|…]|supplies|reports|subscription` in all builds. Drive a simulator with `xcrun simctl openurl <udid> barnhub://horses`; iOS asks "Open in BarnHub?" the first time, so tap Open once
 
 ## Localization
 

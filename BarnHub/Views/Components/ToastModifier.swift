@@ -6,6 +6,10 @@ final class ToastState {
     var message = ""
     var isError = false
 
+    /// Closes the form sheet this toast lives in, when it lives in one. Set by
+    /// `.toast(_:)` from the environment (see `FormSheet`).
+    @ObservationIgnored var closeFormSheet: (() -> Void)?
+
     func show(_ message: String, isError: Bool = false) {
         self.message = message
         self.isError = isError
@@ -15,13 +19,25 @@ final class ToastState {
     @MainActor
     func showAndDismiss(_ message: String, isError: Bool = false, dismiss: DismissAction) {
         show(message, isError: isError)
+        closeAfterToast { dismiss() }
+    }
+
+    /// Closes the form once the toast has had a moment. In a form sheet this closes
+    /// the sheet itself: the form's DismissAction doesn't reliably close it on macOS,
+    /// which left Save needing Cancel. Elsewhere (a pushed form) it calls `fallback`.
+    @MainActor
+    func closeAfterToast(fallback: @escaping @MainActor () -> Void) {
         Task {
             do {
                 try await Task.sleep(for: .seconds(0.5))
             } catch {
                 return
             }
-            dismiss()
+            if let closeFormSheet {
+                closeFormSheet()
+            } else {
+                fallback()
+            }
         }
     }
 }
@@ -54,9 +70,11 @@ struct ToastModifier: ViewModifier {
 struct ToastStateModifier: ViewModifier {
     @Bindable var state: ToastState
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.closeFormSheet) private var closeFormSheet
 
     func body(content: Content) -> some View {
         content
+            .onAppear { state.closeFormSheet = closeFormSheet }
             .overlay(alignment: .top) {
                 if state.isPresented {
                     ToastView(message: state.message, isError: state.isError)

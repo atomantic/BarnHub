@@ -118,6 +118,7 @@ struct FeedPlanEntryEditView: View {
         .sheet(isPresented: $showProductSheet, onDismiss: autoSelectNewProduct) {
             NavigationStack {
                 FeedProductEditView(productID: nil)
+                    .environment(\.closeFormSheet, { showProductSheet = false })  // Save closes the sheet
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") { showProductSheet = false }
