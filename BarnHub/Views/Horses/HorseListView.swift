@@ -8,7 +8,6 @@ struct HorseListView: View {
 
     @State private var searchText = ""
     @State private var showInactive = false
-    @State private var selectedHorseID: PersistentIdentifier?
     @State private var width: CGFloat = 0
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -33,7 +32,8 @@ struct HorseListView: View {
     }
 
     var body: some View {
-        Group {
+        @Bindable var router = router
+        return Group {
             if filteredHorses.isEmpty {
                 EmptyStateView(
                     icon: "horse",
@@ -42,15 +42,15 @@ struct HorseListView: View {
                 )
             } else if showsSplit {
                 ListDetailSplit(width: width) {
-                    List(filteredHorses, id: \.persistentModelID, selection: $selectedHorseID) { horse in
+                    List(filteredHorses, id: \.persistentModelID, selection: $router.selectedHorseID) { horse in
                         HorseRowView(horse: horse)
                     }
                 } detail: {
-                    if let selectedHorseID {
-                        HorseDetailView(horseID: selectedHorseID, isEmbedded: true) {
-                            self.selectedHorseID = nil
+                    if let id = router.selectedHorseID {
+                        HorseDetailView(horseID: id, isEmbedded: true) {
+                            router.selectedHorseID = nil
                         }
-                        .id(selectedHorseID)
+                        .id(id)
                     }
                 }
             } else {
@@ -64,6 +64,9 @@ struct HorseListView: View {
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
         .onChange(of: filteredHorses.map(\.persistentModelID), initial: true) { _, ids in
             keepSelection(in: ids)
+        }
+        .onChange(of: showsSplit, initial: true) { _, split in
+            router.horsesShowSplit = split
         }
         .navigationTitle("Horses")
         .inlineNavTitle()
@@ -89,7 +92,7 @@ struct HorseListView: View {
     /// Keeps the split's selection on a horse that's still listed, so the detail
     /// pane is never blank while there are horses to show.
     private func keepSelection(in ids: [PersistentIdentifier]) {
-        if let selectedHorseID, ids.contains(selectedHorseID) { return }
-        selectedHorseID = ids.first
+        if let id = router.selectedHorseID, ids.contains(id) { return }
+        router.selectedHorseID = ids.first
     }
 }

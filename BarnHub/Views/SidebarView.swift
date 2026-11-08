@@ -137,6 +137,19 @@ struct SidebarView: View {
                 selection = synced
             }
         }
+        .onChange(of: router.selectedHorseID) { _, id in
+            // Follow the selection in the Horses list column, if the horse has a row.
+            guard router.selectedTab == .horses, router.horsesShowSplit, let id,
+                  activeHorses.contains(where: { $0.persistentModelID == id }),
+                  let synced = selectionSync.syncItem(.horse(id), current: selection) else { return }
+            selection = synced
+        }
+        .onChange(of: router.selectedClientID) { _, id in
+            guard router.selectedTab == .clients, router.clientsShowSplit, let id,
+                  activeClients.contains(where: { $0.persistentModelID == id }),
+                  let synced = selectionSync.syncItem(.client(id), current: selection) else { return }
+            selection = synced
+        }
         .onChange(of: router.selectedTab) { _, new in
             // Sync sidebar when tab changes externally (e.g., deep link, Cmd-1..5)
             if let synced = selectionSync.syncFromRouter(tab: new, current: selection) {
@@ -212,11 +225,11 @@ extension SidebarSelection {
         case .horses, .clients, .schedule:
             router.popToRoot(tab: tab)
         case .horse(let id):
-            router.popToRoot(tab: .horses)
-            router.navigate(to: HorseRoute.detail(id), tab: .horses)
+            if !router.horsesShowSplit { router.popToRoot(tab: .horses) }
+            router.showHorse(id)
         case .client(let id):
-            router.popToRoot(tab: .clients)
-            router.navigate(to: ClientRoute.detail(id), tab: .clients)
+            if !router.clientsShowSplit { router.popToRoot(tab: .clients) }
+            router.showClient(id)
         case .schedulePage(let sub):
             router.popToRoot(tab: .schedule)
             router.navigate(to: sub.barnRoute, tab: .schedule)
@@ -236,6 +249,15 @@ struct SidebarSelectionSync {
     mutating func syncFromRouter(tab: Router.AppTab, current: SidebarSelection?) -> SidebarSelection? {
         guard current?.tab != tab else { return nil }
         let target = SidebarSelection(tab: tab)
+        pendingSync = target
+        return target
+    }
+
+    /// Returns the sidebar row to highlight for an item picked in the list beside
+    /// the detail, or nil if it's already highlighted. Like `syncFromRouter`, the
+    /// resulting selection change is not treated as a tap.
+    mutating func syncItem(_ target: SidebarSelection, current: SidebarSelection?) -> SidebarSelection? {
+        guard current != target else { return nil }
         pendingSync = target
         return target
     }

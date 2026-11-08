@@ -10,6 +10,14 @@ final class Router {
     var schedulePath = NavigationPath()
     var accountingPath = NavigationPath()
 
+    /// The horse and client selected in the list beside the detail
+    /// (`ListDetailSplit`), kept here so the sidebar and deep links can drive it.
+    var selectedHorseID: PersistentIdentifier?
+    var selectedClientID: PersistentIdentifier?
+    /// Whether the Horses / Clients tab is currently showing its list beside the detail.
+    var horsesShowSplit = false
+    var clientsShowSplit = false
+
     enum AppTab: String, CaseIterable {
         case home, horses, clients, schedule, accounting
 
@@ -52,6 +60,30 @@ final class Router {
         case .clients: clientsPath.append(route)
         case .schedule: schedulePath.append(route)
         case .accounting: accountingPath.append(route)
+        }
+    }
+
+    /// Shows a horse's detail: selects it in the split when that's showing,
+    /// otherwise pushes it onto the Horses stack.
+    func showHorse(_ id: PersistentIdentifier) {
+        selectedTab = .horses
+        if horsesShowSplit {
+            popToRoot(tab: .horses)
+            selectedHorseID = id
+        } else {
+            horsesPath.append(HorseRoute.detail(id))
+        }
+    }
+
+    /// Shows a client's detail: selects it in the split when that's showing,
+    /// otherwise pushes it onto the Clients stack.
+    func showClient(_ id: PersistentIdentifier) {
+        selectedTab = .clients
+        if clientsShowSplit {
+            popToRoot(tab: .clients)
+            selectedClientID = id
+        } else {
+            clientsPath.append(ClientRoute.detail(id))
         }
     }
 
