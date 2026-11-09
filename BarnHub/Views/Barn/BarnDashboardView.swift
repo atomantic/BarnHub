@@ -372,15 +372,23 @@ struct BarnDashboardView: View {
                 EmptyView()
             }
             .pickerStyle(.segmented)
-            .frame(width: 180)
+            // Sized to its labels: a fixed width clipped longer translations
+            // ("Giorno / Settimana / Mese") into the legend.
+            .fixedSize()
 
-            HStack(spacing: 12) {
-                ForEach(ScheduleEventType.allCases, id: \.self) { type in
-                    HStack(spacing: 4) {
-                        Circle().fill(type.color).frame(width: 8, height: 8)
-                        Text(type.label).font(.caption).foregroundStyle(.secondary)
+            // The legend is a nicety; drop it rather than overlap the controls
+            // when a narrow window or long translations leave no room.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) {
+                    ForEach(ScheduleEventType.allCases, id: \.self) { type in
+                        HStack(spacing: 4) {
+                            Circle().fill(type.color).frame(width: 8, height: 8)
+                            Text(type.label).font(.caption).foregroundStyle(.secondary)
+                        }
+                        .fixedSize()
                     }
                 }
+                Color.clear.frame(width: 0, height: 0)
             }
         }
         .padding(.horizontal, 16)
