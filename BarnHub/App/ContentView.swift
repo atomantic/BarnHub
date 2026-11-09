@@ -48,8 +48,13 @@ struct ContentView: View {
             if !hasCompletedFirstLaunch && StorageMode.current != .inMemoryFallback {
                 showFirstLaunchSheet = true
             }
-            notificationService.attach(to: modelContext)
-            notificationService.requestSync(delay: .zero)
+            // Sample data must never schedule reminders or cancel real ones: the
+            // Debug build shares BarnHub's bundle ID, and so its notifications.
+            // Without attach, later sync requests have no context and do nothing.
+            if StorageMode.current != .inMemorySeed {
+                notificationService.attach(to: modelContext)
+                notificationService.requestSync(delay: .zero)
+            }
             #if DEBUG
             screenshotRouter.handleLaunchArguments()
             #endif

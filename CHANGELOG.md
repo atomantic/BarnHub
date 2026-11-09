@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.1
+
+### Improvements
+- The Horses list shows its Show Inactive button only when you have inactive horses, and a toast says what the list now shows when you tap it (#93).
+
+### Bug Fixes
+- The iCloud sync icon on Home is easy to see again in iOS light mode (#94).
+
 ## 1.7.0
 
 ### New Features

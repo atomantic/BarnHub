@@ -25,11 +25,17 @@ struct ScreenshotRouter {
         navigate(to: args[idx + 1])
     }
 
+    /// Bumped by each navigation, so a newer route retires the previous one's
+    /// watchdog instead of being "undone" back to the older page.
+    private static var generation = 0
+
     func navigate(to page: String) {
         guard let (tab, open) = entry(for: page) else {
             BarnHubLogger.warning("Unknown screenshot route")
             return
         }
+        Self.generation += 1
+        let generation = Self.generation
         // Set the tab synchronously; defer detail-level navigation until the
         // layout (tab bar or sidebar) has rendered its first frame.
         let apply = {
@@ -39,6 +45,7 @@ struct ScreenshotRouter {
         apply()
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 400_000_000)
+            guard generation == Self.generation else { return }
             let unopened = state
             open()
             guard page != "settings" else { return }
@@ -52,11 +59,13 @@ struct ScreenshotRouter {
             var expected = state
             for _ in 0..<8 {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
+                guard generation == Self.generation else { return }
                 let dropped = !opensScreen && entryOpensScreen(page) && state == unopened
                 guard state != expected || dropped else { continue }
                 BarnHubLogger.warning("Screenshot route was undone; reapplying")
                 apply()
                 try? await Task.sleep(nanoseconds: 300_000_000)
+                guard generation == Self.generation else { return }
                 open()
                 expected = state
             }
