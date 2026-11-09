@@ -372,7 +372,9 @@ struct BarnDashboardView: View {
                 EmptyView()
             }
             .pickerStyle(.segmented)
-            .frame(width: 180)
+            // Size to the labels: a fixed width clipped longer translations
+            // ("Settimana") and pushed the picker into the legend.
+            .fixedSize()
 
             HStack(spacing: 12) {
                 ForEach(ScheduleEventType.allCases, id: \.self) { type in
