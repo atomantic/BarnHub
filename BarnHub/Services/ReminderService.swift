@@ -28,7 +28,7 @@ enum ReminderService {
 
         var created: Reminder?
         if let nextDue = nextDueDate(after: reminder, now: now, calendar: calendar) {
-            let existing = successors(of: reminder, dueOn: nextDue, in: context, calendar: calendar)
+            let existing = successors(of: reminder, dueThrough: nextDue, in: context, calendar: calendar)
             if completed {
                 if existing.isEmpty {
                     let next = Reminder(
@@ -42,8 +42,9 @@ enum ReminderService {
                     created = next
                     BarnHubLogger.info("Created next occurrence of recurring reminder frequency=\(reminder.frequencyRaw)")
                 }
-            } else {
-                existing.forEach { context.delete($0) }
+            } else if let next = existing.first {
+                // Completing created exactly one occurrence; remove only that one.
+                context.delete(next)
             }
         }
 
@@ -62,18 +63,29 @@ enum ReminderService {
         return nil
     }
 
-    /// Incomplete reminders that look like `reminder`'s next occurrence.
-    private static func successors(of reminder: Reminder, dueOn date: Date, in context: ModelContext, calendar: Calendar) -> [Reminder] {
+    /// Incomplete reminders that look like `reminder`'s next occurrence, earliest first.
+    ///
+    /// The next occurrence was due on the first step on or after the day it was
+    /// completed, and `last` is that step as of today, so the occurrence falls
+    /// after `reminder` and no later than `last`'s day. Matching a window, not
+    /// one exact day, finds it even when the reminder is un-completed (or
+    /// completed again) on a later day than it was first completed.
+    private static func successors(of reminder: Reminder, dueThrough last: Date, in context: ModelContext, calendar: Calendar) -> [Reminder] {
         let title = reminder.title
         let frequencyRaw = reminder.frequencyRaw
         let descriptor = FetchDescriptor<Reminder>(predicate: #Predicate {
             !$0.isCompleted && $0.title == title && $0.frequencyRaw == frequencyRaw
         })
         let candidates = (try? context.fetch(descriptor)) ?? []
+        // [the day after `reminder`, the day after `last`)
+        guard let start = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: reminder.dueDate)),
+              let end = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: last))
+        else { return [] }
         return candidates.filter {
             $0 !== reminder
                 && $0.horse?.persistentModelID == reminder.horse?.persistentModelID
-                && calendar.isDate($0.dueDate, inSameDayAs: date)
+                && $0.dueDate >= start && $0.dueDate < end
         }
+        .sorted { $0.dueDate < $1.dueDate }
     }
 }

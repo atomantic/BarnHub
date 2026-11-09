@@ -7,6 +7,8 @@
 
 ### Bug Fixes
 - The iCloud sync icon on Home is easy to see again in iOS light mode (#94).
+- Un-checking a recurring reminder on a later day than you checked it now removes the next occurrence it created, instead of leaving a duplicate.
+- On Mac, the Schedule's Day/Week/Month picker no longer overlaps the color legend in longer languages such as Italian.
 
 ## 1.7.0
 
