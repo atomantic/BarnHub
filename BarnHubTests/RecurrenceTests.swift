@@ -85,6 +85,48 @@ final class RecurrenceTests: XCTestCase {
         XCTAssertEqual(try incomplete(in: context).count, 1)
     }
 
+    func test_uncompletingOnALaterDay_removesTheNextOccurrence() throws {
+        let context = try makeContext()
+        let reminder = Reminder(title: "Turnout", dueDate: day(0), frequency: .daily)
+        context.insert(reminder)
+        try context.save()
+
+        ReminderService.setCompleted(reminder, true, in: context, now: now, calendar: calendar)
+        XCTAssertEqual(try incomplete(in: context).map(\.dueDate), [day(1)])
+
+        // Two days later the next step as of today is day 2, not day 1.
+        ReminderService.setCompleted(reminder, false, in: context, now: day(2, hour: 10), calendar: calendar)
+        XCTAssertEqual(try incomplete(in: context).map(\.dueDate), [day(0)],
+                       "The day-1 occurrence goes away even though it isn't today's next step")
+    }
+
+    func test_recompletingOnALaterDay_keepsTheExistingNextOccurrence() throws {
+        let context = try makeContext()
+        let reminder = Reminder(title: "Turnout", dueDate: day(0), frequency: .daily)
+        context.insert(reminder)
+        try context.save()
+
+        let first = try XCTUnwrap(ReminderService.setCompleted(reminder, true, in: context, now: now, calendar: calendar))
+        reminder.isCompleted = false  // reopened without going through the service
+        try context.save()
+
+        XCTAssertNil(ReminderService.setCompleted(reminder, true, in: context, now: day(2, hour: 10), calendar: calendar))
+        XCTAssertEqual(try incomplete(in: context).map(\.dueDate), [first.dueDate])
+    }
+
+    func test_uncompleting_leavesUnrelatedLaterRemindersAlone() throws {
+        let context = try makeContext()
+        let reminder = Reminder(title: "Hay order", dueDate: day(0), frequency: .monthly)
+        let later = Reminder(title: "Hay order", dueDate: day(60), frequency: .monthly)
+        context.insert(reminder)
+        context.insert(later)
+        try context.save()
+
+        ReminderService.setCompleted(reminder, true, in: context, now: now, calendar: calendar)
+        ReminderService.setCompleted(reminder, false, in: context, now: now, calendar: calendar)
+        XCTAssertEqual(try incomplete(in: context).map(\.dueDate).sorted(), [day(0), day(60)])
+    }
+
     func test_completingLongOverdueReminder_skipsMissedOccurrences() throws {
         let context = try makeContext()
         let reminder = Reminder(title: "Fly spray", dueDate: day(-20), frequency: .weekly)
